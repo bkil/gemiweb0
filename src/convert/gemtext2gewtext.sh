@@ -31,6 +31,8 @@ EOF
     t p
     s~^#(.*)~<h1>\1</h1>~
     t p
+    s~^&gt;(.*)~<blockquote>\1</blockquote>~
+    t p
     s~^=&gt;([^ ]*)$~<p><a href="\1">\1</a></p>~
     t p
     s~^=&gt;([^ ]*) (.*)~<p><a href="\1">\2</a></p>~

@@ -22,6 +22,8 @@ main() {
     t p
     s~^<h3>([^<]*)</h3>~###\1\n~
     t p
+    s~^<blockquote>([^<]*)</blockquote>~>\1\n~
+    t p
     s~^<li>([^<]*)</li>~*\1\n~
     t p
     s~^<a href="([^"]*)">([^<]*)</a>~=>\1\n~
