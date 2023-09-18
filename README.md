@@ -8,6 +8,8 @@ See the doc folder for more information:
 * [doc/http-spec.md](doc/http-spec.md)
 * [doc/js-spec.md](doc/js-spec.md)
 * [doc/js-grammar.md](doc/js-grammar.md)
+* [doc/web-browsers-by-engine.md](doc/web-browsers-by-engine.md)
+* [doc/javascript-interpreter-runtimes.md](doc/javascript-interpreter-runtimes.md)
 
 Older notes:
 
