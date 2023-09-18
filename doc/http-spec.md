@@ -1,0 +1,53 @@
+# HTTP subset specification
+
+## HTTP grammar
+
+### HTTP common
+
+PATH: "[^? ]*" [ "?" PARAMS ]?
+
+PARAMS: [ KEY "=" VALUE [ "&" KEY "=" VALUE ]* ]?
+
+KEY: "[A-Za-z_]+"
+
+VALUE: [^& ]*
+
+ORIGIN: HOSTNAME ":" PORT
+
+PORT: "[0-9]+"
+
+LENGTH: [0-9]+
+
+DATA: .*?
+
+### GET request
+
+REQUEST: "GET " PATH "HTTP/1.1\r\nHost: " ORIGIN "\r\n" HEADER "\r\n"
+
+HEADER: [ [ Accept | Cookie | Authorization ] ": " DATA "\r\n" ]*
+
+### POST urlencoded request
+
+REQUEST: "POST " PATH "HTTP/1.1\r\nHost: " ORIGIN "\r\nContent-Type: application/x-www-form-urlencoded "\r\n" HEADER "\r\n" PARAMS
+
+HEADER: [ [ "Content-Length: " LENGTH | [ Cookie | Authorization ] ": " DATA ] "\r\n" ]*
+
+### POST form request
+
+REQUEST: "POST " PATH "HTTP/1.1\r\nHost: " ORIGIN "\r\nContent-Type: multipart/form-data;boundary=\"" BOUNDARY "\"\r\n" HEADER "\r\n" BODY
+
+HEADER: [ [ Cookie | Authorization ] ": " DATA "\r\n" ]*
+
+BODY: "--" BOUNDARY "\r\nContent-Disposition: form-data; name=\"" KEY "\"" [ "; filename=\"" KEY "\"" ]? "\r\nContent-Length: " LENGTH "\r\n\r\n" DATA "\r\n--" BOUNDARY "--\r\n"
+
+BOUNDARY: "[^\"\r\n-]+"
+
+### HTTP response
+
+RESPONSE: [ 200 | 302 | 404 | 429 | 500 ] " .*?\r\n" HEADER "\r\n" BODY
+
+HEADER: [ [ Transfer-Encoding: Chunked | Content-Type: text/html | [ Location | Set-Cookie ] ": " DATA ] "\r\n" ]*
+
+BODY: CHUNKED | DATA
+
+CHUNKED: [ "[0-9a-f]+\r\n" DATA ]* "0\r\n"

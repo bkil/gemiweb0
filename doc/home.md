@@ -24,7 +24,7 @@ We were inspired by the gemini protocol, but would like to further extend the ge
 
 ## Try it
 
-* You should already have access if you are using an up to date version version.
+* You should already have access if you are using an up to date browser version.
 
 ### Clients
 

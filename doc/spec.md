@@ -47,6 +47,7 @@
 * Titan extension: https://transjovian.org:1965/titan/page/The%20Titan%20Specification
 * iapetus extension: https://codeberg.org/oppenlab/iapetus
 * Spartan protocol: http://spartan.mozz.us/
+* gemini+upload https://alexschroeder.ch/wiki/Baschdels_spin_on_Gemini_uploading
 
 ## Notes
 
