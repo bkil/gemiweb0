@@ -1,0 +1,133 @@
+#!/bin/sh
+
+ISDEBUG=""
+ISSMALLBIN=""
+ISSIMPLE=""
+
+main() {
+seq 1 20
+
+rm a.out 2>/dev/null
+compile -c vm2.c && \
+{
+  if [ -n "$ISSMALLBIN" ]; then
+  :  strip \
+    -S \
+    --strip-unneeded \
+    --remove-section=.note.gnu.gold-version \
+    --remove-section=.comment \
+    --remove-section=.note \
+    --remove-section=.note.gnu.build-id \
+    --remove-section=.note.ABI-tag \
+    vm2.o
+    # -s
+  else
+    true
+  fi &&
+  compile -flto vm2.o test-vm.c
+} && {
+valgrind \
+  --leak-check=full \
+  --show-leak-kinds=all \
+  --num-callers=20 \
+  --malloc-fill=0xaa \
+  --free-fill=0x55 \
+  --expensive-definedness-checks=yes \
+  ./a.out "$@"
+}
+
+local S=$?
+echo $S
+return $S
+#-fsanitize=address -fsanitize=leak -fsanitize=undefined
+}
+
+compile() {
+local ADD=""
+[ -n "$ISDEBUG" ] && ADD="$ADD vm-debug.c -DDEBUG"
+if [ -n "$ISSMALLBIN" ]; then
+#  -fshort-double \
+  -ffunction-sections \
+  -fdata-sections \
+  -fno-jump-tables \
+#
+
+  ADD="$ADD \
+  -Os \
+  -fno-asynchronous-unwind-tables \
+  -fno-unwind-tables \
+  -fno-stack-protector \
+  -fno-unroll-loops \
+  -fno-ident \
+  -mfpmath=387 \
+  -mfancy-math-387 \
+  -fsingle-precision-constant \
+  -Wl,-z,norelro \
+  -Wl,--build-id=none \
+  -U_FORTIFY_SOURCE \
+  -DSMALLBIN \
+  -s\
+  "
+elif [ -n "$ISSIMPLE" ]; then
+  ADD="$ADD -O2 -g -DSIMPLE"
+else
+  ADD="$ADD -O2 -g"
+fi
+
+gcc \
+ -Werror -std=gnu11\
+ -Wno-unused-parameter\
+ -Wpedantic\
+ -Wwrite-strings\
+ -Woverflow\
+ -fstrict-overflow\
+ -Wstrict-overflow=5 -Wno-error=strict-overflow\
+ -Wformat-nonliteral\
+ -fstrict-aliasing\
+ -Winit-self \
+ -fno-common \
+ -W \
+ -Wabi \
+ -Wall \
+ -Wcast-align \
+ -Wdeprecated \
+ -Wdeprecated-declarations \
+ -Wextra \
+ -Winvalid-pch \
+ -Wmissing-format-attribute \
+ -Woverflow \
+ -Wshadow \
+ \
+ -Waggregate-return \
+ -Wbad-function-cast \
+ -Wcast-qual \
+ -Wconversion \
+ -Wdouble-promotion \
+ -Wfloat-equal \
+ -Wformat=2 \
+ -Winline \
+ -Wmissing-declarations \
+ -Wno-error=missing-format-attribute \
+ -Wmissing-prototypes \
+ -Wnested-externs \
+ -Wpointer-arith \
+ -Wpointer-sign \
+ -Wredundant-decls \
+ -Wsign-conversion \
+ -Wstrict-prototypes \
+ -Wsuggest-attribute=pure \
+ -Wsuggest-attribute=const \
+ -Wsuggest-attribute=noreturn \
+ -Wsuggest-attribute=format \
+ -Wswitch-default \
+ -Wundef \
+ -fipa-pta \
+ -ffast-math \
+ -fmerge-all-constants \
+ -Wl,-O1 \
+ -Wl,--gc-sections \
+ -Wl,--as-needed \
+ $ADD "$@"
+}
+
+main "$@"

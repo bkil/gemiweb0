@@ -142,6 +142,10 @@ A simple, text-entry & pre based browser written in the JavaScript subset interp
 
 * https://bkil.gitlab.io/static-wonders.js/browser-vm/lambda-dispatch-js.html
 
+Work in progress C interpreter aiming for few lines of code, small code size and low memory footprint:
+
+* [../src/js2/test-vm.c](../src/js2/test-vm.c)
+
 Not published yet:
 
 * Multiple C-based interpreters for various subsets
