@@ -138,9 +138,12 @@ Multiple proof of concept interpreter runtimes are in progress. If you would lik
 * https://bkil.gitlab.io/static-wonders.js/browser-vm/fun-err-obj-js.html
 * https://bkil.gitlab.io/static-wonders.js/browser-vm/parse-dispatch-js.html
 
+A simple, text-entry & pre based browser written in the JavaScript subset interpreted by the interpreter in the browser:
+
+* https://bkil.gitlab.io/static-wonders.js/browser-vm/lambda-dispatch-js.html
+
 Not published yet:
 
-* based on the above, a simple, text-entry & pre based browser written in the browser
 * Multiple C-based interpreters for various subsets
 
 Planned on shortlist:
