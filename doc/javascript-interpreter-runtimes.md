@@ -49,3 +49,9 @@ Feel free to review the complexity of existing small independent solutions that 
 ## Benchmarks
 
 * https://kangax.github.io/compat-table/es6/
+
+## Related
+
+* https://github.com/bkil/wiki/blob/master/en/widget-toolkit-html-rich-text.md
+
+> HTML rich text support by desktop widget toolkits
