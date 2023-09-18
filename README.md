@@ -15,3 +15,9 @@ Older notes:
 
 * [doc/spec.md](doc/spec.md)
 * [doc/home.md](doc/home.md)
+
+## Contact
+
+Join our chat room to participate in brainstorming or to give a hand by implementing the standard from scratch:
+
+* https://matrix.to/#/#weblite:matrix.org

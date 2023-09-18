@@ -1,0 +1,7 @@
+.bk
+.wip
+*.pem
+a.out
+*.o
+*.php
+html
