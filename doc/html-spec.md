@@ -50,6 +50,8 @@ meta (charset=utf-8), title
 
 h1, h2, h3, a (href, name), br (~p, ~div), pre, blockquote, ul, li, form (name, action, enctype, method=get, method=post), input (type=text, name, value), input (type=file, name) input (type=submit, value) textarea (name), script (src, onerror)
 
+With a limitation of supporting up to one form input or textarea element along with a submit button and up to 1 form per web page.
+
 ### Attributes to interpret
 
 id or name should be followed for fragment linking
