@@ -1,8 +1,6 @@
 # HTTP subset specification
 
-## HTTP grammar
-
-### HTTP common
+## HTTP common
 
 PATH: "[^? ]*" [ "?" PARAMS ]?
 
@@ -20,19 +18,19 @@ LENGTH: [0-9]+
 
 DATA: .*?
 
-### GET request
+## GET request
 
 REQUEST: "GET " PATH "HTTP/1.1\r\nHost: " ORIGIN "\r\n" HEADER "\r\n"
 
 HEADER: [ [ Accept | Cookie | Authorization ] ": " DATA "\r\n" ]*
 
-### POST urlencoded request
+## POST urlencoded request
 
 REQUEST: "POST " PATH "HTTP/1.1\r\nHost: " ORIGIN "\r\nContent-Type: application/x-www-form-urlencoded "\r\n" HEADER "\r\n" PARAMS
 
 HEADER: [ [ "Content-Length: " LENGTH | [ Cookie | Authorization ] ": " DATA ] "\r\n" ]*
 
-### POST form request
+## POST form request
 
 REQUEST: "POST " PATH "HTTP/1.1\r\nHost: " ORIGIN "\r\nContent-Type: multipart/form-data;boundary=\"" BOUNDARY "\"\r\n" HEADER "\r\n" BODY
 
@@ -42,7 +40,7 @@ BODY: "--" BOUNDARY "\r\nContent-Disposition: form-data; name=\"" KEY "\"" [ "; 
 
 BOUNDARY: "[^\"\r\n-]+"
 
-### HTTP response
+## HTTP response
 
 RESPONSE: [ 200 | 302 | 404 | 429 | 500 ] " .*?\r\n" HEADER "\r\n" BODY
 
