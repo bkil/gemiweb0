@@ -6,7 +6,7 @@
 * code golfing, minimalism, small is beautiful, less is more
 * security: possibility for review, less opportunity for bugs
 * NIH: DIY, primitive technology, clean room reimplementation, independence artisan
-* transparency: nothing up my sleeves
+* transparency: nothing up my sleeves, less opportunity for backdoors
 * anti-oligopoly: possibility for competition
 * anti vendor lock-in: reproducible environment
 * cross-platform: code generation, run anywhere
