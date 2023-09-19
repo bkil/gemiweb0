@@ -7,15 +7,17 @@
 * try-catch
 * double slash comments
 * throw
-* function definition with an optional return at the end
+* function definition
+* return
+* arbitrary block scopes with {}
 
 missing:
 
-* switch-case-default, for, for-in, for-of, foreach, do-while, label-goto, break, continue, with, arbitrary return, varargs
+* switch-case-default, for, for-in, for-of, foreach, do-while, label-goto, break, continue, with, varargs
 
 ## Operators
 
-* !, ~, +, -, * , /, %, <, >, <=, >=, ==, !=, ===, !==, ^, <<, >>
+* !, ~, +, -, *, /, %, <, >, <=, >=, ==, !=, ===, !==, ^, <<, >>
 
 convenience:
 * parenthesis subexpressions, short-circuiting &&, ||, + also works for string concatenation
@@ -30,16 +32,16 @@ missing:
 * undefined
 * null
 * decimal integers
-* string literals with escaping
+* string literals without escaping
 * object square bracket member accessor
 
 convenience:
 
-* initializer for Object and Array, anonymous function expression, string control characters
+* var initializer, Object and Array literals, anonymous function expression, object dot member accessor
 
 missing:
 
-* const, this, void, true, false, hexadecimal, float, object dot member accessor
+* const, let, this, void, true, false, hexadecimal, float, string control characters
 
 ## Navigator objects
 
@@ -48,20 +50,26 @@ missing:
 * document.close
 * document.write
 * document['FormName']['ElementName'].value
-* document.cookie (expires)
 
 convenience:
 
-* document.docType, document.documentElement.innerHTML, public suffix list
+* document.docType, document.documentElement.innerHTML
 
 missing:
 
 * document.open (implicit)
 
+### Cookies
+
+A hardened minimal subset required to interface with most common gratis web hosting, storage and authorization providers
+
+* document.cookie (expires)
+* public suffix list
+
 ### Window
 
-window.location.href
-window.setTimeout (function)
+* window.location.href
+* window.setTimeout (function)
 
 missing:
 
@@ -142,7 +150,7 @@ A simple, text-entry & pre based browser written in the JavaScript subset interp
 
 * https://bkil.gitlab.io/static-wonders.js/browser-vm/lambda-dispatch-js.html
 
-Work in progress C interpreter aiming for few lines of code, small code size and low memory footprint:
+Work in progress C interpreter aiming for short source that is easy to review, small size of compressed binary code and low memory footprint:
 
 * [../src/js2/test-vm.c](../src/js2/test-vm.c)
 
