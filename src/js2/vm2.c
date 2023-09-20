@@ -277,7 +277,7 @@ putsn(const char *s, size_t len) {
 
 static int
 accept(Parser *p, char c) {
-  if (p->prog[0] == c) {
+  if ((p->prog < p->progEnd) && (*p->prog == c)) {
     p->prog++;
     return 1;
   }
@@ -298,24 +298,24 @@ static int
 skipWs(Parser *p) {
   int ret = 0;
   while (1) {
-    while ((p->prog[0] == ' ') || (p->prog[0] == '\n')) {
+    while ((p->prog < p->progEnd) && ((*p->prog == ' ') || (*p->prog == '\n'))) {
       p->prog++;
       ret = 1;
     }
-    if (p->prog[0] != '/') {
+    if ((p->progEnd - p->prog < 2) || (*p->prog != '/')) {
       break;
     }
     if (p->prog[1] == '/') {
       p->prog += 2;
       ret = 1;
-      while (p->prog[0] && (p->prog[0] != '\n')) {
+      while ((p->prog < p->progEnd) && (*p->prog != '\n')) {
         p->prog++;
       }
     } else if (p->prog[1] == '*') {
       p->prog += 2;
       ret = 1;
-      while (p->prog[0]) {
-        if ((p->prog[0] == '*') && (p->prog[1] == '/')) {
+      while (p->prog < p->progEnd) {
+        if ((p->progEnd - p->prog >= 2) && (*p->prog == '*') && (p->prog[1] == '/')) {
           p->prog += 2;
           break;
         }
@@ -343,14 +343,15 @@ expectWs(Parser *p, char c) {
 static int
 parseId(Parser *p, Id *id) {
   skipWs(p);
-  size_t len = 0;
-  char c = p->prog[len];
+  const char *s = p->prog;
+  char c = s < p->progEnd ? *s : 0;
   if ((c == '_') || ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z'))) {
-    c = p->prog[++len];
-    while ((c == '_') || ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z')) || ((c >= '0') && (c <= '9'))) {
-      c = p->prog[++len];
-    }
+    do {
+      s++;
+      c = s < p->progEnd ? *s : 0;
+    } while ((c == '_') || ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z')) || ((c >= '0') && (c <= '9')));
   }
+  size_t len = off_t2size_t(s - p->prog);
   if (len) {
     id->s = p->prog;
     id->len = len;
@@ -365,14 +366,17 @@ parseIntLit(Parser *p) {
   skipWs(p);
 
   const char *s = p->prog;
-  char c = *s;
+  char c = s < p->progEnd ? *s : 0;
   if (c == '-') {
-    c = *(++s);
+    s++;
+    c = s < p->progEnd ? *s : 0;
   }
   while ((c >= '0') && (c <= '9')) {
-    c = *(++s);
+    s++;
+    c = s < p->progEnd ? *s : 0;
   }
-  if ((s == p->prog) || (c == '_') || (c == '.') || ((c >= 'A' && (c <= 'Z'))) || ((c >= 'a') && (c <= 'z'))) {
+  size_t len = off_t2size_t(s - p->prog);
+  if (!len || (c == '_') || (c == '.') || ((c >= 'A' && (c <= 'Z'))) || ((c >= 'a') && (c <= 'z'))) {
     return 0;
   }
 
@@ -380,7 +384,14 @@ parseIntLit(Parser *p) {
     p->prog = s;
     return &undefinedObject;
   }
-  int x = atoi(p->prog);
+  int x;
+  if (s < p->progEnd) {
+    x = atoi(p->prog);
+  } else {
+    char *t = strndup(p->prog, len);
+    x = atoi(t);
+    free(t);
+  }
   p->prog = s;
   return IntObject_new(x);
 }
@@ -393,7 +404,7 @@ parseStringLit(Parser *p) {
     return 0;
   }
   Id id = {.s = p->prog, .len = 0};
-  while (p->prog[0] && (p->prog[0] != c) && (p->prog[0] != '\\')) {
+  while ((p->prog < p->progEnd) && (*p->prog != c) && (*p->prog != '\\')) {
     p->prog++;
     id.len++;
   }
@@ -924,7 +935,7 @@ parseStatement(Parser *p) {
 
 static int
 haveMore(Parser *p) {
-  return !p->parseErr && p->prog[0];
+  return !p->parseErr && (p->prog < p->progEnd);
 }
 
 static int
@@ -1016,12 +1027,20 @@ Parser_new(void) {
   return p;
 }
 
+static void
+showProg(Parser *p) {
+  const size_t left = off_t2size_t(p->progEnd - p->prog);
+  putsn(p->prog, left < 16 ? left : 16);
+  puts("");
+}
+
 int
-Parser_eval(Parser *p, const char *prog) {
+Parser_eval(Parser *p, const char *prog, size_t len) {
   if (!prog) {
     return 0;
   }
   p->prog = prog;
+  p->progEnd = prog + len;
   p->parseErr = 0;
   p->parseErrChar = 0;
   p->err = 0;
@@ -1071,8 +1090,7 @@ Parser_eval(Parser *p, const char *prog) {
       }
     }
     puts("");
-    putsn(p->prog, 16);
-    puts("");
+    showProg(p);
     return -1;
   } else {
     fputs("runtime error: ", stdout);
@@ -1084,8 +1102,7 @@ Parser_eval(Parser *p, const char *prog) {
       }
     }
     puts("");
-    putsn(p->prog, 16);
-    puts("");
+    showProg(p);
     return -2;
   }
 }

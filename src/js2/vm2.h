@@ -59,6 +59,7 @@ typedef struct Object {
 
 typedef struct Parser {
   const char *prog;
+  const char *progEnd;
   const char *parseErr;
   char parseErrChar;
 
@@ -72,7 +73,16 @@ typedef struct Parser {
 } Parser;
 
 Parser *Parser_new(void);
-int Parser_eval(Parser *p, const char *prog);
+int Parser_eval(Parser *p, const char *prog, size_t len);
 void Parser_free(Parser *p);
+
+static inline size_t
+off_t2size_t(off_t x) {
+  if (x < 0) {
+    return 0;
+  }
+  size_t ret = (size_t)x;
+  return ret;
+}
 
 #endif

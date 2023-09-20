@@ -1,6 +1,7 @@
 #include "vm2.h"
 #include <stdbool.h> // true false bool
 #include <stdio.h> // printf puts
+#include <string.h> // strlen
 
 #ifdef SMALLBIN
 #define SB(x,y) (x)
@@ -14,7 +15,7 @@ static unsigned int _errorCount = 0;
 static int
 test_case(const char *prog) {
   Parser *p = Parser_new();
-  int ret = Parser_eval(p, prog);
+  int ret = Parser_eval(p, prog, strlen(prog));
   Parser_free(p);
   return ret;
 }
