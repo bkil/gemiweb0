@@ -1,7 +1,7 @@
 .bk
 .wip
 *.pem
-a.out
+*.out
 *.o
 *.php
 html

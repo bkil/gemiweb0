@@ -1,0 +1,11 @@
+#!/bin/sh
+
+./gcc-warn.sh vm2.c run.c -o run.out &&
+valgrind \
+  --leak-check=full \
+  --show-leak-kinds=all \
+  --num-callers=20 \
+  --malloc-fill=0xaa \
+  --free-fill=0x55 \
+  --expensive-definedness-checks=yes \
+  ./run.out "${1-test_hi.js}"
