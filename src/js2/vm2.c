@@ -955,6 +955,7 @@ static Object *
 parseStatements(Parser *p) {
   p->needSemicolon = 0;
   Object *o = &undefinedObject;
+  skipWs(p);
   while (o && haveMore(p)) {
     Object_free(o);
     if (!parseRequiredSemicolon(p)) {
@@ -963,6 +964,7 @@ parseStatements(Parser *p) {
     o = parseStatement(p);
     if (o) {
       parseOptionalSemicolon(p);
+      skipWs(p);
     }
   }
   return o;
@@ -992,7 +994,7 @@ document_write(Parser *p, Object *o) {
   Object *e = l ? l->value : &undefinedObject;
   Object *os = Object_toString(e);
   if (os) {
-    puts(os->s.s);
+    putsn(os->s.s, os->s.len);
     Object_free(os);
   } else {
     puts("?");
