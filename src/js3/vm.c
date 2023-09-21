@@ -445,10 +445,10 @@ parseIndex(Parser *p) {
 }
 
 static Object *
-parseStatements(Parser *p);
+parseBody(Parser *p);
 
 static Object *
-parseBody(Parser *p);
+parseBlock(Parser *p);
 
 static Object *
 parseFunction(Parser *p, Object *arg) {
@@ -811,7 +811,7 @@ parseWhile(Parser *p) {
       }
     }
     Object_free(o);
-    if (!(o = parseBody(p))) {
+    if (!(o = parseBlock(p))) {
       return 0;
     }
     Object_free(o);
@@ -833,7 +833,7 @@ parseIf(Parser *p) {
     p->nest++;
   }
   Object_free(o);
-  if (!expectWs(p, ')') || !(o = parseBody(p))) {
+  if (!expectWs(p, ')') || !(o = parseBlock(p))) {
     return 0;
   }
   Object_free(o);
@@ -854,7 +854,7 @@ parseIf(Parser *p) {
   if (cond) {
     p->nest++;
   }
-  if (!(o = parseBody(p))) {
+  if (!(o = parseBlock(p))) {
     return 0;
   }
   Object_free(o);
@@ -1023,6 +1023,18 @@ parseBody(Parser *p) {
   }
   p->needSemicolon = 0;
   return &undefinedObject;
+}
+
+static Object *
+parseBlock(Parser *p) {
+  Object *o = parseBody(p);
+  if (o) {
+    return o;
+  }
+  clearErr(p);
+  o = parseStatement(p);
+  parseOptionalSemicolon(p);
+  return o;
 }
 
 static Object *

@@ -236,6 +236,10 @@ main(void) {
 
   t("if (1) {}", 0);
   t("if (1) {} else {}", 0);
+  t("if (1) {} else if (1) {}", 0);
+  t("var i; if (1) i = 9; i", 9);
+  t("var i; if (0) {} else i = 9; i", 9);
+  t("var i; if (0) i = 8; else i = 9; i", 9);
   t("while (0) {}", 0);
   t("function f() {}", 0);
   t("try {} catch (e) {}", 0);
