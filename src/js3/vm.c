@@ -651,13 +651,19 @@ parseLTerm(Parser *p) {
   return 0;
 }
 
+static void
+clearErr(Parser *p) {
+  p->parseErr = 0;
+  p->parseErrChar = 0;
+}
+
 static Object *
 parseTerm(Parser *p) {
   Id id;
   if (parseId(p, &id)) {
     return parseITerm(p, &id);
   } else {
-    p->parseErr = 0;
+    clearErr(p);
     return parseLTerm(p);
   }
 }
@@ -779,7 +785,7 @@ parseExpr(Parser *p) {
   if (parseId(p, &id)) {
     return parseIExpr(p, &id);
   } else {
-    p->parseErr = 0;
+    clearErr(p);
     return parseLExpr(p);
   }
 }
@@ -947,7 +953,7 @@ parseStatement(Parser *p) {
       o = parseIExpr(p, &id);
     }
   } else {
-    p->parseErr = 0;
+    clearErr(p);
     o = parseLExpr(p);
   }
   return o;
@@ -1084,14 +1090,13 @@ Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
   }
   p->prog = prog;
   p->progEnd = prog + len;
-  p->parseErr = 0;
-  p->parseErrChar = 0;
   p->err = 0;
   p->nest = 0;
   p->ret = 0;
   p->thrw = 0;
   p->needSemicolon = 0;
   p->debug = debug;
+  clearErr(p);
 
   Object *o = parseStatements(p);
   if (o) {
