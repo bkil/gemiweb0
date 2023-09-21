@@ -1,6 +1,6 @@
 #!/bin/sh
 
-./gcc-warn.sh vm2.c run.c -o run.out &&
+./gcc-warn.sh vm.c run.c -o run.out &&
 valgrind \
   --leak-check=full \
   --show-leak-kinds=all \
@@ -8,4 +8,4 @@ valgrind \
   --malloc-fill=0xaa \
   --free-fill=0x55 \
   --expensive-definedness-checks=yes \
-  ./run.out "$@"
+  ./run.out "${1-test_hi.js}"
