@@ -699,7 +699,13 @@ parseEExpr(Parser *p, Object *t1) {
   if (accept(p, op = '+')) {
   } else if (accept(p, op = '-')) {
   } else if (accept(p, op = '|')) {
+    if (accept(p, '|')) {
+      op = 'O';
+    }
   } else if (accept(p, op = '&')) {
+    if (accept(p, '&')) {
+      op = 'A';
+    }
   } else if (accept(p, op = '<')) {
   } else if (accept(p, '>')) {
     if (!expect(p, '>')) {
@@ -717,6 +723,20 @@ parseEExpr(Parser *p, Object *t1) {
     return t1;
   }
 
+  int sh = 0;
+  switch (op) {
+    case 'A':
+      sh = !isTrue(t1);
+      break;
+    case 'O':
+      sh = isTrue(t1);
+      break;
+    default: {}
+  }
+  if (sh) {
+    p->nest++;
+  }
+
   Object *t2 = parseTerm(p);
   if (!t2) {
     Object_free(t1);
@@ -724,6 +744,9 @@ parseEExpr(Parser *p, Object *t1) {
   }
 
   if (p->nest) {
+    if (sh) {
+      p->nest--;
+    }
     Object_free(t2);
     return t1;
   }
@@ -740,8 +763,12 @@ parseEExpr(Parser *p, Object *t1) {
         return IntObject_new(x - y);
       case '|':
         return IntObject_new(x | y);
+      case 'O':
+        return IntObject_new(y);
       case '&':
         return IntObject_new(x & y);
+      case 'A':
+        return IntObject_new(y);
       case 'R':
         return IntObject_new(x >> y);
       case '<':
