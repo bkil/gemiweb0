@@ -63,6 +63,7 @@ typedef struct Parser {
   const char *parseErr;
   char parseErrChar;
 
+  int debug;
   int nest;
   int needSemicolon;
   Object *ret;
@@ -73,7 +74,7 @@ typedef struct Parser {
 } Parser;
 
 Parser *Parser_new(void);
-int Parser_eval(Parser *p, const char *prog, size_t len);
+int Parser_eval(Parser *p, const char *prog, size_t len, int debug);
 void Parser_free(Parser *p);
 
 static inline size_t

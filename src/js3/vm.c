@@ -1078,7 +1078,7 @@ Parser_new(void) {
 }
 
 int
-Parser_eval(Parser *p, const char *prog, size_t len) {
+Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
   if (!prog) {
     return 0;
   }
@@ -1091,18 +1091,21 @@ Parser_eval(Parser *p, const char *prog, size_t len) {
   p->ret = 0;
   p->thrw = 0;
   p->needSemicolon = 0;
+  p->debug = debug;
 
   Object *o = parseStatements(p);
   if (o) {
     int ret;
     if (p->thrw) {
-      Object *os = Object_toString(p->thrw);
+      if (p->debug) {
+        Object *os = Object_toString(p->thrw);
+        puts("runtime error: exception");
+        putsn(os->s.s, os->s.len);
+        Object_free(os);
+        puts("");
+      }
       Object_free(p->thrw);
       p->thrw = 0;
-      puts("runtime error: exception");
-      putsn(os->s.s, os->s.len);
-      Object_free(os);
-      puts("");
       ret = -2;
     } else {
       ret = o->t == IntObject ? o->i : isTrue(o);
@@ -1114,7 +1117,9 @@ Parser_eval(Parser *p, const char *prog, size_t len) {
   if (p->ret) {
     Object_free(p->ret);
     p->ret = 0;
-    puts("runtime error: return outside function");
+    if (p->debug) {
+      puts("runtime error: return outside function");
+    }
     return -2;
   }
 
@@ -1123,29 +1128,33 @@ Parser_eval(Parser *p, const char *prog, size_t len) {
     p->thrw = 0;
   }
   if (p->parseErr || !p->err) {
-    fputs("parse error: ", stdout);
-    if (p->parseErr) {
-      fputs(p->parseErr, stdout);
-      if (p->parseErrChar) {
-        fputs(" ( '", stdout);
-        putchar(p->parseErrChar);
-        fputs("' )", stdout);
+    if (p->debug) {
+      fputs("parse error: ", stdout);
+      if (p->parseErr) {
+        fputs(p->parseErr, stdout);
+        if (p->parseErrChar) {
+          fputs(" ( '", stdout);
+          putchar(p->parseErrChar);
+          fputs("' )", stdout);
+        }
       }
+      puts("");
+      showProg(p);
     }
-    puts("");
-    showProg(p);
     return -1;
   } else {
-    fputs("runtime error: ", stdout);
-    if (p->err) {
-      fputs(p->err, stdout);
-      if (p->errName.s) {
-        fputs(" - ", stdout);
-        putsn(p->errName.s, p->errName.len);
+    if (p->debug) {
+      fputs("runtime error: ", stdout);
+      if (p->err) {
+        fputs(p->err, stdout);
+        if (p->errName.s) {
+          fputs(" - ", stdout);
+          putsn(p->errName.s, p->errName.len);
+        }
       }
+      puts("");
+      showProg(p);
     }
-    puts("");
-    showProg(p);
     return -2;
   }
 }

@@ -36,7 +36,7 @@ main(int argc, char **argv) {
   }
 
   Parser *p = Parser_new();
-  int ret = Parser_eval(p, prog, len);
+  int ret = Parser_eval(p, prog, len, 1);
   Parser_free(p);
 
   if (munmap(prog, len) < 0) {

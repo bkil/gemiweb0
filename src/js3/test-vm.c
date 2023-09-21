@@ -9,13 +9,13 @@
 #define SB(x,y) (y)
 #endif
 
-static bool _debug = true;
+static bool _debug = false;
 static unsigned int _errorCount = 0;
 
 static int
-test_case(const char *prog) {
+test_case(const char *prog, bool debug) {
   Parser *p = Parser_new();
-  int ret = Parser_eval(p, prog, strlen(prog));
+  int ret = Parser_eval(p, prog, strlen(prog), debug);
   Parser_free(p);
   return ret;
 }
@@ -26,12 +26,13 @@ t3(const char *code, int expect, const char *name) {
   if (_debug) {
     printf("=testing: %s\n", title);
   }
-  int res = test_case(code);
+  int res = test_case(code, _debug);
   if (res != expect) {
     if (_debug) {
       printf(" -fail: got %d, expected %d\n", res, expect);
     } else {
       printf("fail: %s: got %d, expected %d\n", title, res, expect);
+      test_case(code, 1);
     }
     _errorCount++;
   }
@@ -165,7 +166,6 @@ main(void) {
   t("return 9", -2);
   t("function f() { var i; i = 9 }; f(); i", -2);
   t("function f() { var i; i = 9; return i }; f(); i", -2);
-  t("document.write(9)", 0);
   t("document.write(9", -1);
 
   // TODO Object reference cycles
@@ -261,6 +261,8 @@ main(void) {
   t("/* */\n9", 9);
   t("// /* \n9", 9);
   t("/* // */9", 9);
+
+  t("document.write(' DONE ')", 0);
 
   if (_errorCount) {
     printf("%d test(s) failed\n", _errorCount);

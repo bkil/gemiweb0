@@ -4,8 +4,6 @@ ISSMALLBIN=""
 ISSIMPLE=""
 
 main() {
-seq 1 20
-
 rm a.out 2>/dev/null
 compile -c vm.c && \
 {
