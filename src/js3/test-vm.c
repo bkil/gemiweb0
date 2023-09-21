@@ -67,6 +67,8 @@ main(void) {
   t("function f() { return 9 }; f(8)", 9);
   t("function f(a) { return a + 4 }; f(5)", 9);
   t("function f(a) { return a === undefined }; f()", 1);
+  t("function f(a, b) { return a + b }; f(4, 5)", 9);
+  t("function f(a, b, c) { return (a + b) + c }; f(2, 3, 4)", 9);
   t("function f() { 8 }; f() === undefined", 1);
 
   t("var s; s = 'a' + 'b'; s === 'ab'", 1);

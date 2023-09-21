@@ -451,17 +451,24 @@ static Object *
 parseBlock(Parser *p);
 
 static Object *
-parseFunction(Parser *p, Object *arg) {
+parseFunction(Parser *p, List *arg) {
   if (!acceptWs(p, ')')) {
     Id id;
-    if (!parseId(p, &id)) {
-      return 0;
-    }
+    do {
+      if (!parseId(p, &id)) {
+        return 0;
+      }
+      if (!p->nest) {
+        if (arg) {
+          Map_set_id(&p->vars->m, &id, arg->value);
+          arg = arg->next;
+        } else {
+          Map_set_id(&p->vars->m, &id, &undefinedObject);
+        }
+      }
+    } while (acceptWs(p, ','));
     if (!expectWs(p, ')')) {
       return 0;
-    }
-    if (!p->nest) {
-      Map_set_id(&p->vars->m, &id, arg ? arg : &undefinedObject);
     }
   }
   return parseBody(p);
@@ -501,60 +508,63 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
 
   Object *o = e ? Object_ref(e->value) : got ? got : &undefinedObject;
   Object_free(key);
-  Object *arg = 0;
+  List *args = 0;
   if (accept(p, '(')) {
-    if (acceptWs(p, ')') || ((arg = parseExpr(p)) && expectWs(p, ')'))) {
-      if (p->nest) {
+    if (!acceptWs(p, ')')) {
+      do {
+        Object *arg = parseExpr(p);
+        if (!arg) {
+          Object_free(o);
+          List_free(args);
+          return 0;
+        }
+        if (!p->nest) {
+          args = List_new(args, 0, arg);
+        }
+      } while (acceptWs(p, ','));
+      if (!expectWs(p, ')')) {
         Object_free(o);
-        return &undefinedObject;
+        List_free(args);
+        return 0;
       }
-      if (o->t == FunctionJs) {
-        const char *ret = p->prog;
-        p->prog = o->j.cs;
-        Object *caller = p->vars;
-        p->vars = MapObject_new();
-        Map_set_const(&p->vars->m, "", o->j.scope);
-        Object_free(o);
-
-        Object *res = parseFunction(p, arg);
-        if (arg) {
-          Object_free(arg);
-        }
-        Object_free(p->vars);
-        p->vars = caller;
-
-        if (res) {
-          p->prog = ret;
-          return res;
-        }
-        if (p->ret) {
-          p->prog = ret;
-          res = p->ret;
-          p->ret = 0;
-          return res;
-        }
-      } else if (o->t == FunctionNative) {
-        Object *as = MapObject_new();
-        if (arg) {
-          Map_set_const(&as->m, "0", arg);
-          Object_free(arg);
-        }
-        Object *res = (*o->f)(p, as);
-        Object_free(o);
-        Object_free(as);
-        return res;
-      } else {
-        if (arg) {
-          Object_free(arg);
-        }
-        Object_free(o);
-        return setRunError(p, "not a function", 0);
-      }
-    } else {
-      if (arg) {
-        Object_free(arg);
-      }
+    }
+    if (p->nest) {
+      List_free(args);
       Object_free(o);
+      return &undefinedObject;
+    }
+    if (o->t == FunctionJs) {
+      const char *ret = p->prog;
+      p->prog = o->j.cs;
+      Object *caller = p->vars;
+      p->vars = MapObject_new();
+      Map_set_const(&p->vars->m, "", o->j.scope);
+      Object_free(o);
+
+      Object *res = parseFunction(p, args);
+      List_free(args);
+      Object_free(p->vars);
+      p->vars = caller;
+
+      if (res) {
+        p->prog = ret;
+        return res;
+      }
+      if (p->ret) {
+        p->prog = ret;
+        res = p->ret;
+        p->ret = 0;
+        return res;
+      }
+    } else if (o->t == FunctionNative) {
+      Object *res = (*o->f)(p, args);
+      Object_free(o);
+      List_free(args);
+      return res;
+    } else {
+      List_free(args);
+      Object_free(o);
+      return setRunError(p, "not a function", 0);
     }
     return 0;
   }
@@ -1038,14 +1048,8 @@ parseBlock(Parser *p) {
 }
 
 static Object *
-getArg(Object *o, const char *n) {
-  List *l = Map_get(o->m, (Id){.s = n, .len = 1});
-  return l ? l->value : &undefinedObject;
-}
-
-static Object *
-document_write(Parser *p, Object *o) {
-  Object *e = getArg(o, "0");
+document_write(Parser *p, List *l) {
+  Object *e = l ? l->value : &undefinedObject;
   Object *os = Object_toString(e);
   if (os) {
     putsn(os->s.s, os->s.len);
@@ -1057,8 +1061,8 @@ document_write(Parser *p, Object *o) {
 }
 
 static Object *
-String_fromCharCode(Parser *p, Object *o) {
-  Object *e = getArg(o, "0");
+String_fromCharCode(Parser *p, List *l) {
+  Object *e = l ? l->value : &undefinedObject;
   if ((e->t != IntObject) || (e->i < 0) || (e->i > 255)) {
     return &undefinedObject;
   }

@@ -30,7 +30,7 @@ typedef struct JsFun {
   Object *scope;
 } JsFun;
 
-typedef Object *(*Native)(Parser *p, Object *);
+typedef Object *(*Native)(Parser *p, List *);
 
 enum ObjectV {
   UndefinedObject,
