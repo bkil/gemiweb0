@@ -632,6 +632,13 @@ parseLTerm(Parser *p) {
       Object_free(o);
       return b;
     }
+  } else if (acceptWs(p, '(')) {
+    o = parseExpr(p);
+    if (!expectWs(p, ')')) {
+      Object_free(o);
+      return 0;
+    }
+    return o;
   }
   p->parseErr = "expected keyword or identifier";
   return 0;
