@@ -1011,9 +1011,14 @@ parseBody(Parser *p) {
 }
 
 static Object *
+getArg(Object *o, const char *n) {
+  List *l = Map_get(o->m, (Id){.s = n, .len = 1});
+  return l ? l->value : &undefinedObject;
+}
+
+static Object *
 document_write(Parser *p, Object *o) {
-  List *l = Map_get(o->m, (Id){.s = "0", .len = 1});
-  Object *e = l ? l->value : &undefinedObject;
+  Object *e = getArg(o, "0");
   Object *os = Object_toString(e);
   if (os) {
     putsn(os->s.s, os->s.len);
@@ -1024,17 +1029,42 @@ document_write(Parser *p, Object *o) {
   return &undefinedObject;
 }
 
+static Object *
+String_fromCharCode(Parser *p, Object *o) {
+  Object *e = getArg(o, "0");
+  if ((e->t != IntObject) || (e->i < 0) || (e->i > 255)) {
+    return &undefinedObject;
+  }
+  Str s = {.s = 0, .len = 1};
+  s.s = malloc(2);
+  s.s[0] = (char)e->i;
+  s.s[1] = 0;
+  return StringObject_new_str(s);
+}
+
+static void
+addField(Object *o, const char *key, Object *v) {
+  Map_set_const(&o->m, key, v);
+  Object_free(v);
+}
+
+static void
+addFunction(Object *o, const char *key, Native f) {
+  addField(o, key, FunctionNative_new(f));
+}
+
 Parser *
 Parser_new(void) {
   Parser *p = malloc(sizeof(*p));
   p->vars = MapObject_new();
 
   Object *doc = MapObject_new();
-  Object *w = FunctionNative_new(&document_write);
-  Map_set_const(&doc->m, "write", w);
-  Object_free(w);
-  Map_set_const(&p->vars->m, "document", doc);
-  Object_free(doc);
+  addFunction(doc, "write", &document_write);
+  addField(p->vars, "document", doc);
+
+  Object *s = MapObject_new();
+  addFunction(s, "fromCharCode", &String_fromCharCode);
+  addField(p->vars, "String", s);
   return p;
 }
 
