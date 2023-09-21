@@ -828,13 +828,15 @@ parseIf(Parser *p) {
     p->nest--;
   }
 
+  const char *saved = p->prog;
   Id id;
   if (!parseId(p, &id)) {
     return &undefinedObject;
   }
 
   if (!strncmpEq(id, "else")) {
-    return 0;
+    p->prog = saved;
+    return &undefinedObject;
   }
   if (cond) {
     p->nest++;
