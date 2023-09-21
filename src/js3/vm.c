@@ -45,6 +45,20 @@ List *List_new(List *next, char *key, Object *value);
 #include "vm-free.c"
 #endif
 
+static void
+putsn(const char *s, size_t len) {
+  while (len-- && *s) {
+    fputc(*(s++), stdout);
+  }
+}
+
+static void
+showProg(Parser *p) {
+  const size_t left = off_t2size_t(p->progEnd - p->prog);
+  putsn(p->prog, left < 32 ? left : 32);
+  puts("");
+}
+
 static Object *
 setRunError(Parser *p, const char *message, const Id *id) {
   p->err = message;
@@ -261,13 +275,6 @@ String_concat(Object *t1, Object *t2) {
   strncpy(s, t1->s.s, n);
   strncpy(s + n, t2->s.s, m + 1);
   return StringObject_new_str((Str){.s = s, .len = n + m});
-}
-
-static void
-putsn(const char *s, size_t len) {
-  while (len-- && *s) {
-    fputc(*(s++), stdout);
-  }
 }
 
 
@@ -1068,13 +1075,6 @@ Parser_new(void) {
   addFunction(s, "fromCharCode", &String_fromCharCode);
   addField(p->vars, "String", s);
   return p;
-}
-
-static void
-showProg(Parser *p) {
-  const size_t left = off_t2size_t(p->progEnd - p->prog);
-  putsn(p->prog, left < 16 ? left : 16);
-  puts("");
 }
 
 int
