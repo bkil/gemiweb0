@@ -72,6 +72,7 @@ main(void) {
   t("var s; s = 9 + 'x'; s === '9x'", 1);
   t("var s; s = 'x' + 9; s === 'x9'", 1);
   t("var i; i = 9", 9);
+  t("var i = 9; i", 9);
   t("var i; i = 0; i = !i", 1);
   t("var xY_0; xY_0 = 9", 9);
   t("var i; i = 9; i", 9);

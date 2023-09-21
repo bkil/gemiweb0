@@ -891,10 +891,18 @@ parseStatement(Parser *p) {
       }
     } else if (strncmpEq(id, "var")) {
       if (parseId(p, &id)) {
-        if (!p->nest) {
-          Map_set_id(&p->vars->m, &id, &undefinedObject);
+        if (acceptWs(p, '=')) {
+          o = parseExpr(p);
+        } else {
+          o = &undefinedObject;
         }
-        o = &undefinedObject;
+        if (o) {
+          if (!p->nest) {
+            Map_set_id(&p->vars->m, &id, o);
+          }
+          Object_free(o);
+          o = &undefinedObject;
+        }
       }
     } else if (strncmpEq(id, "function")) {
       if (parseId(p, &id) && expectWs(p, '(')) {
