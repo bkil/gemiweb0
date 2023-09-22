@@ -62,7 +62,7 @@
 
 https://html.spec.whatwg.org/multipage/syntax.html#elements-2
 
-* Void elements: area, base, br, col, embed, hr, img, input, link, meta, source, track, wbr
+* Void elements: area, base, br, col, embed, hr, img, input, link, meta, source, track, wbr (deprecated: command, keygen, param)
 * Raw text elements: script, style
 * Escapable raw text elements: textarea, title
 
