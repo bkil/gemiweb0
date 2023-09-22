@@ -59,6 +59,12 @@ showProg(Parser *p) {
   puts("");
 }
 
+static void
+clearErr(Parser *p) {
+  p->parseErr = 0;
+  p->parseErrChar = 0;
+}
+
 static Object *
 setRunError(Parser *p, const char *message, const Id *id) {
   p->err = message;
@@ -630,8 +636,23 @@ parseITerm(Parser *p, Id *id) {
     return &undefinedObject;
   } else if (strncmpEq(*id, "null")) {
     return &nullObject;
+  } else if (strncmpEq(*id, "function")) {
+    Id skip;
+    parseId(p, &skip);
+    if (!expectWs(p, '(')) {
+      return 0;
+    }
+    Object *o = &undefinedObject;
+    if (!p->nest) {
+      o = FunctionJs_new((JsFun){.cs = p->prog, .scope = Object_clone(p->vars)});
+    }
+    p->nest++;
+    if (!parseFunction(p, 0)) {
+      return 0;
+    }
+    p->nest--;
+    return o;
   }
-
   return parseSTerm(p, id);
 }
 
@@ -659,12 +680,6 @@ parseLTerm(Parser *p) {
   }
   p->parseErr = "expected keyword or identifier";
   return 0;
-}
-
-static void
-clearErr(Parser *p) {
-  p->parseErr = 0;
-  p->parseErrChar = 0;
 }
 
 static Object *

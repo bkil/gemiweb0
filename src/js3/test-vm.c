@@ -207,6 +207,10 @@ main(void) {
     "var i; var j; i = 0; j = 0; function f() { function g() { i = i + 1; return 2; i = i + 8 }; j = g(); i = i + 4 }; f(); i + j",
     SB(7, 0));
 
+  // TODO application
+  t("var i; i = (function() { return 9 })(); i", -1);
+
+
   t("var i; try { i = 9 } catch (e) { i = 8 }; i", 9);
   t("var i; try { throw 4 } catch (e) { i = 9 }; i", 9);
   t("var i; var j; try { j = 4; throw 3; j = 2 } catch (e) { i = j + 5 }; i", 9);
@@ -254,6 +258,9 @@ main(void) {
   t("var i; if (0) i = 8; else i = 9; i", 9);
   t("while (0) {}", 0);
   t("function f() {}", 0);
+  t("var f; f = function() { return 9 }; f()", 9);
+  t("var f; f = function g() { return 9 }; f()", 9);
+  t("var f; f = function g() { return 9 }; g()", -2);
   t("try {} catch (e) {}", 0);
 
   t("", 0);
