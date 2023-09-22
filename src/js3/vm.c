@@ -812,8 +812,8 @@ parseEExpr(Parser *p, Object *t1) {
       default: {}
     }
     return 0;
-  } else if (op == 'E') {
-    int b = isStringEq(t1, t2) || ((t1->t == NullObject) && (t2->t == NullObject)) || ((t1->t == UndefinedObject) && (t2->t == UndefinedObject));
+  } else if (op == '=') {
+    int b = isStringEq(t1, t2) || (((t1->t == NullObject) || (t1->t == UndefinedObject)) && (t1->t == t2->t));
     Object_free(t1);
     Object_free(t2);
     return IntObject_new(b);
