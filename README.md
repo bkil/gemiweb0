@@ -1,5 +1,7 @@
 # GemiWeb, the gemini-HTTP/HTML subset
 
+Status: not public yet, volunteer developers and user brainstorming welcome!
+
 See the doc folder for more information:
 
 * [doc/project-community.md](doc/project-community.md)

@@ -258,6 +258,21 @@ More of a tech demo than a product for end users, but it is a unique independent
 
 > An (un)impressive browser being written from scratch in Rust
 
+## Planned
+
+Projects listed here have not produced a browser a user could test yet.
+
+### this project
+
+* As this project is not public yet, only an internal working name is available.
+* The main scope is producing only documentation, specification and conformance tests. Developers are expected to implement it on their own.
+* A proof of concept web browser, web server and bot user agent will be provided later in multiple languages, both low level an high level.
+
+### Haphaestus
+
+* https://haphaestus.org/
+* https://argonaut-constellation.org/
+
 ## Unmaintained
 
 ### kweb
