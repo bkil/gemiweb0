@@ -185,6 +185,8 @@ More of a tech demo than a product for end users, but it is a unique independent
 * CSS (from around 2008)
 * optionally JavaScript if compiled from source (ES3, from around 2009)
 
+## Text-only
+
 ### edbrowse
 
 * https://github.com/CMB/edbrowse
@@ -193,9 +195,59 @@ More of a tech demo than a product for end users, but it is a unique independent
 
 `apt install edbrowse`
 
-### NCSA-mosaic
+## Experimental
 
-* https://github.com/alandipert/ncsa-mosaic
+### Chawn
+
+* https://sr.ht/~bptato/chawan/
+* text-only
+* CSS, forms, cookies, FTP, Gopher
+* QuickJS JavaScript for link navigation and basic DOM manipulation
+
+### kosmonaut
+
+* https://github.com/twilco/kosmonaut
+
+> Kosmonaut is built with Rust using OpenGL bindings via gl-rs, Glutin for window management and OpenGL context creation, Servo's html5ever and cssparser for HTML and CSS parsing, and various other auxiliary libraries.
+> Only a very limited subset of CSS is currently supported, so most web pages will not work.
+
+### mbrowser
+
+* https://github.com/MQuy/mbrowser
+* DOM, partial CSS
+* Rust
+* uses various external dependencies for its components: cssparser, html5ever
+
+> mBrowser is a toy browser developed from scratch for learning purpose.
+
+### moon
+
+* https://github.com/ZeroX-DG/moon
+* GTK GUI
+
+> This is a web browser developed from scratch using Rust. To fit with the "make from scratch" spirit, the development of the browser avoids the use of external libraries as much as possible.
+
+### naglfar
+
+* https://github.com/maekawatoshiki/naglfar
+* gtk-rs
+
+> A toy web browser implemented in Rust from scratch
+
+### thdwb
+
+* https://github.com/danfragoso/thdwb
+* DOM, CSS, OpenGL, cache
+
+> This is the hotdog web browser project. It's a web browser with its own layout and rendering engine, parsers, and UI toolkit!
+> It's made from scratch entirely in golang. External dependencies are only OpenGL and GLFW, even go dependencies are kept to a minimum.
+
+### wowser
+
+* https://github.com/quittle/wowser
+* glfw
+
+> An (un)impressive browser being written from scratch in Rust
 
 ## Unmaintained
 
@@ -211,8 +263,21 @@ Hasn't been updated for a long time.
 
 `apt install midori`
 
+### NCSA-mosaic
+
+* https://github.com/alandipert/ncsa-mosaic
+
 ## Related
 
 * https://github.com/bkil/wiki/blob/master/en/widget-toolkit-html-rich-text.md
 
 > HTML rich text support by desktop widget toolkits
+
+* https://wiki.archlinux.org/title/List_of_applications/Internet#Web_browsers
+* https://github.com/cliffordfajardo/awesome-web-browsers#user-content-desktop-web-browsers
+* https://github.com/metov/awesome-browser#user-content-desktop-gui
+* https://github.com/hs3180/awesome-browser#user-content-browser
+* https://github.com/ZeroX-DG/awesome-browser#user-content-open-source-web-browsersbrowser-engines
+* https://github.com/gaeulbyul/non-webkit#user-content-non-webkit
+* https://github.com/nerdyslacker/desktop-web-browsers
+* https://blogs.gnome.org/mcatanzaro/2022/11/04/stop-using-qtwebkit/
