@@ -204,6 +204,15 @@ More of a tech demo than a product for end users, but it is a unique independent
 * CSS, forms, cookies, FTP, Gopher
 * QuickJS JavaScript for link navigation and basic DOM manipulation
 
+### gosub-browser
+
+* https://github.com/jaytaph/gosub-browser
+
+> GoSub: Gateway to Optimized Searching and Unlimited Browsing
+> A feeble attempt on writing a browser and learning rust.
+> Note: code in the main branch is currently not stable and might not even compile.
+> In the future, this component (html5 parser) will receive through an API a stream of bytes and will output a stream of events. The events will be consumed by the next component and so on, until we can display something in a window/user agent. This could very well be a text-mode browser, but the idea is to have a graphical browser.
+
 ### kosmonaut
 
 * https://github.com/twilco/kosmonaut
