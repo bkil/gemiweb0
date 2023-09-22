@@ -672,7 +672,7 @@ parseLTerm(Parser *p) {
     }
   } else if (acceptWs(p, '(')) {
     o = parseExpr(p);
-    if (!expectWs(p, ')')) {
+    if (o && !expectWs(p, ')')) {
       Object_free(o);
       return 0;
     }
@@ -722,18 +722,27 @@ parseEExpr(Parser *p, Object *t1) {
       op = 'A';
     }
   } else if (accept(p, op = '<')) {
-  } else if (accept(p, '>')) {
-    if (!expect(p, '>')) {
-      Object_free(t1);
-      return 0;
+    if (accept(p, '<')) {
+      op = 'L';
+    } else if (accept(p, '=')) {
+      op = 'l';
     }
-    op = 'R';
-  } else if (accept(p, '=')) {
+  } else if (accept(p, op = '>')) {
+    if (accept(p, '>')) {
+      op = 'R';
+    } else if (accept(p, '=')) {
+      op = 'g';
+    }
+  } else if (accept(p, op = '=')) {
     if (!expect(p, '=') || !expect(p, '=')) {
       Object_free(t1);
       return 0;
     }
-    op = 'E';
+  } else if (accept(p, op = '!')) {
+    if (!expect(p, '=') || !expect(p, '=')) {
+      Object_free(t1);
+      return 0;
+    }
   } else {
     return t1;
   }
@@ -786,10 +795,20 @@ parseEExpr(Parser *p, Object *t1) {
         return IntObject_new(y);
       case 'R':
         return IntObject_new(x >> y);
+      case 'L':
+        return IntObject_new(x << y);
       case '<':
         return IntObject_new(x < y);
-      case 'E':
+      case 'l':
+        return IntObject_new(x <= y);
+      case '>':
+        return IntObject_new(x > y);
+      case 'g':
+        return IntObject_new(x >= y);
+      case '=':
         return IntObject_new(x == y);
+      case '!':
+        return IntObject_new(x != y);
       default: {}
     }
     return 0;
