@@ -663,6 +663,9 @@ parseITerm(Parser *p, Id *id) {
 }
 
 static Object *
+parseTerm(Parser *p);
+
+static Object *
 parseLTerm(Parser *p) {
   Object *o;
   if ((o = parseIntLit(p))) {
@@ -670,12 +673,12 @@ parseLTerm(Parser *p) {
   } else if ((o = parseStringLit(p))) {
     return o;
   } else if (acceptWs(p, '!')) {
-    Id id;
-    if (parseId(p, &id) && (o = parseSTerm(p, &id))) {
-      Object *b = IntObject_new(!isTrue(o));
-      Object_free(o);
-      return b;
+    if (!(o = parseTerm(p))) {
+      return 0;
     }
+    Object *b = IntObject_new(!isTrue(o));
+    Object_free(o);
+    return b;
   } else if (acceptWs(p, '(')) {
     o = parseExpr(p);
     if (o && !expectWs(p, ')')) {
