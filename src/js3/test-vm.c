@@ -264,10 +264,14 @@ main(void) {
   t("9;\n ", 9);
   t("if (1) { 8; }", 0);
   t("if (1) { 8; } else { 7; }", 0);
+  t("if (0) { 8; } else { 7; }", 0);
   t("if (1) { 8 } 9", 9);
   t("if (1) { 8 } else { 7 } 9", 9);
   t("if (1) { if (1) { 8 } } 9", 9);
+  t("if (1) { if (1) { 8 } } else { 8 }", 0);
+  t("if (0) { if (1) { 8 } } else { 8 }", 0);
   t("if (1) { 8 } if (1) { 8 }", 0);
+  t("if (0) { 8 } if (1) { 8 }", 0);
   t("while (0) { 8; }", 0);
   t("function f() { 8; }", 0);
   t("try { 8; } catch (e) { 7; }", 0);
@@ -277,6 +281,7 @@ main(void) {
   t("if (1) {}", 0);
   t("if (1) {} else {}", 0);
   t("if (1) {} else if (1) {}", 0);
+  t("if (0) {} else if (1) {}", 0);
   t("var i; if (1) i = 9; i", 9);
   t("var i; if (0) {} else i = 9; i", 9);
   t("var i; if (0) i = 8; else i = 9; i", 9);

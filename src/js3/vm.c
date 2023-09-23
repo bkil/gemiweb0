@@ -367,6 +367,7 @@ parseId(Parser *p, Id *id) {
     p->prog += len;
     return 1;
   }
+  p->parseErr = "expected keyword or identifier";
   return 0;
 }
 
@@ -645,6 +646,7 @@ parseITerm(Parser *p, Id *id) {
   } else if (strncmpEq(*id, "function")) {
     Id skip;
     parseId(p, &skip);
+    clearErr(p);
     if (!expectWs(p, '(')) {
       return 0;
     }
@@ -687,7 +689,7 @@ parseLTerm(Parser *p) {
     }
     return o;
   }
-  p->parseErr = "expected keyword or identifier";
+  p->parseErr = "expected literal, negation or parenthesized expression";
   return 0;
 }
 
@@ -717,6 +719,7 @@ parseEExpr(Parser *p, Object *t1) {
   if (!t1) {
     return 0;
   }
+  clearErr(p);
   skipWs(p);
 
   char op;
@@ -932,6 +935,7 @@ parseIf(Parser *p) {
   const char *saved = p->prog;
   Id id;
   if (!parseId(p, &id)) {
+    clearErr(p);
     return &undefinedObject;
   }
 
@@ -1096,11 +1100,8 @@ parseStatements(Parser *p) {
 }
 
 static Object *
-parseBody(Parser *p) {
+parseBodyInner(Parser *p) {
   p->needSemicolon = 0;
-  if (!expectWs(p, '{')) {
-    return 0;
-  }
   Object *o;
   while (!acceptWs(p, '}')) {
     if (!parseRequiredSemicolon(p) || !(o = parseStatement(p))) {
@@ -1114,13 +1115,19 @@ parseBody(Parser *p) {
 }
 
 static Object *
-parseBlock(Parser *p) {
-  Object *o = parseBody(p);
-  if (o) {
-    return o;
+parseBody(Parser *p) {
+  if (!expectWs(p, '{')) {
+    return 0;
   }
-  clearErr(p);
-  o = parseStatement(p);
+  return parseBodyInner(p);
+}
+
+static Object *
+parseBlock(Parser *p) {
+  if (acceptWs(p, '{')) {
+    return parseBodyInner(p);
+  }
+  Object *o = parseStatement(p);
   parseOptionalSemicolon(p);
   return o;
 }
