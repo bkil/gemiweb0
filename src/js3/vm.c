@@ -754,6 +754,7 @@ parseEExpr(Parser *p, Object *t1) {
   }
 
   int sh = 0;
+  int isBool = 1;
   switch (op) {
     case 'A':
       sh = !isTrue(t1);
@@ -761,7 +762,8 @@ parseEExpr(Parser *p, Object *t1) {
     case 'O':
       sh = isTrue(t1);
       break;
-    default: {}
+    default:
+      isBool = 0;
   }
   if (sh) {
     p->nest++;
@@ -781,7 +783,17 @@ parseEExpr(Parser *p, Object *t1) {
     return t1;
   }
 
-  if ((t1->t == IntObject) && (t1->t == t2->t)) {
+  if (isBool) {
+    Object_free(t1);
+    switch (op) {
+      case 'O':
+        return t2;
+      case 'A':
+        return t2;
+      default:
+        return 0;
+    }
+  } else if ((t1->t == IntObject) && (t1->t == t2->t)) {
     int x = t1->i;
     int y = t2->i;
     Object_free(t1);
@@ -793,12 +805,8 @@ parseEExpr(Parser *p, Object *t1) {
         return IntObject_new(x - y);
       case '|':
         return IntObject_new(x | y);
-      case 'O':
-        return IntObject_new(y);
       case '&':
         return IntObject_new(x & y);
-      case 'A':
-        return IntObject_new(y);
       case 'R':
         return IntObject_new(x >> y);
       case 'L':
