@@ -514,7 +514,7 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
 
   Object *o = e ? Object_ref(e->value) : got ? got : &undefinedObject;
   Object_free(key);
-  List *args = 0;
+  List *args = 0, *argsEnd = 0;
   if (accept(p, '(')) {
     if (!acceptWs(p, ')')) {
       do {
@@ -525,7 +525,13 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
           return 0;
         }
         if (!p->nest) {
-          args = List_new(args, 0, arg);
+          List *l = List_new(0, 0, arg);
+          if (argsEnd) {
+            argsEnd->next = l;
+          } else {
+            args = l;
+          }
+          argsEnd = l;
         }
       } while (acceptWs(p, ','));
       if (!expectWs(p, ')')) {
