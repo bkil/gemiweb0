@@ -119,6 +119,15 @@ StringObject_new(const char *s) {
 }
 
 static Object *
+StringObject_new_char(char c) {
+  Str s = {.s = 0, .len = 1};
+  s.s = malloc(2);
+  s.s[0] = c;
+  s.s[1] = 0;
+  return StringObject_new_str(s);
+}
+
+static Object *
 FunctionJs_new(JsFun j) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -1148,11 +1157,7 @@ String_fromCharCode(Parser *p, List *l) {
   if ((e->t != IntObject) || (e->i < 0) || (e->i > 255)) {
     return &undefinedObject;
   }
-  Str s = {.s = 0, .len = 1};
-  s.s = malloc(2);
-  s.s[0] = (char)e->i;
-  s.s[1] = 0;
-  return StringObject_new_str(s);
+  return StringObject_new_char((char)e->i);
 }
 
 static void
