@@ -1228,7 +1228,7 @@ parseBlock(Parser *p) {
 }
 
 static Object *
-document_write(Parser *p, List *l) {
+Console_log(Parser *p, List *l) {
   Object *e = l ? l->value : &undefinedObject;
   Object *os = Object_toString(e);
   if (os) {
@@ -1265,9 +1265,9 @@ Parser_new(void) {
   Parser *p = malloc(sizeof(*p));
   p->vars = MapObject_new();
 
-  Object *doc = MapObject_new();
-  addFunction(doc, "write", &document_write);
-  addField(p->vars, "document", doc);
+  Object *con = MapObject_new();
+  addFunction(con, "log", &Console_log);
+  addField(p->vars, "console", con);
 
   Object *s = MapObject_new();
   addFunction(s, "fromCharCode", &String_fromCharCode);

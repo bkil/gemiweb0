@@ -229,7 +229,7 @@ main(void) {
   t("return 9", -2);
   t("function f() { var i; i = 9 }; f(); i", -2);
   t("function f() { var i; i = 9; return i }; f(); i", -2);
-  t("document.write(9", -1);
+  t("console.log(9", -1);
 
   // TODO Object reference cycles
   t("var p; var q; p = new Object; q = new Object; p.q = q; q.p = p; q = p.q; q.p", SB(1, -2));
@@ -342,7 +342,7 @@ main(void) {
   t("// /* \n9", 9);
   t("/* // */9", 9);
 
-  t("document.write(' DONE ')", 0);
+  t("console.log(' DONE ')", 0);
 
   if (_errorCount) {
     printf("%d test(s) failed\n", _errorCount);
