@@ -260,8 +260,8 @@ String_indexOf(Parser *p, Object *self, List *l) {
   char *needle = strndup(a->c.s, a->c.len);
   char *start = strstr(haystack, needle);
   int index = start ? off_t2int(start - haystack + 1) - 1 : -1;
-  free(haystack);
-  free(needle);
+  mfree(haystack);
+  mfree(needle);
   return IntObject_new(index);
 }
 
@@ -453,7 +453,7 @@ parseIntLit(Parser *p) {
   } else {
     char *t = strndup(p->prog, len);
     x = atoi(t);
-    free(t);
+    mfree(t);
   }
   p->prog = s;
   return IntObject_new(x);
