@@ -5,6 +5,19 @@
 
 #include "vm.h"
 
+static void
+putsn(const char *s, size_t len) {
+  while (len-- && *s) {
+    fputc(*(s++), stdout);
+  }
+}
+
+static void
+showProg(Parser *p) {
+  const size_t left = off_t2size_t(p->progEnd - p->prog);
+  putsn(p->prog, left < 32 ? left : 32);
+  puts("");
+}
 
 #ifdef SMALLBIN
 #include "vm-smallbin.c"
@@ -44,20 +57,6 @@ List *List_new(List *next, char *key, Object *value);
 
 #include "vm-free.c"
 #endif
-
-static void
-putsn(const char *s, size_t len) {
-  while (len-- && *s) {
-    fputc(*(s++), stdout);
-  }
-}
-
-static void
-showProg(Parser *p) {
-  const size_t left = off_t2size_t(p->progEnd - p->prog);
-  putsn(p->prog, left < 32 ? left : 32);
-  puts("");
-}
 
 static void
 clearErr(Parser *p) {
@@ -224,6 +223,15 @@ List_length(List *list) {
 }
 
 static int
+isString(Object *o) {
+  return (o->t == StringObject) || (o->t == ConstStringObject);
+}
+
+static int
+isStringEq(Object *a, Object *b) {
+  return isString(a) && isString(b) && (a->c.len == b->c.len) && (!strncmp(a->c.s, b->c.s, a->c.len));
+}
+
 isTrue(Object *o) {
   return ((o->t == IntObject) && o->i) || (((o->t == StringObject) || (o->t == ConstStringObject)) && o->c.len) || (o->t == MapObject) || (o->t == ArrayObject) || (o->t == FunctionJs) || (o->t == FunctionNative);
 }
@@ -271,8 +279,7 @@ Object_toString(Object *o) {
 
 static Object *
 String_concat(Object *t1, Object *t2) {
-  if (((t1->t != StringObject) && (t1->t != ConstStringObject)) ||
-    ((t2->t != StringObject) && (t2->t != ConstStringObject))) {
+  if (!isString(t1) || !isString(t2)) {
     return 0;
   }
   const size_t n = t1->s.len;
@@ -702,16 +709,6 @@ parseTerm(Parser *p) {
     clearErr(p);
     return parseLTerm(p);
   }
-}
-
-static int
-isString(Object *o) {
-  return (o->t == StringObject) || (o->t == ConstStringObject);
-}
-
-static int
-isStringEq(Object *a, Object *b) {
-  return isString(a) && isString(b) && (a->c.len == b->c.len) && (!strncmp(a->c.s, b->c.s, a->c.len));
 }
 
 static Object *
