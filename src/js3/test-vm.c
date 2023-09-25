@@ -78,6 +78,9 @@ main(void) {
   t("var s; s = 9 + 'x'; s === '9x'", 1);
   t("var s; s = 'x' + 9; s === 'x9'", 1);
   t("String.fromCharCode(48) === '0'", 1);
+  t("var s = 'a'; s.indexOf('c') === -1", 1);
+  t("var s = 'abcd'; s.indexOf('c') === 2", 1);
+  t("var s = 'abcd'; s.indexOf('bc') === 1", 1);
   t("var i; i = 9", 9);
   t("var i = 9; i", 9);
   t("!0", 1);
@@ -118,6 +121,7 @@ main(void) {
   t("var v; v = new Array; v[0] = 9; v[0]", 9);
   t("var v; v = new Array; v.length === 0", 1);
   t("var v; v = new Array; v[0] = 8; v[1] = 7; v.length", 2);
+  t("var v; v = new Array; v.length = 1", -2);
 
   t("var u; while (0) { u = 9 }; u", 0);
   t("while (0) { 9 }", 0);
@@ -192,6 +196,23 @@ main(void) {
   t("'xa' === 'xb'", 0);
   t("'xa' !== 'xa'", 0);
   t("'xa' !== 'xb'", 1);
+  t("var s = ''; s.length === 0", 1);
+  t("var s = 'a'; s.length", 1);
+  t("var s = 'a'; s.missing", -2);
+  t("var s = 'ab'; s.length", 2);
+  t("var s = ''; s.length = 1", -2);
+  t("var s = 'a'; s[-1] === undefined", 1);
+  t("var s = 'a'; s.charCodeAt(-1) === undefined", 1);
+  t("var s = ''; s[0] === undefined", 1);
+  t("var s = 'a'; s[0] === 'a'", 1);
+  t("var s = 'abc'; s[1] === 'b'", 1);
+  t("var s = 'abc'; s[2] === 'c'", 1);
+  t("var s = 'abc'; s.charCodeAt(2)", 99);
+  t("var s = 'abc'; s[3] === undefined", 1);
+  t("var s = 'abc'; s.charCodeAt(3) === undefined", 1);
+  t("var s = 'a'; s[0] = 'x'", -2);
+  t("var s = ''; s.charCodeAt(undefined)", -2);
+  t("var s = ''; s[undefined]", -2);
   t("new Object", 1);
   t("new Array", 1);
   t("''", 0);

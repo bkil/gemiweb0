@@ -1,7 +1,7 @@
 #include <stdio.h> // puts fputs fputc putchar stdout
 #include <malloc.h> // malloc free
 #include <stdlib.h> // atoi size_t
-#include <string.h> // strcmp strncmp strncpy strdup strndup strlen
+#include <string.h> // strcmp strncmp strncpy strdup strndup strlen strstr
 
 #include "vm.h"
 
@@ -145,6 +145,15 @@ FunctionNative_new(Native f) {
   return o;
 }
 
+static Object *
+MethodNative_new(Method a) {
+  Object *o = malloc(sizeof(*o));
+  o->ref = 0;
+  o->t = MethodNative;
+  o->a = a;
+  return o;
+}
+
 #ifdef NEEDLEAK
 static
 #endif
@@ -241,8 +250,33 @@ isStringEq(Object *a, Object *b) {
   return isString(a) && isString(b) && (a->c.len == b->c.len) && (!strncmp(a->c.s, b->c.s, a->c.len));
 }
 
+static Object *
+String_indexOf(Parser *p, Object *self, List *l) {
+  Object *a = l ? l->value : &undefinedObject;
+  if (!isString(a)) {
+    return &undefinedObject;
+  }
+  char *haystack = strndup(self->c.s, self->c.len);
+  char *needle = strndup(a->c.s, a->c.len);
+  char *start = strstr(haystack, needle);
+  int index = start ? off_t2int(start - haystack + 1) - 1 : -1;
+  free(haystack);
+  free(needle);
+  return IntObject_new(index);
+}
+
+static Object *
+String_charCodeAt(Parser *p, Object *self, List *l) {
+  if (!l || (l->value->t != IntObject)) {
+    return 0;
+  }
+  int i = l->value->i;
+  return (i >= 0) && (i < (int)self->c.len) ? IntObject_new(self->c.s[i]) : &undefinedObject;
+}
+
+static int
 isTrue(Object *o) {
-  return ((o->t == IntObject) && o->i) || (((o->t == StringObject) || (o->t == ConstStringObject)) && o->c.len) || (o->t == MapObject) || (o->t == ArrayObject) || (o->t == FunctionJs) || (o->t == FunctionNative);
+  return ((o->t == IntObject) && o->i) || (isString(o) && o->c.len) || (o->t == MapObject) || (o->t == ArrayObject) || (o->t == FunctionJs) || (o->t == FunctionNative) || (o->t == MethodNative);
 }
 // TODO throw exception
 
@@ -280,6 +314,9 @@ Object_toString(Object *o) {
 
     case FunctionNative:
       return StringObject_new("Native");
+
+    case MethodNative:
+      return StringObject_new("Method");
 
     default: {}
   }
@@ -503,6 +540,12 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
 
   const char *prog = p->prog;
   if (accept(p, '=') && !accept(p, '=')) {
+    if (!key) {
+      if (got) {
+        Object_free(got);
+      }
+      return setRunError(p, "expected a writeable left hand side", 0);
+    }
     Object *r = 0;
     if ((r = parseExpr(p))) {
       if (!p->nest) {
@@ -520,6 +563,9 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
           }
           Object_free(r);
           Object_free(r);
+          if (got) {
+            Object_free(got);
+          }
           return setRunError(p, "reference cycles unsupported", 0);
         }
       }
@@ -530,7 +576,9 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
   p->prog = prog;
 
   Object *o = e ? Object_ref(e->value) : got ? got : &undefinedObject;
-  Object_free(key);
+  if (key) {
+    Object_free(key);
+  }
   List *args = 0, *argsEnd = 0;
   if (accept(p, '(')) {
     if (!acceptWs(p, ')')) {
@@ -589,6 +637,17 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
       Object *res = (*o->f)(p, args);
       Object_free(o);
       List_free(args);
+      if (!res) {
+        setRunError(p, "native function failed", 0);
+      }
+      return res;
+    } else if (o->t == MethodNative) {
+      Object *res = (*o->a.f)(p, o->a.self, args);
+      Object_free(o);
+      List_free(args);
+      if (!res) {
+        setRunError(p, "native method failed", 0);
+      }
       return res;
     } else {
       List_free(args);
@@ -625,21 +684,50 @@ parseSTerm(Parser *p, Id *id) {
     return parseRHS(p, &p->vars->m, &undefinedObject, m, 0);
   }
 
-  if ((m->value->t != MapObject) && (m->value->t != ArrayObject)) {
+  Object *field = 0;
+  if (isString(m->value)) {
+    if (isString(i)) {
+      if (strncmpEq(i->c, "indexOf")) {
+        field = MethodNative_new((Method){.f = &String_indexOf, .self = Object_ref(m->value)});
+      } else if (strncmpEq(i->c, "charCodeAt")) {
+        field = MethodNative_new((Method){.f = &String_charCodeAt, .self = Object_ref(m->value)});
+      } else if (strncmpEq(i->c, "length")) {
+        field = IntObject_new((int)strnlen(m->value->c.s, m->value->c.len));
+      } else {
+        Object_free(i);
+        return setRunError(p, "unknown String method", 0);
+      }
+    } else if (i->t == IntObject) {
+      field = (i->i >= 0) && (i->i < (int)m->value->c.len) ? StringObject_new_char(m->value->c.s[i->i]) : &undefinedObject;
+    } else {
+      Object_free(i);
+      return setRunError(p, "String only indexable with String or Int", 0);
+    }
     Object_free(i);
+    return parseRHS(p, &m->value->m, 0, 0, field);
+
+  } else if ((m->value->t == MapObject) || (m->value->t == ArrayObject)) {
+    Object *is = Object_toString(i);
+    Object_free(i);
+    if (!is) {
+      return setRunError(p, "can't convert to string", id);
+    }
+    List *e = Map_get_str(m->value->m, is->s);
+    if (!e) {
+      if (m->value->t == ArrayObject) {
+        if (strncmpEq(is->c, "length")) {
+          field = IntObject_new(List_length(m->value->m));
+        }
+      }
+    }
+    if (field) {
+      Object_free(is);
+      is = 0;
+    }
+    return parseRHS(p, &m->value->m, is, field ? 0 : e, field);
+  } else {
     return setRunError(p, "not indexable", id);
   }
-  Object *is = Object_toString(i);
-  Object_free(i);
-  if (!is) {
-    return setRunError(p, "can't convert to string", id);
-  }
-
-  List *e = Map_get_str(m->value->m, is->s);
-  if (!e && (m->value->t == ArrayObject) && strncmpEq(is->c, "length")) {
-    return parseRHS(p, &m->value->m, is, 0, IntObject_new(List_length(m->value->m)));
-  }
-  return parseRHS(p, &m->value->m, is, e, 0);
 }
 
 static Object *
@@ -672,6 +760,7 @@ parseITerm(Parser *p, Id *id) {
     }
     p->nest++;
     if (!parseFunction(p, 0)) {
+      Object_free(o);
       return 0;
     }
     p->nest--;

@@ -3,7 +3,7 @@
 
 static int
 getCycles(Object *o) {
-  if ((o->t != MapObject) && (o->t != ArrayObject) && (o->t != FunctionJs)) {
+  if ((o->t != MapObject) && (o->t != ArrayObject) && (o->t != FunctionJs) && (o->t != MethodNative)) {
     return 0;
   } else if (o->ref == -2) {
     return 1;
@@ -21,8 +21,10 @@ getCycles(Object *o) {
       c += getCycles(it->value);
       it = it->next;
     }
-  } else {
+  } else if (o->t == FunctionJs) {
     c = getCycles(o->j.scope);
+  } else if (o->t == MethodNative) {
+    c = getCycles(o->a.self);
   }
 
   o->ref = savedRef;
@@ -47,6 +49,8 @@ Object_free(Object *o) {
     List_free(o->m);
   } else if (o->t == FunctionJs) {
     Object_free(o->j.scope);
+  } else if (o->t == MethodNative) {
+    Object_free(o->a.self);
   }
   free(o);
 }

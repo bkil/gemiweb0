@@ -2,6 +2,7 @@
 #define _include_vm_h
 
 #include <stdlib.h> // size_t
+#include <limits.h> // INT_MIN INT_MAX
 
 typedef struct Id {
   const char *s;
@@ -30,7 +31,13 @@ typedef struct JsFun {
   Object *scope;
 } JsFun;
 
-typedef Object *(*Native)(Parser *p, List *);
+typedef Object *(*Native)(Parser *, List *);
+typedef Object *(*MethodFun)(Parser *, Object *, List *);
+
+typedef struct Method {
+  MethodFun f;
+  Object *self;
+} Method;
 
 enum ObjectV {
   UndefinedObject,
@@ -40,6 +47,7 @@ enum ObjectV {
   MapObject,
   FunctionJs,
   FunctionNative,
+  MethodNative,
   NullObject,
   ArrayObject
 };
@@ -54,6 +62,7 @@ typedef struct Object {
     List *m;
     JsFun j;
     Native f;
+    Method a;
   };
 } Object;
 
@@ -82,8 +91,15 @@ off_t2size_t(off_t x) {
   if (x < 0) {
     return 0;
   }
-  size_t ret = (size_t)x;
-  return ret;
+  return (size_t)x;
+}
+
+static inline int
+off_t2int(off_t x) {
+  if ((x < INT_MIN) || (x > INT_MAX)) {
+    return 0;
+  }
+  return (int)x;
 }
 
 #endif
