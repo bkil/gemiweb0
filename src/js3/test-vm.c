@@ -51,6 +51,7 @@ main(void) {
   t("var i; i = 9; function f() { i = 8 }; var g; g = f; i", 9);
   t("function f() { return 9 }; var m; m = new Object; m.a = f; m.a()", 9);
   t("function f() { function g() { return 9 }; return g() }; f()", 9);
+  t("function f() { return 9 }; function g() { return f(); }; g()", 9);
 
   t3(
     "var a; var b; a = 24; b = 42; while (b < a) { a = a - b }; while (a < b) { while (a < b) { b = b - a }; while (b < a) { a = a - b } }; b",
@@ -230,6 +231,7 @@ main(void) {
   t(
     "var i; var j; i = 0; j = 0; function f() { function g() { i = i + 1; return 2; i = i + 8 }; j = g(); i = i + 4 }; f(); i + j",
     SB(7, 0));
+  t("function g() { return f(); }; function f() { return 9 }; g()", -2);
 
   // TODO application
   t("var i; i = (function() { return 9 })(); i", -1);
