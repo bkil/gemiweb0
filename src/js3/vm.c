@@ -832,11 +832,11 @@ parseEExpr(Parser *p, Object *t1) {
       default: {}
     }
     return 0;
-  } else if (op == '=') {
+  } else if ((op == '=') || (op == '!')) {
     int b = isStringEq(t1, t2) || (((t1->t == NullObject) || (t1->t == UndefinedObject)) && (t1->t == t2->t));
     Object_free(t1);
     Object_free(t2);
-    return IntObject_new(b);
+    return IntObject_new((op == '=') ? b : !b);
   } else if (op == '+') {
     Object *s = 0;
     if (isString(t1)) {

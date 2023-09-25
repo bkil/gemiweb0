@@ -175,6 +175,7 @@ main(void) {
   t("2 !== 2", 0);
   t("2 !== 3", 1);
   t("undefined === undefined", 1);
+  t("undefined !== undefined", 0);
   t("0 === undefined", 0);
   t("0 === '0'", 0);
   t("0 === ''", 0);
@@ -183,10 +184,14 @@ main(void) {
   t("null", 0);
   t("null === null", 1);
   t("null === undefined", 0);
+  t("null !== null", 0);
+  t("null !== undefined", 1);
   t("\"xa\" === \"xa\"", 1);
   t("\"xa\" === \"xb\"", 0);
   t("'xa' === 'xa'", 1);
   t("'xa' === 'xb'", 0);
+  t("'xa' !== 'xa'", 0);
+  t("'xa' !== 'xb'", 1);
   t("new Object", 1);
   t("new Array", 1);
   t("''", 0);
