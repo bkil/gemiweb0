@@ -535,6 +535,49 @@ parseFunction(Parser *p, List *arg) {
 }
 
 static Object *
+invokeFun(Parser *p, Object *o, List *args) {
+  if (o->t == FunctionJs) {
+    const char *ret = p->prog;
+    p->prog = o->j.cs;
+    Object *caller = p->vars;
+    p->vars = MapObject_new();
+    Map_set_const(&p->vars->m, "", o->j.scope);
+    Object_free(o);
+
+    Object *res = parseFunction(p, args);
+    List_free(args);
+    Object_free(p->vars);
+    p->vars = caller;
+
+    if (res) {
+      p->prog = ret;
+      return res;
+    }
+    if (p->ret) {
+      p->prog = ret;
+      res = p->ret;
+      p->ret = 0;
+      return res;
+    }
+  } else if (o->t == FunctionNative) {
+    Object *res = (*o->f)(p, args);
+    Object_free(o);
+    List_free(args);
+    return res;
+  } else if (o->t == MethodNative) {
+    Object *res = (*o->a.f)(p, o->a.self, args);
+    Object_free(o);
+    List_free(args);
+    return res;
+  } else {
+    List_free(args);
+    Object_free(o);
+    return setRunError(p, "not a function", 0);
+  }
+  return 0;
+}
+
+static Object *
 parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
   skipWs(p);
 
@@ -610,51 +653,7 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
       Object_free(o);
       return &undefinedObject;
     }
-    if (o->t == FunctionJs) {
-      const char *ret = p->prog;
-      p->prog = o->j.cs;
-      Object *caller = p->vars;
-      p->vars = MapObject_new();
-      Map_set_const(&p->vars->m, "", o->j.scope);
-      Object_free(o);
-
-      Object *res = parseFunction(p, args);
-      List_free(args);
-      Object_free(p->vars);
-      p->vars = caller;
-
-      if (res) {
-        p->prog = ret;
-        return res;
-      }
-      if (p->ret) {
-        p->prog = ret;
-        res = p->ret;
-        p->ret = 0;
-        return res;
-      }
-    } else if (o->t == FunctionNative) {
-      Object *res = (*o->f)(p, args);
-      Object_free(o);
-      List_free(args);
-      if (!res) {
-        setRunError(p, "native function failed", 0);
-      }
-      return res;
-    } else if (o->t == MethodNative) {
-      Object *res = (*o->a.f)(p, o->a.self, args);
-      Object_free(o);
-      List_free(args);
-      if (!res) {
-        setRunError(p, "native method failed", 0);
-      }
-      return res;
-    } else {
-      List_free(args);
-      Object_free(o);
-      return setRunError(p, "not a function", 0);
-    }
-    return 0;
+    return invokeFun(p, o, args);
   }
 
   return o;
@@ -892,6 +891,7 @@ parseEExpr(Parser *p, Object *t1) {
       case 'A':
         return t2;
       default:
+        Object_free(t2);
         return 0;
     }
   } else if ((t1->t == IntObject) && (t1->t == t2->t)) {
