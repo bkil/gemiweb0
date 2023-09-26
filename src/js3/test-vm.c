@@ -78,6 +78,9 @@ main(void) {
   t("var s; s = 9 + 'x'; s === '9x'", 1);
   t("var s; s = 'x' + 9; s === 'x9'", 1);
   t("String.fromCharCode(48) === '0'", 1);
+  t("var i = String.fromCharCode(undefined); i.charCodeAt(0) === 0", 1);
+  t("var i = String.fromCharCode(null); i.charCodeAt(0) === 0", 1);
+  t("var i = String.fromCharCode(new Object); i.charCodeAt(0) === 0", 1);
   t("var s = 'a'; s.indexOf('c') === -1", 1);
   t("var s = 'abcd'; s.indexOf('c') === 2", 1);
   t("var s = 'abcd'; s.indexOf('bc') === 1", 1);
@@ -211,7 +214,9 @@ main(void) {
   t("var s = 'abc'; s[3] === undefined", 1);
   t("var s = 'abc'; s.charCodeAt(3) === undefined", 1);
   t("var s = 'a'; s[0] = 'x'", -2);
-  t("var s = ''; s.charCodeAt(undefined)", -2);
+  t("var s = 'c'; s.charCodeAt(undefined)", 99);
+  t("var s = 'c'; s.charCodeAt(null)", 99);
+  t("var s = 'c'; s.charCodeAt(new Object)", 99);
   t("var s = ''; s[undefined]", -2);
   t("new Object", 1);
   t("new Array", 1);

@@ -267,10 +267,10 @@ String_indexOf(Parser *p, Object *self, List *l) {
 
 static Object *
 String_charCodeAt(Parser *p, Object *self, List *l) {
-  if (!l || (l->value->t != IntObject)) {
-    return 0;
+  int i = 0;
+  if (l && (l->value->t == IntObject)) {
+    i = l->value->i;
   }
-  int i = l->value->i;
   return (i >= 0) && (i < (int)self->c.len) ? IntObject_new(self->c.s[i]) : &undefinedObject;
 }
 
@@ -1243,10 +1243,11 @@ Console_log(Parser *p, List *l) {
 static Object *
 String_fromCharCode(Parser *p, List *l) {
   Object *e = l ? l->value : &undefinedObject;
-  if ((e->t != IntObject) || (e->i < 0) || (e->i > 255)) {
-    return &undefinedObject;
+  char c = 0;
+  if ((e->t == IntObject) && (e->i >= 0) && (e->i < 128)) {
+    c = (char)e->i;
   }
-  return StringObject_new_char((char)e->i);
+  return StringObject_new_char(c);
 }
 
 static void
