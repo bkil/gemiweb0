@@ -1,4 +1,4 @@
-#include <stdio.h> // puts fputs fputc putchar stdout
+#include <stdio.h> // puts fputs fputc putchar stdout getline
 #include <malloc.h> // malloc free
 #include <stdlib.h> // atoi size_t
 #include <string.h> // strcmp strncmp strncpy strdup strndup strlen strstr
@@ -1250,6 +1250,26 @@ String_fromCharCode(Parser *p, List *l) {
   return StringObject_new_char(c);
 }
 
+static Object *
+process_stdin_on(Parser *p, List *l) {
+  if (!l || !l->next || !isString(l->value) || !strncmpEq(l->value->c, "data")) {
+    return 0;
+  }
+  size_t all = 0;
+  Str s = {.s = 0};
+  ssize_t len = getline(&s.s, &all, stdin);
+  Object *arg;
+  len--;
+  if (len < 0) {
+    mfree(s.s);
+    arg = &undefinedObject;
+  } else {
+    s.len = (size_t)len;
+    arg = StringObject_new_str(s);
+  }
+  return invokeFun(p, Object_ref(l->next->value), List_new(0, 0, arg));
+}
+
 static void
 addField(Object *o, const char *key, Object *v) {
   Map_set_const(&o->m, key, v);
@@ -1273,6 +1293,12 @@ Parser_new(void) {
   Object *s = MapObject_new();
   addFunction(s, "fromCharCode", &String_fromCharCode);
   addField(p->vars, "String", s);
+
+  Object *ps = MapObject_new();
+  addFunction(ps, "on", &process_stdin_on);
+  Object *pr = MapObject_new();
+  addField(pr, "stdin", ps);
+  addField(p->vars, "process", pr);
   return p;
 }
 
