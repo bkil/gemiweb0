@@ -785,6 +785,13 @@ parseLTerm(Parser *p) {
     Object *b = IntObject_new(!isTrue(o));
     Object_free(o);
     return b;
+  } else if (acceptWs(p, '~')) {
+    if (!(o = parseTerm(p))) {
+      return 0;
+    }
+    Object *b = IntObject_new(o->t == IntObject ? ~o->i : ~isTrue(o));
+    Object_free(o);
+    return b;
   } else if (acceptWs(p, '(')) {
     o = parseExpr(p);
     if (o && !expectWs(p, ')')) {
@@ -819,6 +826,10 @@ parseEExpr(Parser *p, Object *t1) {
   char op;
   if (accept(p, op = '+')) {
   } else if (accept(p, op = '-')) {
+  } else if (accept(p, op = '*')) {
+  } else if (accept(p, op = '/')) {
+  } else if (accept(p, op = '%')) {
+  } else if (accept(p, op = '^')) {
   } else if (accept(p, op = '|')) {
     if (accept(p, '|')) {
       op = 'O';
@@ -904,6 +915,14 @@ parseEExpr(Parser *p, Object *t1) {
         return IntObject_new(x + y);
       case '-':
         return IntObject_new(x - y);
+      case '*':
+        return IntObject_new(x * y);
+      case '/':
+        return IntObject_new(x / y);
+      case '%':
+        return IntObject_new(x % y);
+      case '^':
+        return IntObject_new(x ^ y);
       case '|':
         return IntObject_new(x | y);
       case '&':
