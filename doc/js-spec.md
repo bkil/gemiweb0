@@ -4,27 +4,33 @@
 
 * if-else
 * while
+* for-in
 * try-catch
-* double slash comments
+* comments
 * throw
 * function definition
 * return
-* arbitrary block scopes with {}
+* optional compound block within if, while or for statements ({})
+
+convenience:
+
+* function expression
 
 missing:
 
-* switch-case-default, for, for-in, for-of, foreach, do-while, label-goto, break, continue, with, varargs
+* switch-case-default, for (the C-styled one), for-of, foreach, do-while, label-goto, break, continue, with, varargs, arbitrary block scopes with {}
 
 ## Operators
 
-* !, ~, +, -, *, /, %, <, >, <=, >=, ==, !=, ===, !==, ^, <<, >>
+* !, ~, +, -, *, /, %, <, >, <=, >=, ^, |, &, <<, >>, ===, !==
 
 convenience:
-* parenthesis subexpressions, short-circuiting &&, ||, + also works for string concatenation
+
+* parenthesis subexpressions, short-circuiting &&, ||, + also works for string concatenation, typeof
 
 missing:
 
-* delete, instanceof, typeof, +=, ++, class, new (mocked for some built-in objects), precedence (have to fully parenthesize)
+* delete, instanceof, ==, !=, +=, ++, class, new (mocked for some built-in objects), precedence (have to fully parenthesize)
 
 ## Values
 
@@ -32,18 +38,85 @@ missing:
 * undefined
 * null
 * decimal integers
-* string literals without escaping
-* object square bracket member accessor
+* string literals (without escaping)
+* Object and Array square bracket member accessor ([])
 
 convenience:
 
-* var initializer, Object and Array literals, anonymous function expression, object dot member accessor
+* var initializer, anonymous function expression, object dot member accessor
 
 missing:
 
-* const, let, this, void, true, false, hexadecimal, float, string control characters
+* const, let, this, void, true, false, hexadecimal, float, string control characters, Object and Array literals
+
+## Functions
+
+* eval
+* eval2: not standard, a sandboxed variant not operating on the current environment, but on one passed in as an Object argument
+* isNaN
+* parseInt(s, 10)
+
+missing:
+
+* parseFloat, escape, unescape
+
+## Language objects
+
+missing:
+
+* Boolean, Function, Math, Number, RegExp
+
+### Array
+
+`.length`
+
+missing:
+
+* concat, join, pop, push, reverse, shift, slice, splice, sort, unshift
+
+### Date
+
+`+new Date`
+
+missing:
+
+* everything except getting the current time in seconds
+
+### Object
+
+* .hasOwnProperty
+
+### String
+
+* String.fromCharCode
+* .charCodeAt
+* .length
+
+convenience:
+
+* .match
+
+missing:
+
+* .charAt, .lastIndexOf, .concat, .split, .slice, .substring, .replace, .search, .toLowerCase, .toUpperCase, .substr, .indexOf
+
+## Application server
+
+```
+TODO This section still needs more research, a proof of concept and then drafting.
+```
+
+* console.log()
+* process.stdin.on('data', function(data) {})
+* require('fs').readFileSync(file)
+* require('fs').writeFileSync(file, data)
+* require('node:net').createServer(function(socket) {}).listen(function(){}).close()
+* require('node:net').createConnection({}, function() {}).on('data', function(data) {}).write('')
+* require('node:net').connect({})
 
 ## Navigator objects
+
+These are not provided by the interpreter, but by the runtime of the web browser user agent.
 
 ### Document
 
@@ -75,47 +148,6 @@ missing:
 
 * window.location.replace, window.setTimeout (string variant), window.setInterval, window.clearTimeout
 
-## Language objects
-
-missing:
-
-* Boolean, Function, Math, Number, RegExp
-
-### Array
-
-`.length`
-
-missing:
-
-* concat, join, pop, push, reverse, shift, slice, splice, sort, unshift
-
-### Date
-
-`+new Date`
-
-missing:
-
-* everything except getting the current time in seconds
-
-### Object
-
-* Object.keys
-* .hasOwnProperty
-
-### String
-
-* String.fromCharCode
-* .charCodeAt
-* .length
-
-convenience:
-
-* .toLowerCase, .toUpperCase, .substr, .match, .indexOf
-
-missing:
-
-* .charAt, .lastIndexOf, .concat, .split, .slice, .substring, .replace, .search
-
 ### XMLHttpRequest
 
 * new XMLHttpRequest
@@ -127,16 +159,6 @@ missing:
 * .timeout
 * .send
 * .responseText
-
-## Functions
-
-* eval
-* isNaN
-* parseInt(s, 10)
-
-missing:
-
-* parseFloat, escape, unescape
 
 ## Implementation
 
@@ -153,6 +175,7 @@ A simple, text-entry & pre based browser written in the JavaScript subset interp
 Work in progress C interpreter aiming for short source that is easy to review, small size of compressed binary code and low memory footprint:
 
 * [../src/js2/test-vm.c](../src/js2/test-vm.c)
+* [../src/js3/test-vm.c](../src/js3/test-vm.c)
 
 Not published yet:
 

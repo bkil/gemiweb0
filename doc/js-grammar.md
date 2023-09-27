@@ -316,8 +316,54 @@ lTerm: <int> | <string> | ! <id> <sTerm>
 iTerm: undefined | null | new <id> | <id> <sTerm>
 sTerm: <idx> [ <rhs> ]?
 rhs: '=' <expr> | ( [ <expr> [, <expr>]* ]? )
-idx: [ '[' <expr> ']' | . <id> ]*
+idx: [ '[' <expr> ']' | . <id> ]?
 op: + | - | '|' | & | '>>' | '<' | === | ==
+int = -?[1-9][0-9]*
+string = '[^'\\]*'|"[^"\\]*"
+id = [a-zA-Z_][a-zA-Z_0-9]*
+```
+
+### Level 7 b
+
+```
+program: <stms> [;]?
+stmBody: <stmBrace> | <stm>
+stmBrace: { <stms> [;]? }
+stms: [ <stm> [; <stm>]* ]?
+stm: if ( <expr> ) <stmBody> [ else <stmBody> ]? | while ( <expr> ) <stmBody> | var <id> [ '=' <expr> ]? | function <id> <function> | return <expr> | try <stmBrace> catch ( <id> ) <stmBrace> | throw <expr> | <expr>
+expr: function [ <id> ]? <function> | <iTerm> <eExpr> | <lTerm> <eExpr>
+function: <id> ( [ <id> [, <id>]* ]? ) <stmBody>
+eExpr: [ <op> <term> ]?
+term: <iTerm> | <lTerm>
+lTerm: <int> | <string> | ! <expr> | ~ <expr> | '(' <expr> ')'
+iTerm: undefined | null | new Object | new Array | <id> <sTerm>
+sTerm: <idx> [ <rhs> ]?
+rhs: '=' <expr> | ( [ <expr> [, <expr>]* ]? )
+idx: [ '[' <expr> ']' | . <id> ]?
+op: + | - | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '||' | '&&' | === | !==
+int = -?[1-9][0-9]*
+string = '[^'\\]*'|"[^"\\]*"
+id = [a-zA-Z_][a-zA-Z_0-9]*
+```
+
+### Level 7 c
+
+```
+program: <stms> [;]?
+stmBody: <stmBrace> | <stm>
+stmBrace: { <stms> [;]? }
+stms: [ <stm> [; <stm>]* ]?
+stm: if ( <expr> ) <stmBody> [ else <stmBody> ]? | while ( <expr> ) <stmBody> | for ( <id> in <expr> ) <stmBody> | var <id> [ '=' <expr> ]? | function <id> <function> | return <expr> | try <stmBrace> catch ( <id> ) <stmBrace> | throw <expr> | <expr>
+expr: function [ <id> ]? <function> | <iTerm> <eExpr> | <lTerm> <eExpr>
+function: <id> ( [ <id> [, <id>]* ]? ) <stmBody>
+eExpr: [ <op> <term> ]?
+term: <iTerm> | <lTerm>
+lTerm: <int> | <string> | ! <expr> | ~ <expr> | '(' <expr> ')'
+iTerm: undefined | null | new Object | new Array | <id> <sTerm>
+sTerm: <idx> [ <rhs> ]?
+rhs: '=' <expr> | ( [ <expr> [, <expr>]* ]? )
+idx: [ '[' <expr> ']' | . <id> ]*
+op: + | - | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '||' | '&&' | === | !==
 int = -?[1-9][0-9]*
 string = '[^'\\]*'|"[^"\\]*"
 id = [a-zA-Z_][a-zA-Z_0-9]*
@@ -335,45 +381,35 @@ goto: try <stmBrace> catch ( <id> ) <stmBrace> | throw <expr> | return <expr> | 
 expr: <funExpr> | <uTerm> [ '?' <expr> : <expr> | <op> <uTerm> ]?
 funExpr: function [ <id> ]? ( [ <id> [, <id>]* ]? ) { <funStm> [; <funStm>]* [;]? }
 funStm: var <varInit> [, <varInit> ]* | <stm>
-varInit: <id> [ = <expr> ]?
+varInit: <id> [ '=' <expr> ]?
 uTerm: [ ( ! | ~ ) ]? <term>
 term: <lit> | new <id> [ <args> ]? | typeof <id> <idx> | ( <expr> ) [ <args> ]? | <id> <idx> [ <iTerm> ]?
 lit: undefined | null | <num> | <string>
 iTerm: '=' <expr> | <args> | instanceof <id>
 idx: [ '[' <expr> ']' | . <id> ]*
-op: + | - | '*' | '%' | / | '||' | '|' | && | & | ^ | '<<' | '<=' | '<' | '>>' | '>=' | '>' | === | == | !== | !=
+op: + | - | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '||' | '&&' | === | !== | == | !=
 args: ( [ <expr> [, <expr>]* ]? )
 num: <double> | <int>
 double = -?[1-9][0-9]*\.[0-9]+
 int = (-?[1-9][0-9]*|0x[0-9a-fA-F]+)
-string = '([^'\\]|\\n|\\.)*'|"([^"\\]|\\n|\\.)*"
+string = '([^'\\]|\\n|\\t|\\.)*'|"([^"\\]|\\n|\\t|\\.)*"
 id = [a-zA-Z_][a-zA-Z_0-9]*
 ```
 
 ### Level 9 a
 
-* instance method: .length
+* comments
+* instance method: .length, charCodeAt
+* static methods: String.fromCharCode
 * new Array
 * new Object
-* x[y]
-* static method
-* undefined
-* ===
-* x.y x[y]
-* general property accessor
-* comments
-* var a, b = 2, c = 3;
-* new
-* delete
-* double quoted string, newline, tab
-* try-catch
-* ternary operator
-* hexadecimal
 
 ### Level 9 b
 
 * []
 * {}
 * associative operators with precedence
-* null coalescing
+* ?? null coalescing
 * .?
+* defining general properties, accessors
+* .prototype inheritance
