@@ -195,6 +195,22 @@ More of a tech demo than a product for end users, but it is a unique independent
 
 `apt install edbrowse`
 
+### ELinks
+
+* https://en.wikipedia.org/wiki/ELinks
+* text-only
+* tables, frames
+* some CSS
+* some JavaScript using Mozilla SpiderMonkey
+* colours
+
+### Eww
+
+* https://en.wikipedia.org/wiki/Eww_(web_browser)
+* text-only
+* images
+* no CSS, no JS
+
 ## Experimental
 
 ### Chawn
