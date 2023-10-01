@@ -68,7 +68,8 @@ missing:
 
 ### Array
 
-`.length`
+* .length
+* [i]
 
 missing:
 
@@ -89,6 +90,7 @@ missing:
 ### String
 
 * String.fromCharCode
+* .charAt
 * .charCodeAt
 * .length
 
@@ -187,4 +189,6 @@ Planned on shortlist:
 
 ## References
 
+* https://www.ecma-international.org/wp-content/uploads/ECMA-262_2nd_edition_august_1998.pdf
+* https://www.ecma-international.org/wp-content/uploads/ECMA-262_3rd_edition_december_1999.pdf
 * https://web.archive.org/web/19990127231137/http://developer.netscape.com/docs/manuals/communicator/jsguide4/contents.htm
