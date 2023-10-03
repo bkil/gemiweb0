@@ -49,7 +49,8 @@ enum ObjectV {
   FunctionNative,
   MethodNative,
   NullObject,
-  ArrayObject
+  ArrayObject,
+  NanObject
 };
 
 typedef struct Object {

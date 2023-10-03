@@ -85,6 +85,7 @@ List_new(List *next, char *key, Object *value) {
 
 static Object undefinedObject = {.ref = -1, .t = UndefinedObject, .i = 0};
 static Object nullObject = {.ref = -1, .t = NullObject, .i = 0};
+static Object nanObject = {.ref = -1, .t = NanObject, .i = 0};
 
 static Object *
 IntObject_new(int x) {
@@ -317,6 +318,9 @@ Object_toString(Object *o) {
 
     case MethodNative:
       return StringObject_new("Method");
+
+    case NanObject:
+      return StringObject_new("NaN");
 
     default: {}
   }
@@ -746,6 +750,8 @@ parseITerm(Parser *p, Id *id) {
     return &undefinedObject;
   } else if (strncmpEq(*id, "null")) {
     return &nullObject;
+  } else if (strncmpEq(*id, "NaN")) {
+    return &nanObject;
   } else if (strncmpEq(*id, "function")) {
     Id skip;
     parseId(p, &skip);
@@ -1289,6 +1295,11 @@ process_stdin_on(Parser *p, List *l) {
   return invokeFun(p, Object_ref(l->next->value), List_new(0, 0, arg));
 }
 
+static Object *
+isNaN(Parser *p, List *l) {
+  return IntObject_new(l ? l->value->t == NanObject : 0);
+}
+
 static void
 addField(Object *o, const char *key, Object *v) {
   Map_set_const(&o->m, key, v);
@@ -1318,6 +1329,8 @@ Parser_new(void) {
   Object *pr = MapObject_new();
   addField(pr, "stdin", ps);
   addField(p->vars, "process", pr);
+
+  addFunction(p->vars, "isNaN", &isNaN);
   return p;
 }
 

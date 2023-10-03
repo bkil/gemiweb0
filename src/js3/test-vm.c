@@ -189,6 +189,10 @@ main(void) {
   t("2 === 3", 0);
   t("2 !== 2", 0);
   t("2 !== 3", 1);
+  t("NaN", 0);
+  t("NaN !== NaN", 1);
+  t("isNaN(NaN)", 1);
+  t("isNaN(8)", 0);
   t("undefined === undefined", 1);
   t("undefined !== undefined", 0);
   t("0 === undefined", 0);
