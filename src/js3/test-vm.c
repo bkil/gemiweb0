@@ -216,25 +216,36 @@ main(void) {
   t("var s = 'a'; s.missing", -2);
   t("var s = 'ab'; s.length", 2);
   t("var s = ''; s.length = 1", -2);
-  t("var s = 'a'; s[-1] === undefined", 1);
-  t("var s = 'a'; s.charCodeAt(-1) === undefined", 1);
-  t("var s = ''; s[0] === undefined", 1);
-  t("var s = 'a'; s[0] === 'a'", 1);
-  t("var s = 'abc'; s[1] === 'b'", 1);
-  t("var s = 'abc'; s[2] === 'c'", 1);
+  t("var s = 'a'; s.charAt(-1) === ''", 1);
+  t("var s = 'a'; isNaN(s.charCodeAt(-1))", 1);
+  t("var s = ''; s.charAt(0) === ''", 1);
+  t("var s = 'a'; s.charAt(0) === 'a'", 1);
+  t("var s = 'abc'; s.charAt(1) === 'b'", 1);
+  t("var s = 'abc'; s.charAt(2) === 'c'", 1);
   t("var s = 'abc'; s.charCodeAt(2)", 99);
-  t("var s = 'abc'; s[3] === undefined", 1);
-  t("var s = 'abc'; s.charCodeAt(3) === undefined", 1);
-  t("var s = 'a'; s[0] = 'x'", -2);
+  t("var s = 'abc'; s.charAt(3) === ''", 1);
+  t("var s = 'abc'; isNaN(s.charCodeAt(3))", 1);
   t("var s = 'c'; s.charCodeAt(undefined)", 99);
   t("var s = 'c'; s.charCodeAt(null)", 99);
   t("var s = 'c'; s.charCodeAt(new Object)", 99);
-  t("var s = ''; s[undefined]", -2);
+  t("var s = 'c'; s.charAt(undefined) === 'c'", 1);
   t("new Object", 1);
   t("new Array", 1);
   t("''", 0);
   t("'x'", 1);
   t("8; 9", 9);
+
+  // ES5
+  t("var s = 'a'; s[-1] === ''", 1);
+  t("var s = ''; s[0] === ''", 1);
+  t("var s = 'a'; s[0] === 'a'", 1);
+  t("var s = 'abc'; s[1] === 'b'", 1);
+  t("var s = 'abc'; s[2] === 'c'", 1);
+  t("var s = 'abc'; s[3] === ''", 1);
+  t("var s = 'c'; s[undefined] === 'c'", 1);
+  t("var s = 'c'; s[null] === 'c'", 1);
+  t("var s = 'c'; s[new Object] === 'c'", 1);
+  t("var s = 'a'; s[0] = 'x'", -2);
 
   t("var i; i === undefined", 1);
   t("var i; i = 9", 9);

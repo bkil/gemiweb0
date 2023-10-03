@@ -86,6 +86,7 @@ List_new(List *next, char *key, Object *value) {
 static Object undefinedObject = {.ref = -1, .t = UndefinedObject, .i = 0};
 static Object nullObject = {.ref = -1, .t = NullObject, .i = 0};
 static Object nanObject = {.ref = -1, .t = NanObject, .i = 0};
+static Object emptyString = {.ref = -1, .t = ConstStringObject, .c = {.len = 0, .s = ""}};
 
 static Object *
 IntObject_new(int x) {
@@ -266,13 +267,27 @@ String_indexOf(Parser *p, Object *self, List *l) {
   return IntObject_new(index);
 }
 
+static char
+String_getCharCode(Object *self, Object *x) {
+  int i = x->t == IntObject ? x->i : 0;
+  return (i >= 0) && (i < (int)self->c.len) ? self->c.s[i] : -1;
+}
+
 static Object *
 String_charCodeAt(Parser *p, Object *self, List *l) {
-  int i = 0;
-  if (l && (l->value->t == IntObject)) {
-    i = l->value->i;
-  }
-  return (i >= 0) && (i < (int)self->c.len) ? IntObject_new(self->c.s[i]) : &undefinedObject;
+  char c = String_getCharCode(self, l ? l->value : &undefinedObject);
+  return c < 0 ? &nanObject : IntObject_new(c);
+}
+
+static Object *
+String_charAt_obj(Object *self, Object *x) {
+  char c = String_getCharCode(self, x);
+  return c < 0 ? &emptyString : StringObject_new_char(c);
+}
+
+static Object *
+String_charAt(Parser *p, Object *self, List *l) {
+  return String_charAt_obj(self, l ? l->value : &undefinedObject);
 }
 
 static int
@@ -694,20 +709,20 @@ parseSTerm(Parser *p, Id *id) {
         field = MethodNative_new((Method){.f = &String_indexOf, .self = Object_ref(m->value)});
       } else if (strncmpEq(i->c, "charCodeAt")) {
         field = MethodNative_new((Method){.f = &String_charCodeAt, .self = Object_ref(m->value)});
+      } else if (strncmpEq(i->c, "charAt")) {
+        field = MethodNative_new((Method){.f = &String_charAt, .self = Object_ref(m->value)});
       } else if (strncmpEq(i->c, "length")) {
         field = IntObject_new((int)strnlen(m->value->c.s, m->value->c.len));
-      } else {
-        Object_free(i);
-        return setRunError(p, "unknown String method", 0);
       }
-    } else if (i->t == IntObject) {
-      field = (i->i >= 0) && (i->i < (int)m->value->c.len) ? StringObject_new_char(m->value->c.s[i->i]) : &undefinedObject;
     } else {
-      Object_free(i);
-      return setRunError(p, "String only indexable with String or Int", 0);
+      field = String_charAt_obj(m->value, i);
     }
     Object_free(i);
-    return parseRHS(p, &m->value->m, 0, 0, field);
+    if (field) {
+      return parseRHS(p, &m->value->m, 0, 0, field);
+    } else {
+      return setRunError(p, "unknown String method", 0);
+    }
 
   } else if ((m->value->t == MapObject) || (m->value->t == ArrayObject)) {
     Object *is = Object_toString(i);
