@@ -124,6 +124,11 @@ main(void) {
     "test_while_concat"
   );
 
+  t("var o = new Object; o.a = 4; o.b = 5; var s = 0; var i; for (i in o) { s = s + o[i]; }; s", 9);
+  t("var p = new Object; p.ab = 3; p.cd = 4; var q = new Object; var n = 0; var i; for (i in p) { q[i] = p[i]; n = n + 1; }; (q.ab + q.cd) + n", 9);
+  t("var o = new Object; o.a = 4; o.b = 5; var n = 0; var x; try { var i; for (i in o) { n = n + 1; throw 8; } } catch (e) { x = e; }; x + n", 9);
+  t("var x = 9; if (0) { var o = 0; var i; for (i in o) { x = x + 1; } }; x", 9);
+
   t("var v; v = new Array; v[0] === undefined", 1);
   t("var v; v = new Array; v[0] = 9; v[0]", 9);
   t("var v; v = new Array; v.length === 0", 1);

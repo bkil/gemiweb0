@@ -1085,6 +1085,65 @@ parseWhile(Parser *p) {
 }
 
 static Object *
+parseFor(Parser *p) {
+  if (!expectWs(p, '(')) {
+    return 0;
+  }
+
+  Id itName, word;
+  Object *e;
+  if (!parseId(p, &itName) || !parseId(p, &word) || !strncmpEq(word, "in") || !(e = parseExpr(p))) {
+    return 0;
+  }
+  if (!p->nest && (e->t != MapObject)) {
+    Object_free(e);
+    return setRunError(p, "for can only iterate on Object", &itName);
+  }
+  if (!expectWs(p, ')')) {
+    return 0;
+  }
+
+  List *l = e->m;
+  int isEmpty = !l;
+  if (isEmpty) {
+    p->nest++;
+  }
+
+  skipWs(p);
+  const char *begin = p->prog;
+  do {
+    p->prog = begin;
+    Object *caller = 0;
+    Object *o;
+    if (!p->nest) {
+      caller = p->vars;
+      p->vars = MapObject_new();
+      Map_set_const(&p->vars->m, "", caller);
+      Map_set_id(&p->vars->m, &itName, o = StringObject_new(l->key));
+      Object_free(o);
+    }
+
+    o = parseBody(p);
+    if (caller) {
+      Object_free(p->vars);
+      p->vars = caller;
+      l = l->next;
+    }
+    if (!o) {
+      Object_free(e);
+      return 0;
+    }
+    Object_free(o);
+  } while (!p->nest && l);
+
+  if (isEmpty) {
+    p->nest--;
+  }
+  Object_free(e);
+  return &undefinedObject;
+}
+
+static Object *
 parseIf(Parser *p) {
   Object *o;
   if (!expectWs(p, '(') || !(o = parseExpr(p))) {
@@ -1138,6 +1197,8 @@ parseStatement(Parser *p) {
       o = parseIf(p);
     } else if (strncmpEq(id, "while")) {
       o = parseWhile(p);
+    } else if (strncmpEq(id, "for")) {
+      o = parseFor(p);
     } else if (strncmpEq(id, "try")) {
       if (!(o = parseBody(p))) {
         return 0;
