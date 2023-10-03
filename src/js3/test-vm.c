@@ -235,6 +235,11 @@ main(void) {
   t("'x'", 1);
   t("8; 9", 9);
 
+  t("typeof undefined === 'undefined'", 1);
+  t("typeof '' === 'string'", 1);
+  t("typeof 8 === 'number'", 1);
+  t("var o = new Object; typeof o === 'object'", 1);
+
   // ES5
   t("var s = 'a'; s[-1] === ''", 1);
   t("var s = ''; s[0] === ''", 1);

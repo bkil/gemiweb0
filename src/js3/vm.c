@@ -343,6 +343,34 @@ Object_toString(Object *o) {
 }
 
 static Object *
+typeOf(Object *o) {
+  switch (o->t) {
+    case IntObject:
+    case NanObject:
+      return StringObject_new("number");
+
+    case UndefinedObject:
+      return StringObject_new("undefined");
+
+    case StringObject:
+    case ConstStringObject:
+      return StringObject_new("string");
+
+    case MapObject:
+    case ArrayObject:
+      return StringObject_new("object");
+
+    case FunctionJs:
+    case FunctionNative:
+    case MethodNative:
+      return StringObject_new("function");
+
+    default: {}
+  }
+  return 0;
+}
+
+static Object *
 String_concat(Object *t1, Object *t2) {
   if (!isString(t1) || !isString(t2)) {
     return 0;
@@ -749,6 +777,9 @@ parseSTerm(Parser *p, Id *id) {
 }
 
 static Object *
+parseTerm(Parser *p);
+
+static Object *
 parseITerm(Parser *p, Id *id) {
   if (strncmpEq(*id, "new")) {
     skipWs(p);
@@ -761,6 +792,14 @@ parseITerm(Parser *p, Id *id) {
       return ArrayObject_new();
     }
     return setRunError(p, "can't instantiate class of", id);
+  } else if (strncmpEq(*id, "typeof")) {
+    Object *o = parseTerm(p);
+    if (o && !p->nest) {
+      Object *t = typeOf(o);
+      Object_free(o);
+      return t;
+    }
+    return o;
   } else if (strncmpEq(*id, "undefined")) {
     return &undefinedObject;
   } else if (strncmpEq(*id, "null")) {
@@ -788,9 +827,6 @@ parseITerm(Parser *p, Id *id) {
   }
   return parseSTerm(p, id);
 }
-
-static Object *
-parseTerm(Parser *p);
 
 static Object *
 parseLTerm(Parser *p) {
