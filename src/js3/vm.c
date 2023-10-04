@@ -481,12 +481,14 @@ parseIntLit(Parser *p) {
     s++;
     c = s < p->progEnd ? *s : 0;
   }
+  const char *digitStart = s;
   while ((c >= '0') && (c <= '9')) {
     s++;
     c = s < p->progEnd ? *s : 0;
   }
   size_t len = off_t2size_t(s - p->prog);
-  if (!len || (c == '_') || (c == '.') || ((c >= 'A' && (c <= 'Z'))) || ((c >= 'a') && (c <= 'z'))) {
+  size_t digits = off_t2size_t(s - digitStart);
+  if (!digits || (c == '_') || (c == '.') || ((c >= 'A' && (c <= 'Z'))) || ((c >= 'a') && (c <= 'z'))) {
     return 0;
   }
 
