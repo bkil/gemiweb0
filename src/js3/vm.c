@@ -634,7 +634,7 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
       if (got) {
         Object_free(got);
       }
-      return setRunError(p, "expected a writeable left hand side", 0);
+      return setRunError(p, "expected a writable left hand side", 0);
     }
     Object *r = 0;
     if ((r = parseExpr(p))) {
@@ -709,13 +709,13 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
 static Object *
 parseSTerm(Parser *p, Id *id) {
   List **parent = &p->vars->m;
-  Object *is = &undefinedObject;
-  List *m = 0;
+  Object *key = &undefinedObject;
+  List *e = 0;
   Object *field = 0;
 
   if (p->nest) {
     parent = 0;
-  } else if (!(m = Map_get(*parent, *id))) {
+  } else if (!(e = Map_get(*parent, *id))) {
     return setRunError(p, "undefined variable", id);
   }
 
@@ -724,51 +724,51 @@ parseSTerm(Parser *p, Id *id) {
     if (p->nest) {
       Object_free(i);
     } else {
-      if (is) {
-        Object_free(is);
-        is = 0;
+      if (key) {
+        Object_free(key);
+        key = 0;
       }
-      if (!m) {
+      if (!e) {
         Object_free(i);
         if (field) {
           Object_free(field);
         }
         return setRunError(p, "undefined object field", id);
       }
-      parent = &m->value->m;
-      if (isString(m->value)) {
+      parent = &e->value->m;
+      if (isString(e->value)) {
         if (isString(i)) {
           if (strncmpEq(i->c, "indexOf")) {
-            field = MethodNative_new((Method){.f = &String_indexOf, .self = Object_ref(m->value)});
+            field = MethodNative_new((Method){.f = &String_indexOf, .self = Object_ref(e->value)});
           } else if (strncmpEq(i->c, "charCodeAt")) {
-            field = MethodNative_new((Method){.f = &String_charCodeAt, .self = Object_ref(m->value)});
+            field = MethodNative_new((Method){.f = &String_charCodeAt, .self = Object_ref(e->value)});
           } else if (strncmpEq(i->c, "charAt")) {
-            field = MethodNative_new((Method){.f = &String_charAt, .self = Object_ref(m->value)});
+            field = MethodNative_new((Method){.f = &String_charAt, .self = Object_ref(e->value)});
           } else if (strncmpEq(i->c, "length")) {
-            field = IntObject_new((int)strnlen(m->value->c.s, m->value->c.len));
+            field = IntObject_new((int)strnlen(e->value->c.s, e->value->c.len));
           }
         } else {
-          field = String_charAt_obj(m->value, i);
+          field = String_charAt_obj(e->value, i);
         }
         Object_free(i);
-        m = 0;
+        e = 0;
         if (!field) {
-          return setRunError(p, "unknown String method", 0);
+          return setRunError(p, "unknown String method", id);
         }
 
-      } else if ((m->value->t == MapObject) || (m->value->t == ArrayObject)) {
-        is = Object_toString(i);
+      } else if ((e->value->t == MapObject) || (e->value->t == ArrayObject)) {
+        key = Object_toString(i);
         Object_free(i);
-        if (!is) {
-          return setRunError(p, "can't convert to string", id);
+        if (!key) {
+          return setRunError(p, "can't convert index to string", id);
         }
-        if ((m->value->t == ArrayObject) && strncmpEq(is->c, "length")) {
-          field = IntObject_new(List_length(m->value->m));
-          Object_free(is);
-          is = 0;
-          m = 0;
+        if ((e->value->t == ArrayObject) && strncmpEq(key->c, "length")) {
+          field = IntObject_new(List_length(e->value->m));
+          Object_free(key);
+          key = 0;
+          e = 0;
         } else {
-          m = Map_get_str(*parent, is->s);
+          e = Map_get_str(*parent, key->s);
         }
 
       } else {
@@ -780,7 +780,7 @@ parseSTerm(Parser *p, Id *id) {
   if (p->err || p->parseErr) {
     return 0;
   }
-  return parseRHS(p, parent, is, m, field);
+  return parseRHS(p, parent, key, e, field);
 }
 
 static Object *
