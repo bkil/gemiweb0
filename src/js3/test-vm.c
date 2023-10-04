@@ -115,6 +115,20 @@ main(void) {
   t("var p; var q; p = new Object; q = new Object; q.p = p; q.p", 1);
   t("var p; var q; p = new Object; p.a = 9; q = new Object; q.p = p; p = q.p; p.a", 9);
 
+  t("var p = new Object; p.a = 9; var q = new Object; q.p = p; q.p.a", 9);
+  t("var p = new Object; p.a = 9; var q = new Object; q.r = p; p = new Object; p.q = q; p.q.r.a", 9);
+  t("var p = new Object; p.a = 8; var q = new Object; q.r = p; p = new Object; p.q = q; p.q.r.a = 9; p.q.r.a", 9);
+  t("var p = new Object; p.a = 8; var q = new Object; q.r = p; p = new Object; p.q = q; p.q.r = 9; p.q.r", 9);
+  t("var p = new Object; var v = new Array; v[0] = 9; p.v = v; p.v[0]", 9);
+  t("var p = new Object; p.v = new Array; p.v[0] = 9; p.v[0]", 9);
+  t("var p = new Object; p.x.y", -2);
+  t("var i = 2; i.x", -2);
+  t("var i = 2; i.x", -2);
+  t("var s = 'c'; s.length.x", -2);
+  t("var s = 'c'; s.x", -2);
+  t("u.x", -2);
+  t("var p = new Object; p.a = 9; var q = new Object; q.p = p; q['p']['a']", 9);
+
   t("var i; i = 3; while (i) { i = i - 1 }; i", 0);
   t("var i; var j; var k; k = 0; i = 3; while (i) { j = 3; while (j) { k = k + 1; j = j - 1 }; i = i - 1 }; k", 9);
   t("var v; v = new Object; v[1", -1);
@@ -134,6 +148,7 @@ main(void) {
   t("var v; v = new Array; v.length === 0", 1);
   t("var v; v = new Array; v[0] = 8; v[1] = 7; v.length", 2);
   t("var v; v = new Array; v.length = 1", -2);
+  t("var v; v = new Array; v.u === undefined", 1);
 
   t("var u; while (0) { u = 9 }; u", 0);
   t("while (0) { 9 }", 0);
@@ -228,6 +243,7 @@ main(void) {
   t("var s = 'abc'; s.charAt(1) === 'b'", 1);
   t("var s = 'abc'; s.charAt(2) === 'c'", 1);
   t("var s = 'abc'; s.charCodeAt(2)", 99);
+  t("var s = 'abc'; var f = s.charCodeAt; f(2)", 99);
   t("var s = 'abc'; s.charAt(3) === ''", 1);
   t("var s = 'abc'; isNaN(s.charCodeAt(3))", 1);
   t("var s = 'c'; s.charCodeAt(undefined)", 99);

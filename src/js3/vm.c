@@ -708,72 +708,79 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
 
 static Object *
 parseSTerm(Parser *p, Id *id) {
-  Object *i = parseIndex(p);
-  if (!i && (p->err || p->parseErr)) {
-    return 0;
-  }
-  if (p->nest) {
-    if (i) {
-      Object_free(i);
-    }
-    return parseRHS(p, 0, &undefinedObject, 0, 0);
-  }
+  List **parent = &p->vars->m;
+  Object *is = &undefinedObject;
+  List *m = 0;
+  Object *field = 0;
 
-  List *m;
-  if (!(m = Map_get(p->vars->m, *id))) {
-    if (i) {
-      Object_free(i);
-    }
+  if (p->nest) {
+    parent = 0;
+  } else if (!(m = Map_get(*parent, *id))) {
     return setRunError(p, "undefined variable", id);
   }
-  if (!i) {
-    return parseRHS(p, &p->vars->m, &undefinedObject, m, 0);
-  }
 
-  Object *field = 0;
-  if (isString(m->value)) {
-    if (isString(i)) {
-      if (strncmpEq(i->c, "indexOf")) {
-        field = MethodNative_new((Method){.f = &String_indexOf, .self = Object_ref(m->value)});
-      } else if (strncmpEq(i->c, "charCodeAt")) {
-        field = MethodNative_new((Method){.f = &String_charCodeAt, .self = Object_ref(m->value)});
-      } else if (strncmpEq(i->c, "charAt")) {
-        field = MethodNative_new((Method){.f = &String_charAt, .self = Object_ref(m->value)});
-      } else if (strncmpEq(i->c, "length")) {
-        field = IntObject_new((int)strnlen(m->value->c.s, m->value->c.len));
+  Object *i;
+  while ((i = parseIndex(p))) {
+    if (p->nest) {
+      Object_free(i);
+    } else {
+      if (is) {
+        Object_free(is);
+        is = 0;
       }
-    } else {
-      field = String_charAt_obj(m->value, i);
-    }
-    Object_free(i);
-    if (field) {
-      return parseRHS(p, &m->value->m, 0, 0, field);
-    } else {
-      return setRunError(p, "unknown String method", 0);
-    }
-
-  } else if ((m->value->t == MapObject) || (m->value->t == ArrayObject)) {
-    Object *is = Object_toString(i);
-    Object_free(i);
-    if (!is) {
-      return setRunError(p, "can't convert to string", id);
-    }
-    List *e = Map_get_str(m->value->m, is->s);
-    if (!e) {
-      if (m->value->t == ArrayObject) {
-        if (strncmpEq(is->c, "length")) {
-          field = IntObject_new(List_length(m->value->m));
+      if (!m) {
+        Object_free(i);
+        if (field) {
+          Object_free(field);
         }
+        return setRunError(p, "undefined object field", id);
+      }
+      parent = &m->value->m;
+      if (isString(m->value)) {
+        if (isString(i)) {
+          if (strncmpEq(i->c, "indexOf")) {
+            field = MethodNative_new((Method){.f = &String_indexOf, .self = Object_ref(m->value)});
+          } else if (strncmpEq(i->c, "charCodeAt")) {
+            field = MethodNative_new((Method){.f = &String_charCodeAt, .self = Object_ref(m->value)});
+          } else if (strncmpEq(i->c, "charAt")) {
+            field = MethodNative_new((Method){.f = &String_charAt, .self = Object_ref(m->value)});
+          } else if (strncmpEq(i->c, "length")) {
+            field = IntObject_new((int)strnlen(m->value->c.s, m->value->c.len));
+          }
+        } else {
+          field = String_charAt_obj(m->value, i);
+        }
+        Object_free(i);
+        m = 0;
+        if (!field) {
+          return setRunError(p, "unknown String method", 0);
+        }
+
+      } else if ((m->value->t == MapObject) || (m->value->t == ArrayObject)) {
+        is = Object_toString(i);
+        Object_free(i);
+        if (!is) {
+          return setRunError(p, "can't convert to string", id);
+        }
+        if ((m->value->t == ArrayObject) && strncmpEq(is->c, "length")) {
+          field = IntObject_new(List_length(m->value->m));
+          Object_free(is);
+          is = 0;
+          m = 0;
+        } else {
+          m = Map_get_str(*parent, is->s);
+        }
+
+      } else {
+        Object_free(i);
+        return setRunError(p, "not indexable", id);
       }
     }
-    if (field) {
-      Object_free(is);
-      is = 0;
-    }
-    return parseRHS(p, &m->value->m, is, field ? 0 : e, field);
-  } else {
-    return setRunError(p, "not indexable", id);
   }
+  if (p->err || p->parseErr) {
+    return 0;
+  }
+  return parseRHS(p, parent, is, m, field);
 }
 
 static Object *
