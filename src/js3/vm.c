@@ -839,23 +839,29 @@ parseITerm(Parser *p, Id *id) {
 
 static Object *
 parseLTerm(Parser *p) {
+  char op = 0;
   Object *o;
   if ((o = parseIntLit(p))) {
     return o;
   } else if ((o = parseStringLit(p))) {
     return o;
-  } else if (acceptWs(p, '!')) {
+  } else if (acceptWs(p, op = '!') || accept(p, op = '~') || accept(p, op = '-')) {
     if (!(o = parseTerm(p))) {
       return 0;
     }
-    Object *b = IntObject_new(!isTrue(o));
-    Object_free(o);
-    return b;
-  } else if (acceptWs(p, '~')) {
-    if (!(o = parseTerm(p))) {
-      return 0;
+    if (p->nest) {
+      return o;
     }
-    Object *b = IntObject_new(o->t == IntObject ? ~o->i : ~isTrue(o));
+    int v;
+    if (op == '-') {
+      if (o->t != IntObject) {
+        return setRunError(p, "minus expects a number", 0);
+      }
+      v = -o->i;
+    } else {
+      v = op == '!' ? !isTrue(o) : o->t == IntObject ? ~o->i : ~isTrue(o);
+    }
+    Object *b = IntObject_new(v);
     Object_free(o);
     return b;
   } else if (acceptWs(p, '(')) {
@@ -866,7 +872,7 @@ parseLTerm(Parser *p) {
     }
     return o;
   }
-  p->parseErr = "expected literal, negation or parenthesized expression";
+  p->parseErr = "expected literal, negation, minus or parenthesized expression";
   return 0;
 }
 

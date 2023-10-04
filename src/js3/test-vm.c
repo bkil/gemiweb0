@@ -98,6 +98,9 @@ main(void) {
   t("~(-1) === 0", 1);
   t("~(-2) === 1", 1);
   t("-", -1);
+  t("-(-9)", 9);
+  t("var i = -9; -i", 9);
+  t("-null", -2); // non-conforming
   t("var i; i = 0; i = !i", 1);
   t("var xY_0; xY_0 = 9", 9);
   t("var i; i = 9; i", 9);
