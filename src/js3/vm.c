@@ -918,7 +918,11 @@ parseEExpr(Parser *p, Object *t1) {
     }
   } else if (accept(p, op = '>')) {
     if (accept(p, '>')) {
-      op = 'R';
+      if (accept(p, '>')) {
+        op = 'r';
+      } else {
+        op = 'R';
+      }
     } else if (accept(p, '=')) {
       op = 'g';
     }
@@ -1001,6 +1005,8 @@ parseEExpr(Parser *p, Object *t1) {
         return IntObject_new(x & y);
       case 'R':
         return IntObject_new(x >> y);
+      case 'r':
+        return IntObject_new((int)((unsigned int)x >> y));
       case 'L':
         return IntObject_new(x << y);
       case '<':
