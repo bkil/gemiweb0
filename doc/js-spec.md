@@ -5,12 +5,11 @@
 * if-else
 * while
 * for-in
-* try-catch
 * comments
-* throw
 * function definition
 * return
 * optional compound block within if, while or for statements ({})
+* ES3: try-catch, throw
 
 convenience:
 
@@ -18,19 +17,22 @@ convenience:
 
 missing:
 
-* switch-case-default, for (the C-styled one), for-of, foreach, do-while, label-goto, break, continue, with, varargs, arbitrary block scopes with {}
+* ES3/NS4: switch-case-default, do-while, label-goto
+* for (the C-styled one), for-of, break, continue, with, varargs, arbitrary block scopes with {}
 
 ## Operators
 
-* !, ~, +, -, *, /, %, <, >, <=, >=, ^, |, &, <<, >>, ===, !==
+* !, ~, +, -, *, /, %, <, >, <=, >=, ^, |, &, <<, >>, >>>, ===, !==
 
 convenience:
 
-* parenthesis subexpressions, short-circuiting &&, ||, + also works for string concatenation, typeof
+* parenthesis subexpressions, short-circuiting &&, ||, '+' also works for string concatenation
+* NS3: typeof
 
 missing:
 
-* delete, instanceof, ==, !=, +=, ++, class, new (mocked for some built-in objects), precedence (have to fully parenthesize)
+* instanceof, ==, !=, +=, ++, class, new (mocked for some built-in objects), precedence (have to fully parenthesize), ternary operator, comma operator
+* NS4: delete
 
 ## Values
 
@@ -38,16 +40,21 @@ missing:
 * undefined
 * null
 * decimal integers
+* NaN
 * string literals (without escaping)
 * Object and Array square bracket member accessor ([])
 
 convenience:
 
-* var initializer, anonymous function expression, object dot member accessor
+* var initializer, object dot member accessor, member access chaining
+* ES3/NS4: anonymous function expression
 
 missing:
 
-* const, let, this, void, true, false, hexadecimal, float, string control characters, Object and Array literals
+* this, true, false, hexadecimal, float, string control character escapes
+* NS3: void
+* ES3: Object and Array literals
+* ES5: const, let
 
 ## Functions
 
@@ -55,6 +62,7 @@ missing:
 * eval2: not standard, a sandboxed variant not operating on the current environment, but on one passed in as an Object argument
 * isNaN
 * parseInt(s, 10)
+* setTimeout (function argument)
 
 missing:
 
@@ -73,7 +81,8 @@ missing:
 
 missing:
 
-* concat, join, pop, push, reverse, shift, slice, splice, sort, unshift
+* ES2/NS3: join, reverse, sort
+* ES3/NS4: concat, pop, push, shift, slice, splice, unshift
 
 ### Date
 
@@ -85,22 +94,29 @@ missing:
 
 ### Object
 
-* .hasOwnProperty
-
-### String
-
-* String.fromCharCode
-* .charAt
-* .charCodeAt
-* .length
-
-convenience:
-
-* .match
+* ES3: .hasOwnProperty
 
 missing:
 
-* .charAt, .lastIndexOf, .concat, .split, .slice, .substring, .replace, .search, .toLowerCase, .toUpperCase, .substr, .indexOf
+* NS3: valueOf
+
+### String
+
+* .length
+* .charAt
+* ES2/NS4: String.fromCharCode
+* ES2/NS4: .charCodeAt
+
+convenience:
+
+* .indexOf
+* ES3/NS4: .match
+
+missing:
+
+* .lastIndexOf, .substring, .toLowerCase, .toUpperCase
+* NS3: .split
+* NS4: .concat, .slice, .replace, .search, .substr
 
 ## Application server
 
@@ -189,6 +205,22 @@ Planned on shortlist:
 
 ## References
 
+### JavaScript 1.0
+
+* https://web.archive.org/web/19970613234917/http://home.netscape.com/eng/mozilla/2.0/handbook/javascript/index.html
+
+### JavaScript 1.1
+
+* https://web.archive.org/web/19970614042441/http://home.netscape.com/eng/mozilla/3.0/handbook/javascript/index.html
+* https://web.archive.org/web/19981205222505/http://home.netscape.com/eng/javascript/
+* https://hepunx.rl.ac.uk/~adye/jsspec11/jsspec.ps.gz
 * https://www.ecma-international.org/wp-content/uploads/ECMA-262_2nd_edition_august_1998.pdf
-* https://www.ecma-international.org/wp-content/uploads/ECMA-262_3rd_edition_december_1999.pdf
+
+### JavaScript 1.2
+
 * https://web.archive.org/web/19990127231137/http://developer.netscape.com/docs/manuals/communicator/jsguide4/contents.htm
+* https://www.ecma-international.org/wp-content/uploads/ECMA-262_3rd_edition_december_1999.pdf
+
+### EcmaScript
+
+* https://www.ecma-international.org/publications-and-standards/standards/ecma-262/

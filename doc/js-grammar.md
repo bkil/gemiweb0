@@ -331,8 +331,8 @@ stmBody: <stmBrace> | <stm>
 stmBrace: { <stms> [;]? }
 stms: [ <stm> [; <stm>]* ]?
 stm: if ( <expr> ) <stmBody> [ else <stmBody> ]? | while ( <expr> ) <stmBody> | var <id> [ '=' <expr> ]? | function <id> <function> | return <expr> | try <stmBrace> catch ( <id> ) <stmBrace> | throw <expr> | <expr>
-expr: function [ <id> ]? <function> | <iTerm> <eExpr> | <lTerm> <eExpr>
-function: <id> ( [ <id> [, <id>]* ]? ) <stmBody>
+expr: function <function> | <iTerm> <eExpr> | <lTerm> <eExpr>
+function: ( [ <id> [, <id>]* ]? ) <stmBody>
 eExpr: [ <op> <term> ]?
 term: <iTerm> | <lTerm>
 lTerm: <int> | <string> | ! <expr> | ~ <expr> | '(' <expr> ')'
@@ -354,16 +354,16 @@ stmBody: <stmBrace> | <stm>
 stmBrace: { <stms> [;]? }
 stms: [ <stm> [; <stm>]* ]?
 stm: if ( <expr> ) <stmBody> [ else <stmBody> ]? | while ( <expr> ) <stmBody> | for ( <id> in <expr> ) <stmBody> | var <id> [ '=' <expr> ]? | function <id> <function> | return <expr> | try <stmBrace> catch ( <id> ) <stmBrace> | throw <expr> | <expr>
-expr: function [ <id> ]? <function> | <iTerm> <eExpr> | <lTerm> <eExpr>
-function: <id> ( [ <id> [, <id>]* ]? ) <stmBody>
+expr: function <function> | <iTerm> <eExpr> | <lTerm> <eExpr>
+function: ( [ <id> [, <id>]* ]? ) <stmBody>
 eExpr: [ <op> <term> ]?
 term: <iTerm> | <lTerm>
-lTerm: <int> | <string> | ! <expr> | ~ <expr> | '(' <expr> ')'
-iTerm: undefined | null | new Object | new Array | <id> <sTerm>
+lTerm: <int> | <string> | [ ! | ~ | - ] <expr> | '(' <expr> ')'
+iTerm: undefined | null | NaN | new Object | new Array | typeof <expr> | <id> <sTerm>
 sTerm: <idx> [ <rhs> ]?
 rhs: '=' <expr> | ( [ <expr> [, <expr>]* ]? )
 idx: [ '[' <expr> ']' | . <id> ]*
-op: + | - | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '||' | '&&' | === | !==
+op: + | - | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&' | === | !==
 int = -?[1-9][0-9]*
 string = '[^'\\]*'|"[^"\\]*"
 id = [a-zA-Z_][a-zA-Z_0-9]*
@@ -382,15 +382,15 @@ expr: <funExpr> | <uTerm> [ '?' <expr> : <expr> | <op> <uTerm> ]?
 funExpr: function [ <id> ]? ( [ <id> [, <id>]* ]? ) { <funStm> [; <funStm>]* [;]? }
 funStm: var <varInit> [, <varInit> ]* | <stm>
 varInit: <id> [ '=' <expr> ]?
-uTerm: [ ( ! | ~ ) ]? <term>
+uTerm: [ ! | ~ | - ]? <term>
 term: <lit> | new <id> [ <args> ]? | typeof <id> <idx> | ( <expr> ) [ <args> ]? | <id> <idx> [ <iTerm> ]?
 lit: undefined | null | <num> | <string>
 iTerm: '=' <expr> | <args> | instanceof <id>
 idx: [ '[' <expr> ']' | . <id> ]*
-op: + | - | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '||' | '&&' | === | !== | == | !=
+op: + | - | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&' | === | !== | == | !=
 args: ( [ <expr> [, <expr>]* ]? )
 num: <double> | <int>
-double = -?[1-9][0-9]*\.[0-9]+
+double = -?[1-9][0-9]*\.[0-9]+ | NaN
 int = (-?[1-9][0-9]*|0x[0-9a-fA-F]+)
 string = '([^'\\]|\\n|\\t|\\.)*'|"([^"\\]|\\n|\\t|\\.)*"
 id = [a-zA-Z_][a-zA-Z_0-9]*
