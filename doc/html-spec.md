@@ -117,11 +117,11 @@ id or name should be followed for fragment linking
 * javascript:
 * optional: https:
 
-## Prior art
+## Similar halted efforts
 
 * https://gemini.circumlunar.space/
 * https://codeberg.org/Weblite/HTMLite/src/branch/master/htmlite.md
 
-## Similar efforts
+## Similar ongoing efforts
 
 * https://codeberg.org/smolweb/smolweb-spec
