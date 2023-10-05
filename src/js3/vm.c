@@ -1497,7 +1497,7 @@ Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
       p->thrw = 0;
       ret = -2;
     } else {
-      ret = o->t == IntObject ? o->i : isTrue(o);
+      ret = o->t != IntObject ? isTrue(o) : o->i > 0 ? o->i : 0;
     }
     Object_free(o);
     return ret;

@@ -127,7 +127,7 @@ main(void) {
   t("var p = new Object; p.v = new Array; p.v[0] = 9; p.v[0]", 9);
   t("var p = new Object; p.x.y", -2);
   t("var i = 2; i.x", -2);
-  t("var i = 2; i.x", -2);
+  t("var n = null; n.x", -2);
   t("var s = 'c'; s.length.x", -2);
   t("var s = 'c'; s.x", -2);
   t("u.x", -2);
@@ -173,7 +173,9 @@ main(void) {
   t("(4 + 5)", 9);
   t("2 + (3 + 4)", 9);
   t("1 + (1 + (3 + 4))", 9);
-  t("-9", -9);
+  t("-2 + 11", 9);
+  t("0 - -9", 9);
+  t("var i = -9; 0 - i", 9);
   t("5+-3", 2);
   t("2 + 3", 5);
   t("5 - 3", 2);
