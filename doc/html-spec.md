@@ -121,3 +121,7 @@ id or name should be followed for fragment linking
 
 * https://gemini.circumlunar.space/
 * https://codeberg.org/Weblite/HTMLite/src/branch/master/htmlite.md
+
+## Similar efforts
+
+* https://codeberg.org/smolweb/smolweb-spec
