@@ -14,8 +14,8 @@ putsn(const char *s, size_t len) {
 
 static void
 showProg(Parser *p) {
-  const size_t left = off_t2size_t(p->progEnd - p->prog);
-  putsn(p->prog, left < 32 ? left : 32);
+  const size_t left = off_t2size_t(p->prog.end - p->prog.s);
+  putsn(p->prog.s, left < 32 ? left : 32);
   puts("");
 }
 
@@ -111,13 +111,17 @@ StringObject_new_const(Id s) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
   o->t = ConstStringObject;
-  o->c = s;
+  o->c = (Id){.s = s.s, .len = s.len, .h = s.h ? Object_ref(s.h) : 0};
   return o;
 }
 
 static Object *
 StringObject_new(const char *s) {
-  return StringObject_new_const((Id){.s = s, .len = strlen(s)});
+  Object *o = malloc(sizeof(*o));
+  o->ref = 0;
+  o->t = ConstStringObject;
+  o->c = (Id){.s = s, .len = strlen(s), .h = 0};
+  return o;
 }
 
 static Object *
@@ -130,11 +134,11 @@ StringObject_new_char(char c) {
 }
 
 static Object *
-FunctionJs_new(JsFun j) {
+FunctionJs_new(Parser *p) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
   o->t = FunctionJs;
-  o->j = j;
+  o->j = (JsFun){.p = {.s = p->prog.s, .end = p->prog.end, .h = Object_ref(p->prog.h)}, .scope = Object_clone(p->vars)};
   return o;
 }
 
@@ -386,8 +390,8 @@ String_concat(Object *t1, Object *t2) {
 
 static int
 accept(Parser *p, char c) {
-  if ((p->prog < p->progEnd) && (*p->prog == c)) {
-    p->prog++;
+  if ((p->prog.s < p->prog.end) && (*p->prog.s == c)) {
+    p->prog.s++;
     return 1;
   }
   return 0;
@@ -407,28 +411,28 @@ static int
 skipWs(Parser *p) {
   int ret = 0;
   while (1) {
-    while ((p->prog < p->progEnd) && ((*p->prog == ' ') || (*p->prog == '\n'))) {
-      p->prog++;
+    while ((p->prog.s < p->prog.end) && ((*p->prog.s == ' ') || (*p->prog.s == '\n'))) {
+      p->prog.s++;
       ret = 1;
     }
-    if ((p->progEnd - p->prog < 2) || (*p->prog != '/')) {
+    if ((p->prog.end - p->prog.s < 2) || (*p->prog.s != '/')) {
       break;
     }
-    if (p->prog[1] == '/') {
-      p->prog += 2;
+    if (p->prog.s[1] == '/') {
+      p->prog.s += 2;
       ret = 1;
-      while ((p->prog < p->progEnd) && (*p->prog != '\n')) {
-        p->prog++;
+      while ((p->prog.s < p->prog.end) && (*p->prog.s != '\n')) {
+        p->prog.s++;
       }
-    } else if (p->prog[1] == '*') {
-      p->prog += 2;
+    } else if (p->prog.s[1] == '*') {
+      p->prog.s += 2;
       ret = 1;
-      while (p->prog < p->progEnd) {
-        if ((p->progEnd - p->prog >= 2) && (*p->prog == '*') && (p->prog[1] == '/')) {
-          p->prog += 2;
+      while (p->prog.s < p->prog.end) {
+        if ((p->prog.end - p->prog.s >= 2) && (*p->prog.s == '*') && (p->prog.s[1] == '/')) {
+          p->prog.s += 2;
           break;
         }
-        p->prog++;
+        p->prog.s++;
       }
     } else {
       break;
@@ -452,19 +456,18 @@ expectWs(Parser *p, char c) {
 static int
 parseId(Parser *p, Id *id) {
   skipWs(p);
-  const char *s = p->prog;
-  char c = s < p->progEnd ? *s : 0;
+  const char *s = p->prog.s;
+  char c = s < p->prog.end ? *s : 0;
   if ((c == '_') || ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z'))) {
     do {
       s++;
-      c = s < p->progEnd ? *s : 0;
+      c = s < p->prog.end ? *s : 0;
     } while ((c == '_') || ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z')) || ((c >= '0') && (c <= '9')));
   }
-  size_t len = off_t2size_t(s - p->prog);
+  size_t len = off_t2size_t(s - p->prog.s);
   if (len) {
-    id->s = p->prog;
-    id->len = len;
-    p->prog += len;
+    *id = (Id){.s = p->prog.s, .len = len, .h = p->prog.h};
+    p->prog.s += len;
     return 1;
   }
   p->parseErr = "expected keyword or identifier";
@@ -475,36 +478,36 @@ static Object *
 parseIntLit(Parser *p) {
   skipWs(p);
 
-  const char *s = p->prog;
-  char c = s < p->progEnd ? *s : 0;
+  const char *s = p->prog.s;
+  char c = s < p->prog.end ? *s : 0;
   if (c == '-') {
     s++;
-    c = s < p->progEnd ? *s : 0;
+    c = s < p->prog.end ? *s : 0;
   }
   const char *digitStart = s;
   while ((c >= '0') && (c <= '9')) {
     s++;
-    c = s < p->progEnd ? *s : 0;
+    c = s < p->prog.end ? *s : 0;
   }
-  size_t len = off_t2size_t(s - p->prog);
+  size_t len = off_t2size_t(s - p->prog.s);
   size_t digits = off_t2size_t(s - digitStart);
   if (!digits || (c == '_') || (c == '.') || ((c >= 'A' && (c <= 'Z'))) || ((c >= 'a') && (c <= 'z'))) {
     return 0;
   }
 
   if (p->nest) {
-    p->prog = s;
+    p->prog.s = s;
     return &undefinedObject;
   }
   int x;
-  if (s < p->progEnd) {
-    x = atoi(p->prog);
+  if (s < p->prog.end) {
+    x = atoi(p->prog.s);
   } else {
-    char *t = strndup(p->prog, len);
+    char *t = strndup(p->prog.s, len);
     x = atoi(t);
     mfree(t);
   }
-  p->prog = s;
+  p->prog.s = s;
   return IntObject_new(x);
 }
 
@@ -515,9 +518,9 @@ parseStringLit(Parser *p) {
   if (!acceptWs(p, c = '\'') && !acceptWs(p, c = '"')) {
     return 0;
   }
-  Id id = {.s = p->prog, .len = 0};
-  while ((p->prog < p->progEnd) && (*p->prog != c) && (*p->prog != '\\')) {
-    p->prog++;
+  Id id = {.s = p->prog.s, .len = 0, .h = p->prog.h};
+  while ((p->prog.s < p->prog.end) && (*p->prog.s != c) && (*p->prog.s != '\\')) {
+    p->prog.s++;
     id.len++;
   }
   if (!expectWs(p, c)) {
@@ -586,8 +589,8 @@ parseFunction(Parser *p, List *arg) {
 static Object *
 invokeFun(Parser *p, Object *o, List *args) {
   if (o->t == FunctionJs) {
-    const char *ret = p->prog;
-    p->prog = o->j.cs;
+    Prog ret = p->prog;
+    p->prog = o->j.p;
     Object *caller = p->vars;
     p->vars = MapObject_new();
     Map_set_const(&p->vars->m, "", o->j.scope);
@@ -598,14 +601,12 @@ invokeFun(Parser *p, Object *o, List *args) {
     Object_free(p->vars);
     p->vars = caller;
 
-    if (res) {
-      p->prog = ret;
-      return res;
-    }
     if (p->ret) {
-      p->prog = ret;
       res = p->ret;
       p->ret = 0;
+    }
+    if (res) {
+      p->prog = ret;
       return res;
     }
   } else if (o->t == FunctionNative) {
@@ -630,7 +631,7 @@ static Object *
 parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
   skipWs(p);
 
-  const char *prog = p->prog;
+  const char *prog = p->prog.s;
   if (accept(p, '=') && !accept(p, '=')) {
     if (!key) {
       if (got) {
@@ -665,7 +666,7 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
     Object_free(key);
     return r;
   }
-  p->prog = prog;
+  p->prog.s = prog;
 
   Object *o = e ? Object_ref(e->value) : got ? got : &undefinedObject;
   if (key) {
@@ -824,7 +825,7 @@ parseITerm(Parser *p, Id *id) {
     }
     Object *o = &undefinedObject;
     if (!p->nest) {
-      o = FunctionJs_new((JsFun){.cs = p->prog, .scope = Object_clone(p->vars)});
+      o = FunctionJs_new(p);
     }
     p->nest++;
     if (!parseFunction(p, 0)) {
@@ -1079,11 +1080,11 @@ parseWhile(Parser *p) {
     return 0;
   }
 
-  const char *begin = p->prog;
+  const char *begin = p->prog.s;
   Object *o;
   int cond = 1;
   do {
-    p->prog = begin;
+    p->prog.s = begin;
     if (!(o = parseExpr(p)) || !expect(p, ')')) {
       return 0;
     }
@@ -1131,9 +1132,9 @@ parseFor(Parser *p) {
   }
 
   skipWs(p);
-  const char *begin = p->prog;
+  const char *begin = p->prog.s;
   do {
-    p->prog = begin;
+    p->prog.s = begin;
     Object *caller = 0;
     Object *o;
     if (!p->nest) {
@@ -1183,7 +1184,7 @@ parseIf(Parser *p) {
     p->nest--;
   }
 
-  const char *saved = p->prog;
+  const char *saved = p->prog.s;
   Id id;
   if (!parseId(p, &id)) {
     clearErr(p);
@@ -1191,7 +1192,7 @@ parseIf(Parser *p) {
   }
 
   if (!strncmpEq(id, "else")) {
-    p->prog = saved;
+    p->prog.s = saved;
     return &undefinedObject;
   }
   if (cond) {
@@ -1274,7 +1275,7 @@ parseStatement(Parser *p) {
     } else if (strncmpEq(id, "function")) {
       if (parseId(p, &id) && expectWs(p, '(')) {
         if (!p->nest) {
-          Object *f = FunctionJs_new((JsFun){.cs = p->prog, .scope = Object_clone(p->vars)});
+          Object *f = FunctionJs_new(p);
           Map_set_id(&p->vars->m, &id, f);
           Object_free(f);
         }
@@ -1306,7 +1307,7 @@ parseStatement(Parser *p) {
 
 static int
 haveMore(Parser *p) {
-  return !p->parseErr && (p->prog < p->progEnd);
+  return !p->parseErr && (p->prog.s < p->prog.end);
 }
 
 static int
@@ -1429,7 +1430,7 @@ process_stdin_on(Parser *p, List *l) {
 }
 
 static Object *
-isNaN(Parser *p, List *l) {
+global_isNaN(Parser *p, List *l) {
   return IntObject_new(l ? l->value->t == NanObject : 0);
 }
 
@@ -1443,6 +1444,12 @@ static void
 addFunction(Object *o, const char *key, Native f) {
   addField(o, key, FunctionNative_new(f));
 }
+
+static Object *
+global_eval(Parser *p, List *l);
+
+static Object *
+global_eval2(Parser *p, List *l);
 
 Parser *
 Parser_new(void) {
@@ -1463,26 +1470,134 @@ Parser_new(void) {
   addField(pr, "stdin", ps);
   addField(p->vars, "process", pr);
 
-  addFunction(p->vars, "isNaN", &isNaN);
+  addFunction(p->vars, "isNaN", &global_isNaN);
+  addFunction(p->vars, "eval", &global_eval);
+  addFunction(p->vars, "eval2", &global_eval2);
   return p;
 }
 
-int
-Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
-  if (!prog) {
-    return 0;
+static Parser *
+Parser_new_vars(Object *vars) {
+  Parser *p = Parser_new();
+  addField(vars, "", p->vars);
+  p->vars = Object_ref(vars);
+  return p;
+}
+
+static void
+showParseError(Parser *p) {
+  if (p->debug) {
+    fputs("parse error: ", stdout);
+    if (p->parseErr) {
+      fputs(p->parseErr, stdout);
+      if (p->parseErrChar) {
+        fputs(" ( '", stdout);
+        putchar(p->parseErrChar);
+        fputs("' )", stdout);
+      }
+    }
+    puts("");
+    showProg(p);
   }
-  p->prog = prog;
-  p->progEnd = prog + len;
+}
+
+static void
+showRunError(Parser *p) {
+  if (p->debug) {
+    fputs("runtime error: ", stdout);
+    if (p->err) {
+      fputs(p->err, stdout);
+      if (p->errName.s) {
+        fputs(" - ", stdout);
+        putsn(p->errName.s, p->errName.len);
+      }
+    }
+    puts("");
+    showProg(p);
+  }
+}
+
+static Object *
+Parser_evalString(Parser *p, Object *prog) {
+  p->prog = (Prog){.s = prog->c.s, .end = prog->c.s + prog->c.len, .h = prog};
   p->err = 0;
   p->nest = 0;
   p->ret = 0;
   p->thrw = 0;
   p->needSemicolon = 0;
-  p->debug = debug;
   clearErr(p);
+  return parseStatements(p);
+}
 
-  Object *o = parseStatements(p);
+static Object *
+Parser_evalWithThrow(Parser *p, Object *prog) {
+  Object *o = Parser_evalString(p, prog);
+  Object *thrw = 0;
+  if (p->ret) {
+    Object_free(p->ret);
+    p->ret = 0;
+    if (!p->thrw) {
+      thrw = StringObject_new("eval: return outside function");
+    }
+  } else if (!o && !p->thrw) {
+    if (p->parseErr || !p->err) {
+      thrw = StringObject_new("eval: parse error");
+      showParseError(p);
+    } else {
+      thrw = StringObject_new("eval: runtime error");
+      showRunError(p);
+    }
+  }
+  clearErr(p);
+  setRunError(p, 0, 0);
+  if (thrw) {
+    p->thrw = thrw;
+    p->nest++;
+    if (o) {
+      Object_free(o);
+    }
+    o = &undefinedObject;
+  }
+  return o;
+}
+
+static Object *
+global_eval(Parser *p, List *l) {
+  if (!l || !isString(l->value)) {
+    return setRunError(p, "expecting String argument", 0);
+  }
+  Prog prog = p->prog;
+  Object *o = Parser_evalWithThrow(p, l->value);
+  p->prog = prog;
+  return o;
+}
+
+static Object *
+global_eval2(Parser *p, List *l) {
+  if (!l || (l->value->t != MapObject) || !l->next || !isString(l->next->value)) {
+    return setRunError(p, "expecting an Object and a String argument", 0);
+  }
+  Parser *q = Parser_new_vars(l->value);
+  q->debug = p->debug;
+  Object *o = Parser_evalWithThrow(q, l->next->value);
+  if (q->thrw) {
+    p->thrw = q->thrw;
+    p->nest++;
+  }
+  Parser_free(q);
+  if (!o) {
+    o = &undefinedObject;
+  }
+  return o;
+}
+
+int
+Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
+  p->debug = debug;
+  Object *s = StringObject_new_const((Id){.s = prog, .len = len, .h = 0});
+  Object *o = Parser_evalString(p, s);
+  addField(p->vars, "", s);
+
   if (o) {
     int ret;
     if (p->thrw) {
@@ -1517,33 +1632,10 @@ Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
     p->thrw = 0;
   }
   if (p->parseErr || !p->err) {
-    if (p->debug) {
-      fputs("parse error: ", stdout);
-      if (p->parseErr) {
-        fputs(p->parseErr, stdout);
-        if (p->parseErrChar) {
-          fputs(" ( '", stdout);
-          putchar(p->parseErrChar);
-          fputs("' )", stdout);
-        }
-      }
-      puts("");
-      showProg(p);
-    }
+    showParseError(p);
     return -1;
   } else {
-    if (p->debug) {
-      fputs("runtime error: ", stdout);
-      if (p->err) {
-        fputs(p->err, stdout);
-        if (p->errName.s) {
-          fputs(" - ", stdout);
-          putsn(p->errName.s, p->errName.len);
-        }
-      }
-      puts("");
-      showProg(p);
-    }
+    showRunError(p);
     return -2;
   }
 }

@@ -146,6 +146,7 @@ main(void) {
   t("var p = new Object; p.ab = 3; p.cd = 4; var q = new Object; var n = 0; var i; for (i in p) { q[i] = p[i]; n = n + 1; }; (q.ab + q.cd) + n", 9);
   t("var o = new Object; o.a = 4; o.b = 5; var n = 0; var x; try { var i; for (i in o) { n = n + 1; throw 8; } } catch (e) { x = e; }; x + n", 9);
   t("var x = 9; if (0) { var o = 0; var i; for (i in o) { x = x + 1; } }; x", 9);
+  t("var o = new Object; o.a = 4; o.b = 5; var n = 0; var i; for (i in o) { o = 4; n = n + 1; }; n", 2);
 
   t("var v; v = new Array; v[0] === undefined", 1);
   t("var v; v = new Array; v[0] = 9; v[0]", 9);
@@ -272,6 +273,60 @@ main(void) {
   t("typeof 8 === 'number'", 1);
   t("var o = new Object; typeof o === 'object'", 1);
 
+  t("eval(4)", -2); // non-conforming
+  t("eval('9')", 9);
+  t("eval('4 + 5')", 9);
+  t("eval('var i'); eval('i = 9'); eval('i')", 9);
+  t("eval('var i') === undefined", 1);
+  t("eval('var i; i = 9'); i", 9);
+  t("var i; eval('i = 8'); i + 1", 9);
+  t("eval(\"'1234567890'\") === '1234567890'", 1);
+  t("eval('function f() { return 9 }'); f()", 9);
+  t("eval('try { throw 2 } catch (e) {}; 9')", 9);
+  t("eval('return 2')", -2);
+  t("eval('throw 2')", -2);
+  t("eval('x')", -2);
+  t("eval(':')", -2);
+  t("var i; try { eval('return 2') } catch (e) { i = 9; }; i", 9);
+  t("var i; try { eval('throw 9') } catch (e) { i = e }; i", 9);
+  t("var i; try { eval('x') } catch (e) { i = 9; }; i", 9);
+  t("var i; try { eval(':') } catch (e) { i = 9; }; i", 9);
+  t("var i = 4; try { eval('var j = 5; throw 3') } catch (e) { }; i + j", 9);
+  t("eval('var i; try { throw 2 } catch (e) { i = 9 }; i')", 9);
+  t("eval(eval(\"'4+' + '5'\"))", 9);
+  t("eval(\"eval('4+' + '5')\")", 9);
+  t("function f(x) { return x } eval('f(9)')", 9);
+  t("function f(x) { return function(y) { return x + y } } var g = f(4); eval('g(5)')", 9);
+  t("eval('function f() { return 9 }'); eval('f()')", 9);
+  t("eval('' + 'function g(yh) { return yh(4) + 5 }'); eval('' + 'function f(yh) { return g(yh) } function h(x) { return x }; f(h)')", 9);
+  t("function g(yh) { return yh(4) + 5 }; eval('' + 'function f(yh) { return g(yh) } function h(x) { return x }; f(h)')", 9);
+  t("eval('' + 'function g(yh) { return yh(4) + 5 }'); function f(yh) { return g(yh) } function h(x) { return x }; f(h)", 9);
+  t("eval('' + 'function f(y) { return y(9) }'); function g(x) { return x }; f(g)", 9);
+
+  t("eval2(new Object, '9')", 9);
+  t("eval2(new Object, '4 + 5')", 9);
+  t("var p = new Object; eval2(p, 'var i'); eval2(p, 'i = 9'); eval2(p, 'i')", 9);
+  t("var p = new Object; var q = new Object; eval2(p, 'var i = 4'); eval2(q, 'var i = 5'); eval2(p, 'i') + eval2(q, 'i')", 9);
+  t("eval2(new Object, 'var i') === undefined", 1);
+  t("eval2(new Object, 'var i; i = 9'); i", -2);
+  t("var i = 9; eval2(new Object, 'var i = 2'); i", 9);
+  t("var i; try { eval2(new Object, 'i = 2') } catch (e) { i = 9 }; i", 9);
+  t("eval2(new Object, \"'1234567890'\") === '1234567890'", 1);
+  t("var p = new Object; eval2(p, 'function f() { return 9 }'); eval2(p, 'f()')", 9);
+  t("eval2(new Object, 'try { throw 2 } catch (e) {}; 9')", 9);
+  t("eval2(new Object, 'return 2')", -2);
+  t("eval2(new Object, 'throw 2')", -2);
+  t("eval2(new Object, 'x')", -2);
+  t("eval2(new Object, ':')", -2);
+  t("var i; try { eval2(new Object, 'return 2') } catch (e) { i = 9; }; i", 9);
+  t("var i; try { eval2(new Object, 'throw 9') } catch (e) { i = e }; i", 9);
+  t("var i; try { eval2(new Object, 'x') } catch (e) { i = 9; }; i", 9);
+  t("var i; try { eval2(new Object, ':') } catch (e) { i = 9; }; i", 9);
+  t("var i = 4; var p = new Object; try { eval2(p, 'var j = 5; throw 3') } catch (e) { }; i + eval2(p, 'j')", 9);
+  t("var p = new Object; eval2(p, 'var i; try { throw 2 } catch (e) { i = 9 }; i')", 9);
+  t("var p = new Object; var q = new Object; eval2(p, eval2(q, \"'4+' + '5'\"))", 9);
+  t("var p = new Object; eval2(p, \"var q = new Object; eval2(q, '4+' + '5')\")", 9);
+
   // ES5
   t("var s = 'a'; s[-1] === ''", 1);
   t("var s = ''; s[0] === ''", 1);
@@ -322,7 +377,7 @@ main(void) {
   t(
     "var i; var j; i = 0; j = 0; function f() { function g() { i = i + 1; return 2; i = i + 8 }; j = g(); i = i + 4 }; f(); i + j",
     SB(7, 0));
-  t("function g() { return f(); }; function f() { return 9 }; g()", -2);
+  t("function g() { return f(); }; function f() { return 9 }; g()", SB(9, -2));
 
   // TODO application
   t("var i; i = (function() { return 9 })(); i", -1);

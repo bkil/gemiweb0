@@ -4,21 +4,26 @@
 #include <stdlib.h> // size_t
 #include <limits.h> // INT_MIN INT_MAX
 
+typedef struct Object Object;
+
 typedef struct Id {
   const char *s;
   size_t len;
+  Object *h;
 } Id;
+
+typedef struct Prog {
+  const char *s;
+  const char *end;
+  Object *h;
+} Prog;
 
 typedef struct Str {
   char *s;
   size_t len;
 } Str;
 
-typedef struct Object Object;
-
 typedef struct List List;
-
-typedef struct Parser Parser;
 
 typedef struct List {
   List *next;
@@ -27,9 +32,11 @@ typedef struct List {
 } List;
 
 typedef struct JsFun {
-  const char *cs;
+  Prog p;
   Object *scope;
 } JsFun;
+
+typedef struct Parser Parser;
 
 typedef Object *(*Native)(Parser *, List *);
 typedef Object *(*MethodFun)(Parser *, Object *, List *);
@@ -68,8 +75,8 @@ typedef struct Object {
 } Object;
 
 typedef struct Parser {
-  const char *prog;
-  const char *progEnd;
+  Prog prog;
+
   const char *parseErr;
   char parseErrChar;
 

@@ -45,10 +45,15 @@ Object_free(Object *o) {
 
   if (o->t == StringObject) {
     free(o->s.s);
+  } else if (o->t == ConstStringObject) {
+    if (o->c.h) {
+      Object_free(o->c.h);
+    }
   } else if ((o->t == MapObject) || (o->t == ArrayObject)) {
     List_free(o->m);
   } else if (o->t == FunctionJs) {
     Object_free(o->j.scope);
+    Object_free(o->j.p.h);
   } else if (o->t == MethodNative) {
     Object_free(o->a.self);
   }
