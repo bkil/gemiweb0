@@ -1,7 +1,12 @@
-#include "vm.h"
+#define _XOPEN_SOURCE 700 // strdup
+#define _POSIX_C_SOURCE 200809L // strdup
+
 #include <string.h> // strdup
+#include <stdio.h> // fputs stderr
+#include "vm.h"
 
 static int
+__attribute__((pure, nonnull))
 getCycles(Object *o) {
   if ((o->t != MapObject) && (o->t != ArrayObject) && (o->t != FunctionJs) && (o->t != MethodNative)) {
     return 0;
@@ -16,15 +21,18 @@ getCycles(Object *o) {
   int c = 0;
 
   if ((o->t == MapObject) || (o->t == ArrayObject)) {
-    List *it = o->m;
+    List *it = o->V.m;
     while (it) {
-      c += getCycles(it->value);
+      if (getCycles(it->value)) {
+        c = 1;
+        break;
+      }
       it = it->next;
     }
   } else if (o->t == FunctionJs) {
-    c = getCycles(o->j.scope);
+    c = getCycles(o->V.j.scope);
   } else if (o->t == MethodNative) {
-    c = getCycles(o->a.self);
+    c = getCycles(o->V.a.self);
   }
 
   o->ref = savedRef;
@@ -35,6 +43,7 @@ static void
 List_free(List *list);
 
 static void
+__attribute__((nonnull))
 Object_free(Object *o) {
   if (o->ref) {
     if (o->ref > 0) {
@@ -44,23 +53,24 @@ Object_free(Object *o) {
   }
 
   if (o->t == StringObject) {
-    free(o->s.s);
+    free(o->V.s.s);
   } else if (o->t == ConstStringObject) {
-    if (o->c.h) {
-      Object_free(o->c.h);
+    if (o->V.c.h) {
+      Object_free(o->V.c.h);
     }
   } else if ((o->t == MapObject) || (o->t == ArrayObject)) {
-    List_free(o->m);
+    List_free(o->V.m);
   } else if (o->t == FunctionJs) {
-    Object_free(o->j.scope);
-    Object_free(o->j.p.h);
+    Object_free(o->V.j.scope);
+    Object_free(o->V.j.p.h);
   } else if (o->t == MethodNative) {
-    Object_free(o->a.self);
+    Object_free(o->V.a.self);
   }
   free(o);
 }
 
 static Object *
+__attribute__((nonnull))
 Object_ref(Object *o) {
   if (o->ref >= 0) {
     o->ref++;
@@ -69,15 +79,16 @@ Object_ref(Object *o) {
 }
 
 static Object *
+__attribute__((nonnull))
 Object_clone(Object *o) {
   if (o->t != MapObject) {
     return Object_ref(o);
   }
 
-  List *it = o->m;
+  List *it = o->V.m;
   Object *d = MapObject_new();
   while (it) {
-    d->m = List_new(d->m, strdup(it->key), Object_ref(it->value));
+    d->V.m = List_new(d->V.m, strdup(it->key), Object_ref(it->value));
     it = it->next;
   }
   return d;
@@ -88,7 +99,9 @@ List_free(List *list) {
   List *n;
   while (list) {
     n = list->next;
-    free(list->key);
+    if (list->key) {
+      free(list->key);
+    }
     if (list->value) {
       Object_free(list->value);
     }
@@ -98,6 +111,7 @@ List_free(List *list) {
 }
 
 void
+__attribute__((nonnull))
 Parser_free(Parser *p) {
   Object_free(p->vars);
   free(p);

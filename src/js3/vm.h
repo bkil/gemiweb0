@@ -3,19 +3,20 @@
 
 #include <stdlib.h> // size_t
 #include <limits.h> // INT_MIN INT_MAX
+#include <sys/types.h> // off_t
 
-typedef struct Object Object;
+struct Object;
 
 typedef struct Id {
   const char *s;
   size_t len;
-  Object *h;
+  struct Object *h;
 } Id;
 
 typedef struct Prog {
   const char *s;
   const char *end;
-  Object *h;
+  struct Object *h;
 } Prog;
 
 typedef struct Str {
@@ -23,27 +24,27 @@ typedef struct Str {
   size_t len;
 } Str;
 
-typedef struct List List;
+struct List;
 
 typedef struct List {
-  List *next;
+  struct List *next;
   char *key;
-  Object *value;
+  struct Object *value;
 } List;
 
 typedef struct JsFun {
   Prog p;
-  Object *scope;
+  struct Object *scope;
 } JsFun;
 
-typedef struct Parser Parser;
+struct Parser;
 
-typedef Object *(*Native)(Parser *, List *);
-typedef Object *(*MethodFun)(Parser *, Object *, List *);
+typedef struct Object *(*Native)(struct Parser *, List *);
+typedef struct Object *(*MethodFun)(struct Parser *, struct Object *, List *);
 
 typedef struct Method {
   MethodFun f;
-  Object *self;
+  struct Object *self;
 } Method;
 
 enum ObjectV {
@@ -71,23 +72,24 @@ typedef struct Object {
     JsFun j;
     Native f;
     Method a;
-  };
+  } V;
 } Object;
 
 typedef struct Parser {
   Prog prog;
+  Object *ret;
+  Object *thrw;
+  Object *vars;
 
+  const char *err;
+  Id errName;
   const char *parseErr;
-  char parseErrChar;
 
   int debug;
   int nest;
   int needSemicolon;
-  Object *ret;
-  Object *thrw;
-  Object *vars;
-  const char *err;
-  Id errName;
+
+  char parseErrChar;
 } Parser;
 
 Parser *Parser_new(void);
