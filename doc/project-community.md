@@ -11,7 +11,7 @@
 * anti vendor lock-in: reproducible environment
 * cross-platform: code generation, run anywhere
 * self-hosting: migrate between inexpensive alternatives
-* retro-computing, cyberpunk: most web pages should function on web browsers from the 1990s or simple present ones which are built and look as if they were from the 1990s
+* retro-computing, cyberpunk, anachronism: most web pages according to this standard should function on web browsers from the 1990s or simple present ones and they are built and look as if they were from the 1990s
 
 ## Out of scope
 

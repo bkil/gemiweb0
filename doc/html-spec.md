@@ -115,7 +115,7 @@ id or name should be followed for fragment linking
 * file:
 * http:
 * javascript:
-* optional: https:
+* optional https:
 
 ## Similar halted efforts
 
