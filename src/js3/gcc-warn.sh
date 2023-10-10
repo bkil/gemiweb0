@@ -1,37 +1,23 @@
 #!/bin/sh
 
 gcc \
- -Werror \
  -std=c99 \
- -Wall \
- -Wextra \
- -Wno-unused-parameter\
- -Wunused-but-set-parameter\
- -Wpedantic\
- -pedantic\
- -pedantic-errors\
- -Wwrite-strings\
- -Woverflow\
- -fstrict-overflow\
- -Wstrict-overflow=5 -Wno-error=strict-overflow\
- -Wformat-nonliteral\
- -fstrict-aliasing\
- -Winit-self \
- -fno-common \
- -W \
- -Wabi \
- -Wcast-align \
- -Wdeprecated \
- -Wdeprecated-declarations \
- -Winvalid-pch \
- -Wmissing-format-attribute \
- -Woverflow \
- -Wshadow \
+ -Werror \
  \
+ -ffast-math \
  -fipa-profile \
+ -fipa-pta \
  -fira-loop-pressure \
+ -fmerge-all-constants \
+ -fno-common \
+ -fstrict-aliasing \
+ -fstrict-overflow \
  -ftree-partial-pre \
  -funsafe-loop-optimizations \
+ -pedantic \
+ -pedantic-errors \
+ -Wabi \
+ -Wall \
  -Waggregate-return \
  -Warray-bounds=2 \
  -Wbad-function-cast \
@@ -39,27 +25,44 @@ gcc \
  -Wcast-qual \
  -Wconversion \
  -Wdate-time \
- -Wdisabled-optimization\
+ -Wdeprecated \
+ -Wdeprecated-declarations \
+ -Wdisabled-optimization \
  -Wdouble-promotion \
  -Wendif-labels \
+ -Wextra \
  -Wfloat-equal \
  -Wformat=2 \
+ -Wformat-nonliteral \
  -Wframe-larger-than=256 \
+ -Winit-self \
  -Winline \
- -Wjump-misses-init\
+ -Winvalid-pch \
+ -Wjump-misses-init \
+ -Wl,-O1 \
+ -Wl,--gc-sections \
+ -Wl,--as-needed \
  -Wlogical-op \
  -Wmissing-declarations \
+ -Wmissing-format-attribute \
  -Wmissing-include-dirs \
  -Wmissing-prototypes \
  -Wnested-externs \
+ -Wno-error=padded \
+ -Wno-error=strict-overflow \
+ -Wno-unused-parameter \
+ -Woverflow \
  -Wpacked \
- -Wpadded -Wno-error=padded \
+ -Wpadded \
+ -Wpedantic \
  -Wpointer-arith \
  -Wpointer-sign \
  -Wredundant-decls \
+ -Wshadow \
  -Wsign-conversion \
  -Wstack-usage=256 \
- -Wstrict-aliasing=1\
+ -Wstrict-aliasing=1 \
+ -Wstrict-overflow=5 \
  -Wstrict-prototypes \
  -Wsuggest-attribute=pure \
  -Wsuggest-attribute=const \
@@ -72,12 +75,8 @@ gcc \
  -Wuninitialized \
  -Wunsafe-loop-optimizations \
  -Wunsuffixed-float-constants \
+ -Wunused-but-set-parameter \
  -Wunused-macros \
  -Wvector-operation-performance \
- -fipa-pta \
- -ffast-math \
- -fmerge-all-constants \
- -Wl,-O1 \
- -Wl,--gc-sections \
- -Wl,--as-needed \
+ -Wwrite-strings \
  "$@"
