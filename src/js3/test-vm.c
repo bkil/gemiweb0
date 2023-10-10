@@ -1,7 +1,8 @@
 #include "vm.h"
-#include <stdbool.h> // true false bool
-#include <stdio.h> // printf puts
-#include <string.h> // strlen
+
+#include <stdbool.h> /* true false bool */
+#include <stdio.h> /* printf puts */
+#include <string.h> /* strlen */
 
 #ifdef SMALLBIN
 #define SB(x,y) (x)
@@ -13,14 +14,16 @@ static bool _debug = false;
 static unsigned int _errorCount = 0;
 
 static int
+__attribute__((nonnull))
 test_case(const char *prog, bool debug) {
-  Parser *p = Parser_new();
+  struct Parser *p = Parser_new();
   int ret = Parser_eval(p, prog, strlen(prog), debug);
   Parser_free(p);
   return ret;
 }
 
 static void
+__attribute__((nonnull(1)))
 t3(const char *code, int expect, const char *name) {
   const char *title = name ? name : code;
   if (_debug) {
@@ -39,6 +42,7 @@ t3(const char *code, int expect, const char *name) {
 }
 
 static void
+__attribute__((nonnull))
 t(const char *code, int expect) {
   t3(code, expect, 0);
 }
@@ -100,7 +104,7 @@ main(void) {
   t("-", -1);
   t("-(-9)", 9);
   t("var i = -9; -i", 9);
-  t("-null", -2); // non-conforming
+  t("-null", -2); /* non-conforming */
   t("var i; i = 0; i = !i", 1);
   t("var xY_0; xY_0 = 9", 9);
   t("var i; i = 9; i", 9);
@@ -273,7 +277,7 @@ main(void) {
   t("typeof 8 === 'number'", 1);
   t("var o = new Object; typeof o === 'object'", 1);
 
-  t("eval(4)", -2); // non-conforming
+  t("eval(4)", -2); /* non-conforming */
   t("eval('9')", 9);
   t("eval('4 + 5')", 9);
   t("eval('var i'); eval('i = 9'); eval('i')", 9);
@@ -327,7 +331,7 @@ main(void) {
   t("var p = new Object; var q = new Object; eval2(p, eval2(q, \"'4+' + '5'\"))", 9);
   t("var p = new Object; eval2(p, \"var q = new Object; eval2(q, '4+' + '5')\")", 9);
 
-  // ES5
+  /* ES5 */
   t("var s = 'a'; s[-1] === ''", 1);
   t("var s = ''; s[0] === ''", 1);
   t("var s = 'a'; s[0] === 'a'", 1);
@@ -351,7 +355,7 @@ main(void) {
   t("function f() { var i; i = 9; return i }; f(); i", -2);
   t("console.log(9", -1);
 
-  // TODO Object reference cycles
+  /* TODO Object reference cycles */
   t("var p; var q; p = new Object; q = new Object; p.q = q; q.p = p; q = p.q; q.p", SB(1, -2));
   t("var p; var q; var t; p = new Object; q = new Object; p.q = q; q.p = p; t = p.q; t.p", SB(1, -2));
   t("var p; var q; var t; p = new Object; q = new Object; p.q = q; q.p = p; q.i = 9; t = q.p; t = t.q; t.i", SB(9, -2));
@@ -360,17 +364,17 @@ main(void) {
   t("var o; var p; var q; o = new Object; p = new Object; q = new Object; o.p = p; p.q = q; q.o = o; o = o.p; o = o.q; o.o", SB(1, -2));
   t("var o; var p; var q; o = new Object; p = new Object; q = new Object; o.p = p; o.q = q; p.q = q; p.o = o; q.p = p; q.o = o; o = o.p; o = o.q; o.o", SB(1, -2));
 
-  // TODO function scope reference cycles
+  /* TODO function scope reference cycles */
   t("var o; o = new Object; function f() { 9 }; o.f = f", SB(1, -2));
   t("function obj() { var o; o = new Object; o.i = 9; function get() { return o.i }; o.get = get; return o }; var p; p = obj(); p.get()", SB(9, -2));
   t("function obj() { var o; o = new Object; o.i = 8; function inc() { o.i = o.i + 1 }; o.inc = inc; function get() { return o.i }; o.get = get; return o }; var p; p = obj(); p.inc(); p.get()", SB(9, -2));
 
-  // ok
+  /* ok */
   t("function obj() { var s; s = new Object; s.i = 9; function get() { return s.i }; var m; m = new Object; m.get = get; return m }; var p; p = obj(); p.get()", 9);
   t("function obj() { var s; s = new Object; s.i = 8; function get() { return s.i }; function inc() { s.i = s.i + 1 }; function ret() { var m; m = new Object; m.get = get; m.inc = inc; return m }; return ret() }; var p; p = obj(); p.inc(); p.get()", 9);
   t("function obj() { var s; s = new Object; s.i = 8; function get() { return s.i }; function inc() { s.i = s.i + 1 }; function ret() { var m; m = new Object; m.get = get; m.inc = inc; m.s = s; return m }; return ret() }; var p; p = obj(); p.inc(); p.get(); var t; t = p.s; t.i", 9);
 
-  // TODO function scope by reference
+  /* TODO function scope by reference */
   t("var i; function f() { i = 9 }; f(); i", SB(9, 0));
   t("var i; function f() { i = 9 }; f(); i = 8; f(); i", SB(9, 8));
   t("var i; function f() { i = 9 }; var m; m = new Object; m.a = f; m.a(); i", SB(9, 0));
@@ -379,7 +383,7 @@ main(void) {
     SB(7, 0));
   t("function g() { return f(); }; function f() { return 9 }; g()", SB(9, -2));
 
-  // TODO application
+  /* TODO application */
   t("var i; i = (function() { return 9 })(); i", -1);
 
 

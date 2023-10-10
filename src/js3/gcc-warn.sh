@@ -1,7 +1,8 @@
 #!/bin/sh
 
 gcc \
- -Werror -std=c99\
+ -Werror \
+ -std=c99 \
  -Wall \
  -Wextra \
  -Wno-unused-parameter\

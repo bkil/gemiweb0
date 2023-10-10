@@ -1,9 +1,7 @@
-#define _XOPEN_SOURCE 700 // strdup
-#define _POSIX_C_SOURCE 200809L // strdup
-
-#include <string.h> // strdup
-#include <stdio.h> // fputs stderr
+#include "string.h" /* strdup */
 #include "vm.h"
+
+#include <stdio.h> /* fputs stderr */
 
 static int
 __attribute__((pure, nonnull))
@@ -70,7 +68,7 @@ Object_free(Object *o) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((returns_nonnull, nonnull))
 Object_ref(Object *o) {
   if (o->ref >= 0) {
     o->ref++;
@@ -79,7 +77,7 @@ Object_ref(Object *o) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((returns_nonnull, nonnull))
 Object_clone(Object *o) {
   if (o->t != MapObject) {
     return Object_ref(o);

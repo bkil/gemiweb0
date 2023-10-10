@@ -1,4 +1,5 @@
 static int
+__attribute__((nonnull))
 snprinti(char *s, size_t n, int i) {
   if (n == 1) {
     *s = '\0';

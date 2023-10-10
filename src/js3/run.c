@@ -1,11 +1,11 @@
-#include "vm.h" // Parser_new Parser_eval Parser_free off_t2size_t
-#include <stdio.h> // fputs stderr
-#include <stdlib.h> // size_t
-#include <sys/mman.h> //mmap munmap
-#include <sys/types.h> // open fstat
-#include <sys/stat.h> // open fstat
-#include <fcntl.h> // open
-#include <unistd.h> // close fstat
+#include "vm.h" /* Parser_new Parser_eval Parser_free off_t2size_t */
+#include <stdio.h> /* fputs stderr */
+#include <stdlib.h> /* size_t */
+#include <sys/mman.h> /* mmap munmap */
+#include <sys/types.h> /* open fstat */
+#include <sys/stat.h> /* open fstat */
+#include <fcntl.h> /* open */
+#include <unistd.h> /* close fstat */
 
 #define MAINERR (-3)
 
@@ -37,7 +37,7 @@ main(int argc, char **argv) {
     return MAINERR;
   }
 
-  Parser *p = Parser_new();
+  struct Parser *p = Parser_new();
   int ret = Parser_eval(p, prog, len, 1);
   Parser_free(p);
 

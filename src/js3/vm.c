@@ -1,12 +1,9 @@
-#define _XOPEN_SOURCE 700 // strnlen strdup strndup getline
-#define _POSIX_C_SOURCE 200809L // strnlen strdup strndup getline
+#include "string.h" /* strnlen strdup strndup getline; strlen strcmp strncmp strncpy strstr */
+#include "vm-impl.h"
 
-#include <stdio.h> // fputs fputc putchar stdout stderr getline
-#include <malloc.h> // malloc free
-#include <stdlib.h> // atoi size_t
-#include <string.h> // strcmp strncmp strncpy strdup strndup strlen strstr
-
-#include "vm.h"
+#include <stdio.h> /* fputs fputc putchar stdout stderr getline */
+#include <malloc.h> /* malloc free */
+#include <stdlib.h> /* atoi size_t */
 
 static void
 __attribute__((nonnull))
@@ -25,12 +22,12 @@ showProg(Parser *p) {
 }
 
 #ifdef SMALLBIN
-#include "vm-smallbin.c"
-#define NEEDLEAK
+# include "vm-smallbin.c"
+# define NEEDLEAK
 
 #else
 
-#include <stdio.h> // snprintf
+# include <stdio.h> /* snprintf */
 
 static int
 __attribute__((nonnull))
@@ -38,31 +35,31 @@ snprinti(char *s, size_t n, int i) {
   return snprintf(s, n, "%d", i);
 }
 
-#ifdef SIMPLE
-#define NEEDLEAK
-#endif
+# ifdef SIMPLE
+#  define NEEDLEAK
+# endif
 #endif
 
 #ifdef NEEDLEAK
-
-#define getCycles(o) (0)
-#define Object_ref(o) (o)
-#define Object_clone(o) (o)
-#define mfree(o) while(0) {}
-#define Object_free(o) while(0) {}
-#define List_free(l) while(0) {}
+# define getCycles(o) (0)
+# define Object_ref(o) (o)
+# define Object_clone(o) (o)
+# define mfree(o) while(0) {}
+# define Object_free(o) while(0) {}
+# define List_free(l) while(0) {}
 
 void
 __attribute__((const))
 Parser_free(Parser *p) {
 }
 
-#else
+# else
+
 Object *MapObject_new(void);
 List *List_new(List *next, char *key, Object *value);
-#define mfree(o) free(o)
+# define mfree(o) free(o)
 
-#include "vm-free.c"
+# include "vm-free.c"
 #endif
 
 static void
@@ -84,7 +81,7 @@ setRunError(Parser *p, const char *message, const Id *id) {
 static
 #endif
 List *
-__attribute__((malloc, nonnull(3)))
+__attribute__((malloc, returns_nonnull, nonnull(3)))
 List_new(List *next, char *key, Object *value) {
   List *l = malloc(sizeof(*l));
   l->next = next;
@@ -99,7 +96,7 @@ static Object nanObject = {.ref = -1, .t = NanObject, .V.i = 0};
 static Object emptyString = {.ref = -1, .t = ConstStringObject, .V.c = {.len = 0, .s = ""}};
 
 static Object *
-__attribute__((malloc))
+__attribute__((malloc, returns_nonnull))
 IntObject_new(int x) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -109,7 +106,7 @@ IntObject_new(int x) {
 }
 
 static Object *
-__attribute__((malloc))
+__attribute__((malloc, returns_nonnull))
 StringObject_new_str(Str s) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -119,7 +116,7 @@ StringObject_new_str(Str s) {
 }
 
 static Object *
-__attribute__((malloc))
+__attribute__((malloc, returns_nonnull))
 StringObject_new_const(Id s) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -129,7 +126,7 @@ StringObject_new_const(Id s) {
 }
 
 static Object *
-__attribute__((malloc, nonnull))
+__attribute__((malloc, returns_nonnull, nonnull))
 StringObject_new(const char *s) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -139,7 +136,7 @@ StringObject_new(const char *s) {
 }
 
 static Object *
-__attribute__((malloc))
+__attribute__((malloc, returns_nonnull))
 StringObject_new_char(char c) {
   Str s = {.s = 0, .len = 1};
   s.s = malloc(2);
@@ -149,7 +146,7 @@ StringObject_new_char(char c) {
 }
 
 static Object *
-__attribute__((malloc, nonnull))
+__attribute__((malloc, returns_nonnull, nonnull))
 FunctionJs_new(Parser *p) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -159,7 +156,7 @@ FunctionJs_new(Parser *p) {
 }
 
 static Object *
-__attribute__((malloc))
+__attribute__((malloc, returns_nonnull))
 FunctionNative_new(Native f) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -169,7 +166,7 @@ FunctionNative_new(Native f) {
 }
 
 static Object *
-__attribute__((malloc))
+__attribute__((malloc, returns_nonnull))
 MethodNative_new(Method a) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -182,7 +179,7 @@ MethodNative_new(Method a) {
 static
 #endif
 Object *
-__attribute__((malloc))
+__attribute__((malloc, returns_nonnull))
 MapObject_new(void) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -192,7 +189,7 @@ MapObject_new(void) {
 }
 
 static Object *
-__attribute__((malloc))
+__attribute__((malloc, returns_nonnull))
 ArrayObject_new(void) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -286,7 +283,7 @@ isStringEq(Object *a, Object *b) {
 }
 
 static Object *
-__attribute__((nonnull(1, 2)))
+__attribute__((returns_nonnull, nonnull(1, 2)))
 String_indexOf(Parser *p, Object *self, List *l) {
   Object *a = l ? l->value : &undefinedObject;
   if (!isString(a)) {
@@ -309,21 +306,21 @@ String_getCharCode(Object *self, Object *x) {
 }
 
 static Object *
-__attribute__((nonnull(1, 2)))
+__attribute__((returns_nonnull, nonnull(1, 2)))
 String_charCodeAt(Parser *p, Object *self, List *l) {
   char c = String_getCharCode(self, l ? l->value : &undefinedObject);
   return c < 0 ? &nanObject : IntObject_new(c);
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((returns_nonnull, nonnull))
 String_charAt_obj(Object *self, Object *x) {
   char c = String_getCharCode(self, x);
   return c < 0 ? &emptyString : StringObject_new_char(c);
 }
 
 static Object *
-__attribute__((nonnull(1, 2)))
+__attribute__((returns_nonnull, nonnull(1, 2)))
 String_charAt(Parser *p, Object *self, List *l) {
   return String_charAt_obj(self, l ? l->value : &undefinedObject);
 }
@@ -345,8 +342,8 @@ Object_toString(Object *o) {
         return StringObject_new_str((Str){.s = s, .len = (size_t)len});
       } else {
         mfree(s);
+        break;
       }
-      break;
     }
 
     case UndefinedObject:
@@ -381,7 +378,7 @@ Object_toString(Object *o) {
 
     default: {}
   }
-  return 0;
+  return 0; /* unreachable unless memory corruption */
 }
 
 static Object *
@@ -409,9 +406,9 @@ typeOf(Object *o) {
     case MethodNative:
       return StringObject_new("function");
 
-    default: {}
+    default:
+      return 0; /* unreachable unless memory corruption */
   }
-  return 0;
 }
 
 static Object *
@@ -1459,7 +1456,7 @@ parseBlock(Parser *p) {
 }
 
 static Object *
-__attribute__((nonnull(1)))
+__attribute__((returns_nonnull, nonnull(1)))
 Console_log(Parser *p, List *l) {
   Object *e = l ? l->value : &undefinedObject;
   Object *os = Object_toString(e);
@@ -1473,7 +1470,7 @@ Console_log(Parser *p, List *l) {
 }
 
 static Object *
-__attribute__((nonnull(1)))
+__attribute__((returns_nonnull, nonnull(1)))
 String_fromCharCode(Parser *p, List *l) {
   Object *e = l ? l->value : &undefinedObject;
   char c = 0;
@@ -1505,7 +1502,7 @@ process_stdin_on(Parser *p, List *l) {
 }
 
 static Object *
-__attribute__((nonnull(1)))
+__attribute__((returns_nonnull, nonnull(1)))
 global_isNaN(Parser *p, List *l) {
   return IntObject_new(l ? l->value->t == NanObject : 0);
 }
@@ -1530,7 +1527,7 @@ static Object *
 global_eval2(Parser *p, List *l);
 
 Parser *
-__attribute__((malloc))
+__attribute__((malloc, returns_nonnull))
 Parser_new(void) {
   Parser *p = malloc(sizeof(*p));
   p->vars = MapObject_new();
@@ -1556,7 +1553,7 @@ Parser_new(void) {
 }
 
 static Parser *
-__attribute__((malloc, nonnull))
+__attribute__((malloc, returns_nonnull, nonnull))
 Parser_new_vars(Object *vars) {
   Parser *p = Parser_new();
   addField(vars, "", p->vars);
