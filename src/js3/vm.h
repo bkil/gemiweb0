@@ -17,8 +17,8 @@ struct Parser *Parser_new(void);
 int Parser_eval(struct Parser *p, const char *prog, size_t len, int debug);
 void Parser_free(struct Parser *p);
 
-static size_t
 _inline_
+static size_t
 off_t2size_t(off_t x) {
   if (x < 0) {
     return 0;
@@ -26,8 +26,8 @@ off_t2size_t(off_t x) {
   return (size_t)x;
 }
 
-static int
 _inline_
+static int
 off_t2int(off_t x) {
   if ((x < INT_MIN) || (x > INT_MAX)) {
     return 0;
