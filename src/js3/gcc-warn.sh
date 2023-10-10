@@ -1,9 +1,14 @@
 #!/bin/sh
 
 gcc \
- -Werror -std=gnu11\
+ -Werror -std=c99\
+ -Wall \
+ -Wextra \
  -Wno-unused-parameter\
+ -Wunused-but-set-parameter\
  -Wpedantic\
+ -pedantic\
+ -pedantic-errors\
  -Wwrite-strings\
  -Woverflow\
  -fstrict-overflow\
@@ -14,39 +19,60 @@ gcc \
  -fno-common \
  -W \
  -Wabi \
- -Wall \
  -Wcast-align \
  -Wdeprecated \
  -Wdeprecated-declarations \
- -Wextra \
  -Winvalid-pch \
  -Wmissing-format-attribute \
  -Woverflow \
  -Wshadow \
  \
+ -fipa-profile \
+ -fira-loop-pressure \
+ -ftree-partial-pre \
+ -funsafe-loop-optimizations \
  -Waggregate-return \
+ -Warray-bounds=2 \
  -Wbad-function-cast \
+ -Wcast-align \
  -Wcast-qual \
  -Wconversion \
+ -Wdate-time \
+ -Wdisabled-optimization\
  -Wdouble-promotion \
+ -Wendif-labels \
  -Wfloat-equal \
  -Wformat=2 \
+ -Wframe-larger-than=256 \
  -Winline \
+ -Wjump-misses-init\
+ -Wlogical-op \
  -Wmissing-declarations \
- -Wno-error=missing-format-attribute \
+ -Wmissing-include-dirs \
  -Wmissing-prototypes \
  -Wnested-externs \
+ -Wpacked \
+ -Wpadded -Wno-error=padded \
  -Wpointer-arith \
  -Wpointer-sign \
  -Wredundant-decls \
  -Wsign-conversion \
+ -Wstack-usage=256 \
+ -Wstrict-aliasing=1\
  -Wstrict-prototypes \
  -Wsuggest-attribute=pure \
  -Wsuggest-attribute=const \
  -Wsuggest-attribute=noreturn \
  -Wsuggest-attribute=format \
  -Wswitch-default \
+ -Wswitch-enum \
+ -Wtrampolines \
  -Wundef \
+ -Wuninitialized \
+ -Wunsafe-loop-optimizations \
+ -Wunsuffixed-float-constants \
+ -Wunused-macros \
+ -Wvector-operation-performance \
  -fipa-pta \
  -ffast-math \
  -fmerge-all-constants \

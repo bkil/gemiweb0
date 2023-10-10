@@ -1,11 +1,17 @@
 #!/bin/sh
 
-./gcc-warn.sh vm.c run.c -o run.out &&
+./gcc-warn.sh -O2 -g vm.c run.c -o run.out &&
+
 valgrind \
   --leak-check=full \
   --show-leak-kinds=all \
-  --num-callers=20 \
+  --num-callers=30 \
   --malloc-fill=0xaa \
   --free-fill=0x55 \
+  --redzone-size=256 \
+  --read-var-info=yes \
   --expensive-definedness-checks=yes \
+  --merge-recursive-frames=10 \
+  --track-origins=yes \
+  --partial-loads-ok=no \
   ./run.out "${1-test_hi.js}"

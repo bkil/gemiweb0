@@ -23,13 +23,19 @@ compile -c vm.c && \
   fi &&
   compile -flto vm.o test-vm.c
 } && {
+
 valgrind \
   --leak-check=full \
   --show-leak-kinds=all \
   --num-callers=20 \
   --malloc-fill=0xaa \
   --free-fill=0x55 \
+  --redzone-size=256 \
+  --read-var-info=yes \
   --expensive-definedness-checks=yes \
+  --merge-recursive-frames=10 \
+  --track-origins=yes \
+  --partial-loads-ok=no \
   ./a.out "$@"
 }
 
@@ -42,7 +48,8 @@ return $S
 compile() {
 local ADD=""
 if [ -n "$ISSMALLBIN" ]; then
-#  -fshort-double \
+: \
+  -fshort-double \
   -ffunction-sections \
   -fdata-sections \
   -fno-jump-tables \
@@ -50,6 +57,8 @@ if [ -n "$ISSMALLBIN" ]; then
 
   ADD="$ADD \
   -Os \
+  -Wno-error=suggest-attribute=pure \
+  -Wno-error=suggest-attribute=const \
   -fno-asynchronous-unwind-tables \
   -fno-unwind-tables \
   -fno-stack-protector \
@@ -64,13 +73,14 @@ if [ -n "$ISSMALLBIN" ]; then
   -DSMALLBIN \
   -s\
   "
+  ./gcc-warn.sh -D'__attribute__(_)=' $ADD "$@"
 elif [ -n "$ISSIMPLE" ]; then
   ADD="$ADD -O2 -g -DSIMPLE"
+  ./gcc-warn.sh $ADD "$@"
 else
   ADD="$ADD -O2 -g"
-fi
-
   ./gcc-warn.sh $ADD "$@"
+fi
 }
 
 main "$@"
