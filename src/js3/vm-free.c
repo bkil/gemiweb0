@@ -2,13 +2,17 @@
 #include "vm.h"
 
 static int
-__attribute__((pure, nonnull))
-getCycles(Object *o) {
+__attribute__((nonnull))
+getCycles0(Object *o, int backtrack) {
   if (o->ref == -2) {
     return 1;
   } else if (o->ref == -1) {
     return 0;
   }
+  if (backtrack != (o->ref >> 30)) {
+    return 0;
+  }
+  o->ref ^= 1 << 30;
 
   int savedRef = o->ref;
   o->ref = -2;
@@ -19,7 +23,7 @@ getCycles(Object *o) {
     case ArrayObject: {
       List *it = o->V.m;
       while (it) {
-        if (getCycles(it->value)) {
+        if (getCycles0(it->value, backtrack)) {
           c = 1;
           break;
         }
@@ -29,11 +33,11 @@ getCycles(Object *o) {
     }
 
     case FunctionJs:
-      c = getCycles(o->V.j.scope);
+      c = getCycles0(o->V.j.scope, backtrack);
       break;
 
     case MethodNative:
-      c = getCycles(o->V.a.self);
+      c = getCycles0(o->V.a.self, backtrack);
       break;
 
     case UndefinedObject:
@@ -47,6 +51,14 @@ getCycles(Object *o) {
       break;
   }
   o->ref = savedRef;
+  return c;
+}
+
+static int
+__attribute__((pure, nonnull))
+getCycles(Object *o) {
+  int c = getCycles0(o, 0);
+  getCycles0(o, 1);
   return c;
 }
 
