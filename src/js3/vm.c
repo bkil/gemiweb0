@@ -18,7 +18,7 @@ __attribute__((nonnull))
 showProg(Parser *p) {
   const size_t left = off_t2size_t(p->prog.end - p->prog.s);
   putsn(p->prog.s, left < 32 ? left : 32, stderr);
-  fputs("", stderr);
+  fputs("\n", stderr);
 }
 
 #ifdef SMALLBIN
@@ -1574,7 +1574,7 @@ showParseError(Parser *p) {
         fputs("' )", stderr);
       }
     }
-    fputs("", stderr);
+    fputs("\n", stderr);
     showProg(p);
   }
 }
@@ -1591,7 +1591,7 @@ showRunError(Parser *p) {
         putsn(p->errName.s, p->errName.len, stderr);
       }
     }
-    fputs("", stderr);
+    fputs("\n", stderr);
     showProg(p);
   }
 }
@@ -1688,10 +1688,10 @@ Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
     if (p->thrw) {
       if (p->debug) {
         Object *os = Object_toString(p->thrw);
-        fputs("runtime error: exception", stderr);
+        fputs("runtime error: exception\n", stderr);
         putsn(os->V.s.s, os->V.s.len, stderr);
         Object_free(os);
-        fputs("", stderr);
+        fputs("\n", stderr);
       }
       Object_free(p->thrw);
       p->thrw = 0;
