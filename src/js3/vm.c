@@ -863,9 +863,6 @@ parseITerm(Parser *p, Id *id) {
   } else if (strncmpEq(*id, "NaN")) {
     return &nanObject;
   } else if (strncmpEq(*id, "function")) {
-    Id skip;
-    parseId(p, &skip);
-    clearErr(p);
     if (!expectWs(p, '(')) {
       return 0;
     }

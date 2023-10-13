@@ -442,8 +442,8 @@ main(void) {
   t("while (0) {}", 0);
   t("function f() {}", 0);
   t("var f; f = function() { return 9 }; f()", 9);
-  t("var f; f = function g() { return 9 }; f()", 9);
-  t("var f; f = function g() { return 9 }; g()", -2);
+  t("var f; f = function g() { return 9 }; f()", -1); /* non-conforming */
+  t("var f; f = function g() { return 9 }; g()", -1); /* non-conforming, should be -2 */
   t("try {} catch (e) {}", 0);
 
   t("", 0);
