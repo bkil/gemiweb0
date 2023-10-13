@@ -1,8 +1,6 @@
 #include "string.h" /* strdup */
 #include "vm.h"
 
-#include <stdio.h> /* fputs stderr */
-
 static int
 __attribute__((pure, nonnull))
 getCycles(Object *o) {
@@ -50,19 +48,33 @@ Object_free(Object *o) {
     return;
   }
 
-  if (o->t == StringObject) {
-    free(o->V.s.s);
-  } else if (o->t == ConstStringObject) {
-    if (o->V.c.h) {
-      Object_free(o->V.c.h);
-    }
-  } else if ((o->t == MapObject) || (o->t == ArrayObject)) {
-    List_free(o->V.m);
-  } else if (o->t == FunctionJs) {
-    Object_free(o->V.j.scope);
-    Object_free(o->V.j.p.h);
-  } else if (o->t == MethodNative) {
-    Object_free(o->V.a.self);
+  switch (o->t) {
+    case StringObject:
+      free(o->V.s.s);
+      break;
+    case ConstStringObject:
+      if (o->V.c.h) {
+        Object_free(o->V.c.h);
+      }
+      break;
+    case MapObject:
+    case ArrayObject:
+      List_free(o->V.m);
+      break;
+    case FunctionJs:
+      Object_free(o->V.j.scope);
+      Object_free(o->V.j.p.h);
+      break;
+    case MethodNative:
+      Object_free(o->V.a.self);
+      break;
+    case UndefinedObject:
+    case IntObject:
+    case FunctionNative:
+    case NullObject:
+    case NanObject:
+    default:
+      {}
   }
   free(o);
 }
