@@ -9,7 +9,7 @@
 * function definition
 * return
 * optional compound block within if, while or for statements ({})
-* ES3: try-catch, throw
+* ES3/NS5: try-catch, throw
 
 convenience:
 
@@ -19,6 +19,7 @@ missing:
 
 * ES3/NS4: switch-case-default, do-while, label-goto
 * for (the C-styled one), for-of, break, continue, with, varargs, arbitrary block scopes with {}
+* ES6: tail call optimization
 
 ## Operators
 
@@ -27,11 +28,14 @@ missing:
 convenience:
 
 * parenthesis subexpressions, short-circuiting &&, ||, '+' also works for string concatenation
-* NS3: typeof
+* ES1/NS3: typeof
 
 missing:
 
-* instanceof, ==, !=, +=, ++, class, new (mocked for some built-in objects), precedence (have to fully parenthesize), ternary operator, comma operator
+* ==, !=, +=, ++, class, new (mocked for some built-in objects), precedence (have to fully parenthesize)
+* ES3/NS5: instanceof
+* ES1/NS2: ternary operator
+* ES1/NS2: comma operator
 * NS4: delete
 
 ## Values
@@ -104,7 +108,7 @@ missing:
 
 * .length
 * .charAt
-* ES2/NS4: String.fromCharCode
+* ES2/NS4: String.prototype.fromCharCode
 * ES2/NS4: .charCodeAt
 
 convenience:
