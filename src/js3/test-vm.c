@@ -1,8 +1,10 @@
 #include "vm.h"
 
 #include <stdbool.h> /* true false bool */
-#include <stdio.h> /* printf puts */
+#include <stdio.h> /* fprintf */
 #include <string.h> /* strlen */
+
+#define print(format, ...) fprintf(stderr, format, ##__VA_ARGS__)
 
 #ifdef SMALLBIN
 #define SB(x,y) (x)
@@ -27,14 +29,14 @@ __attribute__((nonnull(1)))
 t3(const char *code, int expect, const char *name) {
   const char *title = name ? name : code;
   if (_debug) {
-    printf("=testing: %s\n", title);
+    print("=testing: %s\n", title);
   }
   int res = test_case(code, _debug);
   if (res != expect) {
     if (_debug) {
-      printf(" -fail: got %d, expected %d\n", res, expect);
+      print(" -fail: got %d, expected %d\n", res, expect);
     } else {
-      printf("fail: %s: got %d, expected %d\n", title, res, expect);
+      print("fail: %s: got %d, expected %d\n", title, res, expect);
       test_case(code, 1);
     }
     _errorCount++;
@@ -109,7 +111,7 @@ main(void) {
   t("var xY_0; xY_0 = 9", 9);
   t("var i; i = 9; i", 9);
   t("var i; i = 2 + 3", 5);
-  t("var i; var j;  i = j = 9", 9);
+  t("var i; var j; i = j = 9", 9);
   t("var i; var j; i = j = 9; i", 9);
   t("var i; var j; i = j = 9; j", 9);
 
@@ -469,9 +471,9 @@ main(void) {
   t("console.log(' DONE ')", 0);
 
   if (_errorCount) {
-    printf("%d test(s) failed\n", _errorCount);
+    print("%d test(s) failed\n", _errorCount);
   } else {
-    puts("All tests successful");
+    print("All tests successful%s\n", "");
   }
   return _errorCount ? 1 : 0;
 }
