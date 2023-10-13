@@ -4,11 +4,9 @@
 static int
 __attribute__((pure, nonnull))
 getCycles(Object *o) {
-  if ((o->t != MapObject) && (o->t != ArrayObject) && (o->t != FunctionJs) && (o->t != MethodNative)) {
-    return 0;
-  } else if (o->ref == -2) {
+  if (o->ref == -2) {
     return 1;
-  } else if (o->ref < 0) {
+  } else if (o->ref == -1) {
     return 0;
   }
 
@@ -16,21 +14,38 @@ getCycles(Object *o) {
   o->ref = -2;
   int c = 0;
 
-  if ((o->t == MapObject) || (o->t == ArrayObject)) {
-    List *it = o->V.m;
-    while (it) {
-      if (getCycles(it->value)) {
-        c = 1;
-        break;
+  switch (o->t) {
+    case MapObject:
+    case ArrayObject: {
+      List *it = o->V.m;
+      while (it) {
+        if (getCycles(it->value)) {
+          c = 1;
+          break;
+        }
+        it = it->next;
       }
-      it = it->next;
+      break;
     }
-  } else if (o->t == FunctionJs) {
-    c = getCycles(o->V.j.scope);
-  } else if (o->t == MethodNative) {
-    c = getCycles(o->V.a.self);
-  }
 
+    case FunctionJs:
+      c = getCycles(o->V.j.scope);
+      break;
+
+    case MethodNative:
+      c = getCycles(o->V.a.self);
+      break;
+
+    case UndefinedObject:
+    case IntObject:
+    case StringObject:
+    case ConstStringObject:
+    case FunctionNative:
+    case NullObject:
+    case NanObject:
+    default:
+      break;
+  }
   o->ref = savedRef;
   return c;
 }
