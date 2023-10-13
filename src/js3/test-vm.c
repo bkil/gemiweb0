@@ -16,7 +16,7 @@ static bool _debug = false;
 static unsigned int _errorCount = 0;
 
 static int
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 test_case(const char *prog, bool debug) {
   struct Parser *p = Parser_new();
   int ret = Parser_eval(p, prog, strlen(prog), debug);
@@ -37,7 +37,7 @@ t3(const char *code, int expect, const char *name) {
       print(" -fail: got %d, expected %d\n", res, expect);
     } else {
       print("fail: %s: got %d, expected %d\n", title, res, expect);
-      test_case(code, 1);
+      if (test_case(code, 1)) {}
     }
     _errorCount++;
   }

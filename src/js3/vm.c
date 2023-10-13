@@ -81,7 +81,7 @@ setRunError(Parser *p, const char *message, const Id *id) {
 static
 #endif
 List *
-__attribute__((malloc, returns_nonnull, nonnull(3)))
+__attribute__((malloc, returns_nonnull, warn_unused_result, nonnull(3)))
 List_new(List *next, char *key, Object *value) {
   List *l = malloc(sizeof(*l));
   l->next = next;
@@ -96,7 +96,7 @@ static Object nanObject = {.ref = -1, .t = NanObject, .V.i = 0};
 static Object emptyString = {.ref = -1, .t = ConstStringObject, .V.c = {.len = 0, .s = ""}};
 
 static Object *
-__attribute__((malloc, returns_nonnull))
+__attribute__((malloc, returns_nonnull, warn_unused_result))
 IntObject_new(int x) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -106,7 +106,7 @@ IntObject_new(int x) {
 }
 
 static Object *
-__attribute__((malloc, returns_nonnull))
+__attribute__((malloc, returns_nonnull, warn_unused_result))
 StringObject_new_str(Str s) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -116,7 +116,7 @@ StringObject_new_str(Str s) {
 }
 
 static Object *
-__attribute__((malloc, returns_nonnull))
+__attribute__((malloc, returns_nonnull, warn_unused_result))
 StringObject_new_const(Id s) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -126,7 +126,7 @@ StringObject_new_const(Id s) {
 }
 
 static Object *
-__attribute__((malloc, returns_nonnull, nonnull))
+__attribute__((malloc, returns_nonnull, warn_unused_result, nonnull))
 StringObject_new(const char *s) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -136,7 +136,7 @@ StringObject_new(const char *s) {
 }
 
 static Object *
-__attribute__((malloc, returns_nonnull))
+__attribute__((malloc, returns_nonnull, warn_unused_result))
 StringObject_new_char(char c) {
   Str s = {.s = 0, .len = 1};
   s.s = malloc(2);
@@ -146,7 +146,7 @@ StringObject_new_char(char c) {
 }
 
 static Object *
-__attribute__((malloc, returns_nonnull, nonnull))
+__attribute__((malloc, returns_nonnull, warn_unused_result, nonnull))
 FunctionJs_new(Parser *p) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -156,7 +156,7 @@ FunctionJs_new(Parser *p) {
 }
 
 static Object *
-__attribute__((malloc, returns_nonnull))
+__attribute__((malloc, returns_nonnull, warn_unused_result))
 FunctionNative_new(Native f) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -166,7 +166,7 @@ FunctionNative_new(Native f) {
 }
 
 static Object *
-__attribute__((malloc, returns_nonnull))
+__attribute__((malloc, returns_nonnull, warn_unused_result))
 MethodNative_new(Method a) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -179,7 +179,7 @@ MethodNative_new(Method a) {
 static
 #endif
 Object *
-__attribute__((malloc, returns_nonnull))
+__attribute__((malloc, returns_nonnull, warn_unused_result))
 MapObject_new(void) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -189,7 +189,7 @@ MapObject_new(void) {
 }
 
 static Object *
-__attribute__((malloc, returns_nonnull))
+__attribute__((malloc, returns_nonnull, warn_unused_result))
 ArrayObject_new(void) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
@@ -230,13 +230,13 @@ Map_set_id(List **list, Id *id, Object *value) {
 }
 
 static int
-__attribute__((pure, nonnull))
+__attribute__((pure, nonnull, warn_unused_result))
 strncmpEq(Id id, const char *s) {
   return !strncmp(id.s, s, id.len) && !s[id.len];
 }
 
 static List *
-__attribute__((pure))
+__attribute__((pure, warn_unused_result))
 Map_get(List *list, Id id) {
   List *it = list;
   while (it && it->key && it->value) {
@@ -257,13 +257,13 @@ Map_get(List *list, Id id) {
 }
 
 static List *
-__attribute__((pure))
+__attribute__((pure, warn_unused_result))
 Map_get_str(List *list, Str s) {
   return Map_get(list, (Id){.s = s.s, .len = s.len});
 }
 
 static int
-__attribute__((pure))
+__attribute__((pure, warn_unused_result))
 List_length(List *list) {
   int n = 0;
   for (; list; list = list->next, n++) {}
@@ -271,19 +271,19 @@ List_length(List *list) {
 }
 
 static int
-__attribute__((pure, nonnull))
+__attribute__((pure, nonnull, warn_unused_result))
 isString(Object *o) {
   return (o->t == StringObject) || (o->t == ConstStringObject);
 }
 
 static int
-__attribute__((pure, nonnull))
+__attribute__((pure, nonnull, warn_unused_result))
 isStringEq(Object *a, Object *b) {
   return isString(a) && isString(b) && (a->V.c.len == b->V.c.len) && (!strncmp(a->V.c.s, b->V.c.s, a->V.c.len));
 }
 
 static Object *
-__attribute__((returns_nonnull, nonnull(1, 2)))
+__attribute__((returns_nonnull, warn_unused_result, nonnull(1, 2)))
 String_indexOf(Parser *p, Object *self, List *l) {
   Object *a = l ? l->value : &undefinedObject;
   if (!isString(a)) {
@@ -299,40 +299,40 @@ String_indexOf(Parser *p, Object *self, List *l) {
 }
 
 static char
-__attribute__((pure, nonnull))
+__attribute__((pure, nonnull, warn_unused_result))
 String_getCharCode(Object *self, Object *x) {
   int i = x->t == IntObject ? x->V.i : 0;
   return (i >= 0) && (i < (int)self->V.c.len) ? self->V.c.s[i] : -1;
 }
 
 static Object *
-__attribute__((returns_nonnull, nonnull(1, 2)))
+__attribute__((returns_nonnull, warn_unused_result, nonnull(1, 2)))
 String_charCodeAt(Parser *p, Object *self, List *l) {
   char c = String_getCharCode(self, l ? l->value : &undefinedObject);
   return c < 0 ? &nanObject : IntObject_new(c);
 }
 
 static Object *
-__attribute__((returns_nonnull, nonnull))
+__attribute__((returns_nonnull, warn_unused_result, nonnull))
 String_charAt_obj(Object *self, Object *x) {
   char c = String_getCharCode(self, x);
   return c < 0 ? &emptyString : StringObject_new_char(c);
 }
 
 static Object *
-__attribute__((returns_nonnull, nonnull(1, 2)))
+__attribute__((returns_nonnull, warn_unused_result, nonnull(1, 2)))
 String_charAt(Parser *p, Object *self, List *l) {
   return String_charAt_obj(self, l ? l->value : &undefinedObject);
 }
 
 static int
-__attribute__((pure, nonnull))
+__attribute__((pure, nonnull, warn_unused_result))
 isTrue(Object *o) {
   return ((o->t == IntObject) && o->V.i) || (isString(o) && o->V.c.len) || (o->t == MapObject) || (o->t == ArrayObject) || (o->t == FunctionJs) || (o->t == FunctionNative) || (o->t == MethodNative);
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 Object_toString(Object *o) {
   switch (o->t) {
     case IntObject: {
@@ -382,7 +382,7 @@ Object_toString(Object *o) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 typeOf(Object *o) {
   switch (o->t) {
     case IntObject:
@@ -412,7 +412,7 @@ typeOf(Object *o) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 String_concat(Object *t1, Object *t2) {
   if (!isString(t1) || !isString(t2)) {
     return 0;
@@ -427,7 +427,7 @@ String_concat(Object *t1, Object *t2) {
 
 
 static int
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 accept(Parser *p, char c) {
   if ((p->prog.s < p->prog.end) && (*p->prog.s == c)) {
     p->prog.s++;
@@ -437,7 +437,7 @@ accept(Parser *p, char c) {
 }
 
 static int
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 expect(Parser *p, char c) {
   if (accept(p, c)) {
     return 1;
@@ -483,21 +483,21 @@ skipWs(Parser *p) {
 }
 
 static int
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 acceptWs(Parser *p, char c) {
   skipWs(p);
   return accept(p, c);
 }
 
 static int
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 expectWs(Parser *p, char c) {
   skipWs(p);
   return expect(p, c);
 }
 
 static int
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseId(Parser *p, Id *id) {
   skipWs(p);
   const char *s = p->prog.s;
@@ -519,7 +519,7 @@ parseId(Parser *p, Id *id) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseIntLit(Parser *p) {
   skipWs(p);
 
@@ -557,7 +557,7 @@ parseIntLit(Parser *p) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseStringLit(Parser *p) {
   skipWs(p);
   char c;
@@ -582,7 +582,7 @@ static Object *
 parseExpr(Parser *p);
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseIndex(Parser *p) {
   skipWs(p);
   if (accept(p, '[')) {
@@ -610,7 +610,7 @@ static Object *
 parseBlock(Parser *p);
 
 static Object *
-__attribute__((nonnull(1)))
+__attribute__((nonnull(1), warn_unused_result))
 parseFunction(Parser *p, List *arg) {
   if (!acceptWs(p, ')')) {
     Id id;
@@ -635,7 +635,7 @@ parseFunction(Parser *p, List *arg) {
 }
 
 static Object *
-__attribute__((nonnull(1, 2)))
+__attribute__((nonnull(1, 2), warn_unused_result))
 invokeFun(Parser *p, Object *o, List *args) {
   if (o->t == FunctionJs) {
     Prog ret = p->prog;
@@ -669,7 +669,7 @@ invokeFun(Parser *p, Object *o, List *args) {
 }
 
 static Object *
-__attribute__((nonnull(1)))
+__attribute__((nonnull(1), warn_unused_result))
 parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
   skipWs(p);
 
@@ -747,7 +747,7 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseSTerm(Parser *p, Id *id) {
   List **parent = &p->vars->V.m;
   Object *key = &undefinedObject;
@@ -835,7 +835,7 @@ static Object *
 parseTerm(Parser *p);
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseITerm(Parser *p, Id *id) {
   if (strncmpEq(*id, "new")) {
     skipWs(p);
@@ -882,7 +882,7 @@ parseITerm(Parser *p, Id *id) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseLTerm(Parser *p) {
   char op = 0;
   Object *o;
@@ -922,7 +922,7 @@ parseLTerm(Parser *p) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseTerm(Parser *p) {
   Id id;
   if (parseId(p, &id)) {
@@ -934,7 +934,7 @@ parseTerm(Parser *p) {
 }
 
 static Object *
-__attribute__((nonnull(1)))
+__attribute__((nonnull(1), warn_unused_result))
 parseEExpr(Parser *p, Object *t1) {
   if (!t1) {
     return 0;
@@ -1100,19 +1100,19 @@ parseEExpr(Parser *p, Object *t1) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseIExpr(Parser *p, Id *id) {
   return parseEExpr(p, parseITerm(p, id));
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseLExpr(Parser *p) {
   return parseEExpr(p, parseLTerm(p));
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseExpr(Parser *p) {
   Id id;
   if (parseId(p, &id)) {
@@ -1124,7 +1124,7 @@ parseExpr(Parser *p) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseWhile(Parser *p) {
   if (!expectWs(p, '(')) {
     return 0;
@@ -1157,7 +1157,7 @@ parseWhile(Parser *p) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseFor(Parser *p) {
   if (!expectWs(p, '(')) {
     return 0;
@@ -1217,7 +1217,7 @@ parseFor(Parser *p) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseIf(Parser *p) {
   Object *o;
   if (!expectWs(p, '(') || !(o = parseExpr(p))) {
@@ -1261,7 +1261,7 @@ parseIf(Parser *p) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseStatement(Parser *p) {
   Object *o = 0;
   Id id;
@@ -1359,13 +1359,13 @@ parseStatement(Parser *p) {
 }
 
 static int
-__attribute__((pure, nonnull))
+__attribute__((pure, nonnull, warn_unused_result))
 haveMore(Parser *p) {
   return !p->parseErr && (p->prog.s < p->prog.end);
 }
 
 static int
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseRequiredSemicolon(Parser *p) {
   skipWs(p);
   if (p->needSemicolon) {
@@ -1391,7 +1391,7 @@ parseOptionalSemicolon(Parser *p) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseStatements(Parser *p) {
   p->needSemicolon = 0;
   Object *o = &undefinedObject;
@@ -1411,7 +1411,7 @@ parseStatements(Parser *p) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseBodyInner(Parser *p) {
   p->needSemicolon = 0;
   Object *o;
@@ -1427,7 +1427,7 @@ parseBodyInner(Parser *p) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseBody(Parser *p) {
   if (!expectWs(p, '{')) {
     return 0;
@@ -1436,7 +1436,7 @@ parseBody(Parser *p) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 parseBlock(Parser *p) {
   if (acceptWs(p, '{')) {
     return parseBodyInner(p);
@@ -1447,7 +1447,7 @@ parseBlock(Parser *p) {
 }
 
 static Object *
-__attribute__((returns_nonnull, nonnull(1)))
+__attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
 Console_log(Parser *p, List *l) {
   Object *e = l ? l->value : &undefinedObject;
   Object *os = Object_toString(e);
@@ -1461,7 +1461,7 @@ Console_log(Parser *p, List *l) {
 }
 
 static Object *
-__attribute__((returns_nonnull, nonnull(1)))
+__attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
 String_fromCharCode(Parser *p, List *l) {
   Object *e = l ? l->value : &undefinedObject;
   char c = 0;
@@ -1472,7 +1472,7 @@ String_fromCharCode(Parser *p, List *l) {
 }
 
 static Object *
-__attribute__((nonnull(1)))
+__attribute__((nonnull(1), warn_unused_result))
 process_stdin_on(Parser *p, List *l) {
   if (!l || !l->next || !isString(l->value) || !strncmpEq(l->value->V.c, "data")) {
     return 0;
@@ -1496,7 +1496,7 @@ process_stdin_on(Parser *p, List *l) {
 }
 
 static Object *
-__attribute__((returns_nonnull, nonnull(1)))
+__attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
 global_isNaN(Parser *p, List *l) {
   return IntObject_new(l ? l->value->t == NanObject : 0);
 }
@@ -1521,7 +1521,6 @@ static Object *
 global_eval2(Parser *p, List *l);
 
 Parser *
-__attribute__((malloc, returns_nonnull))
 Parser_new(void) {
   Parser *p = malloc(sizeof(*p));
   p->vars = MapObject_new();
@@ -1547,7 +1546,7 @@ Parser_new(void) {
 }
 
 static Parser *
-__attribute__((malloc, returns_nonnull, nonnull))
+__attribute__((malloc, returns_nonnull, warn_unused_result, nonnull))
 Parser_new_vars(Object *vars) {
   Parser *p = Parser_new();
   addField(vars, "", p->vars);
@@ -1591,7 +1590,7 @@ showRunError(Parser *p) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 Parser_evalString(Parser *p, Object *prog) {
   p->prog = (Prog){.s = prog->V.c.s, .end = prog->V.c.s + prog->V.c.len, .h = prog};
   p->err = 0;
@@ -1605,7 +1604,7 @@ Parser_evalString(Parser *p, Object *prog) {
 }
 
 static Object *
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 Parser_evalWithThrow(Parser *p, Object *prog) {
   Object *o = Parser_evalString(p, prog);
   Object *thrw = 0;
@@ -1638,7 +1637,7 @@ Parser_evalWithThrow(Parser *p, Object *prog) {
 }
 
 static Object *
-__attribute__((nonnull(1)))
+__attribute__((nonnull(1), warn_unused_result))
 global_eval(Parser *p, List *l) {
   if (!l || !isString(l->value)) {
     return setRunError(p, "expecting String argument", 0);
@@ -1650,7 +1649,7 @@ global_eval(Parser *p, List *l) {
 }
 
 static Object *
-__attribute__((nonnull(1)))
+__attribute__((nonnull(1), warn_unused_result))
 global_eval2(Parser *p, List *l) {
   if (!l || (l->value->t != MapObject) || !l->next || !isString(l->next->value)) {
     return setRunError(p, "expecting an Object and a String argument", 0);
@@ -1670,7 +1669,6 @@ global_eval2(Parser *p, List *l) {
 }
 
 int
-__attribute__((nonnull))
 Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
   p->debug = debug;
   Object *s = StringObject_new_const((Id){.s = prog, .len = len, .h = 0});

@@ -2,7 +2,7 @@
 #include "vm.h"
 
 static int
-__attribute__((nonnull))
+__attribute__((nonnull, warn_unused_result))
 getCycles0(Object *o, int backtrack) {
   if (o->ref == -2) {
     return 1;
@@ -55,10 +55,10 @@ getCycles0(Object *o, int backtrack) {
 }
 
 static int
-__attribute__((pure, nonnull))
+__attribute__((pure, nonnull, warn_unused_result))
 getCycles(Object *o) {
   int c = getCycles0(o, 0);
-  getCycles0(o, 1);
+  if (getCycles0(o, 1)) {}
   return c;
 }
 
@@ -116,7 +116,7 @@ Object_ref(Object *o) {
 }
 
 static Object *
-__attribute__((returns_nonnull, nonnull))
+__attribute__((returns_nonnull, warn_unused_result, nonnull))
 Object_clone(Object *o) {
   if (o->t != MapObject) {
     return Object_ref(o);
