@@ -27,7 +27,7 @@ compile -c vm.c && \
 valgrind \
   --leak-check=full \
   --show-leak-kinds=all \
-  --num-callers=20 \
+  --num-callers=30 \
   --malloc-fill=0xaa \
   --free-fill=0x55 \
   --redzone-size=256 \
@@ -78,7 +78,7 @@ elif [ -n "$ISSIMPLE" ]; then
   ADD="$ADD -O2 -g -DSIMPLE"
   ./gcc-warn.sh $ADD "$@"
 else
-  ADD="$ADD -O2 -g"
+  ADD="$ADD -Og -g"
   ./gcc-warn.sh $ADD "$@"
 fi
 }
