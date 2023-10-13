@@ -3,6 +3,11 @@
 
 #include "vm.h"
 
+typedef struct Str {
+  char *s;
+  size_t len;
+} Str;
+
 struct Object;
 
 typedef struct Id {
@@ -11,17 +16,6 @@ typedef struct Id {
   struct Object *h;
 } Id;
 
-typedef struct Prog {
-  const char *s;
-  const char *end;
-  struct Object *h;
-} Prog;
-
-typedef struct Str {
-  char *s;
-  size_t len;
-} Str;
-
 struct List;
 
 typedef struct List {
@@ -29,6 +23,12 @@ typedef struct List {
   char *key;
   struct Object *value;
 } List;
+
+typedef struct Prog {
+  const char *s;
+  const char *end;
+  struct Object *h;
+} Prog;
 
 typedef struct JsFun {
   Prog p;
