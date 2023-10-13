@@ -643,10 +643,8 @@ invokeFun(Parser *p, Object *o, List *args) {
     Object *caller = p->vars;
     p->vars = MapObject_new();
     Map_set_const(&p->vars->V.m, "", o->V.j.scope);
-    Object_free(o);
 
     Object *res = parseFunction(p, args);
-    List_free(args);
     Object_free(p->vars);
     p->vars = caller;
 
@@ -660,17 +658,11 @@ invokeFun(Parser *p, Object *o, List *args) {
     }
   } else if (o->t == FunctionNative) {
     Object *res = (*o->V.f)(p, args);
-    Object_free(o);
-    List_free(args);
     return res;
   } else if (o->t == MethodNative) {
     Object *res = (*o->V.a.f)(p, o->V.a.self, args);
-    Object_free(o);
-    List_free(args);
     return res;
   } else {
-    List_free(args);
-    Object_free(o);
     return setRunError(p, "not a function", 0);
   }
   return 0;
@@ -684,9 +676,6 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
   const char *prog = p->prog.s;
   if (accept(p, '=') && !accept(p, '=')) {
     if (!key) {
-      if (got) {
-        Object_free(got);
-      }
       return setRunError(p, "expected a writable left hand side", 0);
     }
     Object *r = 0;
@@ -700,28 +689,21 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
         }
         if (getCycles(r)) {
           if (e) {
-            e->value = key;
+            e->value = &undefinedObject;
           } else {
-            (*parent)->value = key;
+            (*parent)->value = &undefinedObject;
           }
           Object_free(r);
           Object_free(r);
-          if (got) {
-            Object_free(got);
-          }
           return setRunError(p, "reference cycles unsupported", 0);
         }
       }
     }
-    Object_free(key);
     return r;
   }
   p->prog.s = prog;
 
-  Object *o = e ? Object_ref(e->value) : got ? got : &undefinedObject;
-  if (key) {
-    Object_free(key);
-  }
+  Object *o = Object_ref(e ? e->value : got ? got : &undefinedObject);
   List *args = 0, *argsEnd = 0;
   if (accept(p, '(')) {
     if (!acceptWs(p, ')')) {
@@ -732,7 +714,9 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
           List_free(args);
           return 0;
         }
-        if (!p->nest) {
+        if (p->nest) {
+          Object_free(arg);
+        } else {
           List *l = List_new(0, 0, arg);
           if (argsEnd) {
             argsEnd->next = l;
@@ -749,11 +733,14 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
       }
     }
     if (p->nest) {
-      List_free(args);
       Object_free(o);
+      List_free(args);
       return &undefinedObject;
     }
-    return invokeFun(p, o, args);
+    Object *f = o;
+    o = invokeFun(p, f, args);
+    Object_free(f);
+    List_free(args);
   }
 
   return o;
@@ -789,7 +776,6 @@ parseSTerm(Parser *p, Id *id) {
         }
         return setRunError(p, "undefined object field", id);
       }
-      parent = &e->value->V.m;
       if (isString(e->value)) {
         if (isString(i)) {
           if (strncmpEq(i->V.c, "indexOf")) {
@@ -811,6 +797,7 @@ parseSTerm(Parser *p, Id *id) {
         }
 
       } else if ((e->value->t == MapObject) || (e->value->t == ArrayObject)) {
+        parent = &e->value->V.m;
         key = Object_toString(i);
         Object_free(i);
         if (!key) {
@@ -834,7 +821,14 @@ parseSTerm(Parser *p, Id *id) {
   if (p->err || p->parseErr) {
     return 0;
   }
-  return parseRHS(p, parent, key, e, field);
+  i = parseRHS(p, parent, key, e, field);
+  if (key) {
+    Object_free(key);
+  }
+  if (field) {
+    Object_free(field);
+  }
+  return i;
 }
 
 static Object *
@@ -1498,7 +1492,10 @@ process_stdin_on(Parser *p, List *l) {
     s.len = (size_t)len;
     arg = StringObject_new_str(s);
   }
-  return invokeFun(p, Object_ref(l->next->value), List_new(0, 0, arg));
+  List *args = List_new(0, 0, arg);
+  Object *o = invokeFun(p, l->next->value, args);
+  List_free(args);
+  return o;
 }
 
 static Object *
