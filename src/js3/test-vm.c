@@ -106,6 +106,7 @@ main(void) {
   t("-", -1);
   t("-(-9)", 9);
   t("var i = -9; -i", 9);
+  t("var i = -7; -i + 2", 9);
   t("-null", -2); /* non-conforming */
   t("var i; i = 0; i = !i", 1);
   t("var xY_0; xY_0 = 9", 9);
@@ -385,10 +386,6 @@ main(void) {
     SB(7, 0));
   t("function g() { return f(); }; function f() { return 9 }; g()", SB(9, -2));
 
-  /* TODO application */
-  t("var i; i = (function() { return 9 })(); i", -1);
-
-
   t("var i; try { i = 9 } catch (e) { i = 8 }; i", 9);
   t("var i; try { throw 4 } catch (e) { i = 9 }; i", 9);
   t("var i; var j; try { j = 4; throw 3; j = 2 } catch (e) { i = j + 5 }; i", 9);
@@ -442,6 +439,9 @@ main(void) {
   t("while (0) {}", 0);
   t("function f() {}", 0);
   t("var f; f = function() { return 9 }; f()", 9);
+  t("function f() { return 9 }; (f)()", 9);
+  t("(function() { return 9 })()", 9);
+  t("(function(x) { return x + 5 })(4)", 9);
   t("var f; f = function g() { return 9 }; f()", -1); /* non-conforming */
   t("var f; f = function g() { return 9 }; g()", -1); /* non-conforming, should be -2 */
   t("try {} catch (e) {}", 0);

@@ -332,10 +332,10 @@ stmBrace: { <stms> [;]? }
 stms: [ <stm> [; <stm>]* ]?
 stm: if ( <expr> ) <stmBody> [ else <stmBody> ]? | while ( <expr> ) <stmBody> | var <id> [ '=' <expr> ]? | function <id> <function> | return <expr> | try <stmBrace> catch ( <id> ) <stmBrace> | throw <expr> | <expr>
 expr: function <function> | <iTerm> <eExpr> | <lTerm> <eExpr>
-function: ( [ <id> [, <id>]* ]? ) <stmBody>
+function: ( [ <id> [, <id>]* ]? ) <stmBrace>
 eExpr: [ <op> <term> ]?
 term: <iTerm> | <lTerm>
-lTerm: <int> | <string> | ! <expr> | ~ <expr> | '(' <expr> ')'
+lTerm: <int> | <string> | ! <term> | ~ <term> | '(' <expr> ')'
 iTerm: undefined | null | new Object | new Array | <id> <sTerm>
 sTerm: <idx> [ <rhs> ]?
 rhs: '=' <expr> | ( [ <expr> [, <expr>]* ]? )
@@ -355,13 +355,14 @@ stmBrace: { <stms> [;]? }
 stms: [ <stm> [; <stm>]* ]?
 stm: if ( <expr> ) <stmBody> [ else <stmBody> ]? | while ( <expr> ) <stmBody> | for ( <id> in <expr> ) <stmBody> | var <id> [ '=' <expr> ]? | function <id> <function> | return <expr> | try <stmBrace> catch ( <id> ) <stmBrace> | throw <expr> | <expr>
 expr: function <function> | <iTerm> <eExpr> | <lTerm> <eExpr>
-function: ( [ <id> [, <id>]* ]? ) <stmBody>
+function: ( [ <id> [, <id>]* ]? ) <stmBrace>
 eExpr: [ <op> <term> ]?
 term: <iTerm> | <lTerm>
-lTerm: <int> | <string> | [ ! | ~ | - ] <expr> | '(' <expr> ')'
+lTerm: <int> | <string> | [ ! | ~ | - ] <term> | '(' <expr> ')' [ <args> ]?
 iTerm: undefined | null | NaN | new Object | new Array | typeof <expr> | <id> <sTerm>
 sTerm: <idx> [ <rhs> ]?
-rhs: '=' <expr> | ( [ <expr> [, <expr>]* ]? )
+rhs: '=' <expr> | <args>
+args: '(' [ <expr> [, <expr>]* ]? ')'
 idx: [ '[' <expr> ']' | . <id> ]*
 op: + | - | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&' | === | !==
 int = -?[1-9][0-9]*

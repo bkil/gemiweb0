@@ -915,7 +915,9 @@ parseLTerm(Parser *p) {
       Object_free(o);
       return 0;
     }
-    return o;
+    Object *r = parseRHS(p, 0, 0, 0, o);
+    Object_free(o);
+    return r;
   }
   p->parseErr = "expected literal, negation, minus or parenthesized expression";
   return 0;
