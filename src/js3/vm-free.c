@@ -36,17 +36,15 @@ getCycles0(Object *o, int backtrack) {
       c = getCycles0(o->V.j.scope, backtrack);
       break;
 
-    case MethodNative:
-      c = getCycles0(o->V.a.self, backtrack);
-      break;
-
     case UndefinedObject:
     case IntObject:
     case StringObject:
     case ConstStringObject:
     case FunctionNative:
+    case MethodNative:
     case NullObject:
     case NanObject:
+    case Prototype:
     default:
       break;
   }
@@ -86,18 +84,17 @@ Object_free(Object *o) {
       break;
     case MapObject:
     case ArrayObject:
+    case Prototype:
       List_free(o->V.m);
       break;
     case FunctionJs:
       Object_free(o->V.j.scope);
       Object_free(o->V.j.p.h);
       break;
-    case MethodNative:
-      Object_free(o->V.a.self);
-      break;
     case UndefinedObject:
     case IntObject:
     case FunctionNative:
+    case MethodNative:
     case NullObject:
     case NanObject:
     default:
@@ -150,6 +147,12 @@ List_free(List *list) {
 void
 __attribute__((nonnull))
 Parser_free(Parser *p) {
+  List_free(p->objectPrototype->V.m);
+  p->objectPrototype->V.m = 0;
+  List_free(p->arrayPrototype->V.m);
+  p->arrayPrototype->V.m = 0;
+  List_free(p->stringPrototype->V.m);
+  p->stringPrototype->V.m = 0;
   Object_free(p->vars);
   free(p);
 }

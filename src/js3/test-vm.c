@@ -136,7 +136,6 @@ main(void) {
   t("var i = 2; i.x", -2);
   t("var n = null; n.x", -2);
   t("var s = 'c'; s.length.x", -2);
-  t("var s = 'c'; s.x", -2);
   t("u.x", -2);
   t("var p = new Object; p.a = 9; var q = new Object; q.p = p; q['p']['a']", 9);
 
@@ -252,7 +251,7 @@ main(void) {
   t("'xa' !== 'xb'", 1);
   t("var s = ''; s.length === 0", 1);
   t("var s = 'a'; s.length", 1);
-  t("var s = 'a'; s.missing", -2);
+  t("var s = 'a'; s.missing === undefined", 1);
   t("var s = 'ab'; s.length", 2);
   t("var s = ''; s.length = 1", -2);
   t("var s = 'a'; s.charAt(-1) === ''", 1);
@@ -262,7 +261,7 @@ main(void) {
   t("var s = 'abc'; s.charAt(1) === 'b'", 1);
   t("var s = 'abc'; s.charAt(2) === 'c'", 1);
   t("var s = 'abc'; s.charCodeAt(2)", 99);
-  t("var s = 'abc'; var f = s.charCodeAt; f(2)", 99);
+  t("var s = 'abc'; var f = s.charCodeAt; f(2)", -2); /* non-conforming */
   t("var s = 'abc'; s.charAt(3) === ''", 1);
   t("var s = 'abc'; isNaN(s.charCodeAt(3))", 1);
   t("var s = 'c'; s.charCodeAt(undefined)", 99);
@@ -274,6 +273,14 @@ main(void) {
   t("''", 0);
   t("'x'", 1);
   t("8; 9", 9);
+
+  t("String.prototype.charAt", 1);
+  t("String.prototype.js0 = function(x) { return this.length + x }; var s = 'ab'; s.js0(7);", 9);
+  t("Array.prototype.js0 = function(x) { return this.length + x }; var a = new Array; a[0] = 1; a[1] = 2; a.js0(7);", 9);
+  t("Object.prototype.js0 = function(x) { return this[x] + 5 }; var o = new Object; o.a = 4; o.js0('a');", 9);
+  t("String.prototype = new Object", -2);
+  t("Array.prototype = new Object", -2);
+  t("Object.prototype = new Object", -2);
 
   t("typeof undefined === 'undefined'", 1);
   t("typeof '' === 'string'", 1);

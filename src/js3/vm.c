@@ -55,7 +55,7 @@ Parser_free(Parser *p) {
 
 # else
 
-Object *MapObject_new(void);
+static Object *MapObject_new(void);
 List *List_new(List *next, char *key, Object *value);
 # define mfree(o) free(o)
 
@@ -167,7 +167,7 @@ FunctionNative_new(Native f) {
 
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
-MethodNative_new(Method a) {
+MethodNative_new(MethodFun a) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
   o->t = MethodNative;
@@ -175,15 +175,24 @@ MethodNative_new(Method a) {
   return o;
 }
 
-#ifdef NEEDLEAK
 static
-#endif
 Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 MapObject_new(void) {
   Object *o = malloc(sizeof(*o));
   o->ref = 0;
   o->t = MapObject;
+  o->V.m = 0;
+  return o;
+}
+
+static
+Object *
+__attribute__((malloc, returns_nonnull, warn_unused_result))
+Prototype_new(void) {
+  Object *o = malloc(sizeof(*o));
+  o->ref = 0;
+  o->t = Prototype;
   o->V.m = 0;
   return o;
 }
@@ -356,6 +365,7 @@ Object_toString(Object *o) {
       return Object_ref(o);
 
     case MapObject:
+    case Prototype:
       return StringObject_new("Object");
 
     case ArrayObject:
@@ -399,6 +409,7 @@ typeOf(Object *o) {
     case MapObject:
     case ArrayObject:
     case NullObject:
+    case Prototype:
       return StringObject_new("object");
 
     case FunctionJs:
@@ -636,12 +647,15 @@ parseFunction(Parser *p, List *arg) {
 
 static Object *
 __attribute__((nonnull(1, 2), warn_unused_result))
-invokeFun(Parser *p, Object *o, List *args) {
+invokeFun(Parser *p, Object *o, List *args, Object *self) {
   if (o->t == FunctionJs) {
     Prog ret = p->prog;
     p->prog = o->V.j.p;
     Object *caller = p->vars;
     p->vars = MapObject_new();
+    if (self) {
+      Map_set_const(&p->vars->V.m, "this", self);
+    }
     Map_set_const(&p->vars->V.m, "", o->V.j.scope);
 
     Object *res = parseFunction(p, args);
@@ -657,11 +671,9 @@ invokeFun(Parser *p, Object *o, List *args) {
       return res;
     }
   } else if (o->t == FunctionNative) {
-    Object *res = (*o->V.f)(p, args);
-    return res;
-  } else if (o->t == MethodNative) {
-    Object *res = (*o->V.a.f)(p, o->V.a.self, args);
-    return res;
+    return (*o->V.f)(p, args);
+  } else if ((o->t == MethodNative) && self) {
+    return (*o->V.a)(p, self, args);
   } else {
     return setRunError(p, "not a function", 0);
   }
@@ -670,13 +682,16 @@ invokeFun(Parser *p, Object *o, List *args) {
 
 static Object *
 __attribute__((nonnull(1), warn_unused_result))
-parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
+parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got, Object *self) {
   skipWs(p);
 
   const char *prog = p->prog.s;
   if (accept(p, '=') && !accept(p, '=')) {
     if (!key) {
       return setRunError(p, "expected a writable left hand side", 0);
+    }
+    if (!p->nest && e && (e->value->t == Prototype)) {
+      return setRunError(p, "overwriting prototype unsupported", 0);
     }
     Object *r = 0;
     if ((r = parseExpr(p))) {
@@ -738,7 +753,7 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got) {
       return &undefinedObject;
     }
     Object *f = o;
-    o = invokeFun(p, f, args);
+    o = invokeFun(p, f, args, self);
     Object_free(f);
     List_free(args);
   }
@@ -753,6 +768,7 @@ parseSTerm(Parser *p, Id *id) {
   Object *key = &undefinedObject;
   List *e = 0;
   Object *field = 0;
+  Object *self = 0;
 
   if (p->nest) {
     parent = 0;
@@ -769,50 +785,78 @@ parseSTerm(Parser *p, Id *id) {
         Object_free(key);
         key = 0;
       }
-      if (!e) {
-        Object_free(i);
+      if (e) {
         if (field) {
           Object_free(field);
         }
+        field = Object_ref(e->value);
+      }
+      if (!field) {
+        Object_free(i);
         return setRunError(p, "undefined object field", id);
       }
-      if (isString(e->value)) {
+      self = field;
+      field = 0;
+      if (isString(self)) {
         if (isString(i)) {
-          if (strncmpEq(i->V.c, "indexOf")) {
-            field = MethodNative_new((Method){.f = &String_indexOf, .self = Object_ref(e->value)});
-          } else if (strncmpEq(i->V.c, "charCodeAt")) {
-            field = MethodNative_new((Method){.f = &String_charCodeAt, .self = Object_ref(e->value)});
-          } else if (strncmpEq(i->V.c, "charAt")) {
-            field = MethodNative_new((Method){.f = &String_charAt, .self = Object_ref(e->value)});
-          } else if (strncmpEq(i->V.c, "length")) {
-            field = IntObject_new((int)strnlen(e->value->V.c.s, e->value->V.c.len));
+          if (strncmpEq(i->V.c, "length")) {
+            field = IntObject_new((int)self->V.c.len);
+            Object_free(self);
+            self = 0;
+          } else {
+            e = Map_get_str(p->stringPrototype->V.m, i->V.s);
+            if (e) {
+              field = Object_ref(e->value);
+            } else {
+              Object_free(self);
+              self = 0;
+            }
           }
         } else {
-          field = String_charAt_obj(e->value, i);
+          field = String_charAt_obj(self, i);
+          Object_free(self);
+          self = 0;
         }
         Object_free(i);
         e = 0;
-        if (!field) {
-          return setRunError(p, "unknown String method", id);
-        }
 
-      } else if ((e->value->t == MapObject) || (e->value->t == ArrayObject)) {
-        parent = &e->value->V.m;
+      } else if ((self->t == MapObject) || (self->t == ArrayObject) || (self->t == Prototype)) {
+        parent = &self->V.m;
         key = Object_toString(i);
         Object_free(i);
         if (!key) {
+          Object_free(self);
           return setRunError(p, "can't convert index to string", id);
         }
-        if ((e->value->t == ArrayObject) && strncmpEq(key->V.c, "length")) {
-          field = IntObject_new(List_length(e->value->V.m));
+        if ((self->t == ArrayObject) && strncmpEq(key->V.c, "length")) {
+          field = IntObject_new(List_length(self->V.m));
           Object_free(key);
           key = 0;
           e = 0;
+          Object_free(self);
+          self = 0;
         } else {
+          Object *proto = self->t == MapObject ? p->objectPrototype : p->arrayPrototype;
           e = Map_get_str(*parent, key->V.s);
+          if (e) {
+            Object_free(self);
+            self = 0;
+          } else {
+            e = Map_get_str(proto->V.m, key->V.s);
+            if (e) {
+              field = Object_ref(e->value);
+              Object_free(key);
+              key = 0;
+              e = 0;
+            } else {
+              Object_free(self);
+              self = 0;
+            }
+          }
         }
 
       } else {
+        Object_free(self);
         Object_free(i);
         return setRunError(p, "not indexable", id);
       }
@@ -821,12 +865,15 @@ parseSTerm(Parser *p, Id *id) {
   if (p->err || p->parseErr) {
     return 0;
   }
-  i = parseRHS(p, parent, key, e, field);
+  i = parseRHS(p, parent, key, e, field, self);
   if (key) {
     Object_free(key);
   }
   if (field) {
     Object_free(field);
+  }
+  if (self) {
+    Object_free(self);
   }
   return i;
 }
@@ -915,7 +962,7 @@ parseLTerm(Parser *p) {
       Object_free(o);
       return 0;
     }
-    Object *r = parseRHS(p, 0, 0, 0, o);
+    Object *r = parseRHS(p, 0, 0, 0, o, 0);
     Object_free(o);
     return r;
   }
@@ -1492,7 +1539,7 @@ process_stdin_on(Parser *p, List *l) {
     arg = StringObject_new_str(s);
   }
   List *args = List_new(0, 0, arg);
-  Object *o = invokeFun(p, l->next->value, args);
+  Object *o = invokeFun(p, l->next->value, args, 0);
   List_free(args);
   return o;
 }
@@ -1516,11 +1563,25 @@ addFunction(Object *o, const char *key, Native f) {
   addField(o, key, FunctionNative_new(f));
 }
 
+static void
+__attribute__((nonnull))
+addMethod(Object *o, const char *key, MethodFun a) {
+  addField(o, key, MethodNative_new(a));
+}
+
 static Object *
 global_eval(Parser *p, List *l);
 
 static Object *
 global_eval2(Parser *p, List *l);
+
+static Object *
+__attribute__((nonnull, returns_nonnull, warn_unused_result))
+addPrototype(Object *parent) {
+  Object *o = Prototype_new();
+  addField(parent, "prototype", o);
+  return o;
+}
 
 Parser *
 Parser_new(void) {
@@ -1533,7 +1594,19 @@ Parser_new(void) {
 
   Object *s = MapObject_new();
   addFunction(s, "fromCharCode", &String_fromCharCode);
+  p->stringPrototype = addPrototype(s);
+  addMethod(p->stringPrototype, "indexOf", &String_indexOf);
+  addMethod(p->stringPrototype, "charCodeAt", &String_charCodeAt);
+  addMethod(p->stringPrototype, "charAt", &String_charAt);
   addField(p->vars, "String", s);
+
+  Object *o = MapObject_new();
+  p->objectPrototype = addPrototype(o);
+  addField(p->vars, "Object", o);
+
+  Object *a = MapObject_new();
+  p->arrayPrototype = addPrototype(a);
+  addField(p->vars, "Array", a);
 
   Object *ps = MapObject_new();
   addFunction(ps, "on", &process_stdin_on);

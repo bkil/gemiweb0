@@ -38,11 +38,6 @@ typedef struct JsFun {
 typedef struct Object *(*Native)(struct Parser *, List *);
 typedef struct Object *(*MethodFun)(struct Parser *, struct Object *, List *);
 
-typedef struct Method {
-  MethodFun f;
-  struct Object *self;
-} Method;
-
 enum ObjectV {
   UndefinedObject,
   IntObject,
@@ -54,7 +49,8 @@ enum ObjectV {
   MethodNative,
   NullObject,
   ArrayObject,
-  NanObject
+  NanObject,
+  Prototype
 };
 
 typedef struct Object {
@@ -67,7 +63,7 @@ typedef struct Object {
     List *m;
     JsFun j;
     Native f;
-    Method a;
+    MethodFun a;
   } V;
 } Object;
 
@@ -76,6 +72,10 @@ typedef struct Parser {
   Object *ret;
   Object *thrw;
   Object *vars;
+
+  Object *objectPrototype;
+  Object *arrayPrototype;
+  Object *stringPrototype;
 
   const char *err;
   Id errName;
