@@ -90,6 +90,9 @@ main(void) {
   t("var s = 'a'; s.indexOf('c') === -1", 1);
   t("var s = 'abcd'; s.indexOf('c') === 2", 1);
   t("var s = 'abcd'; s.indexOf('bc') === 1", 1);
+  t("var s = 'abab'; s.indexOf('b', 1)", 1);
+  t("var s = 'abab'; s.indexOf('b', 2)", 3);
+  t("var s = 'abab'; s.indexOf('b', 4) === -1", 1);
   t("var i; i = 9", 9);
   t("var i = 9; i", 9);
   t("!0", 1);

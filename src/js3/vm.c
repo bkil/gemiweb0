@@ -298,9 +298,14 @@ String_indexOf(Parser *p, Object *self, List *l) {
   if (!isString(a)) {
     return &undefinedObject;
   }
+  Object *b = l->next ? l->next->value : &undefinedObject;
+  size_t pos = (b->t == IntObject) && (b->V.i >= 0) ? (size_t)b->V.i : 0;
+  if (pos > self->V.c.len) {
+    pos = self->V.c.len;
+  }
   char *haystack = strndup(self->V.c.s, self->V.c.len);
   char *needle = strndup(a->V.c.s, a->V.c.len);
-  char *start = strstr(haystack, needle);
+  char *start = strstr(haystack + pos, needle);
   int index = start ? off_t2int(start - haystack + 1) - 1 : -1;
   mfree(haystack);
   mfree(needle);
