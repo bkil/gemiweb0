@@ -958,7 +958,10 @@ parseLTerm(Parser *p) {
     return b;
   } else if (acceptWs(p, '(')) {
     o = parseExpr(p);
-    if (o && !expectWs(p, ')')) {
+    if (!o) {
+      return 0;
+    }
+    if (!expectWs(p, ')')) {
       Object_free(o);
       return 0;
     }
