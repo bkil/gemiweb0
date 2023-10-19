@@ -16,6 +16,12 @@ typedef struct Id {
   struct Object *h;
 } Id;
 
+typedef struct Mmap {
+  char *s;
+  size_t len;
+  int fd;
+} Mmap;
+
 struct List;
 
 typedef struct List {
@@ -43,6 +49,7 @@ enum ObjectV {
   IntObject,
   StringObject,
   ConstStringObject,
+  MmapString,
   MapObject,
   FunctionJs,
   FunctionNative,
@@ -60,6 +67,7 @@ typedef struct Object {
     int i;
     Str s;
     Id c;
+    Mmap mm;
     List *m;
     JsFun j;
     Native f;

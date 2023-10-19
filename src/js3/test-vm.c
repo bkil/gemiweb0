@@ -479,6 +479,10 @@ main(void) {
   t("// /* \n9", 9);
   t("/* // */9", 9);
 
+  t("require('x') === undefined", 1);
+  t("var f = require('fs'); var o = new Object; f.readFile('test-vm-1.txt', function(e, d) {o.e = e; o.d = d}); (o.e === undefined) && (o.d === 'abc')", 1);
+  t("var f = require('fs'); var o = new Object; f.readFile('x', function(e, d) {o.e = e; o.d = d}); (o.d === undefined) && (o.e.charAt(0))", 1);
+
   t("console.log(' DONE ')", 0);
 
   if (_errorCount) {

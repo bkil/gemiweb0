@@ -1,4 +1,6 @@
 #include "string.h" /* strdup */
+#include <sys/mman.h> /* munmap */
+#include <unistd.h> /* close */
 #include "vm.h"
 
 static int
@@ -40,6 +42,7 @@ getCycles0(Object *o, int backtrack) {
     case IntObject:
     case StringObject:
     case ConstStringObject:
+    case MmapString:
     case FunctionNative:
     case MethodNative:
     case NullObject:
@@ -80,6 +83,14 @@ Object_free(Object *o) {
     case ConstStringObject:
       if (o->V.c.h) {
         Object_free(o->V.c.h);
+      }
+      break;
+    case MmapString:
+      if (munmap(o->V.mm.s, o->V.mm.len) < 0) {
+        perror("munmap failed");
+      }
+      if (close(o->V.mm.fd) < 0) {
+        perror("mmap close failed");
       }
       break;
     case MapObject:

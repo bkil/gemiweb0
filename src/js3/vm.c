@@ -4,6 +4,11 @@
 #include <stdio.h> /* fputs fputc putchar stdout stderr getline */
 #include <malloc.h> /* malloc free */
 #include <stdlib.h> /* atoi size_t */
+#include <sys/mman.h> /* mmap */
+#include <sys/types.h> /* open fstat */
+#include <sys/stat.h> /* open fstat */
+#include <fcntl.h> /* open */
+#include <unistd.h> /* close fstat */
 
 static void
 __attribute__((nonnull))
@@ -122,6 +127,18 @@ StringObject_new_const(Id s) {
   o->ref = 0;
   o->t = ConstStringObject;
   o->V.c = (Id){.s = s.s, .len = s.len, .h = s.h ? Object_ref(s.h) : 0};
+  return o;
+}
+
+static Object *
+__attribute__((malloc, returns_nonnull, warn_unused_result))
+Mmap_new(char *s, size_t len, int fd) {
+  Object *o = malloc(sizeof(*o));
+  o->ref = 0;
+  o->t = MmapString;
+  o->V.mm.s = s;
+  o->V.mm.len = len;
+  o->V.mm.fd = fd;
   return o;
 }
 
@@ -282,7 +299,7 @@ List_length(List *list) {
 static int
 __attribute__((pure, nonnull, warn_unused_result))
 isString(Object *o) {
-  return (o->t == StringObject) || (o->t == ConstStringObject);
+  return (o->t == StringObject) || (o->t == ConstStringObject) || (o->t == MmapString);
 }
 
 static int
@@ -364,9 +381,8 @@ Object_toString(Object *o) {
       return StringObject_new("undefined");
 
     case StringObject:
-      return Object_ref(o);
-
     case ConstStringObject:
+    case MmapString:
       return Object_ref(o);
 
     case MapObject:
@@ -409,6 +425,7 @@ typeOf(Object *o) {
 
     case StringObject:
     case ConstStringObject:
+    case MmapString:
       return StringObject_new("string");
 
     case MapObject:
@@ -1558,6 +1575,46 @@ global_isNaN(Parser *p, List *l) {
   return IntObject_new(l ? l->value->t == NanObject : 0);
 }
 
+static Object *
+__attribute__((warn_unused_result, nonnull(1)))
+fs_readFile(Parser *p, List *l) {
+  if (!l || !isString(l->value) || !l->next || (l->next->value->t != FunctionJs)) {
+    return 0;
+  }
+  char *name = strndup(l->value->V.c.s, l->value->V.c.len);
+  Object *err;
+  Object *data = &undefinedObject;
+
+  const int fd = open(name, 0);
+  if (fd < 0) {
+    free(name);
+    err = StringObject_new("readFile open failed");
+  } else {
+    free(name);
+
+    struct stat sb;
+    if (fstat(fd, &sb) < 0) {
+      close(fd);
+      err = StringObject_new("readFile stat failed");
+    } else {
+      size_t len = off_t2size_t(sb.st_size);
+      char *s = mmap(NULL, len, PROT_READ, MAP_SHARED, fd, 0);
+      if (s == (void*)-1) {
+        close(fd);
+        err = StringObject_new("readFile mmap failed");
+      } else {
+        err = &undefinedObject;
+        data = Mmap_new(s, len, fd);
+      }
+    }
+  }
+
+  List *args = List_new((List_new(0, 0, data)), 0, err);
+  Object *ret = invokeFun(p, l->next->value, args, 0);
+  List_free(args);
+  return ret;
+}
+
 static void
 __attribute__((nonnull))
 addField(Object *o, const char *key, Object *v) {
@@ -1589,6 +1646,21 @@ addPrototype(Object *parent) {
   Object *o = Prototype_new();
   addField(parent, "prototype", o);
   return o;
+}
+
+static Object *
+__attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
+global_require(Parser *p, List *l) {
+  if (!l || !isString(l->value)) {
+    return 0;
+  }
+  if (strncmpEq(l->value->V.c, "fs")) {
+    Object *o = MapObject_new();
+    addFunction(o, "readFile", &fs_readFile);
+    return o;
+  } else {
+    return &undefinedObject;
+  }
 }
 
 Parser *
@@ -1625,6 +1697,7 @@ Parser_new(void) {
   addFunction(p->vars, "isNaN", &global_isNaN);
   addFunction(p->vars, "eval", &global_eval);
   addFunction(p->vars, "eval2", &global_eval2);
+  addFunction(p->vars, "require", &global_require);
   return p;
 }
 
