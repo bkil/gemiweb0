@@ -1247,7 +1247,7 @@ parseFor(Parser *p) {
   if (!parseId(p, &itName) || !parseId(p, &word) || !strncmpEq(word, "in") || !(e = parseExpr(p))) {
     return 0;
   }
-  if (!p->nest && (e->t != MapObject)) {
+  if (!p->nest && ((e->t != MapObject) && (e->t != Prototype))) {
     Object_free(e);
     return setRunError(p, "for can only iterate on Object", &itName);
   }
