@@ -1,8 +1,5 @@
 'use strict';
 
-// "\n"
-var nl = String.fromCharCode(10);
-
 eval((function() {
   var o = new Object;
   var fs = require('fs');
@@ -44,6 +41,9 @@ function escaped(x) {
 function isWs(c) {
   return (c === ' ') || (c.charCodeAt(0) === 10)
 }
+
+// "\n"
+var nl = String.fromCharCode(10);
 
 function copyLiteral(s) {
   var o = s['o'];

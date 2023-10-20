@@ -157,116 +157,126 @@ Array.prototype.reverse = Array.prototype.reverse || function() {
   return this;
 }
 
-function JSON_stringify(o) {
-  function JSON_stringify_0(f, o) {
-    var hex = '0123456789abcdef';
-    var bu00 = String.fromCharCode(92) + 'u00';
-    function escapeQuote(s) {
-      var o = '"';
-      var i = 0;
-      var c;
-      var n;
-      while (i < s.length) {
-        n = s.charCodeAt(i);
-        if (n > 126) {
-          return 'null';
-        }
-        if (((n === 34) || (n === 92)) || (n < 32)) {
-          o = ((o + bu00) + hex[n >> 4]) + hex[n & 15];
-        } else {
-          o = o + s.charAt(i);
-        }
-        i = i + 1;
-      }
-      return o + '"';
-    }
-
-    var t = typeof o;
-    if (t === 'string') {
-      return escapeQuote(o);
-    } else if (t === 'number') {
-      return '' + o;
-    } else if ((t === 'object') && (o !== null)) {
-      var s = '';
-      if (o.length !== undefined) {
-        s = s + '[';
-        if (o.length) {
-          s = s + f(f, o[0]);
-          var i = 1;
-          while (i < o.length) {
-            s = (s + ',') + f(f, o[i]);
-            i = i + 1;
+if ((typeof JSON === 'undefined') || !JSON.stringify) {
+  function JSON_stringify(o) {
+    function JSON_stringify_0(f, o) {
+      var hex = '0123456789abcdef';
+      var bu00 = String.fromCharCode(92) + 'u00';
+      function escapeQuote(s) {
+        var o = '"';
+        var i = 0;
+        var c;
+        var n;
+        while (i < s.length) {
+          n = s.charCodeAt(i);
+          if (n > 126) {
+            return 'null';
           }
-        }
-        return s + ']';
-      } else {
-        s = s + '{';
-        var rest = 0;
-        console.log(o); // TODO
-        for (i in o) {
-          if (rest) {
-            s = s + ',';
+          if (((n === 34) || (n === 92)) || (n < 32)) {
+            o = ((o + bu00) + hex[n >> 4]) + hex[n & 15];
           } else {
-            rest = 1;
+            o = o + s.charAt(i);
           }
-          s = (s + f(f, i)) + (':' + f(f, o[i]));
+          i = i + 1;
         }
-        return s + '}';
+        return o + '"';
       }
-    } else {
-      return 'null';
+
+      var t = typeof o;
+      if (t === 'string') {
+        return escapeQuote(o);
+      } else if (t === 'number') {
+        return '' + o;
+      } else if ((t === 'object') && (o !== null)) {
+        var s = '';
+        if (o.length !== undefined) {
+          s = s + '[';
+          if (o.length) {
+            s = s + f(f, o[0]);
+            var i = 1;
+            while (i < o.length) {
+              s = (s + ',') + f(f, o[i]);
+              i = i + 1;
+            }
+          }
+          return s + ']';
+        } else {
+          s = s + '{';
+          var rest = 0;
+          console.log(o); // TODO
+          for (i in o) {
+            if (rest) {
+              s = s + ',';
+            } else {
+              rest = 1;
+            }
+            s = (s + f(f, i)) + (':' + f(f, o[i]));
+          }
+          return s + '}';
+        }
+      } else {
+        return 'null';
+      }
     }
+
+    return JSON_stringify_0(JSON_stringify_0, o);
   }
 
-  return JSON_stringify_0(JSON_stringify_0, o);
+  var JSON = new Object;
+  JSON.stringify = JSON.stringify || JSON_stringify;
 }
 
-var JSON = new Object;
-JSON.stringify = JSON_stringify;
-
-function Function(param, body) {
-  return eval((('(function(' + param) + ('){' + body)) + '})')
+if (typeof Function === 'undefined') {
+  function Function(param, body) {
+    return eval((('(function(' + param) + ('){' + body)) + '})')
+  }
 }
 
-function parseInt(s, b) {
-  if (b === undefined) {
-    b = 10;
-  }
-  if (b !== 10) {
-    return NaN;
-  }
-  var k = 0;
-  var i = 0;
-  while (i < s.length) {
-    var c = s.charCodeAt(i);
-    if ((c < 48) || (c > 57)) {
+if (typeof parseInt === 'undefined') {
+  function parseInt(s, b) {
+    if (b === undefined) {
+      b = 10;
+    }
+    if (b !== 10) {
       return NaN;
     }
-    k = (k * 10) + (c - 48);
-    i = i + 1;
-  }
-  return k;
-}
-
-function encodeURIComponent(s) {
-  var hex = '0123456789abcdef';
-  var o = '';
-  var i = 0;
-  while (i < s.length) {
-    var c = s[i];
-    var n = c.charCodeAt(0);
-    if (((n >= 44) && (n <= 59)) || ((n >= 64) && (n <= 126))) {
-      o = o + c;
-    } else if (n < 128) {
-      o = ((o + '%') + hex[n >> 4]) + hex[n & 15];
-    } else {
-      return undefined;
+    var k = 0;
+    var i = 0;
+    while (i < s.length) {
+      var c = s.charCodeAt(i);
+      if ((c < 48) || (c > 57)) {
+        return NaN;
+      }
+      k = (k * 10) + (c - 48);
+      i = i + 1;
     }
-    i = i + 1;
+    return k;
   }
-  return o;
 }
 
-function decodeURIComponent(s) {
-  return s; // TODO
+if (typeof encodeURIComponent === 'undefined') {
+  function encodeURIComponent(s) {
+    var hex = '0123456789abcdef';
+    var o = '';
+    var i = 0;
+    while (i < s.length) {
+      var c = s[i];
+      var n = c.charCodeAt(0);
+      if (((n >= 44) && (n <= 59)) || ((n >= 64) && (n <= 126))) {
+        o = o + c;
+      } else if (n < 128) {
+        o = ((o + '%') + hex[n >> 4]) + hex[n & 15];
+      } else {
+        return undefined;
+      }
+      i = i + 1;
+    }
+    return o;
+  }
+}
+
+if (typeof decodeURIComponent === 'undefined') {
+  function decodeURIComponent(s) {
+    return s; // TODO
+  }
 }
