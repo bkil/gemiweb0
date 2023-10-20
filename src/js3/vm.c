@@ -919,7 +919,12 @@ parseITerm(Parser *p, Id *id) {
     return setRunError(p, "can't instantiate class of", id);
   } else if (strncmpEq(*id, "typeof")) {
     Object *o = parseTerm(p);
-    if (o && !p->nest) {
+    if (!o) {
+      clearErr(p);
+      setRunError(p, 0, 0);
+      o = &undefinedObject;
+    }
+    if (!p->nest) {
       Object *t = typeOf(o);
       Object_free(o);
       return t;

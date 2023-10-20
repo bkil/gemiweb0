@@ -287,6 +287,7 @@ main(void) {
   t("Object.prototype = new Object", -2);
 
   t("typeof undefined === 'undefined'", 1);
+  t("typeof u === 'undefined'", 1);
   t("typeof '' === 'string'", 1);
   t("typeof 8 === 'number'", 1);
   t("var o = new Object; typeof o === 'object'", 1);
