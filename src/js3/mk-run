@@ -1,6 +1,10 @@
 #!/bin/sh
 
-./gcc-warn.sh -O2 -g vm.c run.c -o run.out &&
+O=`dirname $(readlink -f "$0")`
+./gcc-warn.sh -O2 -g vm.c run.c -o $O/run.out &&
+
+{
+  cd ../br &&
 
 valgrind \
   --leak-check=full \
@@ -14,4 +18,5 @@ valgrind \
   --merge-recursive-frames=10 \
   --track-origins=yes \
   --partial-loads-ok=no \
-  ./run.out "${1-test_hi.js}"
+  $O/run.out "${1-br0.js}"
+}
