@@ -119,7 +119,7 @@ convenience:
 missing:
 
 * .lastIndexOf, .substring, .toLowerCase, .toUpperCase
-* NS3: .split
+* ES2/NS3: .split
 * NS4: .concat, .slice, .replace, .search, .substr
 
 ## Application server
