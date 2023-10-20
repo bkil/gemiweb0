@@ -61,18 +61,34 @@ The following restrictions are non-normative and being worked on pending the res
 * Implementation complexity: low
 * Workaround: interpreter
 
+### Strict equality === !===
+
+* Verdict: recommended
+* Reason: suggested by style guides, avoids wide classes of errors, easy to understand by beginners
+* Incidence: high to always
+* Implementation complexity: low
+* Workaround: error prone and too verbose, invoke abstract equality and `typeof` or `instanceof` in every expression it occurs
+
 ## To research
+
+### Abstract equality == !==
+
+* Verdict: not mandatory, avoid in user code if possible
+* Reason: may lead to bugs, difficult to keep in mind all corner cases for beginners, may only be needed for compatibility with JavaScript 1.0
+* Incidence: low
+* Implementation complexity: low
+* Workaround: usually unwanted, but may simulate by first converting a value to canonical form according to the standard and compare with a sequence of strict equality checks
 
 ### Floating point numbers
 
 * Verdict: Desirable, but unsupported
 * Restriction: only integers supported and the special value of `NaN`
-* Reason: too complex to implement and potentially increases memory use and more difficult to optimize. NaN is desirable to detect error conditions of standard functions.
+* Reason: too complex to implement and potentially increases memory use and more difficult to optimize. `NaN` is desirable to detect error conditions of standard functions.
 
 ### Unicode
 
 * Verdict: partially supported
-* Restrictions: String indexing may iterate on UTF8 instead of UCS-2
+* Restrictions: String indexing may iterate on UTF8 instead of UCS-2. May assume that the HTML and JS source are all encoded as UTF8.
 * Use case: must be able to process input in extant human languages in a way that should work in an equivalent way to extant web browsers.
 
 ### Operator precedence in expressions
@@ -88,12 +104,12 @@ The following restrictions are non-normative and being worked on pending the res
 * Verdict not supported
 * Incidence rate: high
 * Implementation complexity: low
-* Workaround: can be substituted with `0===1` and `1===1`, but 0/1 can be used instead of false/true similar to C
+* Workaround: can be substituted with `0===1` and `1===1`, but 0/1 can also be used instead of false/true similarly to C
 
 ### Date
 
 * Verdict: partial
-* Restriction: only getting the current time as a Unix epoch and converting it to a number is supported. Ensure storage on enough bits.
+* Restriction: only getting the current time as a Unix epoch and converting it to a number is supported. Ensure storage on enough bits. Consider returning the locale time offset.
 * Implementation complexity: high if unrestricted
 * Incidence rate: low
 * Workaround: library
@@ -111,14 +127,14 @@ The following restrictions are non-normative and being worked on pending the res
 
 * Verdict: supported
 * Restrictions: only allowed (optional) for body of if-else and while
-* Implementation complexity: easy with restriction
+* Implementation complexity: easy if restricted
 * Workaround: function, multiple if
 
 ### Immediately invoked anonymous function expression
 
 * Verdict: Recommended
-* Reason: Its desirable qualities useful for modules and userscript (userjs) within a web browser.
-* Restrictions: not all syntax may be supported and in not every position within an expression. This should work: `(function(){})()`
+* Reason: desirable qualities of encapsulation useful for modules and userscript (userjs) within a web browser.
+* Restrictions: not all syntax may be supported and in not every position within an expression. This should work: `(function(){})();`
 
 ### Environment capturing by a function definition
 
@@ -130,8 +146,9 @@ The following restrictions are non-normative and being worked on pending the res
 ### Variable initializer
 
 * Verdict: Desirable, partially supported
-* Reason: Occurs frequently, easy to implement.
-* Restriction: single variable and single initializer supported as usually recommended by style guides to maintain one statement per line.
+* Incidence rate: frequently
+* Implementation complexity: easy
+* Restriction: single variable and single initializer supported per `var` keyword as usually recommended by style guides to maintain one statement per line.
 
 ### Exceptions throw-catch, throw
 
@@ -142,8 +159,9 @@ The following restrictions are non-normative and being worked on pending the res
 ### Field accessor chaining
 
 * Verdict: desirable, limited support
-* Reason: very common in code, easy to implement
-* Restriction: chaining starting from a variable should be supported, but may not support interspersing function calls
+* Incidence rate: very common
+* Implementation complexity: easy
+* Restriction: chaining starting from a variable should be supported, but may not support interspersing function calls or parenthesized expressions
 
 ## Unsupported
 
@@ -166,6 +184,7 @@ The following restrictions are non-normative and being worked on pending the res
 * Verdict: not supported
 * Implementation complexity: intermediate
 * Incidence rate: low
+* Reason: goto also disfavored by style guides
 * Workaround: return, if, altered loop condition
 
 ### varargs
@@ -181,7 +200,7 @@ The following restrictions are non-normative and being worked on pending the res
 * Implementation complexity: complicated
 * Incidence rate: would be often useful
 * Reason: would increase memory pressure, would be less error prone for newcomers than the function scope `var`
-* Workaround: function
+* Workaround: function, immediately invoked anonymous function expression
 
 ### switch-case-default
 
@@ -193,22 +212,22 @@ The following restrictions are non-normative and being worked on pending the res
 ### Literal object notation
 
 * Verdict: not supported, desirable at times
-* Implementation complexity: straight forward
+* Implementation complexity: straightforward
 * Incidence rate: intermediate
 * Workaround: easy, create an intermediate object and add the value via an accessor
 
 ### Literal array notation
 
 * Verdict: not supported, desirable at times
-* Implementation complexity: straight forward
+* Implementation complexity: straightforward
 * Incidence rate: intermediate
 * Workaround: easy, create an intermediate array and add the value via an index
 
 ### Reference cycles
 
 * Verdict: Unsupported.
-* Restriction: Avoid storing a reference within object `p` pointing to object `q` if there exists a directed path leading from `q` to `p`.
-* Reason: Such a cycle would mandate a more complicated and less deterministic garbage collection scheme for collecting cycle specifically.
+* Restriction: Avoid storing a reference within object `p` pointing to object `q` if there exists a directed path leading from `q` to `p`. Captured function environment scopes are also counted as a reference.
+* Reason: Such a cycle would mandate a more complicated and less deterministic garbage collection scheme for collecting cycles specifically.
 * Workaround: store the key of a given object within a common map instead of a direct reference. Inspect carefully which environment a given function definition captures and alter the ordering or use additional encapsulation to hide stray paths.
 
 ### Prototype

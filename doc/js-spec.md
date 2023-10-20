@@ -23,6 +23,8 @@ missing:
 
 * ES3/NS4: switch-case-default, do-while, label-goto
 * for (the C-styled one), for-of, break, continue, with, varargs, arbitrary block scopes with {}
+* NS2: arguments
+* ES3/NS4: call, apply
 * ES6: tail call optimization
 
 ## Operators
