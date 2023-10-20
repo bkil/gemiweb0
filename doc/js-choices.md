@@ -93,8 +93,8 @@ The following restrictions are non-normative and being worked on pending the res
 ### Date
 
 * Verdict: partial
-* Restriction: only getting the current time and converting it to a number is supported
-* Implementation complexity: high
+* Restriction: only getting the current time as a Unix epoch and converting it to a number is supported. Ensure storage on enough bits.
+* Implementation complexity: high if unrestricted
 * Incidence rate: low
 * Workaround: library
 
@@ -171,7 +171,7 @@ The following restrictions are non-normative and being worked on pending the res
 ### varargs
 
 * Verdict: not supported
-* Implementation complexity: intermediate
+* Implementation complexity: intermediate (function arguments object, call, apply)
 * Incidence rate: rare
 * Workaround: Array
 
