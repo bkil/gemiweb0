@@ -648,13 +648,24 @@ function browserInit(j) {
   browse(j, 'index.htm', browse);
 }
 
-function callMeMaybe(cb) {
+function callMeMaybe(self, acc, multiLine, cb) {
   return function(data) {
     if ((data === undefined) || (data === null)) {
       return undefined;
     }
-    cb(data);
-  };
+    if (multiLine) {
+      if (data === '.') {
+        cb(acc);
+      } else {
+        if (acc !== undefined) {
+          data = (acc + nl) + data;
+        }
+        process.stdin.on('data', self(self, data, multiLine, cb));
+      }
+    } else {
+      cb(data);
+    }
+  }
 }
 
 function show(text, defVal, multiLine, cb) {
@@ -668,7 +679,7 @@ function show(text, defVal, multiLine, cb) {
     console.log((' default: ' + escaped(defVal)) + nl);
   }
   var i = process.stdin;
-  i.on('data', callMeMaybe(cb));
+  i.on('data', callMeMaybe(callMeMaybe, undefined, multiLine, cb));
 }
 
 function main() {
