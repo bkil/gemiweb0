@@ -9,11 +9,11 @@ The following restrictions are non-normative and being worked on pending the res
 ### Whitespace and comments
 
 * Verdict: Recommended
-* Reason: easy to implement, required for LibreJS-level distribution of code by each web site
+* Reason: easy to implement, required for LibreJS-level distribution of code in preferred form of modification by each web site
 
 ### if-else
 
-* Verdict: Recommenedd
+* Verdict: Recommended
 * Implementation complexity: low
 * Incidence rate: very common
 * Reason: Turing-completeness
@@ -35,6 +35,46 @@ The following restrictions are non-normative and being worked on pending the res
 * Verdict: Required
 * Incidence rate: very common
 * Reason: basic modularization. A restriction of return at the very end of the body was considered, but then dismissed as easy to implement and greatly improving clarity of user code.
+
+### read from standard input
+
+* Verdict: Recommended
+* Incidence rate: none in web code, high in command line and server CGI code
+* Reason: Turing-completeness
+* Solution: process.stdin.on
+* Workaround: some other API that can open and read from a file descriptor
+
+### write to standard output
+
+* Verdict: Recommended
+* Incidence rate: low in web code, high in command line and server CGI code
+* Reason: Turing-completeness
+* Solution: console.log
+* Workaround: some other API that can open and write to a file descriptor
+
+### reading contents of a file
+
+* Verdict: Recommended
+* Incidence rate: none in web code, high in command line and server CGI code
+* Reason: native platform interface
+* Solution: require('fs').readFile()
+* Alternative: require('fs').readFileSync()
+* Workaround: some other API that can open and read from a file descriptor
+
+### writing contents to a file
+
+* Verdict: Recommended
+* Incidence rate: none in web code, high in command line and server CGI code
+* Reason: native platform interface
+* Solution: require('fs').writeFile()
+* Workaround: some other API that can open and write to a file descriptor
+
+### document.cookie
+
+* Verdict: required
+* Incidence rate: low, but non-negligible
+* Reason: useful to interface with extant web hosting services
+* Workaround: none for web, adding custom headers for HTTP/TCP connections on native platform
 
 ## Quality of life improvement
 
@@ -69,6 +109,22 @@ The following restrictions are non-normative and being worked on pending the res
 * Implementation complexity: low
 * Workaround: error prone and too verbose, invoke abstract equality and `typeof` or `instanceof` in every expression it occurs
 
+### document.write
+
+* Verdict: recommended
+* Incidence rate: intermediate
+* Implementation complexity: low
+* Reason: the simplest alternative for interactive document modification
+* Workaround: serialize state, generate a complete new document using the string return value of a `javascript:` link to navigate away to, deserialize state
+
+### reading the value of a form input element
+
+* Verdict: required
+* Incidence rate: high
+* Implementation complexity: low
+* Reason: allow for interacting with typed user input without server involvement
+* Workaround: unsatisfactory due to lack of caching, allow to submit the form via GET and parse the values from the URI upon load
+
 ## To research
 
 ### Abstract equality == !==
@@ -101,7 +157,7 @@ The following restrictions are non-normative and being worked on pending the res
 
 ### Booleans
 
-* Verdict not supported
+* Verdict: not supported
 * Incidence rate: high
 * Implementation complexity: low
 * Workaround: can be substituted with `0===1` and `1===1`, but 0/1 can also be used instead of false/true similarly to C
@@ -163,7 +219,52 @@ The following restrictions are non-normative and being worked on pending the res
 * Implementation complexity: easy
 * Restriction: chaining starting from a variable should be supported, but may not support interspersing function calls or parenthesized expressions
 
+### window.location.href
+
+* Verdict: partial
+* Use cases: process arguments in the URI query or hash anchor, possibly `GET` form submissions
+* Restriction: can only get the full URL as a string
+* Workaround: library
+
+### window.setTimeout
+
+* Verdict: partial
+* Restriction: function argument
+* Implementation complexity: higher intermediate, needs an event loop with termination and signal handling
+* Use cases: retry with backoff, autosave, neighborly crawling, animation, debouncing
+* Workaround: eval instead of string argument, none for setTimeout itself
+
+### form post
+
+* Verdict: partial
+* Implementation complexity: high, encoding types, file attachments, hooks for both HTML and JavaScript
+* Restriction: limited input types, limited attributes (action, method, enctype)
+
+### XMLHttpRequest
+
+* Verdict: partial
+* Implementation complexity: high, header handling, timeout
+* Restriction: can only return a string responseText without progress, CORS may not be complete
+* Use cases: interfacing with API, third party integration, incremental update of local state
+* Workaround: JSONP, form submit
+
 ## Unsupported
+
+### writing to the value of a form input element
+
+* Verdict: not supported
+* Incidence rate: low
+* Implementation complexity: higher intermediate, depending on widget toolkit, may need to keep the whole HTML source or a representation in memory and reflow
+* Workaround: generate a new document with the intended value set as default, possibly represent value within body outside form
+
+### variable declaration hoisting
+
+* Verdict: not supported
+* Reason: considered bad practice, confusing for beginners
+* Implementation complexity: low to intermediate depending on graph representation, may carry a runtime penalty when streaming
+* Incidence rate: very low, usually not on purpose
+* Use case: none
+* Workaround: declare a variable before referencing it
 
 ### do-while
 
@@ -233,6 +334,6 @@ The following restrictions are non-normative and being worked on pending the res
 ### Prototype
 
 * Verdict: avoid in user code
-* Restriction: the implementation may use it internally but may not expose it to user code
-* Reason: implementation is difficult, slow and uses more memory. Also considered bad practice for most use cases.
+* Restriction: runtime implementation may use it internally but may not expose it to user code
+* Reason: uniform implementation is difficult, slow and uses more memory. Also considered bad practice for most use cases.
 * Workaround: emulate regular inheritance by function expressions or chain only pure functions where applicable
