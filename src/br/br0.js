@@ -63,7 +63,8 @@ function copyLiteral(s) {
   var c = h[s['i']];
   var b;
   s['i'] = s['i'] + 1;
-  if (s['ctx']) {
+  if (s.ctx === 'style') {
+  } else if (s['ctx']) {
     o = o + c;
   } else {
     b = isWs(c);
@@ -291,7 +292,7 @@ function processTag(j, tag, fin, attr) {
       t = '* ';
     }
     displayLi = 1;
-  } else if (tag === 'script') {
+  } else if ((tag === 'script') || (tag === 'style')) {
     needText = 1;
     ctx = 1;
     raw = 1;
