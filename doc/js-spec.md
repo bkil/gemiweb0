@@ -72,7 +72,6 @@ missing:
 * eval2: not standard, a sandboxed variant not operating on the current environment, but on one passed in as an Object argument
 * isNaN
 * parseInt(s, 10)
-* setTimeout (function argument)
 
 missing:
 
@@ -170,11 +169,12 @@ A hardened minimal subset required to interface with most common gratis web host
 ### Window
 
 * window.location.href
-* window.setTimeout (function)
+* NS2: window.setTimeout (function argument)
 
 missing:
 
-* window.location.replace, window.setTimeout (string variant), window.setInterval, window.clearTimeout
+* window.location.replace, window.setTimeout (string variant), window.clearTimeout
+* NS4: window.setInterval
 
 ### XMLHttpRequest
 

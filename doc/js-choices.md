@@ -34,7 +34,7 @@ The following restrictions are non-normative and being worked on pending the res
 
 * Verdict: Required
 * Incidence rate: very common
-* Reason: basic modularization. A restriction of return at the very end of the body was considered, but then dismissed as easy to implement and greatly improving clarity of user code.
+* Reason: basic modularization. A restriction of return at the very end of the body was considered, but then dismissed as easy to implement without this restriction while greatly improving clarity of user code.
 
 ### read from standard input
 
@@ -76,7 +76,32 @@ The following restrictions are non-normative and being worked on pending the res
 * Reason: useful to interface with extant web hosting services
 * Workaround: none for web, adding custom headers for HTTP/TCP connections on native platform
 
+### Call stack quota
+
+* Verdict: required
+* Reason: the visitor must have control over untrusted code
+* Implementation complexity: low
+
+### Heap allocation quota
+
+* Verdict: required
+* Reason: the visitor must have control over untrusted code
+* Implementation complexity: higher intermediate due to many corner cases
+* Solution: account for each allocation including overheads of alignment and padding, accessing a large index in an array, allocate many small objects, concatenating large strings, setting many fields on a single object, manipulations on mmap'ped files
+
+### CPU time quota
+
+* Verdict: required
+* Reason: the visitor must have control over untrusted code
+* Implementation complexity: intermediate
+* Solution: if the interactive user agent is single threaded without a means to abort the script from the interface, start a watchdog timer within the event loop and terminate the script if the single atomic dispatch takes more than the quota. If the user interface can remain responsive for aborting a running script, the total CPU time since the last user interaction with the script should be metered and the user warned if it had taken more than a threshold or if the average CPU utilization percentage caused by the script had exceeded a threshold after some time.
+
 ## Quality of life improvement
+
+### Pause, resume and terminate script upon interactive command
+
+* Verdict: recommended
+* Implementation complexity: low if granularity provided by event loop conditioning is sufficient, intermediate if termination at reductions or via a separate process model would be warranted, very high if resumption without POSIX job control signals also required
 
 ### Pure anonymous function expression
 
@@ -197,7 +222,7 @@ The following restrictions are non-normative and being worked on pending the res
 * Verdict: Desirable, but only partially supported
 * Use case: state encapsulation for object oriented programming, Currying for functional programming
 * Restrictions: to avoid reference cycles, a runtime may make a shallow copy of the environment from above the function definition, not including itself.
-* Workaround: Use a C-like function definition order within the file. Recursion needs to be worked around by passing in a self-reference for the function. `Function` and `eval` can be fully mitigated, but may prove as an alternative.
+* Workaround: Use a C-like function definition order within the file. Recursion needs to be worked around by passing in a self-reference for the function. `Function` and `eval` could also be used as an alternative.
 
 ### Variable initializer
 
@@ -206,7 +231,7 @@ The following restrictions are non-normative and being worked on pending the res
 * Implementation complexity: easy
 * Restriction: single variable and single initializer supported per `var` keyword as usually recommended by style guides to maintain one statement per line.
 
-### Exceptions throw-catch, throw
+### Exceptions try-catch, throw
 
 * Verdict: desirable, limited support
 * Restriction: no classes, catch may be implemented as a restricted kind of environment
@@ -229,10 +254,10 @@ The following restrictions are non-normative and being worked on pending the res
 ### window.setTimeout
 
 * Verdict: partial
-* Restriction: function argument
+* Restriction: function argument, up to a single timeout active at a time
 * Implementation complexity: higher intermediate, needs an event loop with termination and signal handling
 * Use cases: retry with backoff, autosave, neighborly crawling, animation, debouncing
-* Workaround: eval instead of string argument, none for setTimeout itself
+* Workaround: eval instead of string argument, none for setTimeout itself, implement a dispatcher that tracks upcoming events in ascending order to simulate multiple timers
 
 ### form post
 
@@ -249,6 +274,12 @@ The following restrictions are non-normative and being worked on pending the res
 * Workaround: JSONP, form submit
 
 ## Unsupported
+
+### window.setInterval
+
+* Verdict: unsupported
+* Implementation complexity: low
+* Workaround: simulate using setTimeout and Date
 
 ### writing to the value of a form input element
 
