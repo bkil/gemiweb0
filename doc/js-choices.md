@@ -324,6 +324,7 @@ The following restrictions are non-normative and being worked on pending the res
 * Verdict: not supported
 * Implementation complexity: intermediate (function arguments object, call, apply)
 * Incidence rate: rare
+* Use cases: a few standard library functions in ES3 whose functionality could be restricted to only support the minimal amount of non-trivial arguments (1 for Array.prototype.concat, push, unshift, String.fromCharCode, String.prototype.concat, 2 for Array.prototype.splice, Math.min, max and the Function() constructor)
 * Workaround: Array
 
 ### block scope environment const, let
