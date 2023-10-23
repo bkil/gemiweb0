@@ -291,6 +291,10 @@ Projects listed here have not produced a browser a user could test yet.
 
 ## Unmaintained
 
+### Odysseus
+
+* https://github.com/alcinnz/Odysseus
+
 ### kweb
 
 * https://github.com/ekapujiw2002/kweb
