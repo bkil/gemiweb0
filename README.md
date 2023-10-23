@@ -23,3 +23,5 @@ Older notes:
 Join our chat room to participate in brainstorming or to give a hand by implementing the standard from scratch:
 
 * https://matrix.to/#/#weblite:matrix.org
+* https://github.com/bkil/gemiweb
+* https://gitlab.com/bkil/gemiweb
