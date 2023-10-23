@@ -125,3 +125,8 @@ id or name should be followed for fragment linking
 ## Similar ongoing efforts
 
 * https://codeberg.org/smolweb/smolweb-spec
+
+## Compatible best practices
+
+* https://seirdy.one/posts/2020/11/23/website-best-practices/
+* https://indieweb.org/progressive_enhancement
