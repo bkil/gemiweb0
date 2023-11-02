@@ -119,6 +119,7 @@ id or name should be followed for fragment linking
 
 ## Similar halted efforts
 
+* https://en.wikipedia.org/wiki/Small-C
 * https://gemini.circumlunar.space/
 * https://codeberg.org/Weblite/HTMLite/src/branch/master/htmlite.md
 
@@ -130,3 +131,4 @@ id or name should be followed for fragment linking
 
 * https://seirdy.one/posts/2020/11/23/website-best-practices/
 * https://indieweb.org/progressive_enhancement
+* http://eev.ee/blog/2016/03/06/maybe-we-could-tone-down-the-javascript/
