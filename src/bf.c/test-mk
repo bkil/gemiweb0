@@ -1,0 +1,83 @@
+#!/bin/sh
+
+ISSMALLBIN=""
+
+main() {
+  rm a.out 2>/dev/null
+  compile -c vm.c && \
+
+  {
+    if [ -n "$ISSMALLBIN" ]; then
+      strip \
+        -S \
+        --strip-unneeded \
+        --remove-section=.note.gnu.gold-version \
+        --remove-section=.comment \
+        --remove-section=.note \
+        --remove-section=.note.gnu.build-id \
+        --remove-section=.note.ABI-tag \
+        vm.o
+        # -s
+        objdump -x vm.o
+    else
+      true
+    fi &&
+    compile -flto vm.o test-vm.c
+  } && {
+
+  valgrind \
+    --leak-check=full \
+    --show-leak-kinds=all \
+    --num-callers=30 \
+    --malloc-fill=0xaa \
+    --free-fill=0x55 \
+    --redzone-size=256 \
+    --read-var-info=yes \
+    --expensive-definedness-checks=yes \
+    --merge-recursive-frames=10 \
+    --track-origins=yes \
+    --partial-loads-ok=no \
+    ./a.out "$@"
+    # -fsanitize=address -fsanitize=leak -fsanitize=undefined
+  }
+
+  local S=$?
+  echo $S
+  return $S
+}
+
+compile() {
+  local ADD=""
+  if [ -n "$ISSMALLBIN" ]; then
+  : \
+    -fshort-double \
+    -ffunction-sections \
+    -fdata-sections \
+    -fno-jump-tables \
+#
+
+    ADD="$ADD \
+    -Os \
+    -Wno-error=suggest-attribute=pure \
+    -Wno-error=suggest-attribute=const \
+    -fno-asynchronous-unwind-tables \
+    -fno-unwind-tables \
+    -fno-stack-protector \
+    -fno-unroll-loops \
+    -fno-ident \
+    -mfpmath=387 \
+    -mfancy-math-387 \
+    -fsingle-precision-constant \
+    -Wl,-z,norelro \
+    -Wl,--build-id=none \
+    -U_FORTIFY_SOURCE \
+    -DSMALLBIN \
+    -s\
+    "
+  else
+    ADD="$ADD -Og -g"
+  fi
+  ./gcc-warn.sh $ADD "$@"
+}
+
+main "$@"

@@ -26,13 +26,18 @@ id = [a-zA-Z_.]+
 ### Level bf
 
 ```
-program: <stms>
-stms: <stm> [; <stm>]*
-stm: while ( <id> '[' <id> ']' ) { <stms> } | <id> <iStm>
-iStm: ( [ <id> ]? ) | '=' [ 0 | new Object ] | [ '[' <id> ']' ]? <op> 1
-op: += | -=
-id = [a-zA-Z_.]+
+program: <statements>
+statements: <statement> [ ';' <statement> ]*
+statement: 'while(v[i]){' <statements> '}' | [ console.log | document.write ] '(String.fromCharCode(v[i]))' | var ' ' [ v | i | j ] | <assignment>
+assignment: v [ '=new Array' | '[i]=' [ '(v[i]|0)' [ '+' | '-' ] 1 | 'form.text.charCodeAt(j)|0' ] ] | [ i | j ] [ '=0' | '++' | '--' ]
 ```
+
+Not supported:
+
+* whitespace
+* optional semicolons
+* arbitrary variables
+* additional parenthesis
 
 ### Level 0
 
