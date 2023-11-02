@@ -4,8 +4,9 @@
 
 * anti-bloat: feature creep
 * code golfing, minimalism, small is beautiful, less is more
-* security: possibility for review, less opportunity for bugs
-* NIH: DIY, primitive technology, clean room reimplementation, independence artisan
+* security: possibility for auditing review, less opportunity for bugs
+* bottleneck-free: reduce single points of failure, web content can be developed in preferred form for modification
+* NIH: DIY, primitive technology, clean room reimplementation, artisan independence
 * transparency: nothing up my sleeves, less opportunity for backdoors
 * anti-oligopoly: possibility for competition
 * anti vendor lock-in: reproducible environment
