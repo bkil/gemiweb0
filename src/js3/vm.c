@@ -1829,13 +1829,9 @@ global_eval2(Parser *p, List *l) {
   return o;
 }
 
-int
-Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
-  p->debug = debug;
-  Object *s = StringObject_new_const((Id){.s = prog, .len = len, .h = 0});
-  Object *o = Parser_evalString(p, s);
-  addField(p->vars, "", s);
-
+static int
+__attribute__((warn_unused_result))
+Parser_evalResult(Parser *p, Object *o) {
   if (o) {
     int ret;
     if (p->thrw) {
@@ -1876,4 +1872,13 @@ Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
     showRunError(p);
     return -2;
   }
+}
+
+int
+Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
+  p->debug = debug;
+  Object *s = StringObject_new_const((Id){.s = prog, .len = len, .h = 0});
+  Object *o = Parser_evalString(p, s);
+  addField(p->vars, "", s);
+  return Parser_evalResult(p, o);
 }
