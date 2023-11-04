@@ -617,6 +617,96 @@ parseExpr(Parser *p);
 
 static Object *
 __attribute__((nonnull, warn_unused_result))
+parseObjectLiteral(Parser *p) {
+  if (!acceptWs(p, '{')) {
+    return 0;
+  }
+  Object *o = MapObject_new();
+  while (!acceptWs(p, '}')) {
+    Id id;
+    Object *keyString = 0;
+    if (!parseId(p, &id)) {
+      clearErr(p);
+      Object *keyObj = parseStringLit(p);
+      if (!keyObj) {
+        Object_free(o);
+        return 0;
+      }
+      keyString = Object_toString(keyObj);
+      Object_free(keyObj);
+      id = keyString->V.c;
+    }
+    if (!expectWs(p, ':')) {
+      if (keyString) {
+        Object_free(keyString);
+      }
+      Object_free(o);
+      return 0;
+    }
+    Object *value = parseExpr(p);
+    if (!value) {
+      if (keyString) {
+        Object_free(keyString);
+      }
+      Object_free(o);
+      return 0;
+    }
+    Map_set_id(&o->V.m, &id, value);
+    Object_free(value);
+    if (keyString) {
+      Object_free(keyString);
+      keyString = 0;
+    }
+    if (!acceptWs(p, ',')) {
+      if (!expectWs(p, '}')) {
+        Object_free(o);
+        return 0;
+      }
+      return o;
+    }
+  }
+  return o;
+}
+
+static Object *
+__attribute__((nonnull, warn_unused_result))
+parseArrayLiteral(Parser *p) {
+  if (!acceptWs(p, '[')) {
+    return 0;
+  }
+  Object *o = ArrayObject_new();
+  Object *i = IntObject_new(0);
+  while (!acceptWs(p, ']')) {
+    Object *value = parseExpr(p);
+    if (!value) {
+      Object_free(o);
+      Object_free(i);
+      return 0;
+    }
+    Object *key = Object_toString(i);
+    i->V.i++;
+    List *l = List_new(0, strndup(key->V.c.s, key->V.c.len), value);
+    Object_free(key);
+    if (o->V.m) {
+      o->V.m->next = l;
+    } else {
+      o->V.m = l;
+    }
+    if (!acceptWs(p, ',')) {
+      if (!expectWs(p, ']')) {
+        Object_free(o);
+        o = 0;
+      }
+      Object_free(i);
+      return o;
+    }
+  }
+  Object_free(i);
+  return o;
+}
+
+static Object *
+__attribute__((nonnull, warn_unused_result))
 parseIndex(Parser *p) {
   skipWs(p);
   if (accept(p, '[')) {
@@ -964,6 +1054,10 @@ parseLTerm(Parser *p) {
   if ((o = parseIntLit(p))) {
     return o;
   } else if ((o = parseStringLit(p))) {
+    return o;
+  } else if ((o = parseObjectLiteral(p))) {
+    return o;
+  } else if ((o = parseArrayLiteral(p))) {
     return o;
   } else if (acceptWs(p, op = '!') || accept(p, op = '~') || accept(p, op = '-')) {
     if (!(o = parseTerm(p))) {

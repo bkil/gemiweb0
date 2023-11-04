@@ -383,7 +383,7 @@ main(void) {
   t("var p = new Object; var q = new Object; eval2(p, eval2(q, \"'4+' + '5'\"))", 9);
   t("var p = new Object; eval2(p, \"var q = new Object; eval2(q, '4+' + '5')\")", 9);
 
-  /* ES5 */
+  /* ES5 out of project scope */
   t("var s = 'a'; s[-1] === ''", 1);
   t("var s = ''; s[0] === ''", 1);
   t("var s = 'a'; s[0] === 'a'", 1);
@@ -394,6 +394,25 @@ main(void) {
   t("var s = 'c'; s[null] === 'c'", 1);
   t("var s = 'c'; s[new Object] === 'c'", 1);
   t("var s = 'a'; s[0] = 'x'", -2);
+
+  /* ES3 out of project scope */
+  t("var o = {}; o.x === undefined", 1);
+  t("var o = {'ab': 9}; o.ab", 9);
+  t("var o = {'a': {'b': {'c': 4}}, 'd': {'e': 5}}; o.a.b.c + o.d.e", 9);
+  t("var o = {'ab': 'xy'}; o.ab === 'xy'", 1);
+  t("var o = {'a': 4, 'b': 5}; o.a + o.b", 9);
+  t("var o = {ab: 9}; o.ab", 9);
+  t("var o = {ab: 'xy'}; o.ab === 'xy'", 1);
+  t("var o = {a: 4, b: 5}; o.a + o.b", 9);
+  t("var o = {a: {b: {c: 4}}, d: {e: 5}}; o.a.b.c + o.d.e", 9);
+  t("var i = 9; var o = {'ab': i}; o.ab", 9);
+  t("var q = {'y': 9}; var p = {'x': q}; p.x.y", 9);
+
+  /* ES3 out of project scope */
+  t("var a = []; a.length === 0", 1);
+  t("var a = [4, 5]; a[0] + a[1]", 9);
+  t("var a = ['4', '5']; (a[0] + a[1]) === '45'", 1);
+  t("var a = [2, [3, 4]]; var b = a[1]; a[0] + (b[0] + b[1])", 9);
 
   t("var i; i === undefined", 1);
   t("var i; i = 9", 9);
