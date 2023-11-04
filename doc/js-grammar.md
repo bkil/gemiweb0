@@ -361,7 +361,7 @@ stms: [ <stm> [; <stm>]* ]?
 stm: if ( <expr> ) <stmBody> [ else <stmBody> ]? | while ( <expr> ) <stmBody> | for ( <id> in <expr> ) <stmBody> | var <id> [ '=' <expr> ]? | function <id> <function> | return <expr> | try <stmBrace> catch ( <id> ) <stmBrace> | throw <expr> | <expr>
 expr: function <function> | <iTerm> <eExpr> | <lTerm> <eExpr>
 function: ( [ <id> [, <id>]* ]? ) <stmBrace>
-eExpr: [ <op> <term> ]?
+eExpr: [ <op> <term> ]*
 term: <iTerm> | <lTerm>
 lTerm: <int> | <string> | [ ! | ~ | - ] <term> | '(' <expr> ')' [ <args> ]?
 iTerm: undefined | null | NaN | new Object | new Array | typeof <expr> | <id> <sTerm>
@@ -374,6 +374,10 @@ int = -?[1-9][0-9]*
 string = '[^'\\]*'|"[^"\\]*"
 id = [a-zA-Z_][a-zA-Z_0-9]*
 ```
+
+Notes:
+
+* In eExpr, only the same operator can be repeated within the same group (i.e., without using parenthesis)
 
 ### Level 8
 

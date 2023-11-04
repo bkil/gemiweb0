@@ -213,6 +213,13 @@ main(void) {
   t("(9)", 9);
   t("(4 + 5)", 9);
   t("2 + (3 + 4)", 9);
+  t("2 + 3 + 4", 9);
+  t("1 + 3 + 1 + 4", 9);
+  t("3 + 3 * 2", -1); /* con-conforming, could be 9 with precedence */
+  t("var i; i = 2 + 3 + 4; i", 9);
+  t("var i; i = 1 + 3 + 1 + 4; i", 9);
+  t("var i; i = 3 + 3 * 2", -1); /* con-conforming, could be 9 with precedence */
+  t("var i; i = 3 + 3 * 2; i", -1); /* con-conforming, could be 9 with precedence */
   t("1 + (1 + (3 + 4))", 9);
   t("-2 + 11", 9);
   t("0 - -9", 9);

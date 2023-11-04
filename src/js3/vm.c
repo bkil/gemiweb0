@@ -716,7 +716,7 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got, Object *se
     if (!p->nest && e && (e->value->t == Prototype)) {
       return setRunError(p, "overwriting prototype unsupported", 0);
     }
-    Object *r = 0;
+    Object *r;
     if ((r = parseExpr(p))) {
       if (!p->nest) {
         if (e) {
@@ -1013,15 +1013,10 @@ parseTerm(Parser *p) {
   }
 }
 
-static Object *
-__attribute__((nonnull(1), warn_unused_result))
-parseEExpr(Parser *p, Object *t1) {
-  if (!t1) {
-    return 0;
-  }
-  clearErr(p);
+static char
+__attribute__((nonnull, warn_unused_result))
+parseOperator(Parser *p) {
   skipWs(p);
-
   char op;
   if (accept(p, op = '+')) {
   } else if (accept(p, op = '-')) {
@@ -1055,18 +1050,21 @@ parseEExpr(Parser *p, Object *t1) {
     }
   } else if (accept(p, op = '=')) {
     if (!expect(p, '=') || !expect(p, '=')) {
-      Object_free(t1);
       return 0;
     }
   } else if (accept(p, op = '!')) {
     if (!expect(p, '=') || !expect(p, '=')) {
-      Object_free(t1);
       return 0;
     }
   } else {
-    return t1;
+    op = 0;
   }
+  return op;
+}
 
+static Object *
+__attribute__((nonnull, warn_unused_result))
+parseOperatorTerm(Parser *p, Object *t1, char op) {
   int sh = 0;
   int isBool = 1;
   switch (op) {
@@ -1177,6 +1175,30 @@ parseEExpr(Parser *p, Object *t1) {
   Object_free(t1);
   Object_free(t2);
   return setRunError(p, "unknown operand types for expression", 0);
+}
+
+static Object *
+__attribute__((nonnull(1), warn_unused_result))
+parseEExpr(Parser *p, Object *t1) {
+  if (!t1) {
+    return 0;
+  }
+  clearErr(p);
+  char op = parseOperator(p);
+  char opFirst = op;
+  while (op) {
+    if (op != opFirst) {
+      Object_free(t1);
+      p->parseErr = "Please use parenthesis for differing operators";
+      return 0;
+    }
+    if (!(t1 = parseOperatorTerm(p, t1, op))) {
+      return 0;
+    }
+    op = parseOperator(p);
+  }
+  clearErr(p);
+  return t1;
 }
 
 static Object *
