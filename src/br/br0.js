@@ -652,6 +652,7 @@ function browserInit(j) {
 function callMeMaybe(self, acc, multiLine, cb) {
   return function(data) {
     if ((data === undefined) || (data === null)) {
+      process.stdin.on('data', undefined);
       return undefined;
     }
     if (multiLine) {

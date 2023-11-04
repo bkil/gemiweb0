@@ -17,11 +17,41 @@ static unsigned int _errorCount = 0;
 
 static int
 __attribute__((nonnull, warn_unused_result))
-test_case(const char *prog, bool debug) {
+runTestCase(const char *prog, bool debug) {
   struct Parser *p = Parser_new();
-  int ret = Parser_eval(p, prog, strlen(prog), debug);
+  int res = Parser_eval(p, prog, strlen(prog), debug);
   Parser_free(p);
-  return ret;
+  return res;
+}
+
+static int
+__attribute__((nonnull, warn_unused_result))
+runTestEventLoop(const char *prepare, const char *after, bool debug) {
+  struct Parser *p = Parser_new();
+  int res = Parser_eval(p, prepare, strlen(prepare), debug);
+  if (res >= 0) {
+    res = Parser_eventLoop(p, after, strlen(after), debug);
+  }
+  Parser_free(p);
+  return res;
+}
+
+static void
+__attribute__((nonnull))
+testEventLoop(const char *prepare, const char *after, int expect) {
+  if (_debug) {
+    print("=testing: %s ;; %s\n", prepare, after);
+  }
+  int res = runTestEventLoop(prepare, after, _debug);
+  if (res != expect) {
+    if (_debug) {
+      print(" -fail: got %d, expected %d\n", res, expect);
+    } else {
+      print("fail: %s ;; %s: got %d, expected %d\n", prepare, after, res, expect);
+      if (runTestEventLoop(prepare, after, 1)) {}
+    }
+    _errorCount++;
+  }
 }
 
 static void
@@ -31,13 +61,13 @@ t3(const char *code, int expect, const char *name) {
   if (_debug) {
     print("=testing: %s\n", title);
   }
-  int res = test_case(code, _debug);
+  int res = runTestCase(code, _debug);
   if (res != expect) {
     if (_debug) {
       print(" -fail: got %d, expected %d\n", res, expect);
     } else {
       print("fail: %s: got %d, expected %d\n", title, res, expect);
-      if (test_case(code, 1)) {}
+      if (runTestCase(code, 1)) {}
     }
     _errorCount++;
   }
@@ -483,6 +513,9 @@ main(void) {
   t("require('x') === undefined", 1);
   t("var f = require('fs'); var o = new Object; f.readFile('test-vm-1.txt', function(e, d) {o.e = e; o.d = d}); (o.e === undefined) && (o.d === 'abc')", 1);
   t("var f = require('fs'); var o = new Object; f.readFile('x', function(e, d) {o.e = e; o.d = d}); (o.d === undefined) && (o.e.charAt(0))", 1);
+
+  t("var o = new Object; setTimeout(function() { o.i = 9 }, 0); o.i === undefined", 1);
+  testEventLoop("var o = new Object; setTimeout(function() { o.i = 9 }, 0)", "o.i", 9);
 
   t("console.log(' DONE ')", 0);
 

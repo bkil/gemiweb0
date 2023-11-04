@@ -84,6 +84,9 @@ typedef struct Parser {
   Object *objectPrototype;
   Object *arrayPrototype;
   Object *stringPrototype;
+  Object *onStdinData;
+  Object *onTimeout;
+  long int timeoutMs;
 
   const char *err;
   Id errName;
@@ -95,6 +98,5 @@ typedef struct Parser {
 
   char parseErrChar;
 } Parser;
-
 
 #endif

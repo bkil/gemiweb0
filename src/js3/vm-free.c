@@ -164,6 +164,12 @@ Parser_free(Parser *p) {
   p->arrayPrototype->V.m = 0;
   List_free(p->stringPrototype->V.m);
   p->stringPrototype->V.m = 0;
+  if (p->onTimeout) {
+    Object_free(p->onTimeout);
+  }
+  if (p->onStdinData) {
+    Object_free(p->onStdinData);
+  }
   Object_free(p->vars);
   free(p);
 }

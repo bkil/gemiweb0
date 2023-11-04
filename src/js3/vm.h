@@ -22,6 +22,9 @@ int Parser_eval(struct Parser *p, const char *prog, size_t len, int debug);
 __attribute__((nonnull))
 void Parser_free(struct Parser *p);
 
+__attribute__((nonnull, warn_unused_result))
+int Parser_eventLoop(struct Parser *p, const char *prog, size_t len, int debug);
+
 _inline_
 static size_t
 __attribute__((warn_unused_result))

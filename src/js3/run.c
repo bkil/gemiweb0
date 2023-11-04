@@ -39,6 +39,10 @@ main(int argc, char **argv) {
 
   struct Parser *p = Parser_new();
   int ret = Parser_eval(p, prog, len, 1);
+  if (ret >= 0) {
+    int eventRet = Parser_eventLoop(p, "", 0, 1);
+    ret = ret ? ret : eventRet;
+  }
   Parser_free(p);
 
   if (munmap(prog, len) < 0) {

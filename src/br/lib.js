@@ -285,3 +285,13 @@ if (typeof decodeURIComponent === 'undefined') {
     return s; // TODO
   }
 }
+
+if ((typeof setInterval === 'undefined') && (typeof setTimeout === 'function')) {
+  function setInterval(f, ms) {
+    function g(self) {
+      f();
+      setTimeout(function() { self(self) }, ms);
+    }
+    setTimeout(function() { g(g) }, ms);
+  }
+}

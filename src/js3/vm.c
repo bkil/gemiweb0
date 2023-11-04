@@ -1,14 +1,15 @@
 #include "string.h" /* strnlen strdup strndup getline; strlen strcmp strncmp strncpy strstr */
 #include "vm-impl.h"
 
-#include <stdio.h> /* fputs fputc putchar stdout stderr getline */
+#include <stdio.h> /* STDIN_FILENO fputs fputc putchar stdout stderr getline */
 #include <malloc.h> /* malloc free */
 #include <stdlib.h> /* atoi size_t */
 #include <sys/mman.h> /* mmap */
-#include <sys/types.h> /* open fstat */
+#include <sys/types.h> /* open fstat select */
 #include <sys/stat.h> /* open fstat */
 #include <fcntl.h> /* open */
-#include <unistd.h> /* close fstat */
+#include <unistd.h> /* close fstat select */
+#include <sys/time.h> /* select */
 
 static void
 __attribute__((nonnull))
@@ -1556,22 +1557,11 @@ process_stdin_on(Parser *p, List *l) {
   if (!l || !l->next || !isString(l->value) || !strncmpEq(l->value->V.c, "data")) {
     return 0;
   }
-  size_t all = 0;
-  Str s = {.s = 0};
-  ssize_t len = getline(&s.s, &all, stdin);
-  Object *arg;
-  len--;
-  if (len < 0) {
-    mfree(s.s);
-    arg = &undefinedObject;
-  } else {
-    s.len = (size_t)len;
-    arg = StringObject_new_str(s);
+  if (p->onStdinData) {
+    Object_free(p->onStdinData);
   }
-  List *args = List_new(0, 0, arg);
-  Object *o = invokeFun(p, l->next->value, args, 0);
-  List_free(args);
-  return o;
+  p->onStdinData = l->next->value->t == FunctionJs ? Object_ref(l->next->value) : 0;
+  return &undefinedObject;
 }
 
 static Object *
@@ -1668,6 +1658,20 @@ global_require(Parser *p, List *l) {
   }
 }
 
+static Object *
+__attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
+global_setTimeout(Parser *p, List *l) {
+  if (!l || (l->value->t != FunctionJs) || (l->next->value->t != IntObject)) {
+    return 0;
+  }
+  if (p->onTimeout) {
+    Object_free(p->onTimeout);
+  }
+  p->onTimeout = Object_ref(l->value);
+  p->timeoutMs = l->next->value->V.i;
+  return &undefinedObject;
+}
+
 Parser *
 Parser_new(void) {
   Parser *p = malloc(sizeof(*p));
@@ -1703,6 +1707,10 @@ Parser_new(void) {
   addFunction(p->vars, "eval", &global_eval);
   addFunction(p->vars, "eval2", &global_eval2);
   addFunction(p->vars, "require", &global_require);
+  addFunction(p->vars, "setTimeout", &global_setTimeout);
+
+  p->onTimeout = 0;
+  p->onStdinData = 0;
   return p;
 }
 
@@ -1881,4 +1889,60 @@ Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
   Object *o = Parser_evalString(p, s);
   addField(p->vars, "", s);
   return Parser_evalResult(p, o);
+}
+
+int
+Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
+  while (p->onTimeout || p->onStdinData) {
+    fd_set rfd;
+    FD_ZERO(&rfd);
+    int fds = 0;
+    if (p->onStdinData) {
+      FD_SET(STDIN_FILENO, &rfd);
+      fds++;
+    }
+
+    int ret;
+    if (p->onTimeout) {
+      struct timeval timeout;
+      timeout.tv_sec = p->timeoutMs / 1000;
+      timeout.tv_usec = (p->timeoutMs % 1000) * 1000;
+      ret = select(fds, &rfd, NULL, NULL, &timeout);
+    } else {
+      ret = select(fds, &rfd, NULL, NULL, NULL);
+    }
+
+    if (ret < 0) {
+      perror("select");
+      return -2;
+    } else if (ret == 0) {
+      if (p->onTimeout) {
+        Object *onTimeout = p->onTimeout;
+        p->onTimeout = 0;
+        Object *o = invokeFun(p, onTimeout, 0, 0);
+        Object_free(onTimeout);
+        if (Parser_evalResult(p, o)) {}
+      }
+    }
+
+    if (p->onStdinData && FD_ISSET(STDIN_FILENO, &rfd)) {
+      size_t all = 0;
+      Str s = {.s = 0};
+      ssize_t len = getline(&s.s, &all, stdin);
+      Object *arg;
+      len--;
+      if (len < 0) {
+        mfree(s.s);
+        arg = &undefinedObject;
+      } else {
+        s.len = (size_t)len;
+        arg = StringObject_new_str(s);
+      }
+      List *args = List_new(0, 0, arg);
+      Object *o = invokeFun(p, p->onStdinData, args, 0);
+      List_free(args);
+      if (Parser_evalResult(p, o)) {}
+    }
+  }
+  return Parser_eval(p, prog, plen, debug);
 }
