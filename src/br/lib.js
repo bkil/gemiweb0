@@ -131,12 +131,15 @@ String.prototype.split = String.prototype.split || function(s) {
 }
 
 Array.prototype.join = Array.prototype.join || function(d) {
+  if (d === undefined) {
+    d = ',';
+  }
   var s = '';
   if (this.length) {
     s = s + this[0];
     var i = 1;
     while (i < this.length) {
-      s = (s + ',') + this[i];
+      s = (s + d) + this[i];
       i = i + 1;
     }
   }
@@ -222,7 +225,9 @@ if ((typeof JSON === 'undefined') || !JSON.stringify) {
     return JSON_stringify_0(JSON_stringify_0, o);
   }
 
-  var JSON = new Object;
+  if (typeof JSON === 'undefined') {
+    var JSON = new Object;
+  }
   JSON.stringify = JSON.stringify || JSON_stringify;
 }
 
