@@ -89,12 +89,12 @@ parseAssignment(Parser *p) {
         } else {
           return 0;
         }
-      } else if (expect(p, "[i]=form.text.charCodeAt(j)|0")) {
+      } else if (expect(p, "[i]=form.text.value.charCodeAt(j)|0")) {
         if (p->j < 0) {
           return setError(p, "j uninitialized");
         }
         if (p->j != p->lastinpj + 1) {
-          return setError(p, "form.text needs to be iterated in sequence and once");
+          return setError(p, "form.text.value needs to be iterated in sequence and once");
         }
         p->lastinpj = p->j;
 

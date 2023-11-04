@@ -29,7 +29,7 @@ id = [a-zA-Z_.]+
 program: <statements>
 statements: <statement> [ ';' <statement> ]*
 statement: 'while(v[i]){' <statements> '}' | [ console.log | document.write ] '(String.fromCharCode(v[i]))' | var ' ' [ v | i | j ] | <assignment>
-assignment: v [ '=new Array' | '[i]=' [ '(v[i]|0)' [ '+' | '-' ] 1 | 'form.text.charCodeAt(j)|0' ] ] | [ i | j ] [ '=0' | '++' | '--' ]
+assignment: v [ '=new Array' | '[i]=' [ '(v[i]|0)' [ '+' | '-' ] 1 | 'form.text.value.charCodeAt(j)|0' ] ] | [ i | j ] [ '=0' | '++' | '--' ]
 ```
 
 Not supported:

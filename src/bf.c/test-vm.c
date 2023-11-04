@@ -101,14 +101,14 @@ main(void) {
   fail("while(v[i]){var v}");
   fail("var i;i=0;while(v[i]){var v}");
   fail("var v;v=new Array;while(v[i]){var i}");
-  fio(0, "var i;i=0;var v;v=new Array;v[i]=form.text.charCodeAt(j)|0", "9", "");
-  fio(0, "var i;i=0;var j;j=0;v[i]=form.text.charCodeAt(j)|0", "9", "");
-  fio(0, "var j;j=0;var v;v=new Array;v[i]=form.text.charCodeAt(j)|0", "9", "");
+  fio(0, "var i;i=0;var v;v=new Array;v[i]=form.text.value.charCodeAt(j)|0", "9", "");
+  fio(0, "var i;i=0;var j;j=0;v[i]=form.text.value.charCodeAt(j)|0", "9", "");
+  fio(0, "var j;j=0;var v;v=new Array;v[i]=form.text.value.charCodeAt(j)|0", "9", "");
   fail("var i;i=0;document.write(String.fromCharCode(v[i]))");
   fail("var v;v=new Array;document.write(String.fromCharCode(v[i]))");
 
   /* non-conforming */
-  fio(0, "var i;i=0;var j;j=0;var v;v=new Array;v[i]=form.text.charCodeAt(j)|0;v[i]=form.text.charCodeAt(j)|0",
+  fio(0, "var i;i=0;var j;j=0;var v;v=new Array;v[i]=form.text.value.charCodeAt(j)|0;v[i]=form.text.value.charCodeAt(j)|0",
     "9", "");
 
   t("var v", 0);
@@ -131,15 +131,15 @@ main(void) {
     "var i;i=0;var v;v=new Array;v[i]=(v[i]|0)+1;v[i]=(v[i]|0)+1;v[i]=(v[i]|0)+1;i++;v[i]=(v[i]|0)+1;v[i]=(v[i]|0)+1;v[i]=(v[i]|0)+1;i--;while(v[i]){i++;while(v[i]){i++;v[i]=(v[i]|0)+1;i++;v[i]=(v[i]|0)+1;i--;i--;v[i]=(v[i]|0)-1};i++;while(v[i]){i--;v[i]=(v[i]|0)+1;i++;v[i]=(v[i]|0)-1};i--;i--;v[i]=(v[i]|0)-1};i++;i++;i++",
     9, "", "");
 
-  tio(0, "var i;i=0;var j;j=0;var v;v=new Array;v[i]=form.text.charCodeAt(j)|0",
+  tio(0, "var i;i=0;var j;j=0;var v;v=new Array;v[i]=form.text.value.charCodeAt(j)|0",
     57, "9", "");
 
   tio("sum input characters",
-    "var i;i=0;var j;j=0;var v;v=new Array;v[i]=form.text.charCodeAt(j)|0;j++;while(v[i]){while(v[i]){i++;v[i]=(v[i]|0)+1;i--;v[i]=(v[i]|0)-1};v[i]=form.text.charCodeAt(j)|0;j++};i++",
+    "var i;i=0;var j;j=0;var v;v=new Array;v[i]=form.text.value.charCodeAt(j)|0;j++;while(v[i]){while(v[i]){i++;v[i]=(v[i]|0)+1;i--;v[i]=(v[i]|0)-1};v[i]=form.text.value.charCodeAt(j)|0;j++};i++",
     102, "42", "");
 
   tio(0,
-    "var i;i=0;var j;j=0;var v;v=new Array;v[i]=form.text.charCodeAt(j)|0;while(v[i]){v[i]=(v[i]|0)+1;document.write(String.fromCharCode(v[i]));j++;v[i]=form.text.charCodeAt(j)|0}",
+    "var i;i=0;var j;j=0;var v;v=new Array;v[i]=form.text.value.charCodeAt(j)|0;while(v[i]){v[i]=(v[i]|0)+1;document.write(String.fromCharCode(v[i]));j++;v[i]=form.text.value.charCodeAt(j)|0}",
     0, "42", "53");
 
 /* 52 = '4', 50 = '2' */
@@ -150,7 +150,7 @@ main(void) {
   if (_errorCount) {
     print2("%d test(s) failed\n", _errorCount);
   } else {
-    print("All tests successful\n");
+    print1("All tests successful\n");
   }
   return _errorCount ? 1 : 0;
 }
