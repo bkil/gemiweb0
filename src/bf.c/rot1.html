@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset=utf-8>
+  <title>Increment each character</title>
+  <link rel='shortcut icon' type=image/x-icon href=data:image/x-icon;,>
+  <meta property='og:description' content='Programming language design example for Brainfuck JavaScript subset' name='description'>
+  <meta name=viewport content='width=device-width, initial-scale=1'>
+</head>
+<body>
+  <form action="javascript:var i;i=0;var j;j=0;var v;v=new Array;i++;v[i]=form.text.value.charCodeAt(j)|0;while(v[i]){v[i]=(v[i]|0)+1;i++;j++;v[i]=form.text.value.charCodeAt(j)|0};i--;while(v[i]){i--};i++;while(v[i]){document.write(String.fromCharCode(v[i]));i++}" name=form>
+  <input name=text>
+  <input type=submit>
+</form>
+</body>
+</html>
