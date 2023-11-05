@@ -154,8 +154,8 @@ parseStatement(Parser *p) {
         if (!expect(p, "{")) {
           return 0;
         }
-        for (nest = 1; nest; p->prog++) {
-          nest += *p->prog == '{' ? 1 : *p->prog == '}' ? -1 : 0;
+        for (nest = 1; nest;) {
+          nest += accept(p, "{") ? 1 : accept(p, "}") ? -1 : (p->prog++, 0);
         }
         break;
       }
@@ -256,6 +256,9 @@ Parser_eval(Parser *p, const char *prog, const char *inp, char **out, int debug)
   p->lastinpj = -1;
   p->debug = debug;
 
+  while (*p->prog && (*p->prog < 33)) {
+    p->prog++;
+  }
   ok = parseStatements(p);
   if (p->out) {
     p->out[p->outSize - 1] = 0;

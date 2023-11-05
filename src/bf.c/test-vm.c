@@ -127,6 +127,9 @@ main(void) {
   t("var i;i=0;var v;v=new Array;v[i]=(v[i]|0)+1;v[i]=(v[i]|0)+1;while(v[i]){i++;v[i]=(v[i]|0)+1;i--;v[i]=(v[i]|0)-1};i++",
     2);
 
+  /* optional: out of project scope */
+  t(" var  i ; i =0 ; var  v ; v =new Array ; while(v[i]) { v [i]=(v[i]|0) -1 } ", 0);
+
   tio("3*3",
     "var i;i=0;var v;v=new Array;v[i]=(v[i]|0)+1;v[i]=(v[i]|0)+1;v[i]=(v[i]|0)+1;i++;v[i]=(v[i]|0)+1;v[i]=(v[i]|0)+1;v[i]=(v[i]|0)+1;i--;while(v[i]){i++;while(v[i]){i++;v[i]=(v[i]|0)+1;i++;v[i]=(v[i]|0)+1;i--;i--;v[i]=(v[i]|0)-1};i++;while(v[i]){i--;v[i]=(v[i]|0)+1;i++;v[i]=(v[i]|0)-1};i--;i--;v[i]=(v[i]|0)-1};i++;i++;i++",
     9, "", "");
