@@ -1671,7 +1671,7 @@ static Object *
 __attribute__((nonnull(1), warn_unused_result))
 process_stdin_on(Parser *p, List *l) {
   if (!l || !l->next || !isString(l->value) || !strncmpEq(l->value->V.c, "data")) {
-    return 0;
+    return setRunError(p, "expecting String and Function argument", 0);
   }
   if (p->onStdinData) {
     Object_free(p->onStdinData);
@@ -1690,7 +1690,7 @@ static Object *
 __attribute__((warn_unused_result, nonnull(1)))
 fs_readFile(Parser *p, List *l) {
   if (!l || !isString(l->value) || !l->next || (l->next->value->t != FunctionJs)) {
-    return 0;
+    return setRunError(p, "expecting String and Function argument", 0);
   }
   char *name = strndup(l->value->V.c.s, l->value->V.c.len);
   Object *err;
@@ -1763,7 +1763,7 @@ static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
 global_require(Parser *p, List *l) {
   if (!l || !isString(l->value)) {
-    return 0;
+    return setRunError(p, "expecting String argument", 0);
   }
   if (strncmpEq(l->value->V.c, "fs")) {
     Object *o = MapObject_new();
@@ -1778,7 +1778,7 @@ static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
 global_setTimeout(Parser *p, List *l) {
   if (!l || (l->value->t != FunctionJs) || (l->next->value->t != IntObject)) {
-    return 0;
+    return setRunError(p, "expecting Function and Int argument", 0);
   }
   if (p->onTimeout) {
     Object_free(p->onTimeout);
