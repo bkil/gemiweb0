@@ -1,6 +1,8 @@
 #!/bin/sh
 
-ISSMALLBIN=""
+# environment variables:
+# * ISSMALLBIN: 1 = size optimization experiments
+# * ISQUICK: 1 = skip valgrind and run tests natively
 
 main() {
   rm a.out 2>/dev/null
@@ -25,20 +27,24 @@ main() {
     compile -flto vm.o test-vm.c
   } && {
 
-  valgrind \
-    --leak-check=full \
-    --show-leak-kinds=all \
-    --num-callers=30 \
-    --malloc-fill=0xaa \
-    --free-fill=0x55 \
-    --redzone-size=256 \
-    --read-var-info=yes \
-    --expensive-definedness-checks=yes \
-    --merge-recursive-frames=10 \
-    --track-origins=yes \
-    --partial-loads-ok=no \
-    ./a.out "$@"
-    # -fsanitize=address -fsanitize=leak -fsanitize=undefined
+    if [ -n "$ISQUICK" ]; then
+      ./a.out "$@"
+    else
+      valgrind \
+        --leak-check=full \
+        --show-leak-kinds=all \
+        --num-callers=30 \
+        --malloc-fill=0xaa \
+        --free-fill=0x55 \
+        --redzone-size=256 \
+        --read-var-info=yes \
+        --expensive-definedness-checks=yes \
+        --merge-recursive-frames=10 \
+        --track-origins=yes \
+        --partial-loads-ok=no \
+        ./a.out "$@"
+        # -fsanitize=address -fsanitize=leak -fsanitize=undefined
+    fi
   }
 
   local S=$?

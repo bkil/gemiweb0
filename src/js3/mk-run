@@ -1,22 +1,29 @@
 #!/bin/sh
 
+# environment variables:
+# * ISQUICK: 1 = skip valgrind and run natively
+
+JS="${1-br0.js}"
 O=`dirname $(readlink -f "$0")`
 ./gcc-warn.sh -O2 -g vm.c run.c -o $O/run.out &&
 
 {
   cd ../br &&
-
-valgrind \
-  --leak-check=full \
-  --show-leak-kinds=all \
-  --num-callers=30 \
-  --malloc-fill=0xaa \
-  --free-fill=0x55 \
-  --redzone-size=256 \
-  --read-var-info=yes \
-  --expensive-definedness-checks=yes \
-  --merge-recursive-frames=10 \
-  --track-origins=yes \
-  --partial-loads-ok=no \
-  $O/run.out "${1-br0.js}"
+  if [ -n "$ISQUICK" ]; then
+    $O/run.out "$JS"
+  else
+    valgrind \
+      --leak-check=full \
+      --show-leak-kinds=all \
+      --num-callers=30 \
+      --malloc-fill=0xaa \
+      --free-fill=0x55 \
+      --redzone-size=256 \
+      --read-var-info=yes \
+      --expensive-definedness-checks=yes \
+      --merge-recursive-frames=10 \
+      --track-origins=yes \
+      --partial-loads-ok=no \
+      $O/run.out "$JS"
+  fi
 }
