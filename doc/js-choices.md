@@ -150,6 +150,16 @@ The following restrictions are non-normative and being worked on pending the res
 * Reason: allow for interacting with typed user input without server involvement
 * Workaround: unsatisfactory due to lack of caching, allow to submit the form via GET and parse the values from the URI upon load
 
+### Consecutive terms of same operator in expressions
+
+* Verdict: recommended
+* Restriction: you can apply the same operator consecutively in an expression without using parenthesis
+* Use case: string concatenation, numerical sums, factors, short circuiting bool logic
+* Incidence rate: high
+* Implementation complexity: trivial (only a few lines of code)
+* Drawback: it creates an irregular corner case of supported syntax that needs to be remembered
+* Workaround: parenthesis
+
 ## To research
 
 ### Abstract equality == !==
@@ -166,16 +176,24 @@ The following restrictions are non-normative and being worked on pending the res
 * Restriction: only integers supported and the special value of `NaN`
 * Reason: too complex to implement and potentially increases memory use and more difficult to optimize. `NaN` is desirable to detect error conditions of standard functions.
 
+### String conversion by +
+
+* Verdict: expected by users, but removing it would be hardening
+* Drawbacks: can often cause bugs if working on values of unforseen types
+* Incidence: high
+* Implementation complexity: trivial, assuming toString is already available
+* Workaround: invoke Object.prototype.toString()
+
 ### Unicode
 
 * Verdict: partially supported
 * Restrictions: String indexing may iterate on UTF8 instead of UCS-2. May assume that the HTML and JS source are all encoded as UTF8.
-* Use case: must be able to process input in extant human languages in a way that should work in an equivalent way to extant web browsers.
+* Use case: must be able to process input in extant human languages in a way that should work in a way equivalent to extant web browsers.
 
 ### Operator precedence in expressions
 
 * Verdict: partial
-* Restriction: only support unary and binary operators to not have to observe operator precedence rules. A few subexpressions may be supported without parenthesis that are very common: function invocation, array index, object member.
+* Restriction: only support unary and binary operators to avoid having to observe operator precedence rules. A few subexpressions may be supported without parenthesis that are very common: function invocation, array index, object member. The special case of consecutive terms of same operator is detailed separately.
 * Incidence rate: intermediate
 * Implementation complexity: intermediate
 * Workaround: parenthesis, temporary variables
