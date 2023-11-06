@@ -154,11 +154,20 @@ The following restrictions are non-normative and being worked on pending the res
 
 * Verdict: recommended
 * Restriction: you can apply the same operator consecutively in an expression without using parenthesis
-* Use case: string concatenation, numerical sums, factors, short circuiting bool logic
+* Use cases: string concatenation, numerical sums, factors, short circuiting bool logic
 * Incidence rate: high
 * Implementation complexity: trivial (only a few lines of code)
 * Drawback: it creates an irregular corner case of supported syntax that needs to be remembered
 * Workaround: parenthesis
+
+### Automatic ToBoolean conversion
+
+* Verdict: supported
+* Reason: expected by users
+* Drawbacks: restricting it could improve hardening, either remove it completely or only support integers 0 and 1
+* Incidence rate: high, higher for an interpreter substituting integers for the Boolean type
+* Implementation complexity: trivial
+* Workaround: invoke the `Boolean()` function
 
 ## To research
 
@@ -176,19 +185,21 @@ The following restrictions are non-normative and being worked on pending the res
 * Restriction: only integers supported and the special value of `NaN`
 * Reason: too complex to implement and potentially increases memory use and more difficult to optimize. `NaN` is desirable to detect error conditions of standard functions.
 
-### String conversion by +
+### Automatic ToString conversion
 
-* Verdict: expected by users, but removing it would be hardening
-* Drawbacks: can often cause bugs if working on values of unforseen types
-* Incidence: high
-* Implementation complexity: trivial, assuming toString is already available
-* Workaround: invoke Object.prototype.toString()
+* Verdict: partial
+* Restriction: only allowed for concatenation by `+`
+* Reason: expected by users, but would be beneficial to forbid
+* Drawbacks: can often cause bugs if working on values of unforeseen types
+* Incidence rate: high
+* Implementation complexity: trivial, assuming `String()` is already available, high if had to make standard library conforming
+* Workaround: invoke the `String()` function
 
 ### Unicode
 
 * Verdict: partially supported
 * Restrictions: String indexing may iterate on UTF8 instead of UCS-2. May assume that the HTML and JS source are all encoded as UTF8.
-* Use case: must be able to process input in extant human languages in a way that should work in a way equivalent to extant web browsers.
+* Use cases: must be able to process input in extant human languages in a way that should work in a way equivalent to extant web browsers.
 
 ### Operator precedence in expressions
 
@@ -238,7 +249,7 @@ The following restrictions are non-normative and being worked on pending the res
 ### Environment capturing by a function definition
 
 * Verdict: Desirable, but only partially supported
-* Use case: state encapsulation for object oriented programming, Currying for functional programming
+* Use cases: state encapsulation for object oriented programming, Currying for functional programming
 * Restrictions: to avoid reference cycles, a runtime may make a shallow copy of the environment from above the function definition, not including itself.
 * Workaround: Use a C-like function definition order within the file. Recursion needs to be worked around by passing in a self-reference for the function. `Function` and `eval` could also be used as an alternative.
 
@@ -291,7 +302,44 @@ The following restrictions are non-normative and being worked on pending the res
 * Use cases: interfacing with API, third party integration, incremental update of local state
 * Workaround: JSONP, form submit
 
+### Automatic ToNumber conversion
+
+* Verdict: partial
+* Restriction: only allowed to get seconds from a Date
+* Reason: potential for bugs outweighs ergonomic benefits in most common code
+* Drawbacks: can often cause bugs if working on values of unforeseen types
+* Incidence rate: low
+* Implementation complexity: low, assuming `parseInt()` is already available, high if had to make standard library conforming
+* Workaround: `typeof`, `parseInt()`
+
+### Instantiate class with new keyword
+
+* Verdict: partial
+* Restriction: only for a few predetermined classes (Array, Object, XMLHttpRequest), see constructor arguments detailed separately.
+* Incidence rate: low for custom classes, intermediate for built-in
+* Implementation complexity: high if assuming full OOP, prototype and this support
+* Drawbacks: prototype based inheritance is disfavored
+* Workaround: can cleanly simulate OOP by capturing state within a Function that returns an Object of methods
+
 ## Unsupported
+
+### Automatic ToPrimitive conversion
+
+* Verdict: unsupported
+* Reason: implementation cost and introduced irregularity outweighs ergonomic benefits in most common code
+* Drawbacks: can often cause bugs if working on values of unforeseen types
+* Incidence rate: low
+* Implementation complexity: high
+* Workaround: convert to appropriate type manually
+
+### Constructor arguments
+
+* Verdict: unsupported
+* Implementation complexity: intermediate
+* Incidence rate: low
+* Use cases: Array initializer (instead of ES3 Array literal), ES3 RegExp
+* Reason: not crucial in practice
+* Workaround: separately instantiate the class and then initialize it (Array), use function application based alternatives that work without the new keyword (Function, String), substitute RegExp with String match, search or replace
 
 ### window.setInterval
 
@@ -312,7 +360,7 @@ The following restrictions are non-normative and being worked on pending the res
 * Reason: considered bad practice, confusing for beginners
 * Implementation complexity: low to intermediate depending on graph representation, may carry a runtime penalty when streaming
 * Incidence rate: very low, usually not on purpose
-* Use case: none
+* Use cases: none
 * Workaround: declare a variable before referencing it
 
 ### do-while
