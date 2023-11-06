@@ -129,7 +129,7 @@ function getLowerChar(s) {
   if (((c >= 97) && (c <= 122)) || ((c >= 48) && (c <= 57))) {
     return s;
   } else if ((c >= 65) && (c <= 90)) {
-    return String.fromCharCode(c);
+    return String.fromCharCode(c + 32);
   } else {
     return undefined;
   }
