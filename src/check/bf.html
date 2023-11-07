@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset=utf-8>
+  <title>Syntax validator</title>
+  <link rel='shortcut icon' type=image/x-icon href=data:image/x-icon;,>
+  <meta property='og:description' content='Parametric parser for Web0/JavaScript0' name='description'>
+  <meta name=viewport content='width=device-width, initial-scale=1'>
+  <meta name=referrer content=no-referrer>
+  <meta http-equiv=x-dns-prefetch-control content=off>
+  <meta http-equiv=Content-Security-Policy content="default-src 'none'; font-src data: blob:; frame-src data: blob:; img-src data: blob:; manifest-src data: blob:; media-src data: blob:; style-src data: blob: 'unsafe-inline' 'unsafe-eval'; script-src 'unsafe-inline'; base-uri 'none'; form-action javascript:; navigate-to 'none';">
+<style>
+html, textarea, input {
+  background-color: black;
+  color: white;
+}
+
+textarea {
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 4em;
+}
+</style>
+</head>
+<body>
+<script>
+'use strict';
+var tab = String.fromCharCode(9);
+var nl = String.fromCharCode(10);
+var bs = String.fromCharCode(92);
+
+function reload(input, out) {
+  var typ = '';
+  if (document.doctype && (document.doctype.name !== undefined)) {
+    typ = '<!DOCTYPE ' + document.doctype.name + '>';
+  }
+
+  var head = '';
+  if (document.head && document.head.innerHTML && String.prototype && String.prototype.match) {
+    head = document.head.innerHTML;
+    var m = head.match('^((?:.|' + bs + 'n)*)<[^>]+http-equiv=["' + "'" + ']?Content-Security-Policy[^>]*>((?:.|' + bs + 'n)*)$');
+    if (m) {
+      head = m[1] + m[2];
+    }
+  }
+
+  var inText = '';
+  if (input !== undefined) {
+    inText = input;
+  }
+  document.close();
+  document.write(typ + '<html lang=en><head>' + head + '</head><body><pre>' + out + '</pre><form name=f action="javascript:onSubmit()"><textarea name=t>' + inText + '</textarea><input type=submit></form></body></html>');
+  document.close();
+  if (window.f && window.f.t && window.f.t.focus) {
+    window.f.t.focus();
+  }
+}
+
+function jsBf() {
+  return (
+    {
+      '_': [
+        'statements'
+      ],
+      'statements': [
+        [
+          'ws'
+        ],
+        [
+          'statement'
+        ],
+        [
+          'moreStatements'
+        ],
+        [
+          'ws'
+        ]
+      ],
+      'moreStatements': [
+        0,
+        [
+          ';',
+          [
+            'ws'
+          ],
+          [
+            'statements'
+          ]
+        ],
+        ''
+      ],
+      'statement': [
+        0,
+        [
+          'while(v[i]){',
+          [
+            'statements'
+          ],
+          '}'
+        ],
+        [
+          [
+            0,
+            'console.log',
+            'document.write'
+          ],
+          '(String.fromCharCode(v[i]))'
+        ],
+        [
+          'var ',
+          [
+            0,
+            'v',
+            'i',
+            'j'
+          ]
+        ],
+        [
+          0,
+          [
+            'scalarAssignment'
+          ],
+          [
+            'arrayAssignment'
+          ]
+        ]
+      ],
+      'scalarAssignment': [
+        [
+          0,
+          'i',
+          'j'
+        ],
+        [
+          0,
+          '=0',
+          '++',
+          '--'
+        ]
+      ],
+      'arrayAssignment': [
+        'v',
+        [
+          0,
+          '=new Array',
+          [
+            '[i]=',
+            [
+              0,
+              [
+                '(v[i]|0)',
+                [
+                  0,
+                  '+',
+                  '-'
+                ],
+                '1'
+              ],
+              'form.text.value.charCodeAt(j)|0'
+            ]
+          ]
+        ]
+      ],
+      'ws': [
+        0,
+        [
+          [
+            0,
+            tab,
+            nl,
+            ' '
+          ],
+          [
+            'ws'
+          ]
+        ],
+        ''
+      ]
+    }
+  );
+}
+
+function parse(self, g, r, s, pos, out, lim) {
+  if (lim <= 0) {
+    out.t = out.t + 'internal error: grammar recursion depth exceeded at position ' + pos + nl;
+    return undefined;
+  }
+  lim = lim - 1;
+  var i = 0;
+  var next;
+  if (typeof r === 'string') {
+    while ((i < r.length) && (pos < s.length) && (r.charAt(i) === s.charAt(pos))) {
+      pos = pos + 1;
+      i = i + 1;
+    }
+    if (i < r.length) {
+      return undefined;
+    }
+    out.t = out.t + 'debug: match literal "' + r + '" on level ' + lim + nl;
+    return pos;
+  } else if (typeof r !== 'object') {
+    out.t = out.t + 'internal error: tried to apply non-Object rule (' + (typeof r) + ') on level ' + lim + ' at position ' + pos + nl;
+    return undefined;
+  } else if (r.length === undefined) {
+    out.t = out.t + 'internal error: tried to apply non-Array rule on level ' + lim + ' at position ' + pos + nl;
+    return undefined;
+  } else if (r.length === 0) {
+    out.t = out.t + 'internal error: tried to apply empty rule on level ' + lim + ' at position ' + pos + nl;
+    return undefined;
+  } else if (r.length === 1) {
+    var rule = r[0];
+    if (g[rule] === undefined) {
+      out.t = out.t + 'internal error: tried to apply unknown rule "' + rule + '" on level ' + lim + ' at position ' + pos + nl;
+      return undefined;
+    }
+    out.t = out.t + 'debug: descend rule "' + r[0] + '" on level ' + lim + ' at position ' + pos + nl;
+    return self(self, g, g[rule], s, pos, out, lim);
+  } else if (r[0] === 0) {
+    i = i + 1;
+    while (i < r.length) {
+      next = self(self, g, r[i], s, pos, out, lim);
+      if (next !== undefined) {
+        out.t = out.t + 'debug: match either term ' + (i - 1) + ' on level ' + lim + ' at position ' + next + nl;
+        return next;
+      }
+      i = i + 1;
+    }
+    out.t = out.t + 'debug: mismatch either term ' + (i - 1) + ' on level ' + lim + ' at position ' + pos + nl;
+    return undefined;
+  } else {
+    while (i < r.length) {
+      next = self(self, g, r[i], s, pos, out, lim);
+      if (next === undefined) {
+        out.t = out.t + 'debug: mismatch seq term ' + i + ' on level ' + lim + ' at position ' + pos + nl;
+        return undefined;
+      }
+      pos = next;
+      i = i + 1;
+    }
+    out.t = out.t + 'debug: match seq term ' + (i - 1) + ' on level ' + lim + ' at position ' + pos + nl;
+    return pos;
+  }
+}
+
+function action(input) {
+  var out = new Object;
+  out.t = '';
+  var g = jsBf();
+  var pos = parse(parse, g, g['_'], input, 0, out, (3 * input.length) + 42);
+  if (pos === input.length) {
+    out.t = out.t + 'Parsed successfully' + nl;
+  } else {
+    if (pos === undefined) {
+      pos = 0;
+    }
+    out.t = out.t + 'Parsing failed at position ' + pos + nl;
+    var i = 0;
+    while ((i < 32) && (pos < input.length)) {
+      out.t = out.t + input[pos];
+      pos = pos + 1;
+      i = i + 1;
+    }
+    out.t = out.t + '...' + nl;
+  }
+  reload(input, out.t);
+}
+
+function onSubmit() {
+  try {
+    action(window.f.t.value);
+  } catch (e) {
+    console.log(e + nl);
+    throw(e);
+  }
+  return undefined;
+}
+
+function init() {
+  action(' var i; i=0;var j;j=0;var v;v=new Array;i++;v[i]=form.text.value.charCodeAt(j)|0;while(v[i]){v[i]=(v[i]|0)+1;i++;j++;v[i]=form.text.value.charCodeAt(j)|0};i--;while(v[i]){i--};i++;while(v[i]){document.write(String.fromCharCode(v[i]));i++} ');
+}
+
+init();
+</script>
+</body>
+</html>
