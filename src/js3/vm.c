@@ -676,6 +676,7 @@ parseArrayLiteral(Parser *p) {
   }
   Object *o = ArrayObject_new();
   Object *i = IntObject_new(0);
+  List **tail = &o->V.m;
   while (!acceptWs(p, ']')) {
     Object *value = parseExpr(p);
     if (!value) {
@@ -687,10 +688,11 @@ parseArrayLiteral(Parser *p) {
     i->V.i++;
     List *l = List_new(0, strndup(key->V.c.s, key->V.c.len), value);
     Object_free(key);
-    if (o->V.m) {
-      o->V.m->next = l;
+    if (*tail) {
+      (*tail)->next = l;
+      tail = &(*tail)->next;
     } else {
-      o->V.m = l;
+      *tail = l;
     }
     if (!acceptWs(p, ',')) {
       if (!expectWs(p, ']')) {
