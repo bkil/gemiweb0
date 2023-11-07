@@ -7,6 +7,7 @@
 * security: possibility for auditing review, less opportunity for bugs
 * bottleneck-free: reduce single points of failure, web content can be developed in preferred form for modification
 * NIH: DIY, primitive technology, clean room reimplementation, artisan independence
+* simple living: short specification, simple to learn by content producers, syntax regularity
 * transparency: nothing up my sleeves, less opportunity for backdoors
 * anti-oligopoly: possibility for competition
 * anti vendor lock-in: reproducible environment
