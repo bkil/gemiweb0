@@ -206,7 +206,6 @@ if ((typeof JSON === 'undefined') || !JSON.stringify) {
         } else {
           s = s + '{';
           var rest = 0;
-          console.log(o); // TODO
           for (i in o) {
             if (rest) {
               s = s + ',';
