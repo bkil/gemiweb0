@@ -44,12 +44,8 @@ function reload(input, out) {
     }
   }
 
-  var inText = '';
-  if (input !== undefined) {
-    inText = input;
-  }
   document.close();
-  document.write(typ + '<html lang=en><head>' + head + '</head><body><pre>' + out + '</pre><form name=f action="javascript:onSubmit()"><textarea name=t>' + inText + '</textarea><input type=submit></form></body></html>');
+  document.write(typ + '<html lang=en><head>' + head + '</head><body><pre>' + out + '</pre><form name=f action="javascript:onSubmit()"><textarea name=t>' + input + '</textarea><input type=submit></form></body></html>');
   document.close();
   if (window.f && window.f.t && window.f.t.focus) {
     window.f.t.focus();
@@ -64,7 +60,7 @@ function jsBf() {
       ],
       'statements': [
         [
-          'ws'
+          'whitespace'
         ],
         [
           'statement'
@@ -73,16 +69,13 @@ function jsBf() {
           'moreStatements'
         ],
         [
-          'ws'
+          'whitespace'
         ]
       ],
       'moreStatements': [
         0,
         [
           ';',
-          [
-            'ws'
-          ],
           [
             'statements'
           ]
@@ -161,7 +154,7 @@ function jsBf() {
           ]
         ]
       ],
-      'ws': [
+      'whitespace': [
         0,
         [
           [
@@ -171,7 +164,7 @@ function jsBf() {
             ' '
           ],
           [
-            'ws'
+            'whitespace'
           ]
         ],
         ''
@@ -196,7 +189,7 @@ function parse(self, g, r, s, pos, out, lim) {
     if (i < r.length) {
       return undefined;
     }
-    out.t = out.t + 'debug: match literal "' + r + '" on level ' + lim + nl;
+    out.t = out.t + 'debug: match literal "' + r + '" on level ' + lim + ' at position ' + pos + nl;
     return pos;
   } else if (typeof r !== 'object') {
     out.t = out.t + 'internal error: tried to apply non-Object rule (' + (typeof r) + ') on level ' + lim + ' at position ' + pos + nl;
