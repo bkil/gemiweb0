@@ -14,7 +14,14 @@ Scrolling through the test cases also illustrates the syntax:
 
 Standard input is handled similarly as if you were handling a form submit button, while standard output can be done through `console.log` (as on a server) or `document.write` (like a browser). The API could be easily extended on demand, although further development of the proof of concept seems uncalled for.
 
-This one takes only a few hundred lines of C code - originally 300 SLOC, resulting in ~1400 bytes of gzip'ped compiled object code. Its bulk stems from offering a dynamically growing array and extensive diagnostic warning message generation that's still not exhaustive, though. Assuming input resulting from flawless code generation, most of the safeties could even be removed.
+This one takes only a few hundred lines of C code - originally 300 SLOC, resulting in ~1400 bytes of gzip'ped compiled object code. Its bulk stems from offering a dynamically growing array and extensive diagnostic warning message generation that's still not exhaustive, though. Assuming input resulting from flawless code generation, most of the safeties could even be removed. See the following example for web browsers:
+
+[https://bkil.gitlab.io/gemiweb/src/bf.c/rot1.html](https://bkil.gitlab.io/gemiweb/src/bf.c/rot1.html)
+
+Here is a syntax checker for its grammar implemented in HTML0/JS0:
+
+[https://bkil.gitlab.io/gemiweb/src/check/bf.html](https://bkil.gitlab.io/gemiweb/src/check/bf.html
+)
 
 ## Motivation
 
