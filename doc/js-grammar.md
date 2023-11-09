@@ -166,6 +166,108 @@ id = ([a-zA-Z_][a-zA-Z_0-9]*\.)*[a-zA-Z_][a-zA-Z_0-9]*
 
 ## Useful
 
+### Level 7 assembly 0
+
+```
+program: <arrId> '=' new Array [ ';' <tstm> ]*
+tstm: function <funcId> '(' ')' <fBody> | <mstm>
+mstm: if '(' <expr> ')' <body> | while '(' <expr> ')' <body> | <cstm>
+body: '{' <mstm> [ ';' <mstm> ]* '}'
+cstm: <builtin> | <funcId> '(' ')' | <arrId> <idx> '=' <expr> | <intId> '=' <expr>
+expr: <term> [ <op> <term> ]?
+term: <int> | <intId> | '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' ] ')'
+idx: '[' <expr> ']'
+op: '+' | '-' | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '===' | '!=='
+builtin: 'console.log(String.fromCharCode(' <expr> '))'
+arrId = '_'
+intId = [a-z]
+funcId = [a-zA-Z_]{2,8}
+int = [0-9]+
+```
+
+Notes:
+
+* Whitespace (at least newlines between statements) and comments (/* ... */) must be supported
+* Standard input must not be consumed multiple times or out of sequence
+* Integer variables may already be initialized to zero, the array may already be allocated and zeroed
+* You must not access a negative array index or read a value before initializing it, but both may return zero
+* You may assume that the interpreter stores the first few variables in CPU registers, so utilize them in lexicographical order
+
+### Level 7 assembly 1
+
+```
+program: [ '\'use strict\'' ; [ var [ <arrId> | <intId> ] ; ]* <arrId> '=' new Array [ ; <tstm> ]* ]? [;]?
+tstm: function <funcId> ( [ A [ , B [ , C [ , D [ , E [ , F [ , G [ , H [ , I [ , J [ , K [ , L [ , M [ , N [ , O [ , P [ , Q [ , R [ , S [ , T [ , U [ , V [ , W [ , X [ , Y [ , Z  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]? ) <fBody> | <mstm>
+mstm: if '(' <expr> ')' <mBody> [ else <mBody> ]? | while ( <expr> ) <mBody> | <expr>
+fstm: if '(' <expr> ')' <fBody> [ else <fBody> ]? | while ( <expr> ) <fBody> | return <expr> | <expr>
+mBody: { [ <mstm> [ ; <mstm> ]* ]? [;]? }
+fBody: { [ <fstm> [ ; <fstm> ]* ]? [;]? }
+expr: <funcId> '(' [ <expr> [, <expr>]* ]? ')' | <term> [ <op> <term> ]*
+term: <int> | <builtin> | [ <intId> | <parId> ] [ <rhs> ]? | <arrId> <idx> <rhs> | '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' | <expr> ] ')'
+rhs: '=' <expr>
+idx: '[' <expr> ']'
+op: '+' | '-' | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&' | '===' | '!=='
+builtin: 'console.log(String.fromCharCode(' <expr> '))'
+arrId = '_'
+intId = [a-z]
+parId = [A-Z]
+funcId = [a-zA-Z_][0-9a-zA-Z_]{1,9}[0-9]?
+int = [0-9]+
+```
+
+Notes:
+
+* In expr, only the same operator can be repeated within the same group (i.e., without using parenthesis)
+* Whitespace and comments must be supported
+* Standard input must not be consumed multiple times or out of sequence
+* Variable declaration may not be enforced, but you must not access a variable before declaring it
+* Integer variables may already be initialized to zero, the array may already be allocated and zeroed
+* You must not access a negative array index or read a value before initializing it, but both may return zero
+* You must not access parameters outside a function or those which you have not declared or given as argument
+* Each function must complete execution with a `return`
+* Each function must be defined above the point of invocation
+* You may assume that the interpreter stores the first few variables and the first few function parameters in CPU registers, so utilize them in lexicographical order
+* The function name may be capped to 10 letters and a digit (packed as base64 and BCD to fit 64 bits)
+
+### Level 7 assembly 2
+
+```
+program: [ '\'use strict\'' ; [ var [ <arrId> | <intId> ] ; ]* <arrId> '=' new Array [ ; <tstm> ]* ]? [;]?
+tstm: function <funcId> ( [ A [ , B [ , C [ , D [ , E [ , F [ , G [ , H [ , I [ , J [ , K [ , L [ , M [ , N [ , O [ , P [ , Q [ , R [ , S [ , T [ , U [ , V [ , W [ , X [ , Y [ , Z  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]? ) <fBody> | <mstm>
+mstm: if '(' <expr> ')' <mBody> [ else <mBody> ]? | while ( <expr> ) <mBody> | do <mBody> while ( <expr> ) | break | continue | switch ( <expr> ) { [ case <expr>: <mBody> ]* [ default: <mBody> ]? } | <expr>
+fstm: if '(' <expr> ')' <fBody> [ else <fBody> ]? | while ( <expr> ) <fBody> | do <fBody> while ( <expr> ) | break | continue | switch ( <expr> ) { [ case <expr>: <fBody> ]* [ default: <fBody> ]? } | return <expr> | <expr>
+mBody: { [ <mstm> [ ; <mstm> ]* ]? [;]? }
+fBody: { [ <fstm> [ ; <fstm> ]* ]? [;]? }
+expr: <funcId> '(' [ <expr> [, <expr>]* ]? ')' | [ [ '!' | '~' | '-' ]? <term> ] [ '?' <expr> ':' <expr> | [ <opRel> <term> ]* ]?
+term: <int> | <builtin> | [ <intId> | <parId> ] [ <rhs> ]? | <arrId> <idx> <rhs> | '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' | <expr> ] ')'
+rhs: ++ | -- | [ <op> ]? '=' <expr>
+idx: '[' <expr> ']'
+op: '+' | '-' | '*' | / | % | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&'
+opRel: <op> | '<' | '>' | '<=' | '>=' | '===' | '!=='
+builtin: 'console.log(String.fromCharCode(' <expr> '))'
+arrId = '_'
+intId = [a-z]
+parId = [A-Z]
+funcId = [a-zA-Z_][0-9a-zA-Z_]{1,9}[0-9]?
+int = [0-9]+
+```
+
+Notes:
+
+* In expr, only the same operator can be repeated within the same group (i.e., without using parenthesis)
+* Whitespace and comments must be supported
+* Standard input must not be consumed multiple times or out of sequence
+* Variable declaration may not be enforced, but you must not access a variable before declaring it
+* Integer variables may already be initialized to zero, the array may already be allocated and zeroed
+* You must not access a negative array index or read a value before initializing it, but both may return zero
+* You must not access parameters outside a function or those which you have not declared or given as argument
+* Each function must complete execution with a `return`
+* Each function must be defined above the point of invocation
+* `continue` must not be used outside a loop
+* `break` must not be used outside a loop or a switch
+* You may assume that the interpreter stores the first few variables and the first few function parameters in CPU registers, so utilize them in lexicographical order
+* The function name may be capped to 10 letters and a digit (packed as base64 and BCD to fit 64 bits)
+
 ## Metacircular
 
 ### Level 5 fun expr array
