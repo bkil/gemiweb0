@@ -1,4 +1,4 @@
-#include "string.h" /* strnlen strdup strndup getline; strlen strcmp strncmp strncpy strstr */
+#include "include.h" /* strnlen strdup strndup getline clock_gettime; strlen strcmp strncmp strncpy strstr */
 #include "vm-impl.h"
 
 #include <stdio.h> /* STDIN_FILENO fputs fputc putchar stdout stderr getline */
