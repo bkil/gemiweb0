@@ -365,8 +365,30 @@ String_charAt(Parser *p, Object *self, List *l) {
 
 static int
 __attribute__((pure, nonnull, warn_unused_result))
-isTrue(Object *o) {
-  return ((o->t == IntObject) && o->V.i) || (isString(o) && o->V.c.len) || (o->t == MapObject) || (o->t == ArrayObject) || (o->t == FunctionJs) || (o->t == FunctionNative) || (o->t == MethodNative);
+toBoolean(Object *o) {
+  switch (o->t) {
+    case IntObject:
+      return o->V.i;
+
+    case StringObject:
+    case ConstStringObject:
+    case MmapString:
+      return !!o->V.c.len;
+
+    case MapObject:
+    case ArrayObject:
+    case FunctionJs:
+    case FunctionNative:
+    case MethodNative:
+    case Prototype:
+    case UndefinedObject:
+    case NullObject:
+    case NanObject:
+      return 0;
+
+    default:
+      return 0;
+  }
 }
 
 static Object *
@@ -1081,7 +1103,7 @@ parseLTerm(Parser *p) {
       }
       v = -o->V.i;
     } else {
-      v = op == '!' ? !isTrue(o) : o->t == IntObject ? ~o->V.i : ~isTrue(o);
+      v = op == '!' ? !toBoolean(o) : o->t == IntObject ? ~o->V.i : ~toBoolean(o);
     }
     Object *b = IntObject_new(v);
     Object_free(o);
@@ -1171,10 +1193,10 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
   int isBool = 1;
   switch (op) {
     case 'A':
-      sh = !isTrue(t1);
+      sh = !toBoolean(t1);
       break;
     case 'O':
-      sh = isTrue(t1);
+      sh = toBoolean(t1);
       break;
     default:
       isBool = 0;
@@ -1208,6 +1230,7 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
         Object_free(t2);
         return 0;
     }
+
   } else if ((t1->t == IntObject) && (t1->t == t2->t)) {
     int x = t1->V.i;
     int y = t2->V.i;
@@ -1256,6 +1279,7 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
     Object_free(t1);
     Object_free(t2);
     return IntObject_new((op == '=') ? b : !b);
+
   } else if (op == '+') {
     Object *s = 0;
     if (isString(t1)) {
@@ -1274,6 +1298,7 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
       return o;
     }
   }
+
   Object_free(t1);
   Object_free(t2);
   return setRunError(p, "unknown operand types for expression", 0);
@@ -1343,7 +1368,7 @@ parseWhile(Parser *p) {
       return 0;
     }
     if (!p->nest) {
-      if (!isTrue(o)) {
+      if (!toBoolean(o)) {
         p->nest++;
         cond = 0;
       }
@@ -1427,7 +1452,7 @@ parseIf(Parser *p) {
   if (!expectWs(p, '(') || !(o = parseExpr(p))) {
     return 0;
   }
-  int cond = !p->nest && isTrue(o);
+  int cond = !p->nest && toBoolean(o);
   if (!cond) {
     p->nest++;
   }
@@ -2008,7 +2033,7 @@ Parser_evalResult(Parser *p, Object *o) {
       p->thrw = 0;
       ret = -2;
     } else {
-      ret = o->t != IntObject ? isTrue(o) : o->V.i > 0 ? o->V.i : 0;
+      ret = o->t != IntObject ? toBoolean(o) : o->V.i > 0 ? o->V.i : 0;
     }
     Object_free(o);
     return ret;
