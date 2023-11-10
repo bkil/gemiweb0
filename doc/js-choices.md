@@ -235,7 +235,7 @@ The following restrictions are non-normative and being worked on pending the res
 ### Date
 
 * Verdict: partial
-* Restriction: only getting the current time as a Unix epoch and converting it to a number is supported. Ensure storage on enough bits. Consider returning the locale time offset.
+* Restriction: You can only subtract two Date objects from each other to get the elapsed time in milliseconds, add a Date and a Number offset to result in a Date and divide or compute modulo of a Date by a Number (usually 1000) as taken in number of milliseconds since Unix epoch. This should allow for Number to be represented on 32 bits. Consider methods for returning the locale time offset.
 * Implementation complexity: high if unrestricted
 * Incidence rate: low
 * Workaround: library
@@ -354,7 +354,7 @@ The following restrictions are non-normative and being worked on pending the res
 ### Automatic ToNumber conversion
 
 * Verdict: partial
-* Restriction: only allowed to get seconds from a Date
+* Restriction: only allowed to get milliseconds from a Date for certain operators detailed in the Date section
 * Reason: potential for bugs outweighs ergonomic benefits in most common code
 * Drawbacks: can often cause bugs if working on values of unforeseen types
 * Incidence rate: low

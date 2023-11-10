@@ -10,6 +10,7 @@
 #include <fcntl.h> /* open */
 #include <unistd.h> /* close fstat select */
 #include <sys/time.h> /* select */
+#include <limits.h> /* INT_MIN INT_MAX */
 
 static void
 __attribute__((nonnull))
@@ -225,6 +226,26 @@ ArrayObject_new(void) {
   return o;
 }
 
+static Object *
+__attribute__((malloc, returns_nonnull, warn_unused_result))
+DateObject_new(long d) {
+  Object *o = malloc(sizeof(*o));
+  o->ref = 0;
+  o->t = DateObject;
+  o->V.d = d;
+  return o;
+}
+
+static Object *
+__attribute__((nonnull, warn_unused_result))
+DateObject_now(Parser *p) {
+  struct timespec tp;
+  if (!clock_gettime(CLOCK_REALTIME, &tp)) {
+    return DateObject_new(tp.tv_sec * 1000 + tp.tv_nsec / 1000000);
+  }
+  return setRunError(p, "clock_gettime() failed", 0);
+}
+
 static void
 __attribute__((nonnull(2, 3)))
 Map_set(List **list, char *key, Object *value) {
@@ -381,6 +402,9 @@ toBoolean(Object *o) {
     case FunctionNative:
     case MethodNative:
     case Prototype:
+    case DateObject:
+      return 1;
+
     case UndefinedObject:
     case NullObject:
     case NanObject:
@@ -436,6 +460,9 @@ Object_toString(Object *o) {
     case NanObject:
       return StringObject_new("NaN");
 
+    case DateObject:
+      return StringObject_new("Date");
+
     default: {}
   }
   return 0; /* unreachable unless memory corruption */
@@ -460,6 +487,7 @@ typeOf(Object *o) {
     case MapObject:
     case ArrayObject:
     case NullObject:
+    case DateObject:
     case Prototype:
       return StringObject_new("object");
 
@@ -1036,6 +1064,8 @@ parseITerm(Parser *p, Id *id) {
       return MapObject_new();
     } else if (strncmpEq(*id, "Array")) {
       return ArrayObject_new();
+    } else if (strncmpEq(*id, "Date")) {
+      return DateObject_now(p);
     }
     return setRunError(p, "can't instantiate class of", id);
   } else if (strncmpEq(*id, "typeof")) {
@@ -1273,7 +1303,37 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
         return IntObject_new(x != y);
       default: {}
     }
-    return 0;
+
+  } else if ((t1->t == DateObject) && (t2->t == IntObject)) {
+    long d = t1->V.d;
+    int y = t2->V.i;
+    Object_free(t1);
+    Object_free(t2);
+    switch (op) {
+      case '+':
+        return DateObject_new(d + y);
+      case '-':
+        return DateObject_new(d - y);
+      case '/':
+        d /= y;
+        if ((d >= INT_MIN) && (d <= INT_MAX)) {
+          return IntObject_new((int)d);
+        }
+        return setRunError(p, "integer overflow", 0);
+      case '%':
+        return IntObject_new((int)(d % y));
+      default: {}
+    }
+
+  } else if ((t1->t == DateObject) && (t1->t == t2->t) && (op == '-')) {
+    long d = t1->V.d - t2->V.d;
+    Object_free(t1);
+    Object_free(t2);
+    if ((d >= INT_MIN) && (d <= INT_MAX)) {
+      return IntObject_new((int)d);
+    }
+    return setRunError(p, "integer overflow", 0);
+
   } else if ((op == '=') || (op == '!')) {
     int b = isStringEq(t1, t2) || (((t1->t == NullObject) || (t1->t == UndefinedObject)) && (t1->t == t2->t));
     Object_free(t1);

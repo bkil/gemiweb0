@@ -57,6 +57,7 @@ enum ObjectV {
   NullObject,
   ArrayObject,
   NanObject,
+  DateObject,
   Prototype
 };
 
@@ -72,6 +73,7 @@ typedef struct Object {
     JsFun j;
     Native f;
     MethodFun a;
+    long d;
   } V;
 } Object;
 

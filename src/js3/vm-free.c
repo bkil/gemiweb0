@@ -47,6 +47,7 @@ getCycles0(Object *o, int backtrack) {
     case MethodNative:
     case NullObject:
     case NanObject:
+    case DateObject:
     case Prototype:
     default:
       break;
@@ -108,6 +109,7 @@ Object_free(Object *o) {
     case MethodNative:
     case NullObject:
     case NanObject:
+    case DateObject:
     default:
       {}
   }

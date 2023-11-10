@@ -95,11 +95,9 @@ missing:
 
 ### Date
 
-`+new Date`
-
 missing:
 
-* everything except getting the current time in seconds
+* everything except a few basic arithmetics with the current time in milliseconds (date + number, date / number, date % number, date - date)
 
 ### Object
 

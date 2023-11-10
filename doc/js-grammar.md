@@ -467,7 +467,7 @@ function: ( [ <id> [, <id>]* ]? ) <stmBrace>
 eExpr: [ <op> <term> ]*
 term: <iTerm> | <lTerm>
 lTerm: <int> | <string> | [ ! | ~ | - ] <term> | '(' <expr> ')' [ <args> ]?
-iTerm: undefined | null | NaN | new Object | new Array | typeof <expr> | <id> <sTerm>
+iTerm: undefined | null | NaN | new Object | new Array | new Date | typeof <expr> | <id> <sTerm>
 sTerm: <idx> [ <rhs> ]?
 rhs: '=' <expr> | <args>
 args: '(' [ <expr> [, <expr>]* ]? ')'
