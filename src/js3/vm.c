@@ -289,6 +289,12 @@ Map_get_str(List *list, Str s) {
   return Map_get(list, (Id){.s = s.s, .len = s.len});
 }
 
+static List *
+__attribute__((pure, warn_unused_result))
+Map_get_const(List *list, const char *s) {
+  return Map_get(list, (Id){.s = s, .len = strlen(s)});
+}
+
 static int
 __attribute__((pure, warn_unused_result))
 List_length(List *list) {
@@ -1876,9 +1882,9 @@ showRunError(Parser *p) {
   }
 }
 
-static Object *
-__attribute__((nonnull, warn_unused_result))
-Parser_evalString(Parser *p, Object *prog) {
+static void
+__attribute__((nonnull))
+Parser_evalInit(Parser *p, Object *prog) {
   p->prog = (Prog){.s = prog->V.c.s, .end = prog->V.c.s + prog->V.c.len, .h = prog};
   p->err = 0;
   p->nest = 0;
@@ -1886,14 +1892,27 @@ Parser_evalString(Parser *p, Object *prog) {
   p->thrw = 0;
   p->needSemicolon = 0;
   clearErr(p);
+}
 
+static Object *
+__attribute__((nonnull, warn_unused_result))
+Parser_evalString(Parser *p, Object *prog) {
+  Parser_evalInit(p, prog);
   return parseStatements(p);
 }
 
 static Object *
 __attribute__((nonnull, warn_unused_result))
 Parser_evalWithThrow(Parser *p, Object *prog) {
-  Object *o = Parser_evalString(p, prog);
+  Object *o;
+  if (isString(prog)) {
+    o = Parser_evalString(p, prog);
+  } else if (prog->t == FunctionJs) {
+    Parser_evalInit(p, prog->V.j.scope);
+    o = invokeFun(p, prog, 0, 0);
+  } else {
+    return 0;
+  }
   Object *thrw = 0;
   if (p->ret) {
     Object_free(p->ret);
@@ -1935,23 +1954,40 @@ global_eval(Parser *p, List *l) {
   return o;
 }
 
+static int
+__attribute__((const, warn_unused_result))
+timeout2int(long int timeOut) {
+  return timeOut < 0 ? 0 : timeOut > 60000 ? 60000 : (int)timeOut;
+}
+
 static Object *
 __attribute__((nonnull(1), warn_unused_result))
 global_eval2(Parser *p, List *l) {
-  if (!l || (l->value->t != MapObject) || !l->next || !isString(l->next->value)) {
-    return setRunError(p, "expecting an Object and a String argument", 0);
+  if (!l || (l->value->t != MapObject) || !l->next || (!isString(l->next->value) && (l->next->value->t != FunctionJs))) {
+    return setRunError(p, "expecting an Object and a String or Function argument", 0);
   }
+
   Parser *q = Parser_new_vars(l->value);
+  List *r = Map_get_const(l->value->V.m, ".onTimeout");
+  q->onTimeout = r ? Object_ref(r->value) : 0;
+  r = Map_get_const(l->value->V.m, ".timeoutMs");
+  q->timeoutMs = r && (r->value->t == IntObject) ? r->value->V.i : 0;
   q->debug = p->debug;
+
   Object *o = Parser_evalWithThrow(q, l->next->value);
+
   if (q->thrw) {
     p->thrw = q->thrw;
     p->nest++;
   }
-  Parser_free(q);
   if (!o) {
     o = &undefinedObject;
   }
+  Map_set_const(&l->value->V.m, ".onTimeout", q->onTimeout ? q->onTimeout : &undefinedObject);
+  Object *t = IntObject_new(timeout2int(q->timeoutMs));
+  Map_set_const(&l->value->V.m, ".timeoutMs", t);
+  Object_free(t);
+  Parser_free(q);
   return o;
 }
 
