@@ -18,6 +18,9 @@ function eval2To0(self, j, updateHtml, prog) {
   var o = eval2(g, prog);
   var f = g['.onTimeout'];
   var t = g['.timeoutMs'];
+  if (t && (t < 1000)) {
+    t = 1000;
+  }
   if (f) {
     g['.onTimeout'] = undefined;
     g['.timeoutMs'] = 0;
