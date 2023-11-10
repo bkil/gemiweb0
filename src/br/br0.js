@@ -215,6 +215,7 @@ function closeLastTag(j) {
   }
 
   s['raw'] = 0;
+  s['ctx'] = 0;
   s['br'] = 0;
   s['pushTag'] = undefined;
   s['pushAttr'] = undefined;
@@ -339,7 +340,9 @@ function processTag(j, tag, fin, attr) {
 
   s['o'] = s['o'] + t;
 
-  s['lastWs'] = 0;
+  if (!ignore) {
+    s['lastWs'] = 0;
+  }
   if (ctx) {
     if (fin) {
       s['ctx'] = 0;
@@ -449,6 +452,8 @@ function render(j, h) {
   s.h = h;
   s.i = 0;
   s.textContent = undefined;
+  s.inline = 1;
+  s.lastWs = 1;
   s.o = '';
   s.link = 0;
   s.links = new Object;
@@ -509,7 +514,7 @@ function Document_close(d) {
   return function() {
     d['documentIsOpen'] = 0;
   };
-};
+}
 
 function setInitState(j, href, html) {
   var d = new Object;
