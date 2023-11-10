@@ -170,7 +170,7 @@ id = ([a-zA-Z_][a-zA-Z_0-9]*\.)*[a-zA-Z_][a-zA-Z_0-9]*
 
 ```
 program: <arrId> '=' new Array [ ';' <tstm> ]*
-tstm: function <funcId> '(' ')' <fBody> | <mstm>
+tstm: function <funcId> '(' ')' <body> | <mstm>
 mstm: if '(' <expr> ')' <body> | while '(' <expr> ')' <body> | <cstm>
 body: '{' <mstm> [ ';' <mstm> ]* '}'
 cstm: <builtin> | <funcId> '(' ')' | <arrId> <idx> '=' <expr> | <intId> '=' <expr>
@@ -240,7 +240,7 @@ mBody: { [ <mstm> [ ; <mstm> ]* ]? [;]? }
 fBody: { [ <fstm> [ ; <fstm> ]* ]? [;]? }
 expr: <funcId> '(' [ <expr> [, <expr>]* ]? ')' | [ [ '!' | '~' | '-' ]? <term> ] [ '?' <expr> ':' <expr> | [ <opRel> <term> ]* ]?
 term: <int> | <builtin> | [ <intId> | <parId> ] [ <rhs> ]? | <arrId> <idx> <rhs> | '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' | <expr> ] ')'
-rhs: ++ | -- | [ <op> ]? '=' <expr>
+rhs: '++' | '--' | [ <op> ]? '=' <expr>
 idx: '[' <expr> ']'
 op: '+' | '-' | '*' | / | % | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&'
 opRel: <op> | '<' | '>' | '<=' | '>=' | '===' | '!=='
