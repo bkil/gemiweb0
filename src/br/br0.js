@@ -13,31 +13,31 @@ eval((function() {
   return o.d;
 })());
 
-function eval2To0(self, j, updateHtml, prog) {
-  var g = j.vars;
-  var o = eval2(g, prog);
-  var f = g['.onTimeout'];
-  var t = g['.timeoutMs'];
-  if (t && (t < 1000)) {
-    t = 1000;
+function eval2To(j, prog) {
+  function eval2To0(self, j, prog) {
+    var g = j.vars;
+    var o = eval2(g, prog);
+    var f = g['.onTimeout'];
+    var t = g['.timeoutMs'];
+    if (t && (t < 1000)) {
+      t = 1000;
+    }
+    if (f) {
+      g['.onTimeout'] = undefined;
+      g['.timeoutMs'] = 0;
+      setTimeout(function() {
+        self(self, j, f);
+        var d = j.d;
+        if (d.documentWritten !== undefined) {
+          j.updateHtml(j, d.documentWritten);
+          d.documentWritten = undefined;
+        }
+      }, t);
+    }
+    return o;
   }
-  if (f) {
-    g['.onTimeout'] = undefined;
-    g['.timeoutMs'] = 0;
-    setTimeout(function() {
-      self(self, j, updateHtml, f);
-      var d = j.d;
-      if (d.documentWritten !== undefined) {
-        updateHtml(j, d.documentWritten);
-        d.documentWritten = undefined;
-      }
-    }, t);
-  }
-  return o;
-}
 
-function eval2To(j, updateHtml, prog) {
-  return eval2To0(eval2To0, j, updateHtml, prog);
+  return eval2To0(eval2To0, j, prog);
 }
 
 function escapedChar(c) {
@@ -208,7 +208,7 @@ function readQuoted(s) {
   return o;
 }
 
-function closeLastTag(j, uh) {
+function closeLastTag(j) {
   var s = j['s'];
   var tag = s['pushTag'];
   var attr = s['pushAttr'];
@@ -225,12 +225,12 @@ function closeLastTag(j, uh) {
       var get = j['get'];
       var body = get(attr['src']);
       if (body === undefined) {
-        eval2To(j, uh, s['textContent']);
+        eval2To(j, s['textContent']);
       } else {
-        eval2To(j, uh, body);
+        eval2To(j, body);
       }
     } else {
-      eval2To(j, uh, s['textContent']);
+      eval2To(j, s['textContent']);
     }
 
     var d = j.d;
@@ -249,7 +249,7 @@ function closeLastTag(j, uh) {
   s['textContent'] = undefined;
 }
 
-function processTag(j, uh, tag, fin, attr) {
+function processTag(j, tag, fin, attr) {
   var s = j['s'];
   var ignore;
   var memo = 1;
@@ -350,7 +350,7 @@ function processTag(j, uh, tag, fin, attr) {
   }
 
   if (memo && (!ignore)) {
-    closeLastTag(j, uh);
+    closeLastTag(j);
     if (!fin) {
       s['pushTag'] = tag;
       s['pushAttr'] = attr;
@@ -432,7 +432,7 @@ function parseMeta(s) {
   }
 }
 
-function parseTag(j, uh) {
+function parseTag(j) {
   var s = j['s'];
   var key;
   var val;
@@ -468,14 +468,14 @@ function parseTag(j, uh) {
   dropToTagEnd(s);
   if (tag !== undefined) {
     if (fin && (tag === s['pushTag'])) {
-      closeLastTag(j, uh);
+      closeLastTag(j);
     } else {
-      processTag(j, uh, tag, fin, attr);
+      processTag(j, tag, fin, attr);
     }
   }
 }
 
-function render(j, uh, h) {
+function render(j, h) {
   var s = new Object;
   s.h = h;
   s.i = 0;
@@ -509,20 +509,20 @@ function render(j, uh, h) {
           }
           if (key === s['raw']) {
             s['i'] = k;
-            parseTag(j, uh);
+            parseTag(j);
           } else {
             s['i'] = i;
             copyText(s);
           }
         } else {
-          parseTag(j, uh);
+          parseTag(j);
         }
       }
     } else {
       copyText(s);
     }
   }
-  closeLastTag(j, uh);
+  closeLastTag(j);
 }
 
 function Document_write(d) {
@@ -571,12 +571,12 @@ function setInitState(j, href, html) {
     var fs = require('fs');
     fs.readFile('lib.js', function(e, lib) {
       if (lib) {
-        eval2To(j, function(html) {}, lib);
+        eval2To(j, lib);
       }
     });
   }
 }
-function browseData(j, uh, url, html, isFile, brows) {
+function browseData(j, url, html, isFile, brows) {
   var g = j['vars'];
   var w = g['window'];
   var l = w['location'];
@@ -591,7 +591,7 @@ function browseData(j, uh, url, html, isFile, brows) {
   var d = j.d;
   d['documentIsOpen'] = 1;
   d['documentWritten'] = undefined;
-  render(j, uh, html);
+  render(j, html);
   d['documentIsOpen'] = 0;
 
   var shw = j['show'];
@@ -607,7 +607,7 @@ function browseData(j, uh, url, html, isFile, brows) {
     shw(text, undefined, 0, function(r) {
       var links = s['links'];
       if (links[r]) {
-        brows(j, uh, links[r], brows);
+        brows(j, links[r], brows);
       }
     });
   } else {
@@ -639,23 +639,23 @@ function browseData(j, uh, url, html, isFile, brows) {
           }
         }
       }
-      brows(j, uh, url, brows);
+      brows(j, url, brows);
     });
   }
 }
 
-function browse(j, uh, url, brows) {
+function browse(j, url, brows) {
   var html;
   if (url.indexOf('javascript:') === 0) {
-    html = eval2To(j, uh, decodeURIComponent(url.substr(11)));
+    html = eval2To(j, decodeURIComponent(url.substr(11)));
     if (html === undefined) {
       var d = j.d;
       html = d['documentWritten'];
       if (html !== undefined) {
-        browseData(j, uh, url, '' + html, 0, brows);
+        browseData(j, url, '' + html, 0, brows);
       }
     } else {
-      browseData(j, uh, url, '' + html, 0, brows);
+      browseData(j, url, '' + html, 0, brows);
     }
   } else {
     var get = j['get'];
@@ -663,7 +663,7 @@ function browse(j, uh, url, brows) {
     if (html === undefined) {
       html = "<!DOCTYPE html><html><head><meta charset=utf-8><title>title</title></head><body><h1>404 not found</h1>"  + (escaped(url) + "</body></html>");
     }
-    browseData(j, uh, url, html, 1, brows);
+    browseData(j, url, html, 1, brows);
   }
 }
 
@@ -684,15 +684,10 @@ function fetchLocal(url) {
   return o.d;
 }
 
-function getUh(uh) {
+function getUh() {
   return function(j, html) {
-    return browseData(j, uh, j.vars.window.location.href, html, 0, browse);
+    return browseData(j, j.vars.window.location.href, html, 0, browse);
   };
-}
-
-function browserInit(j) {
-  j['get'] = fetchLocal;
-  browse(j, getUh(getUh), 'index.htm', browse);
 }
 
 function callMeMaybe(self, acc, multiLine, cb) {
@@ -734,7 +729,9 @@ function main() {
   var j = new Object;
   j.show = show;
   setInitState(j, '', '');
-  browserInit(j);
+  j.get = fetchLocal;
+  j.updateHtml = getUh();
+  browse(j, 'index.htm', browse);
 }
 
 main();
