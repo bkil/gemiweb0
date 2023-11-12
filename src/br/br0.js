@@ -22,9 +22,9 @@ function eval2To(j, prog) {
     if (t && (t < 1000)) {
       t = 1000;
     }
-    if (f) {
-      g['.onTimeout'] = undefined;
-      g['.timeoutMs'] = 0;
+    g['.onTimeout'] = undefined;
+    g['.timeoutMs'] = 0;
+    if (f && !j.shutdown) {
       setTimeout(function() {
         self(self, j, f);
         var d = j.d;
@@ -605,6 +605,10 @@ function browseData(j, url, html, isFile, brows) {
 
   if (s['multiLine'] === undefined) {
     shw(text, undefined, 0, function(r) {
+      if (r === undefined) {
+        j.shutdown = 1;
+        return 0;
+      }
       var links = s['links'];
       if (links[r]) {
         brows(j, links[r], brows);
@@ -612,6 +616,10 @@ function browseData(j, url, html, isFile, brows) {
     });
   } else {
     shw(text, s['default'], s['multiLine'], function(r) {
+      if (r === undefined) {
+        j.shutdown = 1;
+        return 0;
+      }
       if (s['formAction']) {
         url = s['formAction'];
       }
@@ -692,12 +700,15 @@ function getUh() {
 
 function callMeMaybe(self, acc, multiLine, cb) {
   return function(data) {
+    process.stdin.on('data', undefined);
     if ((data === undefined) || (data === null)) {
-      process.stdin.on('data', undefined);
-      return undefined;
+      cb(undefined);
     }
     if (multiLine) {
       if (data === '.') {
+        if (acc === undefined) {
+          acc = '';
+        }
         cb(acc);
       } else {
         if (acc !== undefined) {
@@ -713,20 +724,25 @@ function callMeMaybe(self, acc, multiLine, cb) {
 
 function show(text, defVal, multiLine, cb) {
   console.log(text + nl);
-  if (multiLine) {
-    console.log('Please type in multiple lines of input terminated with a dot (".")' + nl);
-  } else {
-    console.log('Please type in a single line of input: ' + nl);
-  }
-  if (defVal !== undefined) {
-    console.log((' default: ' + escaped(defVal)) + nl);
-  }
   var i = process.stdin;
-  i.on('data', callMeMaybe(callMeMaybe, undefined, multiLine, cb));
+  if (cb === undefined) {
+    i.on('data', undefined);
+  } else {
+    if (multiLine) {
+      console.log('Please type in multiple lines of input terminated with a dot (".")' + nl);
+    } else {
+      console.log('Please type in a single line of input: ' + nl);
+    }
+    if (defVal !== undefined) {
+      console.log((' default: ' + escaped(defVal)) + nl);
+    }
+    i.on('data', callMeMaybe(callMeMaybe, undefined, multiLine, cb));
+  }
 }
 
 function main() {
   var j = new Object;
+  j.shutdown = 0;
   j.show = show;
   setInitState(j, '', '');
   j.get = fetchLocal;

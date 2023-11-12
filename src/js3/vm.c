@@ -2054,7 +2054,7 @@ global_eval2(Parser *p, List *l) {
 
   Parser *q = Parser_new_vars(l->value);
   List *r = Map_get_const(l->value->V.m, ".onTimeout");
-  q->onTimeout = r ? Object_ref(r->value) : 0;
+  q->onTimeout = r && (r->value->t != UndefinedObject) ? Object_ref(r->value) : 0;
   r = Map_get_const(l->value->V.m, ".timeoutMs");
   q->timeoutMs = r && (r->value->t == IntObject) ? r->value->V.i : 0;
   q->debug = p->debug;
