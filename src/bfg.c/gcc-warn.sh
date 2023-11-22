@@ -34,7 +34,7 @@ gcc \
  -Wfloat-equal \
  -Wformat=2 \
  -Wformat-nonliteral \
- -Wframe-larger-than=256 \
+ -Wframe-larger-than=2048 \
  -Winit-self \
  -Winline \
  -Winvalid-pch \
@@ -53,14 +53,14 @@ gcc \
  -Wno-unused-parameter \
  -Woverflow \
  -Wpacked \
- -Wpadded \
+ -Wno-padded \
  -Wpedantic \
  -Wpointer-arith \
  -Wpointer-sign \
  -Wredundant-decls \
  -Wshadow \
  -Wsign-conversion \
- -Wstack-usage=384 \
+ -Wstack-usage=2048 \
  -Wstrict-aliasing=1 \
  -Wstrict-overflow=5 \
  -Wstrict-prototypes \

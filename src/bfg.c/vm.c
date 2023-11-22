@@ -4,6 +4,51 @@
 #include <stdio.h> /* EOF fgetc fputc fputs stderr stdout */
 #include <stdlib.h> /* free malloc realloc size_t */
 
+enum RuleT {
+  None = 0,
+  Literal,
+  Seq,
+  Or,
+  Atleast1,
+  Atleast0,
+  Call,
+  Fun,
+  FunForce,
+  Local
+};
+
+typedef struct Locals {
+  const char *savedPos;
+} Locals;
+
+typedef struct Lit {
+  const size_t len;
+  const char s[];
+} Lit;
+
+struct Parser;
+
+typedef int (*FunProto)(struct Parser *p);
+
+struct Rule;
+
+struct Rule {
+  const enum RuleT t;
+  const union {
+    const Lit *literal;
+    const struct Rule *seq;
+    const struct Rule *or;
+    const struct Rule *atleast1;
+    const struct Rule *atleast0;
+    const struct Rule **call;
+    const FunProto fun;
+    const FunProto funForce;
+    const struct Rule *local;
+  } V;
+};
+
+typedef struct Rule Rule;
+
 typedef struct Parser {
   const char *prog;
   const char *inp;
@@ -13,12 +58,31 @@ typedef struct Parser {
   char *out;
   size_t outSize;
   const char *err;
-  const char *errDetails;
+  int *lhs;
+  Locals *locals;
   int i;
   int j;
   int lastinpj;
   int debug;
+  int nest;
+
 } Parser;
+
+#define LIT(a) (const Rule){.t = Literal, \
+  .V.literal = \
+    &(const union { \
+      const Lit l; \
+      const struct {const size_t len; const char s[sizeof(a)];} u;\
+    }){.u.len = sizeof(a) - 1, .u.s = a}\
+    .l}
+#define SEQ(...) (const Rule){.t = Seq, .V.seq = (const Rule[]){__VA_ARGS__, {.t = None}}}
+#define OR(...) (const Rule){.t = Or, .V.or = (const Rule[]){__VA_ARGS__, {.t = None}}}
+#define ATLEAST1(a) (const Rule){.t = Atleast1, .V.atleast1 = &a}
+#define ATLEAST0(a) (const Rule){.t = Atleast0, .V.atleast0 = &a}
+#define CALL(a) (const Rule){.t = Call, .V.call = &a}
+#define FUN(a) (const Rule){.t = Fun, .V.fun = &a}
+#define FUNFORCE(a) (const Rule){.t = FunForce, .V.fun = &a}
+#define LOCAL(a) (const Rule){.t = Local, .V.local = &a}
 
 static int
 __attribute__((nonnull, warn_unused_result))
@@ -29,26 +93,84 @@ setError(Parser *p, const char *message) {
 
 static int
 __attribute__((nonnull, warn_unused_result))
-accept(Parser *p, const char *s) {
-  size_t len = strlen(s);
-  if (!strncmp(p->prog, s, len)) {
-    p->prog += len;
-    while (*p->prog && (*p->prog < 33)) {
-      p->prog++;
+parse(Parser *p, const Rule *rule, size_t limit) {
+  if (p->err) {
+    return 0;
+  }
+  if (limit-- <= 0) {
+    return setError(p, "internal error: grammar recursion depth exceeded");
+  }
+
+  switch (rule->t) {
+    case Literal: {
+      const Lit *l = rule->V.literal;
+      if (strncmp(p->prog, l->s, l->len)) {
+        return 0;
+      }
+      p->prog += l->len;
+      return 1;
     }
-    return 1;
+
+    case Seq: {
+      const Rule *r = rule->V.seq;
+      for (; r->t != None; r++) {
+        if (!parse(p, r, limit)) {
+          return 0;
+        }
+      }
+      return 1;
+    }
+
+    case Or: {
+      const Rule *r = rule->V.or;
+      for (; r->t != None; r++) {
+        if (parse(p, r, limit)) {
+          return 1;
+        }
+      }
+      break;
+    }
+
+    case Atleast1: {
+      const Rule *r = rule->V.atleast1;
+      if (parse(p, r, limit)) {
+        while (parse(p, r, limit)) {
+        }
+        return 1;
+      }
+      break;
+    }
+
+    case Atleast0:
+      while (parse(p, rule->V.atleast0, limit)) {
+      }
+      return 1;
+
+    case Call: {
+      return parse(p, *rule->V.call, limit);
+    }
+
+    case Fun:
+      if (p->nest) {
+        return 1;
+      }
+    case FunForce:
+      return (*rule->V.fun)(p);
+
+    case Local: {
+      Locals *savedLocals = p->locals;
+      Locals l = {.savedPos = 0};
+      p->locals = &l;
+      int ok = parse(p, rule->V.local, limit);
+      p->locals = savedLocals;
+      return ok;
+    }
+
+    case None:
+    default:
+      return setError(p, "internal error: tried to apply non-Object rule");
   }
   return 0;
-}
-
-static int
-__attribute__((nonnull, warn_unused_result))
-expect(Parser *p, const char *s) {
-  if (accept(p, s)) {
-    return 1;
-  }
-  p->errDetails = s;
-  return setError(p, "parser expected different substring");
 }
 
 static int
@@ -71,133 +193,128 @@ resize(Parser *p) {
 }
 
 static int
-__attribute__((nonnull, warn_unused_result))
-parseAssignment(Parser *p) {
-  if (accept(p, "v")) {
-    if (accept(p, "=new Array")) {
-      p->vSize = 0;
-      p->v = realloc(p->v, p->vSize);
-    } else {
-      if (!resize(p)) {
-        return 0;
-      }
-      if (accept(p, "[i]=(v[i]|0)")) {
-        if (accept(p, "+1")) {
-          p->v[p->i]++;
-        } else if (expect(p, "-1")) {
-          p->v[p->i]--;
-        } else {
-          return 0;
-        }
-      } else if (expect(p, "[i]=form.text.value.charCodeAt(j)|0")) {
-        if (p->j < 0) {
-          return setError(p, "j uninitialized");
-        }
-        if (p->j != p->lastinpj + 1) {
-          return setError(p, "form.text.value needs to be iterated in sequence and once");
-        }
-        p->lastinpj = p->j;
+g_newArray(Parser *p) {
+  p->vSize = 0;
+  p->v = realloc(p->v, p->vSize);
+  return 1;
+}
 
-        if (p->inp) {
-          p->v[p->i] = (p->j >= 0) && (p->j < (int)p->inpSize) ? p->inp[p->j] : 0;
-        } else {
-          int ch = fgetc(stdin);
-          p->v[p->i] = ch == EOF ? 0 : ch;
-        }
-      } else {
-        return 0;
-      }
-    }
+static int
+g_arrayPlus(Parser *p) {
+  if (!resize(p)) {
+    return 0;
+  }
+  p->v[p->i]++;
+  return 1;
+}
 
+static int
+g_arrayMinus(Parser *p) {
+  if (!resize(p)) {
+    return 0;
+  }
+  p->v[p->i]--;
+  return 1;
+}
+
+static int
+g_input(Parser *p) {
+  if (!resize(p)) {
+    return 0;
+  }
+  if (p->j < 0) {
+    return setError(p, "j uninitialized");
+  }
+  if (p->j != p->lastinpj + 1) {
+    return setError(p, "form.text.value needs to be iterated in sequence and once");
+  }
+  p->lastinpj = p->j;
+
+  if (p->inp) {
+    p->v[p->i] = (p->j >= 0) && (p->j < (int)p->inpSize) ? p->inp[p->j] : 0;
   } else {
-    int *idx;
-    if (accept(p, "i")) {
-      idx = &p->i;
-    } else if (expect(p, "j")) {
-      idx = &p->j;
-    } else {
-      return 0;
-    }
-
-    if (accept(p, "=0")) {
-      *idx = 0;
-    } else if (accept(p, "++")) {
-      (*idx)++;
-    } else if (expect(p, "--")) {
-      (*idx)--;
-    } else {
-      return 0;
-    }
+    int ch = fgetc(stdin);
+    p->v[p->i] = ch == EOF ? 0 : ch;
   }
   return 1;
 }
 
 static int
-parseBody(Parser *p);
+g_lhsSet_i(Parser *p) {
+  p->lhs = &p->i;
+  return 1;
+}
 
 static int
-__attribute__((nonnull, warn_unused_result))
-parseStatement(Parser *p) {
-  if (accept(p, "while(v[i])")) {
-    const char *begin = p->prog;
-    do {
-      p->prog = begin;
-      if (!resize(p)) {
-        return 0;
-      }
-      if (p->v[p->i]) {
-        if (!parseBody(p)) {
-          return 0;
-        }
-      } else {
-        int nest;
-        if (!expect(p, "{")) {
-          return 0;
-        }
-        for (nest = 1; nest;) {
-          nest += accept(p, "{") ? 1 : accept(p, "}") ? -1 : (p->prog++, 0);
-        }
-        break;
-      }
-    } while (1);
+g_lhsSet_j(Parser *p) {
+  p->lhs = &p->j;
+  return 1;
+}
 
-  } else if (accept(p, "console.log(String.fromCharCode(v[i]))") ||
-      accept(p, "document.write(String.fromCharCode(v[i]))")) {
+static int
+g_lhsPut0(Parser *p) {
+  *p->lhs = 0;
+  return 1;
+}
+
+static int
+g_lhsInc(Parser *p) {
+  (*p->lhs)++;
+  return 1;
+}
+
+static int
+g_lhsDec(Parser *p) {
+  (*p->lhs)--;
+  return 1;
+}
+
+static int
+g_whileBefore(Parser *p) {
+  p->locals->savedPos = p->prog;
+  return 1;
+}
+
+static int
+g_whileEnter(Parser *p) {
+  if (!resize(p)) {
+    return 0;
+  }
+  if (!p->v[p->i]) {
+    p->locals->savedPos = 0;
+    p->nest++;
+  }
+  return 1;
+}
+
+static int
+g_whileEndForce(Parser *p) {
+  if (!p->locals->savedPos) {
+    p->nest--;
+  } else if (!p->nest) {
     if (!resize(p)) {
       return 0;
     }
-    if (p->out) {
-      p->outSize++;
-      p->out = realloc(p->out, p->outSize * sizeof(p->out[0]));
-      p->out[p->outSize - 2] = (char)p->v[p->i];
-    } else {
-      fputc(p->v[p->i], stdout);
+    if (p->v[p->i]) {
+      p->prog = p->locals->savedPos;
     }
-  } else if (accept(p, "var ") && (accept(p, "i") || accept(p, "j") || expect(p, "v"))) {
-  } else {
-    return parseAssignment(p);
   }
   return 1;
 }
 
 static int
-__attribute__((nonnull, warn_unused_result))
-parseStatements(Parser *p) {
-  int o = parseStatement(p);
-  while (o && *p->prog) {
-    o = expect(p, ";") && parseStatement(p);
+g_write(Parser *p) {
+  if (!resize(p)) {
+    return 0;
   }
-  return o;
-}
-
-static int
-__attribute__((nonnull, warn_unused_result))
-parseBody(Parser *p) {
-  int o = expect(p, "{") && parseStatement(p);
-  while (o && accept(p, ";")) {
-    o = parseStatement(p);
+  if (p->out) {
+    p->outSize++;
+    p->out = realloc(p->out, p->outSize * sizeof(p->out[0]));
+    p->out[p->outSize - 2] = (char)p->v[p->i];
+  } else {
+    fputc(p->v[p->i], stdout);
   }
-  return o && expect(p, "}");
+  return 1;
 }
 
 static void
@@ -210,11 +327,6 @@ showError(Parser *p) {
     fputs("error: ", stderr);
     if (p->err) {
       fputs(p->err, stderr);
-      if (p->errDetails) {
-        fputs(" ( '", stderr);
-        fputs(p->errDetails, stderr);
-        fputs("' )", stderr);
-      }
     }
     fputs("\n", stderr);
 
@@ -244,22 +356,139 @@ Parser_free(Parser *p) {
 int
 Parser_eval(Parser *p, const char *prog, const char *inp, char **out, int debug) {
   int ok;
+  const Rule whitespace = ATLEAST0(
+    OR(
+      LIT(" "),
+      LIT("\t"),
+      LIT("\n")
+    )
+  );
+
+  const Rule *p_statements = 0;
+  const Rule statement = SEQ(
+    whitespace,
+    OR(
+      SEQ(
+        OR(
+          SEQ(
+            LIT("i"),
+            FUN(g_lhsSet_i)
+          ),
+          SEQ(
+            LIT("j"),
+            FUN(g_lhsSet_j)
+          )
+        ),
+        OR(
+          SEQ(
+            LIT("=0"),
+            FUN(g_lhsPut0)
+          ),
+          SEQ(
+            LIT("++"),
+            FUN(g_lhsInc)
+          ),
+          SEQ(
+            LIT("--"),
+            FUN(g_lhsDec)
+          )
+        )
+      ),
+      SEQ(
+        LIT("var "),
+        OR(
+          LIT("v"),
+          LIT("i"),
+          LIT("j")
+        )
+      ),
+      SEQ(
+        LIT("v"),
+        OR(
+          SEQ(
+            LIT("=new Array"),
+            FUN(g_newArray)
+          ),
+          SEQ(
+            LIT("[i]="),
+            OR(
+              SEQ(
+                LIT("(v[i]|0)"),
+                OR(
+                  SEQ(
+                    LIT("+"),
+                    FUN(g_arrayPlus)
+                  ),
+                  SEQ(
+                    LIT("-"),
+                    FUN(g_arrayMinus)
+                  )
+                ),
+                LIT("1")
+              ),
+              SEQ(
+                LIT("form.text.value.charCodeAt(j)|0"),
+                FUN(g_input)
+              )
+            )
+          )
+        )
+      ),
+      LOCAL(
+        ATLEAST1(
+          SEQ(
+            FUN(g_whileBefore),
+            LIT("while(v[i]){"),
+            FUN(g_whileEnter),
+            CALL(p_statements),
+            LIT("}"),
+            FUNFORCE(g_whileEndForce)
+          )
+        )
+      ),
+      SEQ(
+        OR(
+          LIT("console.log"),
+          LIT("document.write")
+        ),
+        LIT("(String.fromCharCode(v[i]))"),
+        FUN(g_write)
+      )
+    ),
+    whitespace
+  );
+
+  const Rule moreStatements = SEQ(LIT(";"), statement);
+
+  const Rule statements = SEQ(
+    statement,
+    ATLEAST0(
+      moreStatements
+    )
+  );
+  p_statements = &statements;
+
   p->prog = prog;
   p->inp = inp;
   p->inpSize = inp ? strlen(inp) : 0;
   p->outSize = 1;
   p->out = out ? calloc(1, p->outSize) : 0;
   p->err = 0;
-  p->errDetails = 0;
   p->i = -1;
   p->j = -1;
   p->lastinpj = -1;
   p->debug = debug;
+  p->lhs = 0;
+  p->locals = 0;
+  p->nest = 0;
 
-  while (*p->prog && (*p->prog < 33)) {
-    p->prog++;
+  ok = parse(p, &statements, 100);
+  if (p->err) {
+    ok = 0;
+  } else if (ok && *p->prog) {
+    ok = setError(p, "unmatched root rule");
   }
-  ok = parseStatements(p);
+
   if (p->out) {
     p->out[p->outSize - 1] = 0;
     *out = p->out;
