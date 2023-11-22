@@ -14,7 +14,7 @@ static bool _debug = false;
 static unsigned int _errorCount = 0;
 
 static int
-__attribute__((nonnull, warn_unused_result, nonnull))
+__attribute__((nonnull, warn_unused_result))
 test_case(const char *prog, const char *inp, char **out, bool debug) {
   struct Parser *p = Parser_new();
   int ret = Parser_eval(p, prog, inp, out, debug);
@@ -119,6 +119,7 @@ main(void) {
   t("var j;j=0", 0);
   t("var i;i=0;var v;v=new Array", 0);
   t("var i;i=0;var v;v=new Array;v[i]=(v[i]|0)+1", 1);
+  t("var i;i=0;var v;v=new Array;v[i]=(v[i]|0)+1;v[i]=(v[i]|0)-1", 0);
   t("var i;i=0;var v;v=new Array;v[i]=(v[i]|0)+1;v[i]=(v[i]|0)+1", 2);
   t("var i;i=0;var v;v=new Array;v[i]=(v[i]|0)+1;i++;v[i]=(v[i]|0)+1;v[i]=(v[i]|0)+1", 2);
   t("var i;i=0;var v;v=new Array;v[i]=(v[i]|0)+1;v[i]=(v[i]|0)+1;i++;v[i]=(v[i]|0)+1;i--", 2);
