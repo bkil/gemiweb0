@@ -2,7 +2,7 @@
 
 #include <string.h> /* memset strlen strncmp */
 #include <stdio.h> /* EOF fgetc fputc fputs stderr stdout */
-#include <stdlib.h> /* atoi free malloc realloc size_t */
+#include <stdlib.h> /* free malloc realloc size_t */
 
 typedef struct Parser {
   const char *prog;
