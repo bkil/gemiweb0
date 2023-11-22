@@ -18,7 +18,7 @@ enum RuleT {
 };
 
 typedef struct Locals {
-  const char *savedPos;
+  const char *savedProg;
 } Locals;
 
 typedef struct Lit {
@@ -104,11 +104,11 @@ parse(Parser *p, const Rule *rule, size_t limit) {
   switch (rule->t) {
     case Literal: {
       const Lit *l = rule->V.literal;
-      if (strncmp(p->prog, l->s, l->len)) {
-        return 0;
+      if (!strncmp(p->prog, l->s, l->len)) {
+        p->prog += l->len;
+        return 1;
       }
-      p->prog += l->len;
-      return 1;
+      break;
     }
 
     case Seq: {
@@ -131,16 +131,10 @@ parse(Parser *p, const Rule *rule, size_t limit) {
       break;
     }
 
-    case Atleast1: {
-      const Rule *r = rule->V.atleast1;
-      if (parse(p, r, limit)) {
-        while (parse(p, r, limit)) {
-        }
-        return 1;
+    case Atleast1:
+      if (!parse(p, rule->V.atleast1, limit)) {
+        break;
       }
-      break;
-    }
-
     case Atleast0:
       while (parse(p, rule->V.atleast0, limit)) {
       }
@@ -159,7 +153,7 @@ parse(Parser *p, const Rule *rule, size_t limit) {
 
     case Local: {
       Locals *savedLocals = p->locals;
-      Locals l = {.savedPos = 0};
+      Locals l = {.savedProg = 0};
       p->locals = &l;
       int ok = parse(p, rule->V.local, limit);
       p->locals = savedLocals;
@@ -271,7 +265,7 @@ g_lhsDec(Parser *p) {
 
 static int
 g_whileBefore(Parser *p) {
-  p->locals->savedPos = p->prog;
+  p->locals->savedProg = p->prog;
   return 1;
 }
 
@@ -281,7 +275,7 @@ g_whileEnter(Parser *p) {
     return 0;
   }
   if (!p->v[p->i]) {
-    p->locals->savedPos = 0;
+    p->locals->savedProg = 0;
     p->nest++;
   }
   return 1;
@@ -289,14 +283,14 @@ g_whileEnter(Parser *p) {
 
 static int
 g_whileEndForce(Parser *p) {
-  if (!p->locals->savedPos) {
+  if (!p->locals->savedProg) {
     p->nest--;
   } else if (!p->nest) {
     if (!resize(p)) {
       return 0;
     }
     if (p->v[p->i]) {
-      p->prog = p->locals->savedPos;
+      p->prog = p->locals->savedProg;
     }
   }
   return 1;
