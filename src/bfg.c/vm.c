@@ -112,9 +112,11 @@ parse(Parser *p, const Rule *rule, size_t limit) {
     }
 
     case Seq: {
+      const char *savedProg = p->prog;
       const Rule *r = rule->V.seq;
       for (; r->t != None; r++) {
         if (!parse(p, r, limit)) {
+          p->prog = savedProg;
           return 0;
         }
       }
