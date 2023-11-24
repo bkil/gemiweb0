@@ -291,6 +291,15 @@ Projects listed here have not produced a browser a user could test yet.
 
 ## Unmaintained
 
+### Charon
+
+* https://en.wikipedia.org/wiki/Charon_(web_browser)
+* written in Limbo
+* runs graphically under wm on Inferno
+* schemes: HTTP 1.1, SSL v3, FTP, file
+* features: start page, history, cookies, web proxy, utf-8
+* aim for compatibility with Netscape 3.0: HTML 3.2 formatting, images (jpeg, xbitmap, Inferno BIT, animated gif), JavaScript 1.1 (ES2)
+
 ### Odysseus
 
 * https://github.com/alcinnz/Odysseus
