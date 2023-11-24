@@ -137,6 +137,7 @@ parse(Parser *p, const Rule *rule, size_t limit) {
       if (!parse(p, rule->V.atleast1, limit)) {
         break;
       }
+      /* fall through */
     case Atleast0:
       while (parse(p, rule->V.atleast0, limit)) {
       }
@@ -150,6 +151,7 @@ parse(Parser *p, const Rule *rule, size_t limit) {
       if (p->nest) {
         return 1;
       }
+      /* fall through */
     case FunForce:
       return (*rule->V.fun)(p);
 
@@ -163,6 +165,7 @@ parse(Parser *p, const Rule *rule, size_t limit) {
     }
 
     case None:
+      /* fall through */
     default:
       return setError(p, "internal error: tried to apply non-Object rule");
   }
