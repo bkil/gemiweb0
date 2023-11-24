@@ -454,12 +454,13 @@ Parser_eval(Parser *p, const char *prog, const char *inp, char **out, int debug)
     whitespace
   );
 
-  const Rule moreStatements = SEQ(LIT(";"), statement);
-
   const Rule statements = SEQ(
     statement,
     ATLEAST0(
-      moreStatements
+      SEQ(
+        LIT(";"),
+        statement
+      )
     )
   );
   p_statements = &statements;
