@@ -201,9 +201,9 @@ tstm: function <funcId> ( [ A [ , B [ , C [ , D [ , E [ , F [ , G [ , H [ , I [ 
 mstm: if '(' <expr> ')' <mBody> [ else <mBody> ]? | while ( <expr> ) <mBody> | <expr>
 fstm: if '(' <expr> ')' <fBody> [ else <fBody> ]? | while ( <expr> ) <fBody> | return <expr> | <expr>
 mBody: { [ <mstm> [ ; <mstm> ]* ]? [;]? }
-fBody: { [ <fstm> [ ; <fstm> ]* ]? [;]? }
-expr: <funcId> '(' [ <expr> [, <expr>]* ]? ')' | <term> [ <op> <term> ]*
-term: <int> | <builtin> | [ <intId> | <parId> ] [ <rhs> ]? | <arrId> <idx> <rhs> | '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' | <expr> ] ')'
+fBody: { [ <fstm> [ ; <fstm> ]* ; ]? return <expr> [;]? }
+expr: <term> [ <op> <term> ]*
+term: <int> | <builtin> | <funcId> '(' [ <expr> [, <expr>]* ]? ')' | [ <intId> | <parId> ] [ <rhs> ]? | <arrId> <idx> <rhs> | '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' | <expr> ] ')'
 rhs: '=' <expr>
 idx: '[' <expr> ']'
 op: '+' | '-' | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&' | '===' | '!=='
@@ -224,7 +224,7 @@ Notes:
 * Integer variables may already be initialized to zero, the array may already be allocated and zeroed
 * You must not access a negative array index or read a value before initializing it, but both may return zero
 * You must not access parameters outside a function or those which you have not declared or given as argument
-* Each function must complete execution with a `return`
+* You must not invoke a function with a different number of arguments than the number of parameters in the function definition
 * Each function must be defined above the point of invocation
 * You may assume that the interpreter stores the first few variables and the first few function parameters in CPU registers, so utilize them in lexicographical order
 * The function name may be capped to 10 letters and a digit (packed as base64 and BCD to fit 64 bits)
@@ -234,12 +234,12 @@ Notes:
 ```
 program: [ '\'use strict\'' ; [ var [ <arrId> | <intId> ] ; ]* <arrId> '=' new Array [ ; <tstm> ]* ]? [;]?
 tstm: function <funcId> ( [ A [ , B [ , C [ , D [ , E [ , F [ , G [ , H [ , I [ , J [ , K [ , L [ , M [ , N [ , O [ , P [ , Q [ , R [ , S [ , T [ , U [ , V [ , W [ , X [ , Y [ , Z  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]? ) <fBody> | <mstm>
-mstm: if '(' <expr> ')' <mBody> [ else <mBody> ]? | while ( <expr> ) <mBody> | do <mBody> while ( <expr> ) | break | continue | switch ( <expr> ) { [ case <expr>: <mBody> ]* [ default: <mBody> ]? } | <expr>
-fstm: if '(' <expr> ')' <fBody> [ else <fBody> ]? | while ( <expr> ) <fBody> | do <fBody> while ( <expr> ) | break | continue | switch ( <expr> ) { [ case <expr>: <fBody> ]* [ default: <fBody> ]? } | return <expr> | <expr>
+mstm: if '(' <expr> ')' <mBody> [ else <mBody> ]? | while ( <expr> ) <mBody> | do <mBody> while ( <expr> ) | for ( [ <expr> ]? ; [ <expr> ]? ; [ <expr> ]? ) <mBody> | break | continue | switch ( <expr> ) { [ case <expr>: <mBody> ]* [ default: <mBody> ]? } | <expr>
+fstm: if '(' <expr> ')' <fBody> [ else <fBody> ]? | while ( <expr> ) <fBody> | do <fBody> while ( <expr> ) | for ( [ <expr> ]? ; [ <expr> ]? ; [ <expr> ]? ) <fBody> | break | continue | switch ( <expr> ) { [ case <expr>: <fBody> ]* [ default: <fBody> ]? } | return <expr> | <expr>
 mBody: { [ <mstm> [ ; <mstm> ]* ]? [;]? }
-fBody: { [ <fstm> [ ; <fstm> ]* ]? [;]? }
-expr: <funcId> '(' [ <expr> [, <expr>]* ]? ')' | [ [ '!' | '~' | '-' ]? <term> ] [ '?' <expr> ':' <expr> | [ <opRel> <term> ]* ]?
-term: <int> | <builtin> | [ <intId> | <parId> ] [ <rhs> ]? | <arrId> <idx> <rhs> | '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' | <expr> ] ')'
+fBody: { [ <fstm> [ ; <fstm> ]* ; ]? return <expr> [;]? }
+expr: [ [ '!' | '~' | '-' ]? <term> ] [ '?' <expr> ':' <expr> | [ <opRel> <term> ]* ]?
+term: <int> | <builtin> | <funcId> '(' [ <expr> [, <expr>]* ]? ')' | [ <intId> | <parId> ] [ <rhs> ]? | <arrId> <idx> <rhs> | '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' | <expr> [ ',' <expr> ]* ] ')'
 rhs: '++' | '--' | [ <op> ]? '=' <expr>
 idx: '[' <expr> ']'
 op: '+' | '-' | '*' | / | % | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&'
@@ -261,7 +261,7 @@ Notes:
 * Integer variables may already be initialized to zero, the array may already be allocated and zeroed
 * You must not access a negative array index or read a value before initializing it, but both may return zero
 * You must not access parameters outside a function or those which you have not declared or given as argument
-* Each function must complete execution with a `return`
+* You must not invoke a function with a different number of arguments than the number of parameters in the function definition
 * Each function must be defined above the point of invocation
 * `continue` must not be used outside a loop
 * `break` must not be used outside a loop or a switch
