@@ -74,7 +74,7 @@ The following restrictions are non-normative and being worked on pending the res
 * Verdict: required
 * Incidence rate: low, but non-negligible
 * Reason: useful to interface with extant web hosting services
-* Workaround: none for web, adding custom headers for HTTP/TCP connections on native platform
+* Workaround: none for web, adding custom headers for HTTP/TCP connections on native platforms
 * Standard: NS2
 
 ### Call stack quota
@@ -103,6 +103,16 @@ The following restrictions are non-normative and being worked on pending the res
 
 * Verdict: recommended
 * Implementation complexity: low if granularity provided by event loop conditioning is sufficient, intermediate if termination at reductions or via a separate process model would be warranted, very high if resumption without POSIX job control signals also required
+
+### javascript: URI
+
+* Verdict: recommended
+* Reason: the simplest alternative for client side interaction
+* Incidence rate: very high
+* Use case: client side interactions, form processing, validation
+* Implementation complexity: trivial
+* Workaround: implement event handlers such as onclick and onsubmit or navigate to a URI pointing to (or submit a form targeting) an HTML containing JavaScript that dispatches upon loading, encode the link identifier and serialize the whole application state to the URI query or anchor
+* Standard: NS2
 
 ### Pure anonymous function expression
 
@@ -155,7 +165,7 @@ The following restrictions are non-normative and being worked on pending the res
 * Incidence rate: high
 * Implementation complexity: low
 * Reason: allow for interacting with typed user input without server involvement
-* Workaround: unsatisfactory due to lack of caching, allow to submit the form via GET and parse the values from the URI upon load
+* Workaround: unsatisfactory due to lack of caching, allow to submit the form via GET and parse the values from the URI upon load, without forms, provide an on screen keyboard with individual links for each key
 * Standard: NS2
 
 ### Consecutive terms of same operator in expressions
@@ -331,8 +341,8 @@ The following restrictions are non-normative and being worked on pending the res
 * Verdict: partial
 * Restriction: function argument, up to a single timeout active at a time
 * Implementation complexity: higher intermediate, needs an event loop with termination and signal handling
-* Use cases: retry with backoff, autosave, neighborly crawling, animation, debouncing
-* Workaround: eval instead of string argument, none for setTimeout itself, implement a dispatcher that tracks upcoming events in ascending order to simulate multiple timers
+* Use cases: retry with backoff, autosave, neighborly crawling, animation, debouncing, initialization after onload (instead of noscript)
+* Workaround: eval instead of string argument, none for setTimeout itself (except for immediately invoking the function if the timeout is 0), implement a dispatcher that tracks upcoming events in ascending order to simulate multiple timers
 * Standard: NS2, JS1
 
 ### form post
