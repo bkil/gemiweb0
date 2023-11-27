@@ -169,7 +169,7 @@ id = ([a-zA-Z_][a-zA-Z_0-9]*\.)*[a-zA-Z_][a-zA-Z_0-9]*
 ### Level 7 assembly 0
 
 ```
-program: <arrId> '=' new Array [ ';' <tstm> ]*
+program: <arrId> '=' new Array ';' [ <tstm> ';' ]* <expr>
 tstm: function <funcId> '(' ')' <body> | <mstm>
 mstm: if '(' <expr> ')' <body> | while '(' <expr> ')' <body> | <cstm>
 body: '{' <mstm> [ ';' <mstm> ]* '}'
@@ -179,7 +179,7 @@ term: <int> | <intId> | '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrI
 idx: '[' <expr> ']'
 op: '+' | '-' | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '===' | '!=='
 builtin: 'console.log(String.fromCharCode(' <expr> '))'
-arrId = '_'
+arrId = _
 intId = [a-z]
 funcId = [a-zA-Z_]{2,8}
 int = [0-9]+
@@ -196,7 +196,7 @@ Notes:
 ### Level 7 assembly 1
 
 ```
-program: [ '\'use strict\'' ; [ var [ <arrId> | <intId> ] ; ]* <arrId> '=' new Array [ ; <tstm> ]* ]? [;]?
+program: [ '\'use strict\'' ; [ var [ <arrId> | <intId> ] ; ]* <arrId> '=' new Array ; [ <tstm> ; ]* ]? <expr> [;]?
 tstm: function <funcId> ( [ A [ , B [ , C [ , D [ , E [ , F [ , G [ , H [ , I [ , J [ , K [ , L [ , M [ , N [ , O [ , P [ , Q [ , R [ , S [ , T [ , U [ , V [ , W [ , X [ , Y [ , Z  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]? ) <fBody> | <mstm>
 mstm: if '(' <expr> ')' <mBody> [ else <mBody> ]? | while ( <expr> ) <mBody> | <expr>
 fstm: if '(' <expr> ')' <fBody> [ else <fBody> ]? | while ( <expr> ) <fBody> | return <expr> | <expr>
@@ -208,7 +208,7 @@ rhs: '=' <expr>
 idx: '[' <expr> ']'
 op: '+' | '-' | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&' | '===' | '!=='
 builtin: 'console.log(String.fromCharCode(' <expr> '))'
-arrId = '_'
+arrId = _
 intId = [a-z]
 parId = [A-Z]
 funcId = [a-zA-Z_][0-9a-zA-Z_]{1,9}[0-9]?
@@ -220,8 +220,9 @@ Notes:
 * In expr, only the same operator can be repeated within the same group (i.e., without using parenthesis)
 * Whitespace and comments must be supported
 * Standard input must not be consumed multiple times or out of sequence
-* Variable declaration may not be enforced, but you must not access a variable before declaring it
+* Variable declaration may not be enforced, but you must not access a variable before declaring and initializing it
 * Integer variables may already be initialized to zero, the array may already be allocated and zeroed
+* You must not assign any single `funcId` identifier multiple times
 * You must not access a negative array index or read a value before initializing it, but both may return zero
 * You must not access parameters outside a function or those which you have not declared or given as argument
 * You must not invoke a function with a different number of arguments than the number of parameters in the function definition
@@ -232,20 +233,22 @@ Notes:
 ### Level 7 assembly 2
 
 ```
-program: [ '\'use strict\'' ; [ var [ <arrId> | <intId> ] ; ]* <arrId> '=' new Array [ ; <tstm> ]* ]? [;]?
+program: [ '\'use strict\'' ; [ var [ <arrId> | <intId> ] ; ]* <arrId> '=' new Array ; [ <tstm> ; ]* ]? <expr> [;]?
 tstm: function <funcId> ( [ A [ , B [ , C [ , D [ , E [ , F [ , G [ , H [ , I [ , J [ , K [ , L [ , M [ , N [ , O [ , P [ , Q [ , R [ , S [ , T [ , U [ , V [ , W [ , X [ , Y [ , Z  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]? ) <fBody> | <mstm>
-mstm: if '(' <expr> ')' <mBody> [ else <mBody> ]? | while ( <expr> ) <mBody> | do <mBody> while ( <expr> ) | for ( [ <expr> ]? ; [ <expr> ]? ; [ <expr> ]? ) <mBody> | break | continue | switch ( <expr> ) { [ case <expr>: <mBody> ]* [ default: <mBody> ]? } | <expr>
-fstm: if '(' <expr> ')' <fBody> [ else <fBody> ]? | while ( <expr> ) <fBody> | do <fBody> while ( <expr> ) | for ( [ <expr> ]? ; [ <expr> ]? ; [ <expr> ]? ) <fBody> | break | continue | switch ( <expr> ) { [ case <expr>: <fBody> ]* [ default: <fBody> ]? } | return <expr> | <expr>
+mstm: if '(' <expr> ')' <mBody> [ else <mBody> ]? | while ( <expr> ) <mBody> | do <mBody> while ( <expr> ) | for ( [ <expr> ]? ; [ <expr> ]? ; [ <expr> ]? ) <mBody> | switch ( <expr> ) { [ case <expr>: <mBody> ]* [ default: <mBody> ]? } | <cstm>
+fstm: if '(' <expr> ')' <fBody> [ else <fBody> ]? | while ( <expr> ) <fBody> | do <fBody> while ( <expr> ) | for ( [ <expr> ]? ; [ <expr> ]? ; [ <expr> ]? ) <fBody> | switch ( <expr> ) { [ case <expr>: <fBody> ]* [ default: <fBody> ]? } | return <expr> | <cstm>
+cstm: break | continue | <expr>
 mBody: { [ <mstm> [ ; <mstm> ]* ]? [;]? }
 fBody: { [ <fstm> [ ; <fstm> ]* ; ]? return <expr> [;]? }
 expr: [ [ '!' | '~' | '-' ]? <term> ] [ '?' <expr> ':' <expr> | [ <opRel> <term> ]* ]?
-term: <int> | <builtin> | <funcId> '(' [ <expr> [, <expr>]* ]? ')' | [ <intId> | <parId> ] [ <rhs> ]? | <arrId> <idx> <rhs> | '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' | <expr> [ ',' <expr> ]* ] ')'
+term: <int> | <builtin> | <funcId> '(' [ <expr> [, <expr>]* ]? ')' | [ <intId> | <parId> ] [ <rhs> ]? | <arrId> <idx> <rhs> | <bracketed>
+bracketed: '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' | <expr> [ ',' <expr> ]* ] ')'
 rhs: '++' | '--' | [ <op> ]? '=' <expr>
 idx: '[' <expr> ']'
 op: '+' | '-' | '*' | / | % | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&'
 opRel: <op> | '<' | '>' | '<=' | '>=' | '===' | '!=='
 builtin: 'console.log(String.fromCharCode(' <expr> '))'
-arrId = '_'
+arrId = _
 intId = [a-z]
 parId = [A-Z]
 funcId = [a-zA-Z_][0-9a-zA-Z_]{1,9}[0-9]?
@@ -254,11 +257,12 @@ int = [0-9]+
 
 Notes:
 
-* In expr, only the same operator can be repeated within the same group (i.e., without using parenthesis)
+* In expr, only the same `opRel` operator can be repeated within the same group (i.e., without using parenthesis)
 * Whitespace and comments must be supported
 * Standard input must not be consumed multiple times or out of sequence
-* Variable declaration may not be enforced, but you must not access a variable before declaring it
+* Variable declaration may not be enforced, but you must not access a variable before declaring and initializing it
 * Integer variables may already be initialized to zero, the array may already be allocated and zeroed
+* You must not assign any single `funcId` identifier multiple times
 * You must not access a negative array index or read a value before initializing it, but both may return zero
 * You must not access parameters outside a function or those which you have not declared or given as argument
 * You must not invoke a function with a different number of arguments than the number of parameters in the function definition
