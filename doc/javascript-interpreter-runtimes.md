@@ -99,6 +99,16 @@ Includes a web based example interpreter.
 > Narcissus is a JavaScript interpreter written in pure JavaScript (i.e., a meta-circular evaluator), using the SpiderMonkey engine.
 > Originally a proof-of-concept, a test-bed for rapidly prototyping new language features for the JavaScript language (as well as the ECMAScript standard).
 
+### otto
+
+* https://github.com/robertkrimen/otto
+* https://github.com/robertkrimen/natto
+
+> Package otto is a JavaScript parser and interpreter written natively in Go.
+> Otto targets ES5
+> Go translates JavaScript-style regular expressions into something that is "regexp" compatible via parser.TransformRegExp. Unfortunately, RegExp requires backtracking for some patterns, and backtracking is not supported by the standard Go engine. re2 (Go) has a different definition for \s: [\t\n\f\r ]
+> Package natto is an example/offshoot of otto that implements an event loop (supporting setTimeout/setInterval).
+
 ## Benchmarks
 
 * https://kangax.github.io/compat-table/es6/
