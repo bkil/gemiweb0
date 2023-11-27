@@ -123,7 +123,7 @@ missing:
 
 * .lastIndexOf, .substring, .toLowerCase, .toUpperCase
 * ES2/NS3: .split
-* NS4: .concat, .slice, .replace, .search, .substr
+* ES3/NS4: .concat, .slice, .replace, .search, .substr
 
 ## Application server
 
@@ -210,6 +210,27 @@ Not published yet:
 Planned on shortlist:
 
 * A minimalistic real world web app running in the C browser and runtime
+
+## Inspiration
+
+* https://tinygo.org/docs/concepts/compiler-internals/
+* https://docs.micropython.org/en/latest/develop/index.html
+* https://bellard.org/tcc/tcc-doc.html#devel
+
+## Best practices
+
+* https://biomejs.dev/linter/rules
+* https://github.com/biomejs/biome/tree/main/website/src/content/docs/linter/rules
+* https://eslint.org/docs/latest/rules/
+* https://github.com/eslint/eslint/tree/main/docs/src/rules
+* https://jshint.com/docs/options/
+* https://github.com/jshint/jshint/blob/main/src/options.js
+* https://github.com/jslint-org/jslint#user-content-directive-jslint
+* https://github.com/semgrep/semgrep-rules/tree/develop/javascript/lang
+* https://github.com/google/closure-compiler/wiki/Flags-and-Options#available-error-groups
+* https://github.com/google/closure-compiler/wiki/Lint-checks
+* https://github.com/google/closure-compiler/wiki/JS-Conformance-Framework
+* https://github.com/google/closure-compiler/tree/master/src/com/google/javascript/jscomp
 
 ## References
 
