@@ -13,6 +13,10 @@ See the doc folder for more information:
 * [doc/web-browsers-by-engine.md](doc/web-browsers-by-engine.md)
 * [doc/javascript-interpreter-runtimes.md](doc/javascript-interpreter-runtimes.md)
 
+Play with an example game obeying this subset:
+
+* https://bkil.gitlab.io/static-wonders.js/game/rockpaper-sum.html
+
 Older notes:
 
 * [doc/spec.md](doc/spec.md)
@@ -22,6 +26,6 @@ Older notes:
 
 Join our chat room to participate in brainstorming or to give a hand by implementing the standard from scratch:
 
-* https://matrix.to/#/#weblite:matrix.org
+* https://matrix.to/#/#gemiweb:matrix.org
 * https://github.com/bkil/gemiweb
 * https://gitlab.com/bkil/gemiweb
