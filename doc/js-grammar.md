@@ -175,9 +175,9 @@ mstm: if '(' <expr> ')' <body> | while '(' <expr> ')' <body> | <cstm>
 body: '{' <mstm> [ ';' <mstm> ]* '}'
 cstm: <builtin> | <funcId> '(' ')' | <arrId> <idx> '=' <expr> | <intId> '=' <expr>
 expr: <term> [ <op> <term> ]?
-term: <int> | <intId> | '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' ] ')'
+term: <int> | <intId> | '(' [ 'form.text.value.charCodeAt(' <expr> ')' | <arrId> <idx> | <term> '/' <term> ] '|' '0' ')'
 idx: '[' <expr> ']'
-op: '+' | '-' | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '===' | '!=='
+op: '+' | '-' | '*' | '%' | '<' | '>' | '<=' | '>=' | '^' | '|' | '&' | '<<' | '>>' | '>>>' | '===' | '!=='
 builtin: 'console.log(String.fromCharCode(' <expr> '))'
 arrId = _
 intId = [a-z]
@@ -202,11 +202,11 @@ mstm: if '(' <expr> ')' <mBody> [ else <mBody> ]? | while ( <expr> ) <mBody> | <
 fstm: if '(' <expr> ')' <fBody> [ else <fBody> ]? | while ( <expr> ) <fBody> | return <expr> | <expr>
 mBody: { [ <mstm> [ ; <mstm> ]* ]? [;]? }
 fBody: { [ <fstm> [ ; <fstm> ]* ; ]? return <expr> [;]? }
-expr: <term> [ <op> <term> ]*
+expr: <term> [ <op> <term> ]* | '(' <term> '/' <term> ')' '|' '0'
 term: <int> | <builtin> | <funcId> '(' [ <expr> [, <expr>]* ]? ')' | [ <intId> | <parId> ] [ <rhs> ]? | <arrId> <idx> <rhs> | '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' | <expr> ] ')'
 rhs: '=' <expr>
 idx: '[' <expr> ']'
-op: '+' | '-' | '*' | / | % | '<' | '>' | '<=' | '>=' | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&' | '===' | '!=='
+op: '+' | '-' | '*' | '%' | '<' | '>' | '<=' | '>=' | '^' | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&' | '===' | '!=='
 builtin: 'console.log(String.fromCharCode(' <expr> '))'
 arrId = _
 intId = [a-z]
@@ -240,12 +240,12 @@ fstm: if '(' <expr> ')' <fBody> [ else <fBody> ]? | while ( <expr> ) <fBody> | d
 cstm: break | continue | <expr>
 mBody: { [ <mstm> [ ; <mstm> ]* ]? [;]? }
 fBody: { [ <fstm> [ ; <fstm> ]* ; ]? return <expr> [;]? }
-expr: [ [ '!' | '~' | '-' ]? <term> ] [ '?' <expr> ':' <expr> | [ <opRel> <term> ]* ]?
+expr: [ [ '!' | '~' | '-' ]? <term> ] [ '?' <expr> ':' <expr> | [ <opRel> <term> ]* ]? | '(' <term> '/' <term> ')' '|' '0'
 term: <int> | <builtin> | <funcId> '(' [ <expr> [, <expr>]* ]? ')' | [ <intId> | <parId> ] [ <rhs> ]? | <arrId> <idx> <rhs> | <bracketed>
 bracketed: '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' | <expr> [ ',' <expr> ]* ] ')'
 rhs: '++' | '--' | [ <op> ]? '=' <expr>
 idx: '[' <expr> ']'
-op: '+' | '-' | '*' | / | % | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&'
+op: '+' | '-' | '*' | % | ^ | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&'
 opRel: <op> | '<' | '>' | '<=' | '>=' | '===' | '!=='
 builtin: 'console.log(String.fromCharCode(' <expr> '))'
 arrId = _
