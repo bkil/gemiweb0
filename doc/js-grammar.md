@@ -272,6 +272,56 @@ Notes:
 * You may assume that the interpreter stores the first few variables and the first few function parameters in CPU registers, so utilize them in lexicographical order
 * The function name may be capped to 10 letters and a digit (packed as base64 and BCD to fit 64 bits)
 
+### Level 7 assembly 3
+
+```
+program: [ '\'use strict\'' ; [ var [ <arrId> | <intId> | <constInit> ] ; ]* <arrId> '=' new Array ; [ <tstm> ; ]* ]? <expr> [;]?
+constInit: <constId> '=' <cexpr> | <strId> '=' <string> | <litArrId> '=' '[' [ <cexpr> [ ',' <cexpr> ]* ]? ']'
+tstm: function <funcId> ( [ A [ , B [ , C [ , D [ , E [ , F [ , G [ , H [ , I [ , J [ , K [ , L [ , M [ , N [ , O [ , P [ , Q [ , R [ , S [ , T [ , U [ , V [ , W [ , X [ , Y [ , Z  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]?  ]? ) <fBody> | <mstm>
+mstm: if '(' <expr> ')' <mBody> [ else <mBody> ]? | while ( <expr> ) <mBody> | do <mBody> while ( <expr> ) | for ( [ <expr> ]? ; [ <expr> ]? ; [ <expr> ]? ) <mBody> | switch ( <expr> ) { [ case <expr>: <mBody> ]* [ default: <mBody> ]? } | <cstm>
+fstm: if '(' <expr> ')' <fBody> [ else <fBody> ]? | while ( <expr> ) <fBody> | do <fBody> while ( <expr> ) | for ( [ <expr> ]? ; [ <expr> ]? ; [ <expr> ]? ) <fBody> | switch ( <expr> ) { [ case <expr>: <fBody> ]* [ default: <fBody> ]? } | return <expr> | <cstm>
+cstm: break | continue | <expr>
+mBody: { [ <mstm> [ ; <mstm> ]* ]? [;]? }
+fBody: { [ <fstm> [ ; <fstm> ]* ; ]? return <expr> [;]? }
+expr: [ [ '!' | '~' | '-' ]? <term> ] [ '?' <expr> ':' <expr> | [ <opRel> <term> ]* ]? | '(' <term> '/' <term> ')' '|' '0'
+term: <int> | <builtin> | [ <strId> | <litArrId> ] '.length' | <funcId> '(' [ <expr> [, <expr>]* ]? ')' | <constId> | [ <intId> | <parId> ] [ <rhs> ]? | <arrId> <idx> <rhs> | <bracketed>
+bracketed: '(' [ [ 'form.text.value' | <strId> ] '.charCodeAt(' <expr> ')|0' | [ <arrId> | <litArrId> ] <idx> '|0' | <expr> [ ',' <expr> ]* ] ')'
+cexpr: [ [ '!' | '~' | '-' ]? <cterm> ] [ '?' <cexpr> ':' <cexpr> | [ <opRel> <cterm> ]* ]? | '(' <cterm> '/' <cterm> ')' '|' '0'
+cterm: <int> | [ <strId> | <litArrId> ] '.length' | <constId> | <cbracketed>
+cbracketed: '(' [ <strId> '.charCodeAt(' <cexpr> ')|0' | <litArrId> <idx> '|0' | <cexpr> ] ')'
+rhs: '++' | '--' | [ <op> ]? '=' <expr>
+idx: '[' <expr> ']'
+op: '+' | '-' | '*' | '%' | '^' | '|' | '&' | '<<' | '>>' | '>>>' | '||' | '&&'
+opRel: <op> | '<' | '>' | '<=' | '>=' | '===' | '!=='
+builtin: 'console.log(String.fromCharCode(' <expr> '))'
+arrId = _
+intId = [a-z]
+parId = [A-Z]
+constId = [A-Z][0-9a-zA-Z_]{1,9}[0-9]?
+strId = _s[0-9a-zA-Z_]{1,10}[0-9]?
+litArrId = _a[0-9a-zA-Z_]{1,10}[0-9]?
+funcId = [a-z][0-9a-zA-Z_]{1,9}[0-9]?
+string = '[^'\\]*'|"[^"\\]*"
+int = [0-9]+
+```
+
+Notes:
+
+* In `expr` and `cexpr`, only the same `opRel` operator can be repeated within the same group (i.e., without using parenthesis)
+* Whitespace and comments must be supported
+* Standard input must not be consumed multiple times or out of sequence
+* Variable declaration may not be enforced, but you must not access a variable before declaring and initializing it
+* Integer variables may already be initialized to zero, the array may already be allocated and zeroed
+* You must not assign any single `constId`, `strId`, `litArrId` and `funcId` identifier multiple times
+* You must not access a negative array index or read a value before initializing it, but both may return zero
+* You must not access parameters outside a function or those which you have not declared or given as argument
+* You must not invoke a function with a different number of arguments than the number of parameters in the function definition
+* Each function must be defined above the point of invocation
+* `continue` must not be used outside a loop
+* `break` must not be used outside a loop or a switch
+* You may assume that the interpreter stores the first few variables and the first few function parameters in CPU registers, so utilize them in lexicographical order
+* The function name may be capped to 10 letters and a digit (packed as base64 and BCD to fit 64 bits)
+
 ## Metacircular
 
 ### Level 5 fun expr array
