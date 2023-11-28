@@ -16,6 +16,7 @@ See the doc folder for more information:
 Play with an example game obeying this subset:
 
 * https://bkil.gitlab.io/static-wonders.js/game/rockpaper-sum.html
+* https://bkil.gitlab.io/static-wonders.js/game/memopair.htm
 
 Older notes:
 
