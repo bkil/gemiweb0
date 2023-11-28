@@ -224,10 +224,12 @@ function closeLastTag(j) {
     if (attr['src']) {
       var get = j['get'];
       var body = get(attr['src']);
-      if (body === undefined) {
-        eval2To(j, s['textContent']);
-      } else {
+      if (body !== undefined) {
         eval2To(j, body);
+      } else if (attr['onerror'] !== undefined) {
+        eval2To(j, attr['onerror']);
+      } else {
+        eval2To(j, s['textContent']);
       }
     } else {
       eval2To(j, s['textContent']);
