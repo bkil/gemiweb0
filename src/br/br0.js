@@ -412,18 +412,6 @@ function parseMeta(s) {
         }
       }
     }
-  } else if ((acc1(s, '[') && (acc1(s, 'C') && acc1(s, 'D'))) && ((acc1(s, 'A') && acc1(s, 'T')) && (acc1(s, 'A') && acc1(s, '[')))) {
-    found = 1;
-    b = more(s);
-    while (b) {
-      i = s['i'];
-      b = !(acc1(s, ']') && (acc1(s, ']') && acc1(s, '>')));
-      if (b) {
-        s['i'] = i;
-        copyText(s);
-        b = more(s);
-      }
-    }
   }
 
   if (!found) {

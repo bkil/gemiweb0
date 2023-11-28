@@ -28,7 +28,7 @@
 
 ### CONTENT
 
-`{ "<!--.*?-->" | "<![CDATA[.*?]]>" | TEXT }*`
+`{ "<!--.*?-->" | TEXT }*`
 
 ### NAME
 
@@ -79,10 +79,9 @@ https://html.spec.whatwg.org/multipage/syntax.html#elements-2
 
 ## CDATA
 
-```
-<![CDATA[
-]]>
-```
+`<![CDATA[...]]>` is not supported, because it is XML-specific.
+
+https://en.wikipedia.org/wiki/CDATA
 
 ## Tags to assume
 
