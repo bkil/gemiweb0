@@ -16,7 +16,17 @@ eval((function() {
 function eval2To(j, prog) {
   function eval2To0(self, j, prog) {
     var g = j.vars;
-    var o = eval2(g, prog);
+    var o;
+    try {
+      o = eval2(g, prog);
+    } catch (e) {
+      var msg = ('<p>Exception running JavaScript: ' + e) + '<p>';
+      if (j.d.documentWritten === undefined) {
+        j.d.documentWritten = '';
+      }
+      j.d.documentIsOpen = 1;
+      j.d.documentWritten = j.d.documentWritten + msg;
+    }
     var f = g['.onTimeout'];
     var t = g['.timeoutMs'];
     if (t && (t < 1000)) {
