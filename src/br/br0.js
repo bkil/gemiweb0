@@ -644,14 +644,14 @@ function browse(j, url, brows) {
   var html;
   if (url.indexOf('javascript:') === 0) {
     html = eval2To(j, decodeURIComponent(url.substr(11)));
-    if (html === undefined) {
+    if (typeof html === 'string') {
+      browseData(j, url, html, 0, brows);
+    } else {
       var d = j.d;
       html = d['documentWritten'];
       if (html !== undefined) {
         browseData(j, url, '' + html, 0, brows);
       }
-    } else {
-      browseData(j, url, '' + html, 0, brows);
     }
   } else {
     var get = j['get'];
