@@ -1,1 +1,1 @@
-var i = 60; document.write(i+9)
+var i = 60; document.write(''+(i+9))
