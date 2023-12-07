@@ -109,7 +109,7 @@ The following restrictions are non-normative and being worked on pending the res
 * Verdict: recommended
 * Reason: the simplest alternative for client side interaction
 * Incidence rate: very high
-* Use case: client side interactions, form processing, validation
+* Use case: client side interactions, form processing, validation, bookmarklets
 * Implementation complexity: trivial
 * Workaround: implement event handlers such as onclick and onsubmit or navigate to a URI pointing to (or submit a form targeting) an HTML containing JavaScript that dispatches upon loading, encode the link identifier and serialize the whole application state to the URI query or anchor
 * Standard: NS2
@@ -355,10 +355,10 @@ The following restrictions are non-normative and being worked on pending the res
 ### XMLHttpRequest
 
 * Verdict: partial
-* Implementation complexity: high, header handling, timeout
+* Implementation complexity: high, header handling, timeout, reference cycle
 * Restriction: can only return a string responseText without progress, CORS may not be complete
-* Use cases: interfacing with API, third party integration, incremental update of local state
-* Workaround: JSONP, form submit
+* Use cases: interfacing with API, third party integration, incremental update of local state, bookmarklet that would parse the current document
+* Workaround: JSONP, form submit, Fetch
 * Standard: Internet Explorer 5, Gecko 1.0, Safari 1.2, Opera 8
 
 ### Automatic ToNumber conversion
