@@ -23,7 +23,7 @@ main() {
     else
       true
     fi &&
-    compile -flto vm.o test-vm.c
+    compile -flto vm.o test-vm.c testutil.c
   } && {
 
     if [ -n "$ISQUICK" ]; then
