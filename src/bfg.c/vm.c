@@ -42,7 +42,6 @@ struct Rule {
     const struct Rule *atleast0;
     const struct Rule **call;
     const FunProto fun;
-    const FunProto funForce;
     const struct Rule *local;
   } V;
 };
@@ -143,9 +142,8 @@ parse(Parser *p, const Rule *rule, size_t limit) {
       }
       return 1;
 
-    case Call: {
+    case Call:
       return parse(p, *rule->V.call, limit);
-    }
 
     case Fun:
       if (p->nest) {
