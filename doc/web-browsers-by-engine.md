@@ -166,10 +166,10 @@ More of a tech demo than a product for end users, but it is a unique independent
 
 * https://en.wikipedia.org/wiki/Dillo#Forks
 * https://github.com/crossbowerbt/dillo-plus
+* https://web.archive.org/web/20220518060405/https://www.dillo.org/
 * no JavaScript
 * their domain name was squatted by a Wordpress clone
 * CSS support to be improved
-* no JavaScript
 
 ### Links2
 
