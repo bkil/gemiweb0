@@ -553,7 +553,8 @@ String_concat(Object *t1, Object *t2) {
   const size_t m = t2->V.s.len;
   char *s = malloc(n + m + 1);
   strncpy(s, t1->V.s.s, n);
-  strncpy(s + n, t2->V.s.s, m + 1);
+  strncpy(s + n, t2->V.s.s, m);
+  s[n + m] = 0;
   return StringObject_new_str((Str){.s = s, .len = n + m});
 }
 
