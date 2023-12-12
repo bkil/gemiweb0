@@ -1856,7 +1856,7 @@ global_require(Parser *p, List *l) {
 static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
 global_setTimeout(Parser *p, List *l) {
-  if (!l || (l->value->t != FunctionJs) || (l->next->value->t != IntObject)) {
+  if (!l || (l->value->t != FunctionJs) || (!l->next) || (l->next->value->t != IntObject)) {
     return setRunError(p, "expecting Function and Int argument", 0);
   }
   Object_set(&p->onTimeout, l->value);
