@@ -1259,8 +1259,8 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
   } else if ((t1->t == IntObject) && (t1->t == t2->t)) {
     int x = t1->V.i;
     int y = t2->V.i;
-    Object_free(t1);
-    Object_free(t2);
+    Object_set0(&t1);
+    Object_set0(&t2);
     switch (op) {
       case '+':
         return IntObject_new(x + y);
@@ -1302,8 +1302,8 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
   } else if ((t1->t == DateObject) && (t2->t == IntObject)) {
     long d = t1->V.d;
     int y = t2->V.i;
-    Object_free(t1);
-    Object_free(t2);
+    Object_set0(&t1);
+    Object_set0(&t2);
     switch (op) {
       case '+':
         return DateObject_new(d + y);
@@ -1354,8 +1354,8 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
     }
   }
 
-  Object_free(t1);
-  Object_free(t2);
+  Object_freeMaybe(t1);
+  Object_freeMaybe(t2);
   return setRunError(p, "unknown operand types for expression", 0);
 }
 
