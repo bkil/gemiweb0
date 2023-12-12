@@ -1,4 +1,5 @@
-#include "string.h" /* strdup */
+#include "include.h" /* strdup */
+#include <stdio.h> /* perror */
 #include <sys/mman.h> /* munmap */
 #include <unistd.h> /* close */
 #include "vm.h"

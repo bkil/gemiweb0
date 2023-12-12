@@ -1,7 +1,7 @@
 #include "include.h" /* strnlen strdup strndup getline clock_gettime; strlen strcmp strncmp strncpy strstr */
 #include "vm-impl.h"
 
-#include <stdio.h> /* STDIN_FILENO fputs fputc putchar stdout stderr getline */
+#include <stdio.h> /* STDIN_FILENO fputs fputc putchar stdout stderr getline perror */
 #include <malloc.h> /* malloc free */
 #include <stdlib.h> /* atoi size_t */
 #include <sys/mman.h> /* mmap */

@@ -1,5 +1,5 @@
 #include "vm.h" /* Parser_new Parser_eval Parser_free off_t2size_t */
-#include <stdio.h> /* fputs stderr */
+#include <stdio.h> /* fputs stderr perror */
 #include <stdlib.h> /* size_t */
 #include <sys/mman.h> /* mmap munmap */
 #include <sys/types.h> /* open fstat */
