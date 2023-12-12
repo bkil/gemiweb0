@@ -27,7 +27,7 @@ tk() {
   readonly EXPRET="$2"
   readonly EXPOUT="`printf "$3"`"
 
-  readonly TKF="tmp.js"
+  readonly TKF="tmp.systest.in.js"
   echo "$CASE" > "$TKF"
 
   GOTOUT="`$B $TKF </dev/null`"
@@ -66,6 +66,73 @@ test_stdin() {
   tk "process.stdin.on('data')" -2 ''
 }
 
+tn() {
+  local GIVEIN EXPNET EXPOUT C TNF GOTRET GOTOUT PID
+  readonly GIVEIN="$1"
+  readonly EXPNET="`printf "$2"`"
+  readonly EXPOUT="`printf "$3"`"
+  readonly TNF="tmp.sock.out.txt"
+
+  if [ "$PORT" -ge 1024 ]; then
+    {
+      printf "$GIVEIN" |
+      nc -l -q 1 "$PORT" > "$TNF"
+    } &
+    PID=$!
+  fi
+
+  GOTOUT="`eval "$C"`"
+  GOTRET="$?"
+  [ "$GOTRET" -ge 128 ] && GOTRET=$((GOTRET - 256))
+
+  [ "$PORT" -ge 1024 ] &&
+    wait "$PID"
+
+  GOTNET="`cat "$TNF" 2>/dev/null`"
+
+  if ! [ "$GOTRET" = 0 ]; then
+    printf "failed status for network \"%s\", expected 0, error %s\n" "$C $GIVEIN" "$GOTRET" >&2
+    FAILS=$((FAILS+1))
+  elif ! [ "$GOTNET" = "$EXPNET" ]; then
+    printf "failed data over network \"%s\", expect: \"%s\", got: \"%s\"\n" "$C $GIVEIN" "$EXPNET" "$GOTNET" >&2
+    FAILS=$((FAILS+1))
+  elif ! [ "$GOTOUT" = "$EXPOUT" ]; then
+    printf "failed output for network \"%s\", expect: \"%s\", got: \"%s\"\n" "$C $GIVEIN" "$EXPOUT" "$GOTOUT" >&2
+    FAILS=$((FAILS+1))
+  else
+    SUCC=$((SUCC+1))
+  fi
+
+  rm "$TNF" 2>/dev/null
+}
+
+test_network() {
+  local PORT C
+  PORT="21198"
+
+  C="$B test-sock-end.js </dev/null"
+  tn "" ":connected" "!connected!writebad,expecting String argument!end"
+
+  C="$B test-sock-conex.js </dev/null"
+  tn "" "" "!throw!error"
+
+  C="$B test-sock-coner.js </dev/null"
+  tn "" "" "!fatal!error"
+
+  C="$B test-sock.js </dev/null"
+
+  #TODO: sleeps for 1 second, should kill nc instead
+  tn "" ":connected" "!connected!eof,"
+
+  tn "?bye" ":connected" "!connected!bye,?bye"
+  tn "?ping?bye" ":connected:pong" "!connected!pong!bye,?ping?bye"
+
+  PORT="1"
+  tn "-" "" "!error"
+
+  tk "var n=require('node:net'); var o=new Object; o.host='-'; o.port=1; var c=n.createConnection(o); c.on('error', function(e){console.log(e)}); c.on('connect',function(){})" 0 'failed to get address of host'
+}
+
 main() {
   local B FAILS SUCC
   FAILS=0
@@ -77,6 +144,7 @@ main() {
   readonly B="$*"
 
   test_stdin
+  test_network
 
   if [ "$FAILS" = 0 ]; then
     printf "All %d system tests successful\n" "$SUCC" >&2

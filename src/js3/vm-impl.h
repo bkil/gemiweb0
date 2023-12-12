@@ -88,12 +88,18 @@ typedef struct Parser {
   Object *stringPrototype;
   Object *onStdinData;
   Object *onTimeout;
+  Object *connClient;
+  Object *connOptions;
+  Object *onConnData;
+  Object *onConnEnd;
+  Object *onConnError;
   long int timeoutMs;
 
   const char *err;
   Id errName;
   const char *parseErr;
 
+  int sock;
   int debug;
   int nest;
   int needSemicolon;

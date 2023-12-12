@@ -192,6 +192,19 @@ Parser_free(Parser *p) {
     Object_free(p->onStdinData);
     /* /coverage:smoke */
   }
+  /* coverage:net */
+  Object_freeMaybe(p->connClient);
+  Object_freeMaybe(p->connOptions);
+  Object_freeMaybe(p->onConnData);
+  Object_freeMaybe(p->onConnEnd);
+  Object_freeMaybe(p->onConnError);
+  /* /coverage:net */
+  if (p->sock != -1) {
+    /* coverage:unreachable */
+    shutdown(p->sock, SHUT_RDWR);
+    close(p->sock);
+    /* /coverage:unreachable */
+  }
   Object_free(p->vars);
   free(p);
 }

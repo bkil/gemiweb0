@@ -8,7 +8,7 @@
 #include <sys/types.h> /* open fstat select */
 #include <sys/stat.h> /* open fstat */
 #include <fcntl.h> /* open */
-#include <unistd.h> /* close fstat select */
+#include <unistd.h> /* close fstat select read write */
 #include <sys/time.h> /* select */
 #include <limits.h> /* INT_MIN INT_MAX */
 
@@ -1855,6 +1855,184 @@ addPrototype(Object *parent) {
   return o;
 }
 
+/* coverage:net */
+static Object *
+__attribute__((warn_unused_result, nonnull(1)))
+node_net_connection_end(Parser *p, List *l) {
+  Object_set0(&p->connClient);
+  Object_set0(&p->connOptions);
+  Object_set0(&p->onConnData);
+  Object_set0(&p->onConnEnd);
+  Object_set0(&p->onConnError);
+
+  if (p->sock != -1) {
+    if (shutdown(p->sock, SHUT_RDWR)) {
+      /* coverage:no */
+      close(p->sock);
+      p->sock = -1;
+      /* /coverage:no */
+      return &undefinedObject;
+    }
+    if (close(p->sock)) {
+      /* coverage:no */
+      p->sock = -1;
+      return &undefinedObject;
+      /* /coverage:no */
+    }
+    p->sock = -1;
+  }
+  return &undefinedObject;
+}
+
+static void
+__attribute__((nonnull))
+node_net_errorConnecting(Parser *p, const char *err) {
+  Object *onConnError = p->onConnError ? Object_ref(p->onConnError) : 0;
+  if (node_net_connection_end(p, 0)) {};
+  if (onConnError) {
+    List *args = List_new(0, 0, StringObject_new(err));
+    if (invokeFun(p, onConnError, args, 0)) {}
+    List_free(args);
+    Object_free(onConnError);
+  }
+}
+
+static void
+__attribute__((nonnull))
+node_net_startConnect(Parser *p, Object *onConnect) {
+  List *o = p->connOptions->V.m;
+  List *e;
+  if (!(e = Map_get_const(o, "port")) || (e->value->t != IntObject) || (e->value->V.i <= 0) || (e->value->V.i > 65535)) {
+    /* coverage:netsmoke */
+    node_net_errorConnecting(p, "expecting port");
+    return;
+    /* /coverage:netsmoke */
+  }
+  Object *port = Object_toString(e->value);
+  if (!(e = Map_get_const(o, "host")) || !isString(e->value)) {
+    /* coverage:netsmoke */
+    Object_free(port);
+    node_net_errorConnecting(p, "expecting host");
+    return;
+    /* /coverage:netsmoke */
+  }
+  char *host = strndup(e->value->V.c.s, e->value->V.c.len);
+
+  struct addrinfo *addrs;
+  struct addrinfo hints = {.ai_family = AF_UNSPEC, .ai_socktype = SOCK_STREAM, .ai_flags = AI_ADDRCONFIG};
+  int err = getaddrinfo(host, port->V.c.s, &hints, &addrs);
+  Object_free(port);
+  free(host);
+  if (err) {
+    node_net_errorConnecting(p, "failed to get address of host");
+    return;
+  }
+  p->sock = 0;
+  struct addrinfo *addr = addrs;
+  for (; addr; addr = addr->ai_next) {
+    p->sock = socket(addr->ai_family, addr->ai_socktype | SOCK_CLOEXEC, addr->ai_protocol);
+    if (p->sock < 0) {
+      /* coverage:no */
+      continue;
+      /* /coverage:no */
+    }
+    if (!connect(p->sock, addr->ai_addr, addr->ai_addrlen)) {
+      break;
+    }
+    close(p->sock);
+  }
+  freeaddrinfo(addrs);
+  if (!addr) {
+    node_net_errorConnecting(p, "failed to connect to any address");
+    return;
+  }
+
+  List *args = List_new(0, 0, Object_ref(p->connClient));
+  Prog saved = p->prog;
+  Object *cb = invokeFun(p, onConnect, args, 0);
+  List_free(args);
+  if (!cb) {
+    clearErr(p);
+    setRunError(p, 0, 0);
+    p->prog = saved;
+    node_net_errorConnecting(p, "failed onconnect event handler");
+    return;
+  }
+  Object_free(cb);
+  if (p->thrw) {
+    Object_set0(&p->thrw);
+    p->nest--;
+    node_net_errorConnecting(p, "exception in onconnect event handler");
+    return;
+  }
+}
+
+static Object *
+__attribute__((warn_unused_result, nonnull(1)))
+node_net_connection_on(Parser *p, List *l) {
+  if (!l || !isString(l->value) || !l->next || (l->next->value->t != FunctionJs)) {
+    /* coverage:netsmoke */
+    return setThrow(p, "expecting String and Function argument");
+    /* /coverage:netsmoke */
+  }
+  if (strncmpEq(l->value->V.c, "data")) {
+    Object_set(&p->onConnData, l->next->value);
+  } else if (strncmpEq(l->value->V.c, "connect")) {
+    node_net_startConnect(p, l->next->value);
+  } else if (strncmpEq(l->value->V.c, "end")) {
+    Object_set(&p->onConnEnd, l->next->value);
+  } else if (strncmpEq(l->value->V.c, "error")) {
+    Object_set(&p->onConnError, l->next->value);
+  } else {
+    /* coverage:netsmoke */
+    return setThrow(p, "expecting 'connect', 'data', 'end' or 'error' as argument");
+    /* /coverage:netsmoke */
+  }
+  return &undefinedObject;
+}
+
+static Object *
+__attribute__((warn_unused_result, nonnull(1)))
+node_net_connection_write(Parser *p, List *l) {
+  if (!l || !isString(l->value)) {
+    return setThrow(p, "expecting String argument");
+  }
+  if (p->sock == -1) {
+    /* coverage:unreachable */
+    return setThrow(p, "socket closed");
+    /* /coverage:unreachable */
+  }
+  ssize_t wn = write(p->sock, l->value->V.c.s, l->value->V.c.len);
+  if ((wn < 0) || ((size_t)wn < l->value->V.c.len)) {
+    /* coverage:no */
+    if (p->onConnEnd) {
+      if (invokeFun(p, p->onConnEnd, 0, 0)) {}
+    }
+    if (node_net_connection_end(p, 0)) {}
+    /* /coverage:no */
+  }
+  return &undefinedObject;
+}
+
+static Object *
+__attribute__((warn_unused_result, nonnull(1)))
+node_net_createConnection(Parser *p, List *l) {
+  if (!l || (l->value->t != MapObject)) {
+    /* coverage:netsmoke */
+    return setThrow(p, "expecting Object argument");
+    /* /coverage:netsmoke */
+  }
+  p->connOptions = Object_ref(l->value);
+
+  Object *ret = MapObject_new();
+  addFunction(ret, "on", node_net_connection_on);
+  addFunction(ret, "end", node_net_connection_end);
+  addFunction(ret, "write", node_net_connection_write);
+  p->connClient = Object_ref(ret);
+  return ret;
+}
+/* /coverage:net */
+
 /* coverage:smokesystem */
 static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
@@ -1866,6 +2044,12 @@ global_require(Parser *p, List *l) {
     Object *o = MapObject_new();
     addFunction(o, "readFile", &fs_readFile);
     return o;
+  } else if (strncmpEq(l->value->V.c, "node:net")) {
+    /* coverage:net */
+    Object *o = MapObject_new();
+    addFunction(o, "createConnection", &node_net_createConnection);
+    return o;
+    /* /coverage:net */
   } else {
     return &undefinedObject;
   }
@@ -1922,6 +2106,12 @@ Parser_new(void) {
 
   p->onTimeout = 0;
   p->onStdinData = 0;
+  p->connClient = 0;
+  p->connOptions = 0;
+  p->onConnData = 0;
+  p->onConnEnd = 0;
+  p->onConnError = 0;
+  p->sock = -1;
   return p;
 }
 
@@ -2139,7 +2329,7 @@ Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
 /* coverage:smokesystem */
 int
 Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
-  while (p->onTimeout || p->onStdinData) {
+  while (p->onTimeout || p->onStdinData || p->onConnData) {
     fd_set rfd;
     FD_ZERO(&rfd);
     int fds = 0;
@@ -2148,6 +2338,14 @@ Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
       FD_SET(STDIN_FILENO, &rfd);
       fds++;
       /* /coverage:stdin */
+    }
+    if (p->sock != -1) {
+      /* coverage:no */
+      FD_SET(p->sock, &rfd);
+      /* /coverage:no */
+      /* coverage:net */
+      fds = p->sock + 1;
+      /* /coverage:net */
     }
 
     int ret;
@@ -2196,6 +2394,27 @@ Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
       if (Parser_evalResult(p, o)) {}
     }
     /* /coverage:stdin */
+    /* coverage:no */
+    if ((p->sock != -1) && p->onConnData && FD_ISSET(p->sock, &rfd)) {
+    /* /coverage:no */
+    /* coverage:net */
+      char buf[2048];
+      ssize_t nread = read(p->sock, &buf, sizeof(buf));
+      Object *o = &undefinedObject;
+      if (nread <= 0) {
+        if (p->onConnEnd) {
+          o = invokeFun(p, p->onConnEnd, 0, 0);
+        }
+        if (node_net_connection_end(p, 0)) {}
+      } else {
+        Object *arg = StringObject_new_const((Id){.s = buf, .len = (size_t)nread});
+        List *args = List_new(0, 0, arg);
+        o = invokeFun(p, p->onConnData, args, 0);
+        List_free(args);
+      }
+      if (Parser_evalResult(p, o)) {}
+    }
+    /* /coverage:net */
   }
   return Parser_eval(p, prog, plen, debug);
 }

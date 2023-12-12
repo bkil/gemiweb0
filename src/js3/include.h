@@ -34,12 +34,12 @@
 #else
 
 # ifdef _include_h_need_XOPEN_SOURCE
-/* strnlen strdup strndup getline */
+/* strnlen strdup strndup getline getaddrinfo freeaddrinfo gai_strerror */
 #  define _XOPEN_SOURCE 700
 # endif
 
 # ifdef _include_h_need_POSIX_C_SOURCE
-/* strnlen strdup strndup getline clock_gettime */
+/* strnlen strdup strndup getline clock_gettime getaddrinfo freeaddrinfo gai_strerror */
 #  define _POSIX_C_SOURCE 200809L
 # endif
 
@@ -63,5 +63,14 @@
 
 /* clock_gettime */
 #include <time.h>
+
+/* getaddrinfo freeaddrinfo gai_strerror socket connect */
+#include <sys/types.h>
+
+/* getaddrinfo freeaddrinfo gai_strerror socket connect shutdown */
+#include <sys/socket.h>
+
+/* getaddrinfo freeaddrinfo gai_strerror */
+#include <netdb.h>
 
 #endif

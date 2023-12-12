@@ -21,7 +21,6 @@ test_coverage() {
   sed '
     /\/\* coverage:no \*\//,/\/\* \/coverage:no \*\//d
     /\/\* coverage:unreachable \*\//,/\/\* \/coverage:unreachable \*\//d
-    /\/\* coverage:net \*\//,/\/\* \/coverage:net \*\//d
     ' |
   if [ "$PHASE" = "smoke" ]; then
     sed -n '
@@ -29,12 +28,14 @@ test_coverage() {
       /\/\* coverage:smoke \*\//,/\/\* \/coverage:smoke \*\//p
       /\/\* coverage:smokesystem \*\//,/\/\* \/coverage:smokesystem \*\//p
       /\/\* coverage:file \*\//,/\/\* \/coverage:file \*\//p
+      /\/\* coverage:netsmoke \*\//,/\/\* \/coverage:netsmoke \*\//p
       '
   else
     sed '
       /\/\* coverage:stderr \*\//,/\/\* \/coverage:stderr \*\//d
       /\/\* coverage:smoke \*\//,/\/\* \/coverage:smoke \*\//d
       /\/\* coverage:file \*\//,/\/\* \/coverage:file \*\//d
+      /\/\* coverage:netsmoke \*\//,/\/\* \/coverage:netsmoke \*\//d
       '
   fi |
 
@@ -42,11 +43,13 @@ test_coverage() {
     sed -n '
       /\/\* coverage:stdin \*\//,/\/\* \/coverage:stdin \*\//p
       /\/\* coverage:stdout \*\//,/\/\* \/coverage:stdout \*\//p
+      /\/\* coverage:net \*\//,/\/\* \/coverage:net \*\//p
       '
   else
     sed '
       /\/\* coverage:stdin \*\//,/\/\* \/coverage:stdin \*\//d
       /\/\* coverage:stdout \*\//,/\/\* \/coverage:stdout \*\//d
+      /\/\* coverage:net \*\//,/\/\* \/coverage:net \*\//d
       '
   fi |
 

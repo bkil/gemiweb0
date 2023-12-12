@@ -46,5 +46,15 @@ main(void) {
   /* non-conforming */
   t("var p = new Object; eval2(p, 'var o = new Object; setTimeout(function() { o.i = 9 }, 0)'); eval2(p, 'setTimeout(function(){}, 0)'); var f = p['.onTimeout']; eval2(p, f); eval2(p, 'o.i === undefined')", 1);
 
+  t("var n=require('node:net'); n.createConnection()", -2);
+  t("var n=require('node:net'); n.createConnection(2)", -2);
+  t("var n=require('node:net'); var c=n.createConnection(new Object); c.on()", -2);
+  t("var n=require('node:net'); var c=n.createConnection(new Object); c.on('u', function(){})", -2);
+  t("var n=require('node:net'); var c=n.createConnection(new Object); c.on('connect')", -2);
+  t("var n=require('node:net'); var c=n.createConnection(new Object); c.on('connect', 2)", -2);
+  t("var n=require('node:net'); var c=n.createConnection(new Object); c.on('connect', function(){})", 0);
+  t("var n=require('node:net'); var o=new Object; o.host='localhost'; var c=n.createConnection(o); var e=new Object; c.on('error', function(m){e.e=m}); c.on('connect',function(){}); e.e==='expecting port'", 1);
+  t("var n=require('node:net'); var o=new Object; o.port=1; var c=n.createConnection(o); var e=new Object; c.on('error', function(m){e.e=m}); c.on('connect',function(){}); e.e==='expecting host'", 1);
+
   return exitWithErrorCount("smoke");
 }
