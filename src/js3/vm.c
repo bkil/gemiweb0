@@ -554,7 +554,7 @@ String_concat(Object *t1, Object *t2) {
 
 static int
 __attribute__((nonnull, warn_unused_result))
-accept(Parser *p, char c) {
+acceptChar(Parser *p, char c) {
   if ((p->prog.s < p->prog.end) && (*p->prog.s == c)) {
     p->prog.s++;
     return 1;
@@ -564,8 +564,8 @@ accept(Parser *p, char c) {
 
 static int
 __attribute__((nonnull, warn_unused_result))
-expect(Parser *p, char c) {
-  if (accept(p, c)) {
+expectChar(Parser *p, char c) {
+  if (acceptChar(p, c)) {
     return 1;
   }
   p->parseErr = "expected different character";
@@ -612,14 +612,14 @@ static int
 __attribute__((nonnull, warn_unused_result))
 acceptWs(Parser *p, char c) {
   skipWs(p);
-  return accept(p, c);
+  return acceptChar(p, c);
 }
 
 static int
 __attribute__((nonnull, warn_unused_result))
 expectWs(Parser *p, char c) {
   skipWs(p);
-  return expect(p, c);
+  return expectChar(p, c);
 }
 
 static int
@@ -795,7 +795,7 @@ static Object *
 __attribute__((nonnull, warn_unused_result))
 parseIndex(Parser *p) {
   skipWs(p);
-  if (accept(p, '[')) {
+  if (acceptChar(p, '[')) {
     Object *o = parseExpr(p);
     if (o) {
       if (expectWs(p, ']')) {
@@ -803,7 +803,7 @@ parseIndex(Parser *p) {
       }
       Object_free(o);
     }
-  } else if (accept(p, '.')) {
+  } else if (acceptChar(p, '.')) {
     Id id;
     if (parseId(p, &id)) {
       return StringObject_new_const(id);
@@ -884,7 +884,7 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got, Object *se
   skipWs(p);
 
   const char *prog = p->prog.s;
-  if (accept(p, '=') && !accept(p, '=')) {
+  if (acceptChar(p, '=') && !acceptChar(p, '=')) {
     if (!key) {
       return setRunError(p, "expected a writable left hand side", 0);
     }
@@ -917,7 +917,7 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got, Object *se
 
   Object *o = Object_ref(e ? e->value : got ? got : &undefinedObject);
   List *args = 0, *argsEnd = 0;
-  if (accept(p, '(')) {
+  if (acceptChar(p, '(')) {
     if (!acceptWs(p, ')')) {
       do {
         Object *arg = parseExpr(p);
@@ -1127,7 +1127,7 @@ parseLTerm(Parser *p) {
     return o;
   } else if ((o = parseArrayLiteral(p))) {
     return o;
-  } else if (acceptWs(p, op = '!') || accept(p, op = '~') || accept(p, op = '-')) {
+  } else if (acceptWs(p, op = '!') || acceptChar(p, op = '~') || acceptChar(p, op = '-')) {
     if (!(o = parseTerm(p))) {
       return 0;
     }
@@ -1181,43 +1181,43 @@ parseOperator(Parser *p) {
   skipWs(p);
   Prog saved = p->prog;
   char op;
-  if (accept(p, op = '+')) {
-  } else if (accept(p, op = '-')) {
-  } else if (accept(p, op = '*')) {
-  } else if (accept(p, op = '/')) {
-  } else if (accept(p, op = '%')) {
-  } else if (accept(p, op = '^')) {
-  } else if (accept(p, op = '|')) {
-    if (accept(p, '|')) {
+  if (acceptChar(p, op = '+')) {
+  } else if (acceptChar(p, op = '-')) {
+  } else if (acceptChar(p, op = '*')) {
+  } else if (acceptChar(p, op = '/')) {
+  } else if (acceptChar(p, op = '%')) {
+  } else if (acceptChar(p, op = '^')) {
+  } else if (acceptChar(p, op = '|')) {
+    if (acceptChar(p, '|')) {
       op = 'O';
     }
-  } else if (accept(p, op = '&')) {
-    if (accept(p, '&')) {
+  } else if (acceptChar(p, op = '&')) {
+    if (acceptChar(p, '&')) {
       op = 'A';
     }
-  } else if (accept(p, op = '<')) {
-    if (accept(p, '<')) {
+  } else if (acceptChar(p, op = '<')) {
+    if (acceptChar(p, '<')) {
       op = 'L';
-    } else if (accept(p, '=')) {
+    } else if (acceptChar(p, '=')) {
       op = 'l';
     }
-  } else if (accept(p, op = '>')) {
-    if (accept(p, '>')) {
-      if (accept(p, '>')) {
+  } else if (acceptChar(p, op = '>')) {
+    if (acceptChar(p, '>')) {
+      if (acceptChar(p, '>')) {
         op = 'r';
       } else {
         op = 'R';
       }
-    } else if (accept(p, '=')) {
+    } else if (acceptChar(p, '=')) {
       op = 'g';
     }
-  } else if (accept(p, op = '=')) {
-    if (!expect(p, '=') || !expect(p, '=')) {
+  } else if (acceptChar(p, op = '=')) {
+    if (!expectChar(p, '=') || !expectChar(p, '=')) {
       p->prog = saved;
       return 0;
     }
-  } else if (accept(p, op = '!')) {
-    if (!expect(p, '=') || !expect(p, '=')) {
+  } else if (acceptChar(p, op = '!')) {
+    if (!expectChar(p, '=') || !expectChar(p, '=')) {
       p->prog = saved;
       return 0;
     }
@@ -1434,7 +1434,7 @@ parseWhile(Parser *p) {
   int cond = 1;
   do {
     p->prog.s = begin;
-    if (!(o = parseExpr(p)) || !expect(p, ')')) {
+    if (!(o = parseExpr(p)) || !expectChar(p, ')')) {
       return 0;
     }
     if (!p->nest) {
