@@ -1646,18 +1646,10 @@ haveMore(Parser *p) {
 static int
 __attribute__((nonnull, warn_unused_result))
 parseRequiredSemicolon(Parser *p) {
-  skipWs(p);
   if (p->needSemicolon) {
-    if (expect(p, ';')) {
-      p->needSemicolon = 0;
-    } else {
-      return 0;
-    }
-  } else {
-    if (accept(p, ';')) {
-      p->needSemicolon = 0;
-    }
+    return 0;
   }
+  if (acceptWs(p, ';')) {}
   return 1;
 }
 
