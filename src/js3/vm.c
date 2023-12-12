@@ -240,13 +240,6 @@ ArrayObject_new(void) {
 }
 
 static void
-Object_freeMaybe(Object *o) {
-  if (o) {
-    Object_free(o);
-  }
-}
-
-static void
 __attribute__((nonnull(1)))
 Object_setUnref(Object **old, Object *next) {
   Object_freeMaybe(*old);

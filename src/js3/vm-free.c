@@ -123,6 +123,13 @@ Object_free(Object *o) {
   free(o);
 }
 
+static void
+Object_freeMaybe(Object *o) {
+  if (o) {
+    Object_free(o);
+  }
+}
+
 static Object *
 __attribute__((returns_nonnull, nonnull))
 Object_ref(Object *o) {
