@@ -25,14 +25,14 @@ test_coverage() {
     ' |
   if [ "$PHASE" = "smoke" ]; then
     sed -n '
-      /\/\* coverage:stdout \*\//,/\/\* \/coverage:stdout \*\//p
+      /\/\* coverage:stderr \*\//,/\/\* \/coverage:stderr \*\//p
       /\/\* coverage:smoke \*\//,/\/\* \/coverage:smoke \*\//p
       /\/\* coverage:smokesystem \*\//,/\/\* \/coverage:smokesystem \*\//p
       /\/\* coverage:file \*\//,/\/\* \/coverage:file \*\//p
       '
   else
     sed '
-      /\/\* coverage:stdout \*\//,/\/\* \/coverage:stdout \*\//d
+      /\/\* coverage:stderr \*\//,/\/\* \/coverage:stderr \*\//d
       /\/\* coverage:smoke \*\//,/\/\* \/coverage:smoke \*\//d
       /\/\* coverage:file \*\//,/\/\* \/coverage:file \*\//d
       '
@@ -41,17 +41,17 @@ test_coverage() {
   if [ "$PHASE" = "system" ]; then
     sed -n '
       /\/\* coverage:stdin \*\//,/\/\* \/coverage:stdin \*\//p
+      /\/\* coverage:stdout \*\//,/\/\* \/coverage:stdout \*\//p
       '
   else
     sed '
       /\/\* coverage:stdin \*\//,/\/\* \/coverage:stdin \*\//d
+      /\/\* coverage:stdout \*\//,/\/\* \/coverage:stdout \*\//d
       '
   fi |
 
   if  [ "$PHASE" = "smoke" ] || [ "$PHASE" = "system" ]; then
-    sed -n '
-      /\/\* coverage:smokesystem \*\//,/\/\* \/coverage:smokesystem \*\//p
-      '
+    cat
   else
     sed '
       /\/\* coverage:smokesystem \*\//,/\/\* \/coverage:smokesystem \*\//d

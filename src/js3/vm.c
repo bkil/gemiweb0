@@ -12,7 +12,7 @@
 #include <sys/time.h> /* select */
 #include <limits.h> /* INT_MIN INT_MAX */
 
-/* coverage:stdout */
+/* coverage:stderr */
 static void
 __attribute__((nonnull))
 putsn(const char *s, size_t len, FILE *out) {
@@ -28,7 +28,7 @@ showProg(Parser *p) {
   putsn(p->prog.s, left < 32 ? left : 32, stderr);
   fputs("\n", stderr);
 }
-/* /coverage:stdout */
+/* /coverage:stderr */
 
 #ifdef SMALLBIN
 # include "vm-smallbin.c"
@@ -1938,7 +1938,7 @@ static void
 __attribute__((nonnull))
 showParseError(Parser *p) {
   if (p->debug) {
-    /* coverage:stdout */
+    /* coverage:stderr */
     fputs("parse error: ", stderr);
     if (p->parseErr) {
       fputs(p->parseErr, stderr);
@@ -1950,7 +1950,7 @@ showParseError(Parser *p) {
     }
     fputs("\n", stderr);
     showProg(p);
-    /* /coverage:stdout */
+    /* /coverage:stderr */
   }
 }
 
@@ -1958,7 +1958,7 @@ static void
 __attribute__((nonnull))
 showRunError(Parser *p) {
   if (p->debug) {
-    /* coverage:stdout */
+    /* coverage:stderr */
     fputs("runtime error: ", stderr);
     if (p->err) {
       fputs(p->err, stderr);
@@ -1969,7 +1969,7 @@ showRunError(Parser *p) {
     }
     fputs("\n", stderr);
     showProg(p);
-    /* /coverage:stdout */
+    /* /coverage:stderr */
   }
 }
 
@@ -2089,13 +2089,13 @@ Parser_evalResult(Parser *p, Object *o) {
     int ret;
     if (p->thrw) {
       if (p->debug) {
-        /* coverage:stdout */
+        /* coverage:stderr */
         Object *os = Object_toString(p->thrw);
         fputs("runtime error: exception\n", stderr);
         putsn(os->V.s.s, os->V.s.len, stderr);
         Object_free(os);
         fputs("\n", stderr);
-        /* /coverage:stdout */
+        /* /coverage:stderr */
       }
       Object_set0(&p->thrw);
       ret = -2;
@@ -2109,10 +2109,10 @@ Parser_evalResult(Parser *p, Object *o) {
   if (p->ret) {
     Object_set0(&p->ret);
     if (p->debug) {
-      /* coverage:stdout */
+      /* coverage:stderr */
       fputs("runtime error: return outside function", stderr);
       fputs("\n", stderr);
-      /* /coverage:stdout */
+      /* /coverage:stderr */
     }
     return -2;
   }
