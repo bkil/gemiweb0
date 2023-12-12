@@ -36,11 +36,24 @@ main(void) {
   t("function f(a, b, c) { return (a + b) + c }; f(2, 3, 4)", 9);
   t("function f(a, b, c) { return (c > b) & (b > a) }; f(2, 3, 4)", 1);
   t("function f() { 8 }; f() === undefined", 1);
+  t("function f(4) { 8 }", -1);
+  t("function f() { . }", -1);
+  t("(function(4) { 8 })(4)", -1);
+  t("(function() { . })()", -1);
+  t("function f(a) { 8 }; f(.)", -1);
 
   t("var s; s = 'a' + 'b'; s === 'ab'", 1);
   t("var s; s = 9 + 'x'; s === '9x'", 1);
   t("var s; s = 'x' + 9; s === 'x9'", 1);
   t("String.fromCharCode(48) === '0'", 1);
+  t("('' + undefined) === 'undefined'", 1);
+  t("('' + null) === 'null'", 1);
+  t("('' + NaN) === 'NaN'", 1);
+  t("('' + (new Object)) === 'Object'", 1);
+  t("('' + (new Array)) === 'Array'", 1);
+  t("('' + (function(){})) === 'Function'", 1);
+  t("('' + (new Date)) === 'Date'", 1); /* non-conforming */
+  t("('' + isNaN) === 'Native'", 1); /* non-conforming */
   t("var i = String.fromCharCode(undefined); i.charCodeAt(0) === 0", 1);
   t("var i = String.fromCharCode(null); i.charCodeAt(0) === 0", 1);
   t("var i = String.fromCharCode(new Object); i.charCodeAt(0) === 0", 1);
@@ -50,6 +63,7 @@ main(void) {
   t("var s = 'abab'; s.indexOf('b', 1)", 1);
   t("var s = 'abab'; s.indexOf('b', 2)", 3);
   t("var s = 'abab'; s.indexOf('b', 4) === -1", 1);
+  t("var s = 'abab'; s.indexOf('b', 5) === -1", 1);
   t("var i; i = 9", 9);
   t("var i = 9; i", 9);
   t("9", 9);
@@ -66,6 +80,7 @@ main(void) {
   t("(~1) === -2", 1);
   t("~(-1) === 0", 1);
   t("~(-2) === 1", 1);
+  t("(~'') === -1", 1);
   t("()", -1);
   t("-", -1);
   t("-(-9)", 9);
@@ -89,6 +104,7 @@ main(void) {
   t("var p; var q; p = new Object; q = p; p.a = 9; q.a", 9);
   t("var p; var q; p = new Object; q = new Object; q.p = p; q.p", 1);
   t("var p; var q; p = new Object; p.a = 9; q = new Object; q.p = p; p = q.p; p.a", 9);
+  t("var m; m = new Object; m.4", -1);
 
   t("var p = new Object; p.a = 9; var q = new Object; q.p = p; q.p.a", 9);
   t("var p = new Object; p.a = 9; var q = new Object; q.r = p; p = new Object; p.q = q; p.q.r.a", 9);
@@ -112,6 +128,9 @@ main(void) {
     "test_while_concat"
   );
 
+  t("var x = 8; var i; for (i in x) { 8 }", -2);
+  t("var o = new Object; var i; for (i in o) { : }; s", -1);
+  t("var o = new Object; var s = 9; var i; for (i in o) { s = s + 1; }; s", 9);
   t("var o = new Object; o.a = 4; o.b = 5; var s = 0; var i; for (i in o) { s = s + o[i]; }; s", 9);
   t("var p = new Object; p.ab = 3; p.cd = 4; var q = new Object; var n = 0; var i; for (i in p) { q[i] = p[i]; n = n + 1; }; (q.ab + q.cd) + n", 9);
   t("var o = new Object; o.a = 4; o.b = 5; var n = 0; var x; try { var i; for (i in o) { n = n + 1; throw 8; } } catch (e) { x = e; }; x + n", 9);
@@ -145,6 +164,8 @@ main(void) {
   t("2 + (3 + 4)", 9);
   t("2 + 3 + 4", 9);
   t("1 + 3 + 1 + 4", 9);
+  t("(4,)", -1);
+  t("2 + .", -1);
   t("3 + 3 * 2", -1); /* con-conforming, could be 9 with precedence */
   t("var i; i = 2 + 3 + 4; i", 9);
   t("var i; i = 1 + 3 + 1 + 4; i", 9);
@@ -220,6 +241,8 @@ main(void) {
   t("null === undefined", 0);
   t("null !== null", 0);
   t("null !== undefined", 1);
+  t("'3'*3", -2); /* non-conforming, could be 9 */
+
   t("\"xa\" === \"xa\"", 1);
   t("\"xa\" === \"xb\"", 0);
   t("'xa' === 'xa'", 1);
@@ -257,6 +280,10 @@ main(void) {
   t("var d = new Date; ((new Date) - d) >= 0", 1);
   t("var d = new Date; d - (d - 9)", 9);
   t("var d = new Date; ((d - (d % 1000)) - (0 - 9)) % 1000", 9);
+  t("var d = new Date; d / 1", -2); /* non-conforming */
+  t("var d = new Date; (d - (1 << 31) - (1 << 31)) - d", -2); /* non-conforming */
+
+  t("new U", -2);
 
   t("String.prototype.charAt", 1);
   t("String.prototype.js0 = function(x) { return this.length + x }; var s = 'ab'; s.js0(7);", 9);
@@ -271,6 +298,7 @@ main(void) {
   t("typeof '' === 'string'", 1);
   t("typeof 8 === 'number'", 1);
   t("var o = new Object; typeof o === 'object'", 1);
+  t("var f = function(){}; typeof f === 'function'", 1);
 
   t("eval(4)", -2); /* non-conforming */
   t("eval('9')", 9);
@@ -313,10 +341,6 @@ main(void) {
   t("eval2(new Object, \"'1234567890'\") === '1234567890'", 1);
   t("var p = new Object; eval2(p, 'function f() { return 9 }'); eval2(p, 'f()')", 9);
   t("eval2(new Object, 'try { throw 2 } catch (e) {}; 9')", 9);
-  t("eval2(new Object, 'return 2')", -2);
-  t("eval2(new Object, 'throw 2')", -2);
-  t("eval2(new Object, 'x')", -2);
-  t("eval2(new Object, ':')", -2);
   t("var i; try { eval2(new Object, 'return 2') } catch (e) { i = 9; }; i", 9);
   t("var i; try { eval2(new Object, 'throw 9') } catch (e) { i = e }; i", 9);
   t("var i; try { eval2(new Object, 'x') } catch (e) { i = 9; }; i", 9);
@@ -325,6 +349,14 @@ main(void) {
   t("var p = new Object; eval2(p, 'var i; try { throw 2 } catch (e) { i = 9 }; i')", 9);
   t("var p = new Object; var q = new Object; eval2(p, eval2(q, \"'4+' + '5'\"))", 9);
   t("var p = new Object; eval2(p, \"var q = new Object; eval2(q, '4+' + '5')\")", 9);
+  t("var p = new Object; var f = eval2(p, '(function() { return 9 })'); eval2(p, f)", 9);
+  t("eval2(new Object, 'return 2')", -2);
+  t("eval2(new Object, 'throw 2')", -2);
+  t("eval2(new Object, 'x')", -2);
+  t("eval2(new Object, ':')", -2);
+  t("eval2()", -2);
+  t("eval2(new Object)", -2);
+  t("eval2(new Object, null)", -2);
 
   /* ES5 out of project scope */
   t("var s = 'a'; s[-1] === ''", 1);
@@ -350,6 +382,16 @@ main(void) {
   t("var o = {a: {b: {c: 4}}, d: {e: 5}}; o.a.b.c + o.d.e", 9);
   t("var i = 9; var o = {'ab': i}; o.ab", 9);
   t("var q = {'y': 9}; var p = {'x': q}; p.x.y", 9);
+  t("{4}", -1);
+  t("{,}", -1);
+  t("{'u'}", -1);
+  t("{u}", -1);
+  t("{'u':}", -1);
+  t("{u:}", -1);
+  t("{'a':9;}", -1);
+
+  /* ES5 out of project scope */
+  t("var o = {'a': 9, }; o.a", 9);
 
   /* ES3 out of project scope */
   t("var a = []; a.length === 0", 1);
@@ -357,6 +399,11 @@ main(void) {
   t("var a = ['4', '5']; (a[0] + a[1]) === '45'", 1);
   t("var a = [2, [3, 4]]; var b = a[1]; a[0] + (b[0] + b[1])", 9);
   t("var a = [2, 3, 4]; a[0] + a[1] + a[2]", 9);
+  t("var a = [,]", -1);
+  t("var a = [4;]", -1);
+
+  /* ES5 out of project scope */
+  t("var a = [4, 5, ]; a[0] + a[1]", 9);
 
   t("var i; i === undefined", 1);
   t("var i; i = 9", 9);
@@ -375,6 +422,7 @@ main(void) {
   t("var p; var q; var t; p = new Object; q = new Object; p.q = q; q.p = p; t = p.q; t.p", SB(1, -2));
   t("var p; var q; var t; p = new Object; q = new Object; p.q = q; q.p = p; q.i = 9; t = q.p; t = t.q; t.i", SB(9, -2));
   t("var p; p = new Object; p.p = p; p = p.p; p.p", SB(1, -2));
+  t("var p; p = new Object; p.p = 8; p.p = p; p = p.p; p.p", SB(1, -2));
   t("var p; var q; p = new Object; q = new Object; p.p = p; p.q = q; q.p = p; q.q = q; q = p.q; q = q.p; q = q.p", SB(1, -2));
   t("var o; var p; var q; o = new Object; p = new Object; q = new Object; o.p = p; p.q = q; q.o = o; o = o.p; o = o.q; o.o", SB(1, -2));
   t("var o; var p; var q; o = new Object; p = new Object; q = new Object; o.p = p; o.q = q; p.q = q; p.o = o; q.p = p; q.o = o; o = o.p; o = o.q; o.o", SB(1, -2));
