@@ -2142,12 +2142,11 @@ Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
       Str s = {.s = 0};
       ssize_t len = getline(&s.s, &all, stdin);
       Object *arg;
-      len--;
-      if (len < 0) {
+      if (len <= 0) {
         mfree(s.s);
         arg = &undefinedObject;
       } else {
-        s.len = (size_t)len;
+        s.len = (size_t)len - (s.s[len - 1] == '\n' ? 1 : 0);
         arg = StringObject_new_str(s);
       }
       List *args = List_new(0, 0, arg);
