@@ -165,6 +165,15 @@ StringObject_new_char(char c) {
 }
 
 static Object *
+__attribute__((nonnull, returns_nonnull, warn_unused_result))
+setThrow(Parser *p, const char *message) {
+  clearErr(p);
+  p->thrw = StringObject_new(message);
+  p->nest++;
+  return &undefinedObject;
+}
+
+static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result, nonnull))
 FunctionJs_new(Parser *p) {
   Object *o = malloc(sizeof(*o));
@@ -862,7 +871,7 @@ invokeFun(Parser *p, Object *o, List *args, Object *self) {
   } else if ((o->t == MethodNative) && self) {
     return (*o->V.a)(p, self, args);
   } else {
-    return setRunError(p, "not a function", 0);
+    return setThrow(p, "not a function");
   }
   return 0;
 }
@@ -896,7 +905,7 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got, Object *se
           }
           Object_free(r);
           Object_free(r);
-          return setRunError(p, "reference cycles unsupported", 0);
+          return setThrow(p, "reference cycles unsupported");
         }
       }
     }
@@ -973,7 +982,7 @@ parseSTerm(Parser *p, Id *id) {
       }
       if (!field) {
         Object_free(i);
-        return setRunError(p, "undefined object field", id);
+        return setThrow(p, "undefined object field");
       }
       self = field;
       field = 0;
@@ -1003,7 +1012,7 @@ parseSTerm(Parser *p, Id *id) {
         Object_free(i);
         if (!key) {
           Object_free(self);
-          return setRunError(p, "can't convert index to string", id);
+          return setThrow(p, "can't convert index to string");
         }
         if ((self->t == ArrayObject) && strncmpEq(key->V.c, "length")) {
           field = IntObject_new(List_length(self->V.m));
@@ -1030,7 +1039,7 @@ parseSTerm(Parser *p, Id *id) {
       } else {
         Object_free(self);
         Object_free(i);
-        return setRunError(p, "not indexable", id);
+        return setThrow(p, "not indexable");
       }
     }
   }
@@ -1062,7 +1071,7 @@ parseITerm(Parser *p, Id *id) {
     } else if (strncmpEq(*id, "Date")) {
       return DateObject_now(p);
     }
-    return setRunError(p, "can't instantiate class of", id);
+    return setThrow(p, "can't instantiate unknown class");
   } else if (strncmpEq(*id, "typeof")) {
     Object *o = parseTerm(p);
     if (!o) {
@@ -1124,7 +1133,7 @@ parseLTerm(Parser *p) {
     int v;
     if (op == '-') {
       if (o->t != IntObject) {
-        return setRunError(p, "unary minus expects a number", 0);
+        return setThrow(p, "unary minus expects a number");
       }
       v = -o->V.i;
     } else {
@@ -1315,7 +1324,7 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
         if ((d >= INT_MIN) && (d <= INT_MAX)) {
           return IntObject_new((int)d);
         }
-        return setRunError(p, "integer overflow", 0);
+        return setThrow(p, "integer overflow");
       case '%':
         return IntObject_new((int)(d % y));
       default: {}
@@ -1328,7 +1337,7 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
     if ((d >= INT_MIN) && (d <= INT_MAX)) {
       return IntObject_new((int)d);
     }
-    return setRunError(p, "integer overflow", 0);
+    return setThrow(p, "integer overflow");
 
   } else if ((op == '=') || (op == '!')) {
     int b = isStringEq(t1, t2) || (((t1->t == NullObject) || (t1->t == UndefinedObject)) && (t1->t == t2->t));
@@ -1357,7 +1366,7 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
 
   Object_freeMaybe(t1);
   Object_freeMaybe(t2);
-  return setRunError(p, "unknown operand types for expression", 0);
+  return setThrow(p, "unknown operand types for expression");
 }
 
 static Object *
@@ -1746,7 +1755,7 @@ static Object *
 __attribute__((nonnull(1), warn_unused_result))
 process_stdin_on(Parser *p, List *l) {
   if (!l || !l->next || !isString(l->value) || !strncmpEq(l->value->V.c, "data")) {
-    return setRunError(p, "expecting String and Function argument", 0);
+    return setThrow(p, "expecting String and Function argument");
   }
   Object_setUnref(&p->onStdinData, l->next->value->t == FunctionJs ? Object_ref(l->next->value) : 0);
   return &undefinedObject;
@@ -1762,7 +1771,7 @@ static Object *
 __attribute__((warn_unused_result, nonnull(1)))
 fs_readFile(Parser *p, List *l) {
   if (!l || !isString(l->value) || !l->next || (l->next->value->t != FunctionJs)) {
-    return setRunError(p, "expecting String and Function argument", 0);
+    return setThrow(p, "expecting String and Function argument");
   }
   char *name = strndup(l->value->V.c.s, l->value->V.c.len);
   Object *err;
@@ -1835,7 +1844,7 @@ static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
 global_require(Parser *p, List *l) {
   if (!l || !isString(l->value)) {
-    return setRunError(p, "expecting String argument", 0);
+    return setThrow(p, "expecting String argument");
   }
   if (strncmpEq(l->value->V.c, "fs")) {
     Object *o = MapObject_new();
@@ -1850,7 +1859,7 @@ static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
 global_setTimeout(Parser *p, List *l) {
   if (!l || (l->value->t != FunctionJs) || (!l->next) || (l->next->value->t != IntObject)) {
-    return setRunError(p, "expecting Function and Int argument", 0);
+    return setThrow(p, "expecting Function and Int argument");
   }
   Object_set(&p->onTimeout, l->value);
   p->timeoutMs = l->next->value->V.i;
@@ -2001,7 +2010,7 @@ static Object *
 __attribute__((nonnull(1), warn_unused_result))
 global_eval(Parser *p, List *l) {
   if (!l || !isString(l->value)) {
-    return setRunError(p, "expecting String argument", 0);
+    return setThrow(p, "expecting String argument");
   }
   Prog prog = p->prog;
   Object *o = Parser_evalWithThrow(p, l->value);
@@ -2019,7 +2028,7 @@ static Object *
 __attribute__((nonnull(1), warn_unused_result))
 global_eval2(Parser *p, List *l) {
   if (!l || (l->value->t != MapObject) || !l->next || (!isString(l->next->value) && (l->next->value->t != FunctionJs))) {
-    return setRunError(p, "expecting an Object and a String or Function argument", 0);
+    return setThrow(p, "expecting an Object and a String or Function argument");
   }
 
   Parser *q = Parser_new_vars(l->value);
