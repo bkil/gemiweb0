@@ -2081,6 +2081,7 @@ Parser_evalResult(Parser *p, Object *o) {
     Object_set0(&p->ret);
     if (p->debug) {
       fputs("runtime error: return outside function", stderr);
+      fputs("\n", stderr);
     }
     return -2;
   }
