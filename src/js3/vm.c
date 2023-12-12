@@ -1166,6 +1166,7 @@ static char
 __attribute__((nonnull, warn_unused_result))
 parseOperator(Parser *p) {
   skipWs(p);
+  Prog saved = p->prog;
   char op;
   if (accept(p, op = '+')) {
   } else if (accept(p, op = '-')) {
@@ -1199,10 +1200,12 @@ parseOperator(Parser *p) {
     }
   } else if (accept(p, op = '=')) {
     if (!expect(p, '=') || !expect(p, '=')) {
+      p->prog = saved;
       return 0;
     }
   } else if (accept(p, op = '!')) {
     if (!expect(p, '=') || !expect(p, '=')) {
+      p->prog = saved;
       return 0;
     }
   } else {
