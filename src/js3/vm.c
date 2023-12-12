@@ -226,6 +226,32 @@ ArrayObject_new(void) {
   return o;
 }
 
+static void
+Object_freeMaybe(Object *o) {
+  if (o) {
+    Object_free(o);
+  }
+}
+
+static void
+__attribute__((nonnull(1)))
+Object_setUnref(Object **old, Object *next) {
+  Object_freeMaybe(*old);
+  *old = next;
+}
+
+static void
+__attribute__((nonnull))
+Object_set(Object **old, Object *next) {
+  Object_setUnref(old, Object_ref(next));
+}
+
+static void
+__attribute__((nonnull))
+Object_set0(Object **old) {
+  Object_setUnref(old, 0);
+}
+
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 DateObject_new(long d) {
@@ -255,8 +281,7 @@ Map_set(List **list, char *key, Object *value) {
   List *it = *list;
   while (it && it->key) {
     if (!strcmp(key, it->key)) {
-      Object_free(it->value);
-      it->value = Object_ref(value);
+      Object_set(&it->value, value);
       mfree(key);
       return;
     }
@@ -693,26 +718,19 @@ parseObjectLiteral(Parser *p) {
       id = keyString->V.c;
     }
     if (!expectWs(p, ':')) {
-      if (keyString) {
-        Object_free(keyString);
-      }
+      Object_freeMaybe(keyString);
       Object_free(o);
       return 0;
     }
     Object *value = parseExpr(p);
     if (!value) {
-      if (keyString) {
-        Object_free(keyString);
-      }
+      Object_freeMaybe(keyString);
       Object_free(o);
       return 0;
     }
     Map_set_id(&o->V.m, &id, value);
     Object_free(value);
-    if (keyString) {
-      Object_free(keyString);
-      keyString = 0;
-    }
+    Object_freeMaybe(keyString);
     if (!acceptWs(p, ',')) {
       if (!expectWs(p, '}')) {
         Object_free(o);
@@ -752,8 +770,7 @@ parseArrayLiteral(Parser *p) {
     }
     if (!acceptWs(p, ',')) {
       if (!expectWs(p, ']')) {
-        Object_free(o);
-        o = 0;
+        Object_set0(&o);
       }
       Object_free(i);
       return o;
@@ -830,8 +847,7 @@ invokeFun(Parser *p, Object *o, List *args, Object *self) {
     Map_set_const(&p->vars->V.m, "", o->V.j.scope);
 
     Object *res = parseFunction(p, args);
-    Object_free(p->vars);
-    p->vars = caller;
+    Object_setUnref(&p->vars, caller);
 
     if (p->ret) {
       res = p->ret;
@@ -868,8 +884,7 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got, Object *se
     if ((r = parseExpr(p))) {
       if (!p->nest) {
         if (e) {
-          Object_free(e->value);
-          e->value = Object_ref(r);
+          Object_set(&e->value, r);
         } else {
           *parent = List_new(*parent, strndup(key->V.s.s, key->V.s.len), Object_ref(r));
         }
@@ -952,15 +967,9 @@ parseSTerm(Parser *p, Id *id) {
     if (p->nest) {
       Object_free(i);
     } else {
-      if (key) {
-        Object_free(key);
-        key = 0;
-      }
+      Object_set0(&key);
       if (e) {
-        if (field) {
-          Object_free(field);
-        }
-        field = Object_ref(e->value);
+        Object_set(&field, e->value);
       }
       if (!field) {
         Object_free(i);
@@ -972,21 +981,18 @@ parseSTerm(Parser *p, Id *id) {
         if (isString(i)) {
           if (strncmpEq(i->V.c, "length")) {
             field = IntObject_new((int)self->V.c.len);
-            Object_free(self);
-            self = 0;
+            Object_set0(&self);
           } else {
             e = Map_get_str(p->stringPrototype->V.m, i->V.s);
             if (e) {
               field = Object_ref(e->value);
             } else {
-              Object_free(self);
-              self = 0;
+              Object_set0(&self);
             }
           }
         } else {
           field = String_charAt_obj(self, i);
-          Object_free(self);
-          self = 0;
+          Object_set0(&self);
         }
         Object_free(i);
         e = 0;
@@ -1001,27 +1007,22 @@ parseSTerm(Parser *p, Id *id) {
         }
         if ((self->t == ArrayObject) && strncmpEq(key->V.c, "length")) {
           field = IntObject_new(List_length(self->V.m));
-          Object_free(key);
-          key = 0;
+          Object_set0(&key);
           e = 0;
-          Object_free(self);
-          self = 0;
+          Object_set0(&self);
         } else {
           Object *proto = self->t == MapObject ? p->objectPrototype : p->arrayPrototype;
           e = Map_get_str(*parent, key->V.s);
           if (e) {
-            Object_free(self);
-            self = 0;
+            Object_set0(&self);
           } else {
             e = Map_get_str(proto->V.m, key->V.s);
             if (e) {
               field = Object_ref(e->value);
-              Object_free(key);
-              key = 0;
+              Object_set0(&key);
               e = 0;
             } else {
-              Object_free(self);
-              self = 0;
+              Object_set0(&self);
             }
           }
         }
@@ -1037,15 +1038,9 @@ parseSTerm(Parser *p, Id *id) {
     return 0;
   }
   i = parseRHS(p, parent, key, e, field, self);
-  if (key) {
-    Object_free(key);
-  }
-  if (field) {
-    Object_free(field);
-  }
-  if (self) {
-    Object_free(self);
-  }
+  Object_freeMaybe(key);
+  Object_freeMaybe(field);
+  Object_freeMaybe(self);
   return i;
 }
 
@@ -1487,8 +1482,7 @@ parseFor(Parser *p) {
 
     o = parseBody(p);
     if (caller) {
-      Object_free(p->vars);
-      p->vars = caller;
+      Object_setUnref(&p->vars, caller);
       l = l->next;
     }
     if (!o) {
@@ -1581,21 +1575,17 @@ parseStatement(Parser *p) {
           Map_set_const(&p->vars->V.m, "", caller);
           Map_set_id(&p->vars->V.m, &id, p->thrw);
         }
-        Object_free(p->thrw);
-        p->thrw = 0;
+        Object_set0(&p->thrw);
         if ((o = parseBody(p))) {
-          Object_free(o);
-          o = &undefinedObject;
+          Object_set(&o, &undefinedObject);
         }
         if (caller) {
-          Object_free(p->vars);
-          p->vars = caller;
+          Object_setUnref(&p->vars, caller);
         }
       } else {
         p->nest++;
         if ((o = parseBody(p))) {
-          Object_free(o);
-          o = &undefinedObject;
+          Object_set(&o, &undefinedObject);
         }
         p->nest--;
       }
@@ -1610,8 +1600,7 @@ parseStatement(Parser *p) {
           if (!p->nest) {
             Map_set_id(&p->vars->V.m, &id, o);
           }
-          Object_free(o);
-          o = &undefinedObject;
+          Object_set(&o, &undefinedObject);
         }
       }
     } else if (strncmpEq(id, "function")) {
@@ -1766,10 +1755,7 @@ process_stdin_on(Parser *p, List *l) {
   if (!l || !l->next || !isString(l->value) || !strncmpEq(l->value->V.c, "data")) {
     return setRunError(p, "expecting String and Function argument", 0);
   }
-  if (p->onStdinData) {
-    Object_free(p->onStdinData);
-  }
-  p->onStdinData = l->next->value->t == FunctionJs ? Object_ref(l->next->value) : 0;
+  Object_setUnref(&p->onStdinData, l->next->value->t == FunctionJs ? Object_ref(l->next->value) : 0);
   return &undefinedObject;
 }
 
@@ -1873,10 +1859,7 @@ global_setTimeout(Parser *p, List *l) {
   if (!l || (l->value->t != FunctionJs) || (l->next->value->t != IntObject)) {
     return setRunError(p, "expecting Function and Int argument", 0);
   }
-  if (p->onTimeout) {
-    Object_free(p->onTimeout);
-  }
-  p->onTimeout = Object_ref(l->value);
+  Object_set(&p->onTimeout, l->value);
   p->timeoutMs = l->next->value->V.i;
   return &undefinedObject;
 }
@@ -2000,8 +1983,7 @@ Parser_evalWithThrow(Parser *p, Object *prog) {
   }
   Object *thrw = 0;
   if (p->ret) {
-    Object_free(p->ret);
-    p->ret = 0;
+    Object_set0(&p->ret);
     if (!p->thrw) {
       thrw = StringObject_new("eval: return outside function");
     }
@@ -2019,10 +2001,7 @@ Parser_evalWithThrow(Parser *p, Object *prog) {
   if (thrw) {
     p->thrw = thrw;
     p->nest++;
-    if (o) {
-      Object_free(o);
-    }
-    o = &undefinedObject;
+    Object_set(&o, &undefinedObject);
   }
   return o;
 }
@@ -2089,8 +2068,7 @@ Parser_evalResult(Parser *p, Object *o) {
         Object_free(os);
         fputs("\n", stderr);
       }
-      Object_free(p->thrw);
-      p->thrw = 0;
+      Object_set0(&p->thrw);
       ret = -2;
     } else {
       ret = o->t != IntObject ? toBoolean(o) : o->V.i > 0 ? o->V.i : 0;
@@ -2100,18 +2078,14 @@ Parser_evalResult(Parser *p, Object *o) {
   }
 
   if (p->ret) {
-    Object_free(p->ret);
-    p->ret = 0;
+    Object_set0(&p->ret);
     if (p->debug) {
       fputs("runtime error: return outside function", stderr);
     }
     return -2;
   }
 
-  if (p->thrw) {
-    Object_free(p->thrw);
-    p->thrw = 0;
-  }
+  Object_set0(&p->thrw);
   if (p->parseErr || !p->err) {
     showParseError(p);
     return -1;
