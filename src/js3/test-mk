@@ -91,6 +91,7 @@ phase() {
   compile -flto vm.o -o "$BIN" $SRC || return 1
 
   readonly VALGRINDOPTS="
+    --error-exitcode=2 \
     --leak-check=full \
     --show-leak-kinds=all \
     --num-callers=30 \
