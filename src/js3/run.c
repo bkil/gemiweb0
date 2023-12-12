@@ -32,9 +32,11 @@ main(int argc, char **argv) {
 
   char *prog = mmap(NULL, len, PROT_READ, MAP_SHARED, fd, 0);
   if (prog == (void*)-1) {
+    /* coverage:no */
     perror("mmap failed of script");
     close(fd);
     return MAINERR;
+    /* /coverage:no */
   }
 
   struct Parser *p = Parser_new();
@@ -46,12 +48,16 @@ main(int argc, char **argv) {
   Parser_free(p);
 
   if (munmap(prog, len) < 0) {
+    /* coverage:no */
     perror("munmap failed");
     ret = MAINERR;
+    /* /coverage:no */
   }
   if (close(fd) < 0) {
+    /* coverage:no */
     perror("close failed");
     ret = MAINERR;
+    /* /coverage:no */
   }
 
   return ret;

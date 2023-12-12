@@ -5,50 +5,168 @@
 # * ISQUICK: 1 = skip valgrind and run tests natively
 # * ISSIMPLE: 1 = reduce complexity, never deallocate memory
 
-main() {
-  rm a.out 2>/dev/null
-  compile -c vm.c && \
+test_coverage() {
+  if ! [ -f "vm.gcda" ]; then
+    [ "$PHASERES" = 0 ] &&
+      echo "error: missing vm.gcda" >&2
+    return 1
+  fi
+
+  gcov \
+    --all-blocks \
+    --relative-only \
+    vm.c $SRC > /dev/null || return 1
+
+  grep -H '' vm.c.gcov vm-free.c.gcov 2>/dev/null |
+  sed '
+    /\/\* coverage:no \*\//,/\/\* \/coverage:no \*\//d
+    /\/\* coverage:unreachable \*\//,/\/\* \/coverage:unreachable \*\//d
+    /\/\* coverage:net \*\//,/\/\* \/coverage:net \*\//d
+    ' |
+  if [ "$PHASE" = "smoke" ]; then
+    sed -n '
+      /\/\* coverage:stdout \*\//,/\/\* \/coverage:stdout \*\//p
+      /\/\* coverage:smoke \*\//,/\/\* \/coverage:smoke \*\//p
+      /\/\* coverage:smokesystem \*\//,/\/\* \/coverage:smokesystem \*\//p
+      /\/\* coverage:file \*\//,/\/\* \/coverage:file \*\//p
+      '
+  else
+    sed '
+      /\/\* coverage:stdout \*\//,/\/\* \/coverage:stdout \*\//d
+      /\/\* coverage:smoke \*\//,/\/\* \/coverage:smoke \*\//d
+      /\/\* coverage:file \*\//,/\/\* \/coverage:file \*\//d
+      '
+  fi |
+
+  if [ "$PHASE" = "system" ]; then
+    sed -n '
+      /\/\* coverage:stdin \*\//,/\/\* \/coverage:stdin \*\//p
+      '
+  else
+    sed '
+      /\/\* coverage:stdin \*\//,/\/\* \/coverage:stdin \*\//d
+      '
+  fi |
+
+  if  [ "$PHASE" = "smoke" ] || [ "$PHASE" = "system" ]; then
+    sed -n '
+      /\/\* coverage:smokesystem \*\//,/\/\* \/coverage:smokesystem \*\//p
+      '
+  else
+    sed '
+      /\/\* coverage:smokesystem \*\//,/\/\* \/coverage:smokesystem \*\//d
+      '
+  fi |
+
   {
-    if [ -n "$ISSMALLBIN" ]; then
-      strip \
-      -S \
-      --strip-unneeded \
-      --remove-section=.note.gnu.gold-version \
-      --remove-section=.comment \
-      --remove-section=.note \
-      --remove-section=.note.gnu.build-id \
-      --remove-section=.note.ABI-tag \
-      vm.o
-      # -s
-    else
-      true
-    fi &&
-    compile -flto vm.o test-vm.c testutil.c
-  } && {
-
-    if [ -n "$ISQUICK" ]; then
-      ./a.out "$@"
-    else
-      valgrind \
-        --leak-check=full \
-        --show-leak-kinds=all \
-        --num-callers=30 \
-        --malloc-fill=0xaa \
-        --free-fill=0x55 \
-        --redzone-size=256 \
-        --read-var-info=yes \
-        --expensive-definedness-checks=yes \
-        --merge-recursive-frames=10 \
-        --track-origins=yes \
-        --partial-loads-ok=no \
-        ./a.out "$@"
-        #-fsanitize=address -fsanitize=leak -fsanitize=undefined
-    fi
+    ! grep -B1 '^[^:]*:\s*[#$]'
   }
+}
 
-  local S=$?
-  echo $S
-  return $S
+phase() {
+  local PHASE SRC BIN PHASERES VALGRINDOPTS
+  readonly PHASE="$1"
+  PHASERES=0
+
+  case "$PHASE" in
+    module)
+      SRC="test-vm.c testutil.c"
+      BIN="module.out"
+      ;;
+    system)
+      SRC="run.c"
+      BIN="js0"
+      ;;
+    smoke)
+      SRC="test-smoke.c testutil.c"
+      BIN="smoke.out"
+      ;;
+    *)
+      echo "unknown phase $PHASE" >&2
+      return 1
+  esac
+
+  echo "Testing phase $PHASE" >&2
+  rm "$BIN" *.gcda *.gcov 2>/dev/null
+  compile -flto vm.o -o "$BIN" $SRC || return 1
+
+  readonly VALGRINDOPTS="
+    --leak-check=full \
+    --show-leak-kinds=all \
+    --num-callers=30 \
+    --malloc-fill=0xaa \
+    --free-fill=0x55 \
+    --redzone-size=256 \
+    --expensive-definedness-checks=yes \
+    --merge-recursive-frames=10 \
+    --partial-loads-ok=no \
+  "
+
+  if [ "$PHASE" = "system" ] && [ -n "$ISQUICK" ]; then
+    ./systest.sh "./$BIN"
+  elif [ "$PHASE" = "system" ]; then
+    ./systest.sh \
+      valgrind \
+        $VALGRINDOPTS \
+        ./"$BIN"
+  elif [ -n "$ISQUICK" ]; then
+    ./"$BIN" </dev/null
+  else
+    valgrind \
+      $VALGRINDOPTS \
+      --read-var-info=yes \
+      --track-origins=yes \
+      ./"$BIN" </dev/null
+      #-fsanitize=address -fsanitize=leak -fsanitize=undefined
+  fi
+  PHASERES=$(($?|$PHASERES))
+
+  if [ -z "$ISSMALLBIN" ] && [ -z "$ISSIMPLE" ]; then
+    test_coverage
+    PHASERES=$(($?|$PHASERES))
+  fi
+
+  return $PHASERES
+}
+
+tests() {
+  local TESTRES
+  TESTRES=0
+
+  rm *.gcno 2>/dev/null
+  compile -c vm.c || return 1
+
+  if [ -n "$ISSMALLBIN" ]; then
+    strip \
+    -S \
+    --strip-unneeded \
+    --remove-section=.note.gnu.gold-version \
+    --remove-section=.comment \
+    --remove-section=.note \
+    --remove-section=.note.gnu.build-id \
+    --remove-section=.note.ABI-tag \
+    vm.o ||
+    return 1
+    # -s
+  fi
+
+  phase module
+  TESTRES=$(($?|$TESTRES))
+
+  phase system
+  TESTRES=$(($?|$TESTRES))
+
+  phase smoke
+  TESTRES=$(($?|$TESTRES))
+  return $TESTRES
+}
+
+main() {
+  local MAINRES
+  tests
+  MAINRES=$?
+  echo $MAINRES
+  return $MAINRES
 }
 
 compile() {
@@ -87,7 +205,7 @@ compile() {
     ADD="$ADD -O2 -g -DSIMPLE"
     ./gcc-warn.sh $ADD "$@"
   else
-    ADD="$ADD -Og -g"
+    ADD="$ADD -Og -g --coverage"
     ./gcc-warn.sh $ADD "$@"
   fi
 }

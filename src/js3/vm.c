@@ -12,6 +12,7 @@
 #include <sys/time.h> /* select */
 #include <limits.h> /* INT_MIN INT_MAX */
 
+/* coverage:stdout */
 static void
 __attribute__((nonnull))
 putsn(const char *s, size_t len, FILE *out) {
@@ -27,6 +28,7 @@ showProg(Parser *p) {
   putsn(p->prog.s, left < 32 ? left : 32, stderr);
   fputs("\n", stderr);
 }
+/* /coverage:stdout */
 
 #ifdef SMALLBIN
 # include "vm-smallbin.c"
@@ -132,6 +134,7 @@ StringObject_new_const(Id s) {
   return o;
 }
 
+/* coverage:file */
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 Mmap_new(char *s, size_t len, int fd) {
@@ -143,6 +146,7 @@ Mmap_new(char *s, size_t len, int fd) {
   o->V.mm.fd = fd;
   return o;
 }
+/* /coverage:file */
 
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result, nonnull))
@@ -278,7 +282,9 @@ DateObject_now(Parser *p) {
   if (!clock_gettime(CLOCK_REALTIME, &tp)) {
     return DateObject_new(tp.tv_sec * 1000 + tp.tv_nsec / 1000000);
   }
+  /* coverage:no */
   return setRunError(p, "clock_gettime() failed", 0);
+  /* /coverage:no */
 }
 
 static void
@@ -442,8 +448,6 @@ toBoolean(Object *o) {
     case UndefinedObject:
     case NullObject:
     case NanObject:
-      return 0;
-
     default:
       return 0;
   }
@@ -459,8 +463,10 @@ Object_toString(Object *o) {
       if ((len > 0) && (len < 16)) {
         return StringObject_new_str((Str){.s = s, .len = (size_t)len});
       } else {
+        /* coverage:unreachable */
         mfree(s);
         break;
+        /* /coverage:unreachable */
       }
     }
 
@@ -485,8 +491,10 @@ Object_toString(Object *o) {
     case FunctionNative:
       return StringObject_new("Native");
 
+    /* coverage:no */
     case MethodNative:
       return StringObject_new("Method");
+    /* /coverage:no */
 
     case NullObject:
       return StringObject_new("null");
@@ -1010,10 +1018,12 @@ parseSTerm(Parser *p, Id *id) {
         parent = &self->V.m;
         key = Object_toString(i);
         Object_free(i);
+        /* coverage:unreachable */
         if (!key) {
           Object_free(self);
           return setThrow(p, "can't convert index to string");
         }
+        /* /coverage:unreachable */
         if ((self->t == ArrayObject) && strncmpEq(key->V.c, "length")) {
           field = IntObject_new(List_length(self->V.m));
           Object_set0(&key);
@@ -1259,13 +1269,14 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
   if (isBool) {
     Object_free(t1);
     switch (op) {
+      case 'A':
       case 'O':
         return t2;
-      case 'A':
-        return t2;
       default:
+        /* coverage:unreachable */
         Object_free(t2);
         return 0;
+        /* /coverage:unreachable */
     }
 
   } else if ((t1->t == IntObject) && (t1->t == t2->t)) {
@@ -1726,6 +1737,7 @@ parseBlock(Parser *p) {
   return o;
 }
 
+/* coverage:stdout */
 static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
 Console_log(Parser *p, List *l) {
@@ -1735,10 +1747,13 @@ Console_log(Parser *p, List *l) {
     putsn(os->V.s.s, os->V.s.len, stdout);
     Object_free(os);
   } else {
+    /* coverage:unreachable */
     fputs("?", stdout);
+    /* /coverage:unreachable */
   }
   return &undefinedObject;
 }
+/* /coverage:stdout */
 
 static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
@@ -1751,6 +1766,7 @@ String_fromCharCode(Parser *p, List *l) {
   return StringObject_new_char(c);
 }
 
+/* coverage:stdin */
 static Object *
 __attribute__((nonnull(1), warn_unused_result))
 process_stdin_on(Parser *p, List *l) {
@@ -1760,6 +1776,7 @@ process_stdin_on(Parser *p, List *l) {
   Object_setUnref(&p->onStdinData, l->next->value->t == FunctionJs ? Object_ref(l->next->value) : 0);
   return &undefinedObject;
 }
+/* /coverage:stdin */
 
 static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
@@ -1767,6 +1784,7 @@ global_isNaN(Parser *p, List *l) {
   return IntObject_new(l ? l->value->t == NanObject : 0);
 }
 
+/* coverage:file */
 static Object *
 __attribute__((warn_unused_result, nonnull(1)))
 fs_readFile(Parser *p, List *l) {
@@ -1778,22 +1796,24 @@ fs_readFile(Parser *p, List *l) {
   Object *data = &undefinedObject;
 
   const int fd = open(name, 0);
+  free(name);
   if (fd < 0) {
-    free(name);
     err = StringObject_new("readFile open failed");
   } else {
-    free(name);
-
     struct stat sb;
     if (fstat(fd, &sb) < 0) {
+      /* coverage:no */
       close(fd);
       err = StringObject_new("readFile stat failed");
+      /* /coverage:no */
     } else {
       size_t len = off_t2size_t(sb.st_size);
       char *s = mmap(NULL, len, PROT_READ, MAP_SHARED, fd, 0);
       if (s == (void*)-1) {
+        /* coverage:no */
         close(fd);
         err = StringObject_new("readFile mmap failed");
+        /* /coverage:no */
       } else {
         err = &undefinedObject;
         data = Mmap_new(s, len, fd);
@@ -1806,6 +1826,7 @@ fs_readFile(Parser *p, List *l) {
   List_free(args);
   return ret;
 }
+/* /coverage:file */
 
 static void
 __attribute__((nonnull))
@@ -1840,6 +1861,7 @@ addPrototype(Object *parent) {
   return o;
 }
 
+/* coverage:smokesystem */
 static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
 global_require(Parser *p, List *l) {
@@ -1865,6 +1887,7 @@ global_setTimeout(Parser *p, List *l) {
   p->timeoutMs = l->next->value->V.i;
   return &undefinedObject;
 }
+/* /coverage:smokesystem */
 
 Parser *
 Parser_new(void) {
@@ -1921,6 +1944,7 @@ static void
 __attribute__((nonnull))
 showParseError(Parser *p) {
   if (p->debug) {
+    /* coverage:stdout */
     fputs("parse error: ", stderr);
     if (p->parseErr) {
       fputs(p->parseErr, stderr);
@@ -1932,6 +1956,7 @@ showParseError(Parser *p) {
     }
     fputs("\n", stderr);
     showProg(p);
+    /* /coverage:stdout */
   }
 }
 
@@ -1939,6 +1964,7 @@ static void
 __attribute__((nonnull))
 showRunError(Parser *p) {
   if (p->debug) {
+    /* coverage:stdout */
     fputs("runtime error: ", stderr);
     if (p->err) {
       fputs(p->err, stderr);
@@ -1949,6 +1975,7 @@ showRunError(Parser *p) {
     }
     fputs("\n", stderr);
     showProg(p);
+    /* /coverage:stdout */
   }
 }
 
@@ -2033,7 +2060,9 @@ global_eval2(Parser *p, List *l) {
 
   Parser *q = Parser_new_vars(l->value);
   List *r = Map_get_const(l->value->V.m, ".onTimeout");
+  /* coverage:smoke */
   q->onTimeout = r && (r->value->t != UndefinedObject) ? Object_ref(r->value) : 0;
+  /* /coverage:smoke */
   r = Map_get_const(l->value->V.m, ".timeoutMs");
   q->timeoutMs = r && (r->value->t == IntObject) ? r->value->V.i : 0;
   q->debug = p->debug;
@@ -2045,9 +2074,13 @@ global_eval2(Parser *p, List *l) {
     p->nest++;
   }
   if (!o) {
+    /* coverage:unreachable */
     o = &undefinedObject;
+    /* /coverage:unreachable */
   }
+  /* coverage:smoke */
   Map_set_const(&l->value->V.m, ".onTimeout", q->onTimeout ? q->onTimeout : &undefinedObject);
+  /* /coverage:smoke */
   Object *t = IntObject_new(timeout2int(q->timeoutMs));
   Map_set_const(&l->value->V.m, ".timeoutMs", t);
   Object_free(t);
@@ -2062,11 +2095,13 @@ Parser_evalResult(Parser *p, Object *o) {
     int ret;
     if (p->thrw) {
       if (p->debug) {
+        /* coverage:stdout */
         Object *os = Object_toString(p->thrw);
         fputs("runtime error: exception\n", stderr);
         putsn(os->V.s.s, os->V.s.len, stderr);
         Object_free(os);
         fputs("\n", stderr);
+        /* /coverage:stdout */
       }
       Object_set0(&p->thrw);
       ret = -2;
@@ -2080,8 +2115,10 @@ Parser_evalResult(Parser *p, Object *o) {
   if (p->ret) {
     Object_set0(&p->ret);
     if (p->debug) {
+      /* coverage:stdout */
       fputs("runtime error: return outside function", stderr);
       fputs("\n", stderr);
+      /* /coverage:stdout */
     }
     return -2;
   }
@@ -2105,6 +2142,7 @@ Parser_eval(Parser *p, const char *prog, size_t len, int debug) {
   return Parser_evalResult(p, o);
 }
 
+/* coverage:smokesystem */
 int
 Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
   while (p->onTimeout || p->onStdinData) {
@@ -2112,8 +2150,10 @@ Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
     FD_ZERO(&rfd);
     int fds = 0;
     if (p->onStdinData) {
+      /* coverage:stdin */
       FD_SET(STDIN_FILENO, &rfd);
       fds++;
+      /* /coverage:stdin */
     }
 
     int ret;
@@ -2123,12 +2163,16 @@ Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
       timeout.tv_usec = (p->timeoutMs % 1000) * 1000;
       ret = select(fds, &rfd, NULL, NULL, &timeout);
     } else {
+      /* coverage:stdin */
       ret = select(fds, &rfd, NULL, NULL, NULL);
+      /* /coverage:stdin */
     }
 
     if (ret < 0) {
+      /* coverage:no */
       perror("select");
       return -2;
+      /* /coverage:no */
     } else if (ret == 0) {
       if (p->onTimeout) {
         Object *onTimeout = p->onTimeout;
@@ -2139,6 +2183,7 @@ Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
       }
     }
 
+    /* coverage:stdin */
     if (p->onStdinData && FD_ISSET(STDIN_FILENO, &rfd)) {
       size_t all = 0;
       Str s = {.s = 0};
@@ -2156,6 +2201,8 @@ Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
       List_free(args);
       if (Parser_evalResult(p, o)) {}
     }
+    /* /coverage:stdin */
   }
   return Parser_eval(p, prog, plen, debug);
 }
+/* /coverage:smokesystem */

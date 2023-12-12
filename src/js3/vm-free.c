@@ -88,13 +88,19 @@ Object_free(Object *o) {
       }
       break;
     case MmapString:
+      /* coverage:file */
       if (munmap(o->V.mm.s, o->V.mm.len) < 0) {
+        /* coverage:no */
         perror("munmap failed");
+        /* /coverage:no */
       }
       if (close(o->V.mm.fd) < 0) {
+        /* coverage:no */
         perror("mmap close failed");
+        /* /coverage:no */
       }
       break;
+      /* /coverage:file */
     case MapObject:
     case ArrayObject:
     case Prototype:
@@ -130,7 +136,9 @@ static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull))
 Object_clone(Object *o) {
   if (o->t != MapObject) {
+    /* coverage:no */
     return Object_ref(o);
+    /* /coverage:no */
   }
 
   List *it = o->V.m;
@@ -168,10 +176,14 @@ Parser_free(Parser *p) {
   List_free(p->stringPrototype->V.m);
   p->stringPrototype->V.m = 0;
   if (p->onTimeout) {
+    /* coverage:smoke */
     Object_free(p->onTimeout);
+    /* /coverage:smoke */
   }
   if (p->onStdinData) {
+    /* coverage:smoke */
     Object_free(p->onStdinData);
+    /* /coverage:smoke */
   }
   Object_free(p->vars);
   free(p);

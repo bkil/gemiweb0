@@ -1,7 +1,10 @@
+*.gcda
+*.gcno
+*.gcov
+*.o
+*.out
+*.pem
+*.php
 .bk
 .wip
-*.pem
-*.out
-*.o
-*.php
 html

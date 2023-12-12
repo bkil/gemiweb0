@@ -48,12 +48,11 @@ gcc \
  -Wmissing-include-dirs \
  -Wmissing-prototypes \
  -Wnested-externs \
- -Wno-error=padded \
  -Wno-error=strict-overflow \
  -Wno-unused-parameter \
  -Woverflow \
  -Wpacked \
- -Wpadded \
+ -Wno-padded \
  -Wpedantic \
  -Wpointer-arith \
  -Wpointer-sign \
