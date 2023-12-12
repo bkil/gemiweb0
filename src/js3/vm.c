@@ -1990,10 +1990,8 @@ Parser_evalWithThrow(Parser *p, Object *prog) {
   } else if (!o && !p->thrw) {
     if (p->parseErr || !p->err) {
       thrw = StringObject_new("eval: parse error");
-      showParseError(p);
     } else {
       thrw = StringObject_new("eval: runtime error");
-      showRunError(p);
     }
   }
   clearErr(p);
