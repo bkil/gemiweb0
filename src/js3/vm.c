@@ -1305,8 +1305,6 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
     Object_set0(&t1);
     Object_set0(&t2);
     switch (op) {
-      case '+':
-        return DateObject_new(d + y);
       case '-':
         return DateObject_new(d - y);
       case '/':

@@ -319,9 +319,8 @@ main(void) {
   t("((new Date) / 1000) > 0", 1);
   t("var i = (new Date) % 1000; (i >= 0) && (i < 1000)", 1);
   t("var d = new Date; ((new Date) - d) >= 0", 1);
-  t("var d = new Date; (d + 9) - d", 9);
   t("var d = new Date; d - (d - 9)", 9);
-  t("var d = new Date; ((d - (d % 1000)) + 9) % 1000", 9);
+  t("var d = new Date; ((d - (d % 1000)) - (0 - 9)) % 1000", 9);
 
   t("String.prototype.charAt", 1);
   t("String.prototype.js0 = function(x) { return this.length + x }; var s = 'ab'; s.js0(7);", 9);
