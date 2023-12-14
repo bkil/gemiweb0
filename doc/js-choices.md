@@ -104,16 +104,6 @@ The following restrictions are non-normative and being worked on pending the res
 * Verdict: recommended
 * Implementation complexity: low if granularity provided by event loop conditioning is sufficient, intermediate if termination at reductions or via a separate process model would be warranted, very high if resumption without POSIX job control signals also required
 
-### javascript: URI
-
-* Verdict: recommended
-* Reason: the simplest alternative for client side interaction
-* Incidence rate: very high
-* Use case: client side interactions, form processing, validation, bookmarklets
-* Implementation complexity: trivial
-* Workaround: implement event handlers such as onclick and onsubmit or navigate to a URI pointing to (or submit a form targeting) an HTML containing JavaScript that dispatches upon loading, encode the link identifier and serialize the whole application state to the URI query or anchor
-* Standard: NS2
-
 ### Pure anonymous function expression
 
 * Verdict: Recommended
@@ -261,6 +251,8 @@ The following restrictions are non-normative and being worked on pending the res
 * Workaround: while, if, String charCodeAt
 * Standard: ES3
 
+https://en.wikipedia.org/wiki/ReDoS
+
 ## Partial
 
 ### semicolon
@@ -274,7 +266,7 @@ The following restrictions are non-normative and being worked on pending the res
 ### write to standard output
 
 * Verdict: Partial
-* Restriction: only a single argument is allowed for console.log() without any formatting
+* Restriction: only a single string argument is allowed for console.log() without any formatting
 * Incidence rate: low in web code, high in command line and server CGI code
 * Reason: Turing-completeness
 * Solution: console.log
@@ -375,7 +367,7 @@ The following restrictions are non-normative and being worked on pending the res
 ### Instantiate class with new keyword
 
 * Verdict: partial
-* Restriction: only for a few predetermined classes (Array, Object, XMLHttpRequest), see constructor arguments detailed separately.
+* Restriction: only for a few predetermined classes (Array, Object, Date, XMLHttpRequest), see constructor arguments detailed separately.
 * Incidence rate: low for custom classes, intermediate for built-in
 * Implementation complexity: high if assuming full OOP, prototype and this support
 * Drawbacks: prototype based inheritance is disfavored
