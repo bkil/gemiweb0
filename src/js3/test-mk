@@ -206,7 +206,7 @@ compile() {
     "
     ./gcc-warn.sh $ADD "$@" # -D'__attribute__(_)=' (TODO useful for putsn())
   elif [ -n "$ISSIMPLE" ]; then
-    ADD="$ADD -O2 -g -DSIMPLE"
+    ADD="$ADD -O2 -g -DNEEDLEAK"
     ./gcc-warn.sh $ADD "$@"
   else
     ADD="$ADD -Og -g --coverage"

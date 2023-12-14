@@ -32,7 +32,6 @@ showProg(Parser *p) {
 
 #ifdef SMALLBIN
 # include "vm-smallbin.c"
-# define NEEDLEAK
 
 #else
 
@@ -43,10 +42,6 @@ __attribute__((nonnull))
 snprinti(char *s, size_t n, int i) {
   return snprintf(s, n, "%d", i);
 }
-
-# ifdef SIMPLE
-#  define NEEDLEAK
-# endif
 #endif
 
 #ifdef NEEDLEAK
