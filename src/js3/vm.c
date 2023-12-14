@@ -1021,7 +1021,7 @@ parseSTerm(Parser *p, Id *id) {
           return setThrow(p, "can't convert index to string");
         }
         /* /coverage:unreachable */
-        if ((self->t == ArrayObject) && strncmpEq(key->V.c, "length")) {
+        if ((self->t == ArrayObject) && strncmpEq((Id){.s = key->V.s.s, .len = key->V.s.len}, "length")) {
           field = IntObject_new(List_length(self->V.m));
           Object_set0(&key);
           e = 0;
@@ -2168,8 +2168,7 @@ showRunError(Parser *p) {
 
 static void
 __attribute__((nonnull))
-Parser_evalInit(Parser *p, Object *prog) {
-  p->prog = (Prog){.s = prog->V.c.s, .end = prog->V.c.s + prog->V.c.len, .h = prog};
+Parser_evalInit(Parser *p) {
   p->err = 0;
   p->nest = 0;
   p->ret = 0;
@@ -2181,7 +2180,8 @@ Parser_evalInit(Parser *p, Object *prog) {
 static Object *
 __attribute__((nonnull, warn_unused_result))
 Parser_evalString(Parser *p, Object *prog) {
-  Parser_evalInit(p, prog);
+  Parser_evalInit(p);
+  p->prog = (Prog){.s = prog->V.c.s, .end = prog->V.c.s + prog->V.c.len, .h = prog};
   return parseStatements(p);
 }
 
@@ -2192,7 +2192,8 @@ Parser_evalWithThrow(Parser *p, Object *prog) {
   if (isString(prog)) {
     o = Parser_evalString(p, prog);
   } else if (prog->t == FunctionJs) {
-    Parser_evalInit(p, prog->V.j.scope);
+    Parser_evalInit(p);
+    p->prog = (Prog){.s = 0, .end = 0, .h = prog->V.j.scope};
     o = invokeFun(p, prog, 0, 0);
   } else {
     return 0;
