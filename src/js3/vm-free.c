@@ -148,26 +148,20 @@ Object_clone(Object *o) {
     /* /coverage:no */
   }
 
-  List *it = o->V.m;
   Object *d = MapObject_new();
-  while (it) {
-    d->V.m = List_new(d->V.m, strdup(it->key), Object_ref(it->value));
-    it = it->next;
-  }
+  d->V.m = o->V.m;
+  o->V.m = List_new(0, 0, Object_ref(d));
   return d;
 }
 
 static void
 List_free(List *list) {
-  List *n;
   while (list) {
-    n = list->next;
     if (list->key) {
       free(list->key);
     }
-    if (list->value) {
-      Object_free(list->value);
-    }
+    Object_free(list->value);
+    List *n = list->next;
     free(list);
     list = n;
   }

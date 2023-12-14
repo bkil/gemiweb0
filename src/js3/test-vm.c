@@ -437,13 +437,15 @@ main(void) {
   t("function obj() { var s; s = new Object; s.i = 8; function get() { return s.i }; function inc() { s.i = s.i + 1 }; function ret() { var m; m = new Object; m.get = get; m.inc = inc; return m }; return ret() }; var p; p = obj(); p.inc(); p.get()", 9);
   t("function obj() { var s; s = new Object; s.i = 8; function get() { return s.i }; function inc() { s.i = s.i + 1 }; function ret() { var m; m = new Object; m.get = get; m.inc = inc; m.s = s; return m }; return ret() }; var p; p = obj(); p.inc(); p.get(); var t; t = p.s; t.i", 9);
 
-  /* TODO function scope by reference */
-  t("var i; function f() { i = 9 }; f(); i", SB(9, 0));
-  t("var i; function f() { i = 9 }; f(); i = 8; f(); i", SB(9, 8));
-  t("var i; function f() { i = 9 }; var m; m = new Object; m.a = f; m.a(); i", SB(9, 0));
+  /* if function scope is implemented by at least backwards reference copy */
+  t("var i; function f() { i = 9 }; f(); i", 9);
+  t("var i; function f() { i = 9 }; f(); i = 8; f(); i", 9);
+  t("var i; function f() { i = 9 }; var m; m = new Object; m.a = f; m.a(); i", 9);
   t(
     "var i; var j; i = 0; j = 0; function f() { function g() { i = i + 1; return 2; i = i + 8 }; j = g(); i = i + 4 }; f(); i + j",
-    SB(7, 0));
+    7);
+
+  /* TODO function scope by reference */
   t("function g() { return f(); }; function f() { return 9 }; g()", SB(9, -2));
 
   t("var i; try { i = 9 } catch (e) { i = 8 }; i", 9);
@@ -498,7 +500,7 @@ main(void) {
   t("var i; if (0) i = 8; else i = 9; i", 9);
   t("while (0) {}", 0);
   t("function f() {}", 0);
-  t("var f; f = function() { return 9 }; f()", 9);
+  t("var f = function() { return 9 }; f()", 9);
   t("function f() { return 9 }; (f)()", 9);
   t("(function() { return 9 })()", 9);
   t("(function(x) { return x + 5 })(4)", 9);

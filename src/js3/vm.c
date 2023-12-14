@@ -316,9 +316,16 @@ static List *
 __attribute__((pure, warn_unused_result))
 Map_get(List *list, Id id) {
   List *it = list;
-  while (it && it->key && it->value) {
-    if (strncmpEq(id, it->key)) {
-      return it;
+  while (it) {
+    if (it->key) {
+      if (strncmpEq(id, it->key)) {
+        return it;
+      }
+    } else {
+      List *sub = Map_get(it->value->V.m, id);
+      if (sub) {
+        return sub;
+      }
     }
     it = it->next;
   }
