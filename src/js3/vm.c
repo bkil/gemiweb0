@@ -11,6 +11,7 @@
 #include <unistd.h> /* close fstat select read write */
 #include <sys/time.h> /* select */
 #include <limits.h> /* INT_MIN INT_MAX */
+#include <stddef.h> /* offsetof */
 
 /* coverage:stderr */
 static void
@@ -103,7 +104,7 @@ static Object emptyString = {.ref = -1, .t = ConstStringObject, .V.c = {.len = 0
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 IntObject_new(int x) {
-  Object *o = malloc(sizeof(*o));
+  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.i));
   o->ref = 0;
   o->t = IntObject;
   o->V.i = x;
@@ -113,7 +114,7 @@ IntObject_new(int x) {
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 StringObject_new_str(Str s) {
-  Object *o = malloc(sizeof(*o));
+  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.s));
   o->ref = 0;
   o->t = StringObject;
   o->V.s = (Str){.s = s.s, .len = s.len};
@@ -123,7 +124,7 @@ StringObject_new_str(Str s) {
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 StringObject_new_const(Id s) {
-  Object *o = malloc(sizeof(*o));
+  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.c));
   o->ref = 0;
   o->t = ConstStringObject;
   o->V.c = (Id){.s = s.s, .len = s.len, .h = s.h ? Object_ref(s.h) : 0};
@@ -134,7 +135,7 @@ StringObject_new_const(Id s) {
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 Mmap_new(char *s, size_t len, int fd) {
-  Object *o = malloc(sizeof(*o));
+  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.mm));
   o->ref = 0;
   o->t = MmapString;
   o->V.mm.s = s;
@@ -147,7 +148,7 @@ Mmap_new(char *s, size_t len, int fd) {
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result, nonnull))
 StringObject_new(const char *s) {
-  Object *o = malloc(sizeof(*o));
+  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.c));
   o->ref = 0;
   o->t = ConstStringObject;
   o->V.c = (Id){.s = s, .len = strlen(s), .h = 0};
@@ -176,7 +177,7 @@ setThrow(Parser *p, const char *message) {
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result, nonnull))
 FunctionJs_new(Parser *p) {
-  Object *o = malloc(sizeof(*o));
+  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.j));
   o->ref = 0;
   o->t = FunctionJs;
   o->V.j = (JsFun){.p = {.s = p->prog.s, .end = p->prog.end, .h = Object_ref(p->prog.h)}, .scope = Object_clone(p->vars)};
@@ -186,7 +187,7 @@ FunctionJs_new(Parser *p) {
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 FunctionNative_new(Native f) {
-  Object *o = malloc(sizeof(*o));
+  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.f));
   o->ref = 0;
   o->t = FunctionNative;
   o->V.f = f;
@@ -196,7 +197,7 @@ FunctionNative_new(Native f) {
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 MethodNative_new(MethodFun a) {
-  Object *o = malloc(sizeof(*o));
+  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.a));
   o->ref = 0;
   o->t = MethodNative;
   o->V.a = a;
@@ -207,7 +208,7 @@ static
 Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 MapObject_new(void) {
-  Object *o = malloc(sizeof(*o));
+  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.m));
   o->ref = 0;
   o->t = MapObject;
   o->V.m = 0;
@@ -218,7 +219,7 @@ static
 Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 Prototype_new(void) {
-  Object *o = malloc(sizeof(*o));
+  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.m));
   o->ref = 0;
   o->t = Prototype;
   o->V.m = 0;
@@ -228,7 +229,7 @@ Prototype_new(void) {
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 ArrayObject_new(void) {
-  Object *o = malloc(sizeof(*o));
+  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.m));
   o->ref = 0;
   o->t = ArrayObject;
   o->V.m = 0;
@@ -257,7 +258,7 @@ Object_set0(Object **old) {
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 DateObject_new(long d) {
-  Object *o = malloc(sizeof(*o));
+  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.d));
   o->ref = 0;
   o->t = DateObject;
   o->V.d = d;
