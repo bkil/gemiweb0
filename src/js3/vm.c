@@ -55,6 +55,7 @@ snprinti(char *s, size_t n, int i) {
 # define Object_clone(o) (o)
 # define mfree(o) while(0) {}
 # define Object_free(o) while(0) {}
+# define Object_freeMaybe(o) while(0) {}
 # define List_free(l) while(0) {}
 
 void
