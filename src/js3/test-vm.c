@@ -12,6 +12,7 @@ main(void) {
   t("function f() { return 9 }; var i; i = f()", 9);
   t("var i; function f() { return 7; i = 8 }; i = 9; f(); i", 9);
   t("var i; i = 9; function f() { i = 8 }; var g; g = f; i", 9);
+  t("var i = 4; var j; function f() { j = 5 }; f(); f = 0; i + j", 9);
   t("function f() { return 9 }; var m; m = new Object; m.a = f; m.a()", 9);
   t("function f() { function g() { return 9 }; return g() }; f()", 9);
   t("function f() { return 9 }; function g() { return f(); }; g()", 9);
