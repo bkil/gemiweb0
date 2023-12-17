@@ -1793,7 +1793,7 @@ fs_readFile(Parser *p, List *l) {
   Object *err;
   Object *data = &undefinedObject;
 
-  const int fd = open(name, 0);
+  const int fd = open(name, O_RDONLY);
   free(name);
   if (fd < 0) {
     err = StringObject_new("readFile open failed");
@@ -1819,10 +1819,11 @@ fs_readFile(Parser *p, List *l) {
     }
   }
 
-  List *args = List_new((List_new(0, 0, data)), 0, err);
+  List *args = List_new(List_new(0, 0, data), 0, err);
   Object *ret = invokeFun(p, l->next->value, args, 0);
+  Object_free(ret);
   List_free(args);
-  return ret;
+  return &undefinedObject;
 }
 
 static Object *
