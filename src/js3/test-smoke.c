@@ -25,11 +25,19 @@ main(void) {
   t("require()", -2);
   t("require(null)", -2);
   t("require('x') === undefined", 1);
+
   t("var f = require('fs'); f.readFile()", -2);
   t("var f = require('fs'); f.readFile('x')", -2);
   t("var f = require('fs'); f.readFile('x', 2)", -2);
   t("var f = require('fs'); var o = new Object; f.readFile('test-vm-1.txt', function(e, d) {o.e = e; o.d = d}); (o.e === undefined) && (o.d === 'abc')", 1);
   t("var f = require('fs'); var o = new Object; f.readFile('x', function(e, d) {o.e = e; o.d = d}); (o.d === undefined) && (o.e.charAt(0))", 1);
+
+  t("var f = require('fs'); f.writeFile()", -2);
+  t("var f = require('fs'); f.writeFile('test-vm-w.txt')", -2);
+  t("var f = require('fs'); f.writeFile('test-vm-w.txt', null)", -2);
+  t("var f = require('fs'); f.writeFile('test-vm-w.txt', 'x', 2)", -2);
+  t("var f = require('fs'); var o = new Object; f.writeFile('.', 'x', function(e){o.e=e}); o.e.charAt(0)", 1);
+  t("var f=require('fs'); var d='' + (new Date/1000); var o=new Object; f.writeFile('test-vm-w.out', d, function(e) {if (e === undefined) { f.readFile('test-vm-w.out', function(e, d){o.e = e; o.d = d}) } else {o.e = e}}); (o.e === undefined) && (o.d === d)", 1);
 
   t("setTimeout()", -2);
   t("setTimeout(function(){})", -2);

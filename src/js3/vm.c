@@ -1824,6 +1824,39 @@ fs_readFile(Parser *p, List *l) {
   List_free(args);
   return ret;
 }
+
+static Object *
+__attribute__((warn_unused_result, nonnull(1)))
+fs_writeFile(Parser *p, List *l) {
+  if (!l || !isString(l->value) || !l->next || !isString(l->next->value) || !l->next->next || (l->next->next->value->t != FunctionJs)) {
+    return setThrow(p, "expecting String, String and Function argument");
+  }
+  char *name = strndup(l->value->V.c.s, l->value->V.c.len);
+  Object *err;
+
+  const int fd = open(name, O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR);
+  free(name);
+  if (fd < 0) {
+    err = StringObject_new("writeFile open failed");
+  } else {
+    ssize_t wn = write(fd, l->next->value->V.s.s, l->next->value->V.s.len);
+    if ((wn < 0) || ((size_t)wn < l->next->value->V.s.len)) {
+      /* coverage:no */
+      err = StringObject_new("write failed to save enough data");
+      /* /coverage:no */
+    } else {
+      err = &undefinedObject;
+    }
+    close(fd);
+  }
+
+  List *args = List_new(0, 0, err);
+  Object *ret = invokeFun(p, l->next->next->value, args, 0);
+  Object_free(ret);
+  List_free(args);
+  return &undefinedObject;
+}
+
 /* /coverage:file */
 
 static void
@@ -2047,6 +2080,7 @@ global_require(Parser *p, List *l) {
   if (strncmpEq(l->value->V.c, "fs")) {
     Object *o = MapObject_new();
     addFunction(o, "readFile", &fs_readFile);
+    addFunction(o, "writeFile", &fs_writeFile);
     return o;
   } else if (strncmpEq(l->value->V.c, "node:net")) {
     /* coverage:net */

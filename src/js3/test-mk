@@ -157,10 +157,10 @@ tests() {
   phase module
   TESTRES=$(($?|$TESTRES))
 
-  phase system
+  phase smoke
   TESTRES=$(($?|$TESTRES))
 
-  phase smoke
+  phase system
   TESTRES=$(($?|$TESTRES))
   return $TESTRES
 }
