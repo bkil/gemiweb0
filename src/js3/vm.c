@@ -12,6 +12,8 @@
 #include <sys/time.h> /* select */
 #include <limits.h> /* INT_MAX INT_MIN */
 #include <stddef.h> /* offsetof */
+#include <dirent.h> /* closedir opendir readdir */
+#include <errno.h> /* errno */
 
 /* coverage:stderr */
 static void
@@ -117,9 +119,17 @@ StringObject_new_str(Str s) {
   Object *o = malloc(offsetof(Object, V) + sizeof(o->V.s));
   o->ref = 0;
   o->t = StringObject;
-  o->V.s = (Str){.s = s.s, .len = s.len};
+  o->V.s = s;
   return o;
 }
+
+/* coverage:file */
+static Object *
+__attribute__((malloc, returns_nonnull, warn_unused_result))
+StringObject_new_dup(const char *s) {
+  return StringObject_new_str((Str){.s = strdup(s), .len = strlen(s)});
+}
+/* /coverage:file */
 
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
@@ -1865,6 +1875,51 @@ fs_writeFile(Parser *p, List *l) {
   return &undefinedObject;
 }
 
+static Object *
+__attribute__((warn_unused_result, nonnull(1)))
+fs_readDir(Parser *p, List *l) {
+  if (!l || !isString(l->value) || !l->next || (l->next->value->t != FunctionJs)) {
+    return setThrow(p, "expecting String and Function argument");
+  }
+  Object *err = &undefinedObject;
+  Object *o = ArrayObject_new();
+  char *name = strndup(l->value->V.s.s, l->value->V.s.len);
+  DIR *dirp = opendir(name);
+  free(name);
+
+  if (!dirp) {
+    err = StringObject_new("opendir failed");
+  } else {
+    Object *i = IntObject_new(0);
+    List **tail = &o->V.m;
+    struct dirent *ent;
+    while ((errno = 0, ent = readdir(dirp))) {
+      const char *s = ent->d_name;
+      if ((s[0] == '.') && (!s[1] || ((s[1] == '.') && !s[2]))) {
+        continue;
+      }
+      List_push(&tail, i, StringObject_new_dup(ent->d_name));
+    }
+    Object_free(i);
+
+    if (errno) {
+      /* coverage:no */
+      err = StringObject_new("readdir failed");
+      /* /coverage:no */
+    }
+    /* coverage:no */
+    if (closedir(dirp) && (err == &undefinedObject)) {
+      err = StringObject_new("closedir failed");
+    }
+    /* /coverage:no */
+  }
+
+  List *args = List_new(List_new(0, 0, o), 0, err);
+  Object *ret = invokeFun(p, l->next->value, args, 0);
+  Object_free(ret);
+  List_free(args);
+  return &undefinedObject;
+}
 /* /coverage:file */
 
 static void
@@ -2089,6 +2144,7 @@ global_require(Parser *p, List *l) {
     Object *o = MapObject_new();
     addFunction(o, "readFile", &fs_readFile);
     addFunction(o, "writeFile", &fs_writeFile);
+    addFunction(o, "readdir", &fs_readDir);
     return o;
   } else if (strncmpEq(l->value->V.c, "node:net")) {
     /* coverage:net */

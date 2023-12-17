@@ -39,6 +39,12 @@ main(void) {
   t("var f = require('fs'); var o = new Object; f.writeFile('.', 'x', function(e){o.e=e}); o.e.charAt(0)", 1);
   t("var f=require('fs'); var d='' + (new Date/1000); var o=new Object; f.writeFile('test-vm-w.out', d, function(e) {if (e === undefined) { f.readFile('test-vm-w.out', function(e, d){o.e = e; o.d = d}) } else {o.e = e}}); (o.e === undefined) && (o.d === d)", 1);
 
+  t("var f = require('fs'); f.readdir()", -2);
+  t("var f = require('fs'); f.readdir('.')", -2);
+  t("var f = require('fs'); f.readdir('.', 2)", -2);
+  t("var f=require('fs'); var o=new Object; f.readdir('', function(e,l){o.e=e;o.l=l}); (o.e.charAt(0)) && (o.l.length===0)", 1);
+  t("var f=require('fs'); var o=new Object; f.readdir('.', function(e,l){o.e=e;o.l=l}); var s=o.l[0]; (o.e===undefined) && (o.l.length > 2) && (s.charAt(0))", 1);
+
   t("setTimeout()", -2);
   t("setTimeout(function(){})", -2);
   t("setTimeout(function(){}, null)", -2);
