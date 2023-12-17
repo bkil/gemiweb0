@@ -1,16 +1,16 @@
 #include "include.h" /* strnlen strdup strndup getline clock_gettime; strlen strcmp strncmp strncpy strstr */
 #include "vm-impl.h"
 
-#include <stdio.h> /* STDIN_FILENO fputs fputc putchar stdout stderr getline perror */
-#include <malloc.h> /* malloc free */
+#include <stdio.h> /* STDIN_FILENO fputc fputs getline perror putchar stderr stdout */
+#include <malloc.h> /* free malloc */
 #include <stdlib.h> /* atoi size_t */
 #include <sys/mman.h> /* mmap */
-#include <sys/types.h> /* open fstat select */
-#include <sys/stat.h> /* open fstat */
+#include <sys/types.h> /* fstat open opendir select */
+#include <sys/stat.h> /* fstat open */
 #include <fcntl.h> /* open */
-#include <unistd.h> /* close fstat select read write */
+#include <unistd.h> /* close fstat read select write */
 #include <sys/time.h> /* select */
-#include <limits.h> /* INT_MIN INT_MAX */
+#include <limits.h> /* INT_MAX INT_MIN */
 #include <stddef.h> /* offsetof */
 
 /* coverage:stderr */
