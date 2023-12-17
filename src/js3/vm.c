@@ -757,6 +757,22 @@ parseObjectLiteral(Parser *p) {
   return o;
 }
 
+static void
+__attribute__((nonnull))
+List_push(List ***tail, Object *it, Object *value) {
+  Object *key = Object_toString(it);
+  it->V.i++;
+  List *l = List_new(0, strndup(key->V.c.s, key->V.c.len), value);
+  Object_free(key);
+  List **tailp = *tail;
+  if (*tailp) {
+    (*tailp)->next = l;
+    *tail = &(*tailp)->next;
+  } else {
+    *tailp = l;
+  }
+}
+
 static Object *
 __attribute__((nonnull, warn_unused_result))
 parseArrayLiteral(Parser *p) {
@@ -773,16 +789,7 @@ parseArrayLiteral(Parser *p) {
       Object_free(i);
       return 0;
     }
-    Object *key = Object_toString(i);
-    i->V.i++;
-    List *l = List_new(0, strndup(key->V.c.s, key->V.c.len), value);
-    Object_free(key);
-    if (*tail) {
-      (*tail)->next = l;
-      tail = &(*tail)->next;
-    } else {
-      *tail = l;
-    }
+    List_push(&tail, i, value);
     if (!acceptWs(p, ',')) {
       if (!expectWs(p, ']')) {
         Object_set0(&o);
