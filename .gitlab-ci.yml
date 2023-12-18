@@ -1,4 +1,4 @@
-image: gcc
+image: alpine:latest
 pages:
   stage: deploy
   before_script:
