@@ -3,7 +3,7 @@ Refer to the GNU GPL v2 in LICENSE for terms */
 
 #include "testutil.h"
 
-#ifdef SMALLBIN
+#ifdef NEEDLEAK
 #define SB(x,y) (x)
 #else
 #define SB(x,y) (y)
