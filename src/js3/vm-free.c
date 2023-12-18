@@ -1,3 +1,6 @@
+/* Copyright (C) 2023 bkil.hu
+Refer to the GNU GPL v2 in LICENSE for terms */
+
 #include "include.h" /* strdup */
 #include <stdio.h> /* perror */
 #include <sys/mman.h> /* munmap */

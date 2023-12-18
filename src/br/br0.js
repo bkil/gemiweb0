@@ -1,5 +1,8 @@
 'use strict';
 
+// Copyright (C) 2023 bkil.hu
+// Refer to the GNU GPL v2 in LICENSE for terms
+
 eval((function() {
   var o = new Object;
   var fs = require('fs');

@@ -1,3 +1,6 @@
+/* Copyright (C) 2023 bkil.hu
+Refer to the GNU GPL v2 in LICENSE for terms */
+
 #ifndef _include_vm_impl_h
 #define _include_vm_impl_h
 

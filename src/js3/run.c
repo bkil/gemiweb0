@@ -1,3 +1,6 @@
+/* Copyright (C) 2023 bkil.hu
+Refer to the GNU GPL v2 in LICENSE for terms */
+
 #include "vm.h" /* Parser_new Parser_eval Parser_free off_t2size_t */
 #include <stdio.h> /* fputs stderr perror */
 #include <stdlib.h> /* size_t */
