@@ -30,6 +30,7 @@ make_dev() {
     '../br/*.js' \
     '../br/*.htm' \
     |
+  grep -E -v "^\.\./br/(br0|lib)\.js$" |
   xargs zip \
     -j \
     "$DEST/js0br0-dev.zip" \
@@ -90,7 +91,7 @@ bins() {
   cd "$ROOT/src/js3" || return 1
   compile "$DEST/js0-dl" gcc || return 1
 
-  if which musl-gcc; then
+  if which musl-gcc >/dev/null; then
     compile "$DEST/js0-static" musl-gcc -static || return 1
   else
     compile "$DEST/js0-static" gcc -static || return 1
