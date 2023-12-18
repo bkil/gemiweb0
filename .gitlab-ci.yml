@@ -2,7 +2,7 @@ image: alpine:latest
 pages:
   stage: deploy
   before_script:
-  - apk --update-cache add brotli git zip gcc libc-dev libc-dev musl-dev binutils binutils-gold
+  - apk --update-cache add brotli git zip gcc musl-dev binutils binutils-gold
   script:
   - src/make-dist.sh .public
   - find .public -type f -exec gzip -9 -f -k {} +
