@@ -220,14 +220,13 @@ More of a tech demo than a product for end users, but it is a unique independent
 * CSS, forms, cookies, FTP, Gopher
 * QuickJS JavaScript for link navigation and basic DOM manipulation
 
-### gosub-browser
+### Cocktail
 
-* https://github.com/jaytaph/gosub-browser
+* https://github.com/silexlabs/Cocktail
+* TODO: could not find JavaScript implementation in the source code
 
-> GoSub: Gateway to Optimized Searching and Unlimited Browsing
-> A feeble attempt on writing a browser and learning rust.
-> Note: code in the main branch is currently not stable and might not even compile.
-> In the future, this component (html5 parser) will receive through an API a stream of bytes and will output a stream of events. The events will be consumed by the next component and so on, until we can display something in a window/user agent. This could very well be a text-mode browser, but the idea is to have a graphical browser.
+> With Cocktail, write HTML/CSS applications in Haxe and build them for OpenFL and flash/Air. As Cocktail uses the standard DOM API, you can also build your app to regular JavaScript.
+> NME (another Haxe library)
 
 ### kosmonaut
 
@@ -259,6 +258,16 @@ More of a tech demo than a product for end users, but it is a unique independent
 
 > A toy web browser implemented in Rust from scratch
 
+### Simple-San-Simon-Functional-Web-Browser
+
+* https://github.com/carliros/Simple-San-Simon-Functional-Web-Browser
+* https://hsbrowser.wordpress.com/
+* Haskell
+* uu-parsinglib, url, tagsoup, gd-haskell, curl-haskell, wxHaskell
+
+> support for a small sub-set of HTML, XHTML and XML grammar
+> small sub-set of CSS. We implemented 48 CSS properties that let us modify Box features, apply styles to texts, use list and generate content.
+
 ### thdwb
 
 * https://github.com/danfragoso/thdwb
@@ -266,6 +275,15 @@ More of a tech demo than a product for end users, but it is a unique independent
 
 > This is the hotdog web browser project. It's a web browser with its own layout and rendering engine, parsers, and UI toolkit!
 > It's made from scratch entirely in golang. External dependencies are only OpenGL and GLFW, even go dependencies are kept to a minimum.
+
+### WebWhir
+
+* https://github.com/reesmichael1/WebWhir
+* C++
+
+> WebWhir uses Boost sparingly and SFML for graphics.
+> designed to be very easy to link into any application
+> HTML tokenizer only handles the few of these that were necessary to parse simple and well-formatted strings
 
 ### wowser
 
@@ -276,7 +294,7 @@ More of a tech demo than a product for end users, but it is a unique independent
 
 ## Planned
 
-Projects listed here have not produced a browser a user could test yet.
+Projects listed here have not produced a browser a user could test yet or are only components that others may build a web browser from in the future.
 
 ### this project
 
@@ -284,10 +302,62 @@ Projects listed here have not produced a browser a user could test yet.
 * The main scope is producing only documentation, specification and conformance tests. Developers are expected to implement it on their own.
 * A proof of concept web browser, web server and bot user agent will be provided later in multiple languages, both low level and high level.
 
+### CSSBox
+
+* https://github.com/philborlin/CSSBox
+* Java
+
+> The input of the rendering engine is the document DOM tree and a set of style sheets referenced from the document. The output is an object-oriented model of the page layout. This model can be directly displayed but mainly, it is suitable for further processing by the layout analysis algorithms as for example the page segmentation or information extraction algorithms.
+> The core CSSBox library may be also used for obtaining a bitmap or vector (SVG) image of the rendered document. Using the SwingBox package, CSSBox may be used as an interactive web browser component in a Java Swing application.
+> CSSBox relies on the jStyleParser open source CSS parser
+> the NekoHTML parser is used for creating the DOM tree. As an alternative, the The Validator.nu HTML Parser has been tested with CSSBox too.
+> The Xerces library may be replaced by any other DOM implementation.
+
+### gosub-browser
+
+* https://github.com/jaytaph/gosub-browser
+
+> GoSub: Gateway to Optimized Searching and Unlimited Browsing
+> A feeble attempt on writing a browser and learning rust.
+> Note: code in the main branch is currently not stable and might not even compile.
+> In the future, this component (html5 parser) will receive through an API a stream of bytes and will output a stream of events. The events will be consumed by the next component and so on, until we can display something in a window/user agent. This could very well be a text-mode browser, but the idea is to have a graphical browser.
+
 ### Haphaestus
 
 * https://haphaestus.org/
 * https://argonaut-constellation.org/
+
+### litehtml
+
+* https://github.com/litehtml/litehtml
+* https://github.com/google/gumbo-parser
+
+> litehtml is the lightweight HTML rendering engine with CSS2/CSS3 support. Note that litehtml itself does not draw any text, pictures
+> litehtml just parses HTML/CSS and places the HTML elements into the correct positions (renders HTML). To draw the HTML elements you have to implement the simple callback interface document_container.
+> litehtml uses the gumbo-parser to parse HTML
+
+### LURE
+
+* https://github.com/smizdev/LURE
+
+> LURE does not intend to implement a fully standards compliant web browser.
+> LURE is currently under development and cannot yet produce rendered content. Much of the DOM and associated subsystems are still under heavy design and development
+
+### Robinson
+
+* https://github.com/mbrubeck/robinson
+* https://limpet.net/mbrubeck/2014/08/08/toy-layout-engine-1.html
+* Rust
+* small subset of HTML and CSS, basic block layout
+* no GUI or interaction yet, can only render to PNG or PDF
+
+### WeasyPrint
+
+* https://github.com/Kozea/WeasyPrint
+
+> visual rendering engine for HTML and CSS that can export to PDF.
+> It is based on various libraries but not on a full rendering engine like WebKit or Gecko. The CSS layout engine is written in Python, designed for pagination, and meant to be easy to hack on.
+> flit_core, pydyf, cffi, html5lib, tinycss2, cssselect2, Pyphen, Pillow, fonttools[woff]
 
 ## Unmaintained
 
