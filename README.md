@@ -29,6 +29,7 @@ Note that it is not intended for general audience yet, hence it may not be safe 
 * https://bkil.gitlab.io/gemiweb/js0br0.zip
 * https://bkil.gitlab.io/gemiweb/js0br0-dev.zip
 * https://bkil.gitlab.io/gemiweb/js0br0-doc.zip
+* https://bkil.gitlab.io/gemiweb/js0
 
 ## Example web content
 
