@@ -44,7 +44,7 @@ make_doc() {
   cd "$ROOT" || return 1
 
   TMP="$DEST/bf-js.md"
-  cp -d --preserve=all "src/bf.c/README.md" "$TMP" || return 1
+  cp -dp "src/bf.c/README.md" "$TMP" || return 1
 
   git ls-files \
     'doc/*' \
