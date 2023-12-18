@@ -62,23 +62,34 @@ make_doc() {
 }
 
 compile() {
-  local BIN
-  readonly BIN="$DEST/js0"
-
-  cd "$ROOT/src/js3" || return 1
-  gcc \
+  local COMP BIN
+  readonly BIN="$1"
+  readonly COMP="$2"
+  shift 2
+  "$COMP" \
     -march=nocona -mtune=broadwell \
     -Os \
     -flto \
     -fno-asynchronous-unwind-tables \
     -Wl,-z,norelro \
     -Wl,--build-id=none \
+    -Wl,--gc-sections \
+    -DSMALLBIN \
+    -s \
+    run.c vm.c \
     -o "$BIN" \
-    run.c vm.c || return 1
+    "$@" \
+    || return 1
 
   strip \
     --remove-section=.comment \
   "$BIN"
+}
+
+bins() {
+  cd "$ROOT/src/js3" || return 1
+  compile "$DEST/js0" gcc || return 1
+  compile "$DEST/js0-static" musl-gcc -static || return 1
 }
 
 main() {
@@ -86,9 +97,14 @@ main() {
   readonly DESTNAME="$1"
   readonly ROOT="$(readlink -f "`dirname "$0"`/..")"
 
-  cd "$ROOT" || return 1
+  [ -n "$DESTNAME" ] || {
+    echo "usage: $0 <destdir>" >&2
+    return 1
+  }
+
   mkdir -p "$DESTNAME" || return 1
   readonly DEST="`readlink -f "$DESTNAME"`"
+  cd "$ROOT" || return 1
 
   git ls-files |
   grep -E '\.(html?|js|css|sh)$' |
@@ -98,7 +114,7 @@ main() {
   make_head || return 1
   make_dev || return 1
   make_doc || return 1
-  compile || return 1
+  bins || return 1
 }
 
 main "$@"
