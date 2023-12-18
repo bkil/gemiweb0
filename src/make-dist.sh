@@ -82,12 +82,13 @@ compile() {
 }
 
 main() {
-  local DEST ROOT TMP
-  readonly DEST="`readlink -f "$1"`"
+  local DESTNAME DEST ROOT TMP
+  readonly DESTNAME="$1"
   readonly ROOT="$(readlink -f "`dirname "$0"`/..")"
 
   cd "$ROOT" || return 1
-  mkdir -p "$DEST" || return 1
+  mkdir -p "$DESTNAME" || return 1
+  readonly DEST="`readlink -f "$DESTNAME"`"
 
   git ls-files |
   grep -E '\.(html?|js|css|sh)$' |
