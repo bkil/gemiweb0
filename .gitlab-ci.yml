@@ -1,11 +1,10 @@
-image: alpine:latest
+image: gcc
 pages:
   stage: deploy
   before_script:
-  - apk update && apk add brotli git
+  - apk --update-cache add brotli git zip gcc musl-dev binutils binutils-gold
   script:
-  - mkdir -p .public
-  - git ls-files | grep -E '\.(html?|js|css)$' | xargs tar -c | tar -xC .public
+  - src/make-dist.sh .public
   - find .public -type f -exec gzip -9 -f -k {} +
   - find .public -type f -exec brotli -f -k {} +
   - mv .public public

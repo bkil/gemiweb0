@@ -7,6 +7,7 @@
 *.php
 .bk
 .wip
+/dist
+/src/js3/js0
 html
-src/js3/js0
 tmp.*
