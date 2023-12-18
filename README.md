@@ -1,6 +1,10 @@
 # GemiWeb, the gemini-HTTP/HTML subset
 
+## Status
+
 Status: not public yet, volunteer developers and user brainstorming welcome!
+
+## Documentation
 
 See the doc folder for more information:
 
@@ -13,15 +17,25 @@ See the doc folder for more information:
 * [doc/web-browsers-by-engine.md](doc/web-browsers-by-engine.md)
 * [doc/javascript-interpreter-runtimes.md](doc/javascript-interpreter-runtimes.md)
 
-Play with an example game obeying this subset:
-
-* https://bkil.gitlab.io/static-wonders.js/game/rockpaper-sum.html
-* https://bkil.gitlab.io/static-wonders.js/game/memopair.htm
-
 Older notes:
 
 * [doc/spec.md](doc/spec.md)
 * [doc/home.md](doc/home.md)
+
+## Development snapshots
+
+Note that it is not intended for general audience yet, hence it may not be safe to run these. Do consider containerization before testing.
+
+* https://bkil.gitlab.io/gemiweb/js0br0.zip
+* https://bkil.gitlab.io/gemiweb/js0br0-dev.zip
+* https://bkil.gitlab.io/gemiweb/js0br0-doc.zip
+
+## Example web content
+
+Play with an example game obeying this subset:
+
+* https://bkil.gitlab.io/static-wonders.js/game/rockpaper-sum.html
+* https://bkil.gitlab.io/static-wonders.js/game/memopair.htm
 
 ## Contact
 
@@ -30,3 +44,7 @@ Join our chat room to participate in brainstorming or to give a hand by implemen
 * https://matrix.to/#/#gemiweb:matrix.org
 * https://github.com/bkil/gemiweb
 * https://gitlab.com/bkil/gemiweb
+
+## LICENSE
+
+* [LICENSE.md](LICENSE.md)
