@@ -3,18 +3,18 @@
 // Copyright (C) 2023 bkil.hu
 // Refer to the GNU GPL v2 in LICENSE for terms
 
-eval((function() {
-  var o = new Object;
+var libJs = new Object;
+(function() {
   var fs = require('fs');
   fs.readFile('lib.js', function(e, d) {
     if (e) {
       console.log(e)
     } else {
-      o.d = d
+      libJs.s = d
     }
   });
-  return o.d;
-})());
+})();
+eval(libJs.s);
 
 function eval2To(j, prog) {
   function eval2To0(self, j, prog) {
@@ -570,13 +570,7 @@ function setInitState(j, href, html) {
     g.document = doc;
 
     g.require = undefined;
-
-    var fs = require('fs');
-    fs.readFile('lib.js', function(e, lib) {
-      if (lib) {
-        eval2To(j, lib);
-      }
-    });
+    eval2To(j, libJs.s);
   }
 }
 function browseData(j, url, html, isFile, brows) {
