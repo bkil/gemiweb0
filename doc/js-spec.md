@@ -216,6 +216,8 @@ Planned on shortlist:
 * https://tinygo.org/docs/concepts/compiler-internals/
 * https://docs.micropython.org/en/latest/develop/index.html
 * https://bellard.org/tcc/tcc-doc.html#devel
+* https://t3x.org/subc/
+* https://github.com/DoctorWkt/acwj
 
 ## Best practices
 
