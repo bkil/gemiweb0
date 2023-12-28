@@ -8,9 +8,9 @@ var libJs = new Object;
   var fs = require('fs');
   fs.readFile('lib.js', function(e, d) {
     if (e) {
-      console.log(e)
+      console.log(e);
     } else {
-      libJs.s = d
+      libJs.s = d;
     }
   });
 })();
@@ -103,10 +103,7 @@ function copyLiteral(s) {
   var c = h[s['i']];
   var b;
   s['i'] = s['i'] + 1;
-  if (s.ctx === 'style') {
-  } else if (s['ctx']) {
-    o = o + c;
-  } else {
+  if (!s['ctx']) {
     b = isWs(c);
     if (!b) {
       o = o + c;
@@ -114,6 +111,9 @@ function copyLiteral(s) {
       o = o + ' ';
     }
     s['lastWs'] = b;
+  } else if (s.ctx === 'style') {
+  } else  {
+    o = o + c;
   }
   s['o'] = o;
 }
@@ -251,7 +251,7 @@ function closeLastTag(j) {
     var d = j.d;
     if (d['documentWritten'] !== undefined) {
       var h = s['h'];
-      s['h'] = h.substr(0, s['i']) + (d['documentWritten'] + h.substr(s['i']));
+      s['h'] = h.substring(0, s['i']) + (d['documentWritten'] + h.substring(s['i']));
       d['documentWritten'] = undefined;
     }
   }
@@ -652,7 +652,7 @@ function browseData(j, url, html, isFile, brows) {
 function browse(j, url, brows) {
   var html;
   if (url.indexOf('javascript:') === 0) {
-    html = eval2To(j, decodeURIComponent(url.substr(11)));
+    html = eval2To(j, decodeURIComponent(url.substring(11)));
     if (typeof html === 'string') {
       browseData(j, url, html, 0, brows);
     } else {
