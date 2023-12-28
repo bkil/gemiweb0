@@ -11,7 +11,7 @@ BIN="$O/js0"
 {
   cd ../br &&
   if [ -n "$ISQUICK" ]; then
-    $O/run.out "$JS"
+    $BIN "$JS"
   else
     valgrind \
       --leak-check=full \
