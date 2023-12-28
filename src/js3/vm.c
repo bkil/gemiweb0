@@ -373,8 +373,8 @@ isString(Object *o) {
 
 static int
 __attribute__((pure, nonnull, warn_unused_result))
-isStringEq(Object *a, Object *b) {
-  return isString(a) && isString(b) && (a->V.c.len == b->V.c.len) && (!strncmp(a->V.c.s, b->V.c.s, a->V.c.len));
+isStringEq(Str a, Str b) {
+  return (a.len == b.len) && (!strncmp(a.s, b.s, a.len));
 }
 
 static Object *
@@ -1308,6 +1308,24 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
         /* /coverage:unreachable */
     }
 
+  } else if ((op == '=') || (op == '!')) {
+    int b = isString(t1) && isString(t2) ? isStringEq(t1->V.s, t2->V.s) :
+      t1->t == t2->t ?
+        t1->t == IntObject ? t1->V.i == t2->V.i :
+        (t1->t == MapObject) || (t1->t == ArrayObject) || (t1->t == Prototype) || (t1->t == DateObject) ? t1 == t2 :
+        t1->t == FunctionJs ? t1->V.j.p.s == t2->V.j.p.s :
+        t1->t == FunctionNative ? t1->V.f == t2->V.f :
+        /* coverage:no */
+        t1->t == MethodNative ? t1->V.a == t2->V.a :
+        /* /coverage:no */
+        (t1->t == UndefinedObject) || (t1->t == NullObject)
+        :
+      0;
+
+    Object_free(t1);
+    Object_free(t2);
+    return IntObject_new((op == '=') ? b : !b);
+
   } else if ((t1->t == IntObject) && (t1->t == t2->t)) {
     int x = t1->V.i;
     int y = t2->V.i;
@@ -1344,10 +1362,6 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
         return IntObject_new(x > y);
       case 'g':
         return IntObject_new(x >= y);
-      case '=':
-        return IntObject_new(x == y);
-      case '!':
-        return IntObject_new(x != y);
       default: {}
     }
 
@@ -1378,12 +1392,6 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
       return IntObject_new((int)d);
     }
     return setThrow(p, "integer overflow");
-
-  } else if ((op == '=') || (op == '!')) {
-    int b = isStringEq(t1, t2) || (((t1->t == NullObject) || (t1->t == UndefinedObject)) && (t1->t == t2->t));
-    Object_free(t1);
-    Object_free(t2);
-    return IntObject_new((op == '=') ? b : !b);
 
   } else if (op == '+') {
     Object *s = 0;

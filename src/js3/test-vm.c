@@ -230,22 +230,36 @@ main(void) {
   t("2 =", -1);
   t("2 !", -1);
   t("NaN", 0);
-  t("NaN !== NaN", 1);
   t("isNaN(NaN)", 1);
   t("isNaN(8)", 0);
   t("undefined === undefined", 1);
   t("undefined !== undefined", 0);
   t("0 === undefined", 0);
-  t("0 === '0'", 0);
-  t("0 === ''", 0);
-  t("0 === new Object", 0);
   t("0 === null", 0);
   t("null", 0);
   t("null === null", 1);
+  t("function f(){}; f === null", 0);
+  t("function f(){}; f === undefined", 0);
   t("null === undefined", 0);
   t("null !== null", 0);
   t("null !== undefined", 1);
   t("'3'*3", -2); /* non-conforming, could be 9 */
+
+  /* optional */
+  t("NaN !== NaN", 1);
+  t("0 === '0'", 0);
+  t("0 === ''", 0);
+  t("0 === new Object", 0);
+  t("new Object === new Object", 0);
+  t("new Date === new Date", 0);
+  t("var o = new Object; o === o", 1);
+  t("function f(){}; f === f", 1);
+  t("var f = function(){}; f === f", 1);
+  t("var f = function(){}; var g = function(){}; f === g", 0);
+  t("new Array === new Array", 0);
+  t("var a = new Array; a === a", 1);
+  t("isNaN === isNaN", 1);
+  t("function f(){}; f === isNaN", 0);
 
   t("\"xa\" === \"xa\"", 1);
   t("\"xa\" === \"xb\"", 0);
