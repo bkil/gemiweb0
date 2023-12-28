@@ -179,15 +179,6 @@ StringObject_new_char(char c) {
 }
 
 static Object *
-__attribute__((nonnull, returns_nonnull, warn_unused_result))
-setThrow(Parser *p, const char *message) {
-  clearErr(p);
-  p->thrw = StringObject_new(message);
-  p->nest++;
-  return &undefinedObject;
-}
-
-static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result, nonnull))
 FunctionJs_new(Parser *p) {
   Object *o = malloc(offsetof(Object, V) + sizeof(o->V.j));
@@ -465,6 +456,41 @@ toBoolean(Object *o) {
 
 static Object *
 __attribute__((nonnull, warn_unused_result))
+String_concat(Object *t1, Object *t2) {
+  if (!isString(t1) || !isString(t2)) {
+    return 0;
+  }
+  const size_t n = t1->V.s.len;
+  const size_t m = t2->V.s.len;
+  char *s = malloc(n + m + 1);
+  strncpy(s, t1->V.s.s, n);
+  strncpy(s + n, t2->V.s.s, m);
+  s[n + m] = 0;
+  return StringObject_new_str((Str){.s = s, .len = n + m});
+}
+
+static Object *
+__attribute__((nonnull, returns_nonnull, warn_unused_result))
+setThrow(Parser *p, const char *message) {
+  clearErr(p);
+  Object_setUnref(&p->thrw, StringObject_new(message));
+  Object *part = StringObject_new(" (");
+  Object_setUnref(&p->thrw, String_concat(p->thrw, part));
+
+  size_t left = off_t2size_t(p->prog.end - p->prog.s);
+  left = left < 32 ? left : 32;
+  Object_setUnref(&part, StringObject_new_str((Str){.s = strndup(p->prog.s, left), .len = left}));
+
+  Object_setUnref(&p->thrw, String_concat(p->thrw, part));
+  Object_setUnref(&part, StringObject_new("...)"));
+  Object_setUnref(&p->thrw, String_concat(p->thrw, part));
+  Object_free(part);
+  p->nest++;
+  return &undefinedObject;
+}
+
+static Object *
+__attribute__((nonnull, warn_unused_result))
 Object_toString(Object *o) {
   switch (o->t) {
     case IntObject: {
@@ -551,21 +577,6 @@ typeOf(Object *o) {
     default:
       return 0; /* unreachable unless memory corruption */
   }
-}
-
-static Object *
-__attribute__((nonnull, warn_unused_result))
-String_concat(Object *t1, Object *t2) {
-  if (!isString(t1) || !isString(t2)) {
-    return 0;
-  }
-  const size_t n = t1->V.s.len;
-  const size_t m = t2->V.s.len;
-  char *s = malloc(n + m + 1);
-  strncpy(s, t1->V.s.s, n);
-  strncpy(s + n, t2->V.s.s, m);
-  s[n + m] = 0;
-  return StringObject_new_str((Str){.s = s, .len = n + m});
 }
 
 

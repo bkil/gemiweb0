@@ -113,7 +113,7 @@ test_network() {
   PORT="21198"
 
   C="$B test-sock-end.js </dev/null"
-  tn "" ":connected" "!connected!writebad,expecting String argument!end"
+  tn "" ":connected" "!connected!writebad,expecting String argument (;\n  } catch (e) {\n    console.lo...)!end"
 
   C="$B test-sock-conex.js </dev/null"
   tn "" "" "!throw!error"
