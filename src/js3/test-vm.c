@@ -53,11 +53,11 @@ main(void) {
   t("('' + undefined) === 'undefined'", 1);
   t("('' + null) === 'null'", 1);
   t("('' + NaN) === 'NaN'", 1);
-  t("('' + (new Object)) === 'Object'", 1);
-  t("('' + (new Array)) === 'Array'", 1);
-  t("('' + (function(){})) === 'Function'", 1);
-  t("('' + (new Date)) === 'Date'", 1); /* non-conforming */
-  t("('' + isNaN) === 'Native'", 1); /* non-conforming */
+  t("('' + (new Object)) === '[object Object]'", 1);
+  t("('' + (new Array)) === ''", -2); /* non-conforming */
+  t("('' + (function(){})) === 'function(){}'", -2); /* non-conforming */
+  t("('' + (new Date)) === 'Date'", -2); /* non-conforming */
+  t("('' + isNaN) === 'Native'", -2); /* non-conforming */
   t("var i = String.fromCharCode(undefined); i.charCodeAt(0) === 0", 1);
   t("var i = String.fromCharCode(null); i.charCodeAt(0) === 0", 1);
   t("var i = String.fromCharCode(new Object); i.charCodeAt(0) === 0", 1);
@@ -109,6 +109,7 @@ main(void) {
   t("var p; var q; p = new Object; q = new Object; q.p = p; q.p", 1);
   t("var p; var q; p = new Object; p.a = 9; q = new Object; q.p = p; p = q.p; p.a", 9);
   t("var m; m = new Object; m.4", -1);
+  t("function f(){}; var m; m = new Object; m[f]", -2); /* non-conforming */
 
   t("var p = new Object; p.a = 9; var q = new Object; q.p = p; q.p.a", 9);
   t("var p = new Object; p.a = 9; var q = new Object; q.r = p; p = new Object; p.q = q; p.q.r.a", 9);

@@ -491,7 +491,7 @@ setThrow(Parser *p, const char *message) {
 
 static Object *
 __attribute__((nonnull, warn_unused_result))
-Object_toString(Object *o) {
+Object_toString(Parser *p, Object *o) {
   switch (o->t) {
     case IntObject: {
       char *s = malloc(16);
@@ -516,30 +516,22 @@ Object_toString(Object *o) {
 
     case MapObject:
     case Prototype:
-      return StringObject_new("Object");
+      return StringObject_new("[object Object]");
 
     case ArrayObject:
-      return StringObject_new("Array");
-
     case FunctionJs:
-      return StringObject_new("Function");
-
     case FunctionNative:
-      return StringObject_new("Native");
-
     /* coverage:no */
     case MethodNative:
-      return StringObject_new("Method");
     /* /coverage:no */
+    case DateObject:
+      return setThrow(p, "toString not available for this type");
 
     case NullObject:
       return StringObject_new("null");
 
     case NanObject:
       return StringObject_new("NaN");
-
-    case DateObject:
-      return StringObject_new("Date");
 
     default: {}
   }
@@ -752,7 +744,7 @@ parseObjectLiteral(Parser *p) {
         Object_free(o);
         return 0;
       }
-      keyString = Object_toString(keyObj);
+      keyString = Object_toString(p, keyObj);
       Object_free(keyObj);
       id = keyString->V.c;
     }
@@ -783,8 +775,8 @@ parseObjectLiteral(Parser *p) {
 
 static void
 __attribute__((nonnull))
-List_push(List ***tail, Object *it, Object *value) {
-  Object *key = Object_toString(it);
+List_push(Parser *p, List ***tail, Object *it, Object *value) {
+  Object *key = Object_toString(p, it);
   it->V.i++;
   List *l = List_new(0, strndup(key->V.c.s, key->V.c.len), value);
   Object_free(key);
@@ -813,7 +805,7 @@ parseArrayLiteral(Parser *p) {
       Object_free(i);
       return 0;
     }
-    List_push(&tail, i, value);
+    List_push(p, &tail, i, value);
     if (!acceptWs(p, ',')) {
       if (!expectWs(p, ']')) {
         Object_set0(&o);
@@ -1045,14 +1037,13 @@ parseSTerm(Parser *p, Id *id) {
 
       } else if ((self->t == MapObject) || (self->t == ArrayObject) || (self->t == Prototype)) {
         parent = &self->V.m;
-        key = Object_toString(i);
+        key = Object_toString(p, i);
         Object_free(i);
-        /* coverage:unreachable */
-        if (!key) {
+        if (!key || p->thrw) {
           Object_free(self);
+          Object_freeMaybe(key);
           return setThrow(p, "can't convert index to string");
         }
-        /* /coverage:unreachable */
         if ((self->t == ArrayObject) && strncmpEq((Id){.s = key->V.s.s, .len = key->V.s.len}, "length")) {
           field = IntObject_new(List_length(self->V.m));
           Object_set0(&key);
@@ -1397,14 +1388,14 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
     Object *s = 0;
     if (isString(t1)) {
       s = t2;
-      t2 = Object_toString(s);
+      t2 = Object_toString(p, s);
       Object_free(s);
     } else if (isString(t2)) {
       s = t1;
-      t1 = Object_toString(s);
+      t1 = Object_toString(p, s);
       Object_free(s);
     }
-    if (s) {
+    if (s && t1 && t2 && !p->thrw) {
       Object *o = String_concat(t1, t2);
       Object_free(t1);
       Object_free(t2);
@@ -1414,6 +1405,9 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
 
   Object_freeMaybe(t1);
   Object_freeMaybe(t2);
+  if (p->thrw) {
+    return &undefinedObject;
+  }
   return setThrow(p, "unknown operand types for expression");
 }
 
@@ -1779,14 +1773,15 @@ static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
 Console_log(Parser *p, List *l) {
   Object *e = l ? l->value : &undefinedObject;
-  Object *os = Object_toString(e);
-  if (os) {
+  Object *os = Object_toString(p, e);
+  if (os && !p->thrw) {
     putsn(os->V.s.s, os->V.s.len, stdout);
     Object_free(os);
   } else {
-    /* coverage:unreachable */
+    /* coverage:no */
+    Object_freeMaybe(os);
     fputs("?", stdout);
-    /* /coverage:unreachable */
+    /* /coverage:no */
   }
   return &undefinedObject;
 }
@@ -1920,7 +1915,7 @@ fs_readDir(Parser *p, List *l) {
       if ((s[0] == '.') && (!s[1] || ((s[1] == '.') && !s[2]))) {
         continue;
       }
-      List_push(&tail, i, StringObject_new_dup(ent->d_name));
+      List_push(p, &tail, i, StringObject_new_dup(ent->d_name));
     }
     Object_free(i);
 
@@ -2030,7 +2025,7 @@ node_net_startConnect(Parser *p, Object *onConnect) {
     return;
     /* /coverage:netsmoke */
   }
-  Object *port = Object_toString(e->value);
+  Object *port = Object_toString(p, e->value);
   if (!(e = Map_get_const(o, "host")) || !isString(e->value)) {
     /* coverage:netsmoke */
     Object_free(port);
@@ -2405,14 +2400,20 @@ Parser_evalResult(Parser *p, Object *o) {
     if (p->thrw) {
       if (p->debug) {
         /* coverage:stderr */
-        Object *os = Object_toString(p->thrw);
+        Object *thrown = p->thrw;
+        p->thrw = 0;
+        Object *os = Object_toString(p, thrown);
+        Object_free(thrown);
         fputs("runtime error: exception\n", stderr);
-        putsn(os->V.s.s, os->V.s.len, stderr);
-        Object_free(os);
+        if (os && !p->thrw) {
+          putsn(os->V.s.s, os->V.s.len, stderr);
+        }
+        Object_freeMaybe(os);
         fputs("\n", stderr);
         /* /coverage:stderr */
+      } else {
+        Object_set0(&p->thrw);
       }
-      Object_set0(&p->thrw);
       ret = -2;
     } else {
       ret = o->t != IntObject ? toBoolean(o) : o->V.i > 0 ? o->V.i : 0;
