@@ -39,7 +39,7 @@
 * Implementation complexity: low with footnotes on their own lines, intermediate when inline
 * Drawback: does not map to gemini
 * Incidence rate: very high
-* Use case: buttons on planar game board within a table
+* Use case: buttons on planar game board within a (preformatted) table
 * Workaround: put links on their own line
 
 ### table

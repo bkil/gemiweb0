@@ -107,7 +107,13 @@ With a limitation of supporting up to one form input or textarea element along w
 
 ## Attributes to interpret
 
-id or name should be followed for fragment linking
+id or name should be followed for fragment linking and may improve with preserving scroll position, focus or form input
+
+### Accessibility
+
+role=img and aria-label="..." added to a pre, blockquote or textarea should improve accessibility of ASCII art
+
+readonly, role=status (or alert, log) and aria-live=polite (or assertive) added to a textarea might allow for status updates
 
 ## Protocol schemes
 
