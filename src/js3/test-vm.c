@@ -293,6 +293,25 @@ main(void) {
   t("'x'", 1);
   t("8; 9", 9);
 
+  /* ES3 out of project scope */
+  t("var s = 'xyazzay'; var m = s.match('a'); m[0] === 'a'", 1);
+  t("var s = 'xyazzay'; var m = s.match('a'); m[1] === undefined", 1);
+  t("var s = 'xyazzay'; var m = s.match('a'); m.length", 1);
+  t("var s = 'xyazzay'; var m = s.match('a'); m.index", 2);
+  t("var s = '-a-b'; var m = s.match('([^-]+)-(.*)'); m[0] === 'a-b'", 1);
+  t("var s = '-a-b'; var m = s.match('([^-]+)-(.*)'); m[1] === 'a'", 1);
+  t("var s = '-a-b'; var m = s.match('([^-]+)-(.*)'); m[2] === 'b'", 1);
+  t("var s = '-a-b'; var m = s.match('([^-]+)-(.*)'); m[3] === undefined", 1);
+  t("var s = '-a-b'; var m = s.match('([^-]+)-(.*)'); m.length", 3);
+  t("var s = '-a-b'; var m = s.match('([^-]+)-(.*)'); m.index", 1);
+  t("var s = 'ab' + String.fromCharCode(10) + 'cd'; var m = s.match('^c'); m[0] === 'c'", 1); /* non-conforming, m should be null */
+  t("var s = 'ab' + String.fromCharCode(10) + 'cd'; var m = s.match('.*'); m[0] === 'ab'", 1);
+  t("var n = String.fromCharCode(10); var s = 'ab' + n + 'cd'; var m = s.match('(.|' + n + ')*'); m[0] === ('ab' + n + 'cd')", 1);
+  t("var s = ''; var m = s.match('.'); m === null", 1);
+  t("var s = ''; var i; try { s.match() } catch (e) {i = 1}; i", 1);
+  t("var s = ''; var i; try { s.match(null) } catch (e) {i = 1}; i", 1);
+  t("var s = ''; var i; try { s.match('*{([') } catch (e) {i = 1}; i", 1);
+
   t("new Date", 1);
   t("((new Date) / 1000) > 0", 1);
   t("var i = (new Date) % 1000; (i >= 0) && (i < 1000)", 1);

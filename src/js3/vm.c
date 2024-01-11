@@ -8,7 +8,8 @@ Refer to the GNU GPL v2 in LICENSE for terms */
 #include <malloc.h> /* free malloc */
 #include <stdlib.h> /* atoi size_t */
 #include <sys/mman.h> /* mmap */
-#include <sys/types.h> /* fstat open opendir select */
+#include <sys/types.h> /* fstat open opendir regcomp regexec regfree select */
+#include <regex.h> /* regcomp regexec regfree */
 #include <sys/stat.h> /* fstat open */
 #include <fcntl.h> /* open */
 #include <unistd.h> /* close fstat read select write */
@@ -361,7 +362,11 @@ static int
 __attribute__((pure, warn_unused_result))
 List_length(List *list) {
   int n = 0;
-  for (; list; list = list->next, n++) {}
+  for (; list; list = list->next) {
+     if ((list->key[0] >= '0') && (list->key[0] <= '9')) {
+       n++;
+     }
+  }
   return n;
 }
 
@@ -396,6 +401,79 @@ String_indexOf(Parser *p, Object *self, List *l) {
   mfree(haystack);
   mfree(needle);
   return IntObject_new(index);
+}
+
+static void
+__attribute__((nonnull))
+List_push(Parser *p, List ***tail, Object *it, Object *value);
+
+static Object *
+__attribute__((nonnull, warn_unused_result))
+String_substring(Object *o, int start, int end) {
+  if (!isString(o)) {
+    return 0;
+  }
+  /* coverage:no */
+  if (end > (int)o->V.s.len) {
+    end = (int)o->V.s.len;
+  }
+  if (start < 0) {
+    start = 0;
+  }
+  if (start > end) {
+    start = end;
+  }
+  /* /coverage:no */
+  size_t n = (size_t)end - (size_t)start;
+  char *s = malloc(n + 1);
+  strncpy(s, o->V.s.s + start, n);
+  s[n] = 0;
+  return StringObject_new_str((Str){.s = s, .len = n});
+}
+
+static Object *
+__attribute__((nonnull, returns_nonnull, warn_unused_result))
+setThrow(Parser *p, const char *message);
+
+static Object *
+__attribute__((returns_nonnull, warn_unused_result, nonnull(1, 2)))
+String_match(Parser *p, Object *self, List *l) {
+  if (!l || !isString(l->value)) {
+    return setThrow(p, "expecting String argument");
+  }
+  regex_t preg;
+  char *reg = strndup(l->value->V.s.s, l->value->V.s.len);
+  if (regcomp(&preg, reg, REG_EXTENDED | REG_NEWLINE)) {
+    mfree(reg);
+    return setThrow(p, "expecting valid regexp");
+  }
+  mfree(reg);
+
+  char *ins = strndup(self->V.s.s, self->V.s.len);
+  size_t nmatch = 256;
+  regmatch_t m[nmatch];
+  if (regexec(&preg, ins, nmatch, m, 0)) {
+    mfree(ins);
+    regfree(&preg);
+    return &nullObject;
+  }
+  mfree(ins);
+
+  Object *o = ArrayObject_new();
+  Object *i = IntObject_new(0);
+  List **tail = &o->V.m;
+  for (int j = 0; (m[j].rm_so >= 0) && (m[j].rm_eo >= 0); j++) {
+    Object *sub = String_substring(self, m[j].rm_so, m[j].rm_eo);
+    List_push(p, &tail, i, sub);
+  }
+  Object_free(i);
+
+  i = IntObject_new(m[0].rm_so);
+  Map_set_const(&o->V.m, "index", i);
+  Object_free(i);
+
+  regfree(&preg);
+  return o;
 }
 
 static char
@@ -470,7 +548,6 @@ String_concat(Object *t1, Object *t2) {
 }
 
 static Object *
-__attribute__((nonnull, returns_nonnull, warn_unused_result))
 setThrow(Parser *p, const char *message) {
   clearErr(p);
   Object_setUnref(&p->thrw, StringObject_new(message));
@@ -774,7 +851,6 @@ parseObjectLiteral(Parser *p) {
 }
 
 static void
-__attribute__((nonnull))
 List_push(Parser *p, List ***tail, Object *it, Object *value) {
   Object *key = Object_toString(p, it);
   it->V.i++;
@@ -2201,6 +2277,7 @@ Parser_new(void) {
   addMethod(p->stringPrototype, "indexOf", &String_indexOf);
   addMethod(p->stringPrototype, "charCodeAt", &String_charCodeAt);
   addMethod(p->stringPrototype, "charAt", &String_charAt);
+  addMethod(p->stringPrototype, "match", &String_match);
   addField(p->vars, "String", s);
 
   Object *o = MapObject_new();
