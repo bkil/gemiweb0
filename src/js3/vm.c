@@ -1930,8 +1930,7 @@ fs_readFile(Parser *p, List *l) {
   }
 
   List *args = List_new(List_new(0, 0, data), 0, err);
-  Object *ret = invokeFun(p, l->next->value, args, 0);
-  Object_free(ret);
+  Object_freeMaybe(invokeFun(p, l->next->value, args, 0));
   List_free(args);
   return &undefinedObject;
 }
@@ -1962,8 +1961,7 @@ fs_writeFile(Parser *p, List *l) {
   }
 
   List *args = List_new(0, 0, err);
-  Object *ret = invokeFun(p, l->next->next->value, args, 0);
-  Object_free(ret);
+  Object_freeMaybe(invokeFun(p, l->next->next->value, args, 0));
   List_free(args);
   return &undefinedObject;
 }
@@ -2008,8 +2006,7 @@ fs_readDir(Parser *p, List *l) {
   }
 
   List *args = List_new(List_new(0, 0, o), 0, err);
-  Object *ret = invokeFun(p, l->next->value, args, 0);
-  Object_free(ret);
+  Object_freeMaybe(invokeFun(p, l->next->value, args, 0));
   List_free(args);
   return &undefinedObject;
 }
