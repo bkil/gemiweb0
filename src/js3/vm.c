@@ -476,25 +476,25 @@ String_match(Parser *p, Object *self, List *l) {
   return o;
 }
 
-static char
+static int
 __attribute__((pure, nonnull, warn_unused_result))
 String_getCharCode(Object *self, Object *x) {
   int i = x->t == IntObject ? x->V.i : 0;
-  return (i >= 0) && (i < (int)self->V.c.len) ? self->V.c.s[i] : -1;
+  return (i >= 0) && (i < (int)self->V.c.len) ? (unsigned char)self->V.c.s[i] : -1;
 }
 
 static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1, 2)))
 String_charCodeAt(Parser *p, Object *self, List *l) {
-  char c = String_getCharCode(self, l ? l->value : &undefinedObject);
+  int c = String_getCharCode(self, l ? l->value : &undefinedObject);
   return c < 0 ? &nanObject : IntObject_new(c);
 }
 
 static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull))
 String_charAt_obj(Object *self, Object *x) {
-  char c = String_getCharCode(self, x);
-  return c < 0 ? &emptyString : StringObject_new_char(c);
+  int c = String_getCharCode(self, x);
+  return c < 0 ? &emptyString : StringObject_new_char((char)c);
 }
 
 static Object *

@@ -287,6 +287,7 @@ main(void) {
   t("var s = 'c'; s.charCodeAt(null)", 99);
   t("var s = 'c'; s.charCodeAt(new Object)", 99);
   t("var s = 'c'; s.charAt(undefined) === 'c'", 1);
+  t("var s = 'kézműves'; var t = ''; var i = 0; while (i < s.length) { t = t + s.charAt(i); i = i + 1 }; s === t", 1);
   t("new Object", 1);
   t("new Array", 1);
   t("''", 0);
