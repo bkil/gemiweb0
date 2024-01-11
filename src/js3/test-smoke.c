@@ -72,6 +72,7 @@ main(void) {
   t("var n=require('node:net'); var c=n.createConnection(new Object); c.on('connect', function(){})", 0);
   t("var n=require('node:net'); var o=new Object; o.host='localhost'; var c=n.createConnection(o); var e=new Object; c.on('error', function(m){e.e=m}); c.on('connect',function(){}); e.e==='expecting port'", 1);
   t("var n=require('node:net'); var o=new Object; o.port=1; var c=n.createConnection(o); var e=new Object; c.on('error', function(m){e.e=m}); c.on('connect',function(){}); e.e==='expecting host'", 1);
+  t("var n=require('node:net'); var o=new Object; o.host='localhost'; var c=n.createConnection(o); var e=new Object; c.on('error', function(m){e.e=m;return m}); c.on('connect',function(){}); e.e==='expecting port'", 1);
 
   return exitWithErrorCount("smoke");
 }

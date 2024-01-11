@@ -2084,7 +2084,7 @@ node_net_errorConnecting(Parser *p, const char *err) {
   if (node_net_connection_end(p, 0)) {};
   if (onConnError) {
     List *args = List_new(0, 0, StringObject_new(err));
-    if (invokeFun(p, onConnError, args, 0)) {}
+    Object_freeMaybe(invokeFun(p, onConnError, args, 0));
     List_free(args);
     Object_free(onConnError);
   }
@@ -2199,7 +2199,7 @@ node_net_connection_write(Parser *p, List *l) {
   if ((wn < 0) || ((size_t)wn < l->value->V.c.len)) {
     /* coverage:no */
     if (p->onConnEnd) {
-      if (invokeFun(p, p->onConnEnd, 0, 0)) {}
+      Object_freeMaybe(invokeFun(p, p->onConnEnd, 0, 0));
     }
     if (node_net_connection_end(p, 0)) {}
     /* /coverage:no */
