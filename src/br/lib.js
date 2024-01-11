@@ -123,15 +123,15 @@ String.prototype.split = String.prototype.split || function(s) {
   }
 
   var j = 0;
-  var h = this;
-  i = h.indexOf(s);
+  var from = 0;
+  i = this.indexOf(s, from);
   while (i >= 0) {
-    a[j] = h.substring(0, i);
+    a[j] = this.substring(from, i);
     j = j + 1;
-    h = h.substring(i + 1);
-    i = h.indexOf(s);
+    from = i + s.length;
+    i = this.indexOf(s, from);
   }
-  a[j] = h;
+  a[j] = this.substring(from);
   return a;
 }
 
