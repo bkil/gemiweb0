@@ -49,3 +49,10 @@ HEADER: [ [ Transfer-Encoding: Chunked | Content-Type: text/html | [ Location | 
 BODY: CHUNKED | DATA
 
 CHUNKED: [ "[0-9a-f]+\r\n" DATA ]* "0\r\n"
+
+### HTML
+
+See
+
+* [html-choices.md](html-choices.md)
+* [html-spec.md](html-spec.md)

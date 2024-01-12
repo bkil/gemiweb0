@@ -39,6 +39,10 @@ Play with an example game obeying this subset:
 * https://bkil.gitlab.io/static-wonders.js/game/rockpaper-sum.html
 * https://bkil.gitlab.io/static-wonders.js/game/memopair.htm
 
+A scraper bookmarklet:
+
+* https://bkil.gitlab.io/static-wonders.js/userjs/maltai-map.js0.html
+
 ## Contact
 
 Join our chat room to participate in brainstorming or to give a hand by implementing the standard from scratch:

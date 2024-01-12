@@ -2,6 +2,22 @@
 
 ## Mandatory
 
+### script
+
+* Verdict: partial, also allow src attribute
+* Implementation complexity: high, but manageable in terms of cost to benefit
+* Restriction: only JavaScript0 is allowed
+* Incidence rate: high
+* Use case: backend-optional computation, privacy, improving latency, reducing server hosting cost, logic can be changed by visitor
+* Workaround: server side rendering
+* Standard: NS2 for `script`, NS3 for `src` attribute
+
+See:
+
+* [js-spec.md](js-spec.md)
+* [js-choices.md](js-choices.md)
+* [js-grammar.md](js-grammar.md)
+
 ## Quality of life improvement
 
 ### noscript
@@ -11,6 +27,7 @@
 * Implementation complexity: trivial
 * Use case: fallback when JavaScript is not implemented or disabled
 * Workaround: greet with a "noscript" message and only hide it after the full JavaScript code has loaded successfully
+* Standard: NS2
 
 ### javascript: URI
 
