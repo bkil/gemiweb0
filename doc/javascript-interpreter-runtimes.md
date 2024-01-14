@@ -3,7 +3,7 @@
 Implementing the relevant standards of JavaScript fully would be prohibitively expensive for a hobby project.
 Feel free to review the complexity of existing small independent solutions that are work in progress.
 
-## Alternatives
+## Production
 
 ### DukTape
 
@@ -108,6 +108,26 @@ Includes a web based example interpreter.
 > Otto targets ES5
 > Go translates JavaScript-style regular expressions into something that is "regexp" compatible via parser.TransformRegExp. Unfortunately, RegExp requires backtracking for some patterns, and backtracking is not supported by the standard Go engine. re2 (Go) has a different definition for \s: [\t\n\f\r ]
 > Package natto is an example/offshoot of otto that implements an event loop (supporting setTimeout/setInterval).
+
+## Planned
+
+### this project
+
+* As this project is not public yet, only an internal working name is available.
+* The main scope is producing only documentation, specification and conformance tests. Developers are expected to implement it on their own.
+* A proof of concept JavaScript0 interpreter plugin for gemini and web browsers and for CLI/CGI web server integration will be provided later in multiple languages, both low level and high level.
+* Language: C, PHP, busybox ash & awk, JavaScript0
+
+### ToyLang
+
+* https://github.com/evomassiny/toylang
+* Language: Rust
+
+> This a toy programming language, utterly useless. I'm using it to experiment parser, compiler and interpreter designs
+> keywords: function (only supports named function), while, for, if, else, return, let, null, undefined, continue, break
+> operators: + - * / ** %, > < >= <= ==, ! && ||, ++foo foo++ --foo foo--
+> separators: ; for expressions, ( ) for sub-expressions, { }
+> literals: booleans, float/integers, strings
 
 ## Benchmarks
 
