@@ -218,6 +218,7 @@ Planned on shortlist:
 * https://bellard.org/tcc/tcc-doc.html#devel
 * https://t3x.org/subc/
 * https://github.com/DoctorWkt/acwj
+* https://github.com/KolibriOS/kolibrios/tree/main/programs/develop/cmm
 
 ## Best practices
 
