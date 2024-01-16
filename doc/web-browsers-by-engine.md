@@ -162,14 +162,40 @@ More of a tech demo than a product for end users, but it is a unique independent
 
 ## Graphical browsers with compromises
 
+### Arachne
+
+* https://en.wikipedia.org/wiki/Arachne_(web_browser)
+* https://www.glennmcc.org/
+* language: C
+* features: tables, frames, animated GIF, subset of HTML 4.0, CSS 1.0 (color, background-color, font-size, font-style:italic, font-weight:bold, text-decoration:underline), supports an extensive plugin system
+* supported HTML tags: a (href, name), area, b (=em, strong), base (href), basefont (size, color, 3d, outline), bgsound (src, filename), big, blocquote, body (background, bgcolor, text, link, vlink, marginwidth, marginheight, mail, noresize, bgproperties), br (clear), button (uri, usr, url, to, subject, value, size, type, checked, active, name), caption (align, valign, nowrap, colspan, rowspan, bgcolor, background, height, width), center, code (=kbd), dd, div (align), embed (src, filename), font (size, color, 3d, outline), form (method, action), frame (src, name, framespacing, frameborder, border, scrolling, marginwidth, marginheight), frameset (frameborder, border, rows, cols), h1, h2, h3, h4, h5, h6, head, hr (size, noshade, align, width), i (=cite, address), iframe (src, name, framespacing, frameborder, border, scrolling, marginwidth, marginheight), img (src, align, ismap, usemap, border, height, width, alt, name), input (uri, usr, url, to, subject, value, size, type, checked, active, name), li (=dt), link (rel, href), map (name), meta (http-equiv, content), nobr, noframes, noscript, ol (=menu, dl, dir), option (selected, value), p (align), pre, s (=strike, del), script (?), select (size, name, multiple), small, style, sub, sup, table (border, frame, cellspacing, cellpadding, width, align, bgcolor, background), td (align, valign, nowrap, colspan, rowspan, bgcolor, background, height, width), textarea (rows, cols, name, wrap, active), th (align, valign, nowrap, colspan, rowspan, bgcolor, background, height, width), title, tr, tt, u (=ins), ul
+* contains a web browser, email client and dialer
+* DOS, Linux & SVGAlib
+
 ### Dillo
 
 * https://en.wikipedia.org/wiki/Dillo#Forks
 * https://github.com/crossbowerbt/dillo-plus
+* https://github.com/dillo-browser/dillo
+* https://github.com/dillo-browser/dillo-browser.github.io
 * https://web.archive.org/web/20220518060405/https://www.dillo.org/
 * no JavaScript
 * their domain name was squatted by a Wordpress clone
 * CSS support to be improved
+
+### KolibriOS WebView
+
+* https://github.com/KolibriOS/kolibrios/tree/main/programs/cmm/browser
+* https://github.com/KolibriOS/kolibrios/tree/main/programs/develop/libraries/box_lib/trunk
+* https://github.com/KolibriOS/kolibrios/blob/main/programs/develop/libraries/http/http.asm
+* https://github.com/KolibriOS/kolibrios/tree/main/programs/develop/libraries/iconv
+* https://github.com/KolibriOS/kolibrios/tree/main/programs/develop/libraries/proc_lib/trunk
+* supported HTML tags: a (href), p, img (src, title, alt), div, ol, ul, dt, dl, dd, li, hr (color), code, meta (charset, content, encoding, http-equiv refresh, name application), body (bgcolor, link, alink, text), iframe (src - just as a link), table (width), tr, th (width), td (width), caption, b (=big, strong), u (=ins), s (=strike, del), q, h1, h2, h3, h4, font (color, bg), pre, blockquote, button, img, nav, br (=header, article, footer, figure), title
+* supported attributes: name, id
+* features: HTML 4.0, character sets, up to 255 byte long anchor, control via mouse, CDATA comment, ignore content within script, style, binary and select
+* language: C--, assembly
+* only supports HTTPS through a custom hosted HTTP downgrade proxy
+* platform: KolibriOS
 
 ### Links2
 
@@ -258,6 +284,13 @@ More of a tech demo than a product for end users, but it is a unique independent
 
 > A toy web browser implemented in Rust from scratch
 
+### Satori
+
+* https://github.com/vercel/satori/
+* TypeScript
+* platform: browser, Web Worker, Node.js
+* not a web browser, only a rendering engine producing SVG
+
 ### Simple-San-Simon-Functional-Web-Browser
 
 * https://github.com/carliros/Simple-San-Simon-Functional-Web-Browser
@@ -326,6 +359,15 @@ Projects listed here have not produced a browser a user could test yet or are on
 
 * https://haphaestus.org/
 * https://argonaut-constellation.org/
+
+### Lexbor
+
+* https://github.com/lexbor/lexbor
+* https://github.com/lexbor/docs/blob/main/site/src/articles/html.md
+* https://github.com/lexborisov/Modest
+* language: C
+* finished: HTML parser, CSS parser, character encoding
+* deprecated implementation: fonts
 
 ### litehtml
 
