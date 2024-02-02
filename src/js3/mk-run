@@ -2,11 +2,14 @@
 
 # environment variables:
 # * ISQUICK: 1 = skip valgrind and run natively
+# * NOREGEXP: 1 = don't compile regexp support
 
 JS="${1-br0.js}"
 O=`dirname $(readlink -f "$0")`
 BIN="$O/js0"
-./gcc-warn.sh -O2 -g vm.c run.c -o $BIN &&
+ARGS=""
+[ -n "$NOREGEXP" ] && ARGS="$ARGS -DNOREGEXP"
+./gcc-warn.sh -O2 -g vm.c run.c -o $BIN $ARGS &&
 
 {
   cd ../br &&

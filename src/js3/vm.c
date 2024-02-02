@@ -8,8 +8,6 @@ Refer to the GNU GPL v2 in LICENSE for terms */
 #include <malloc.h> /* free malloc */
 #include <stdlib.h> /* atoi size_t */
 #include <sys/mman.h> /* mmap */
-#include <sys/types.h> /* fstat open opendir regcomp regexec regfree select */
-#include <regex.h> /* regcomp regexec regfree */
 #include <sys/stat.h> /* fstat open */
 #include <fcntl.h> /* open */
 #include <unistd.h> /* close fstat read select write */
@@ -18,6 +16,11 @@ Refer to the GNU GPL v2 in LICENSE for terms */
 #include <stddef.h> /* offsetof */
 #include <dirent.h> /* closedir opendir readdir */
 #include <errno.h> /* errno */
+
+#ifndef NOREGEXP
+#include <sys/types.h> /* fstat open opendir regcomp regexec regfree select */
+#include <regex.h> /* regcomp regexec regfree */
+#endif
 
 /* coverage:stderr */
 static void
@@ -407,6 +410,7 @@ static void
 __attribute__((nonnull))
 List_push(Parser *p, List ***tail, Object *it, Object *value);
 
+#ifndef NOREGEXP
 static Object *
 __attribute__((nonnull, warn_unused_result))
 String_substring(Object *o, int start, int end) {
@@ -430,11 +434,13 @@ String_substring(Object *o, int start, int end) {
   s[n] = 0;
   return StringObject_new_str((Str){.s = s, .len = n});
 }
+#endif
 
 static Object *
 __attribute__((nonnull, returns_nonnull, warn_unused_result))
 setThrow(Parser *p, const char *message);
 
+#ifndef NOREGEXP
 static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1, 2)))
 String_match(Parser *p, Object *self, List *l) {
@@ -475,6 +481,7 @@ String_match(Parser *p, Object *self, List *l) {
   regfree(&preg);
   return o;
 }
+#endif
 
 static int
 __attribute__((pure, nonnull, warn_unused_result))
@@ -2274,7 +2281,9 @@ Parser_new(void) {
   addMethod(p->stringPrototype, "indexOf", &String_indexOf);
   addMethod(p->stringPrototype, "charCodeAt", &String_charCodeAt);
   addMethod(p->stringPrototype, "charAt", &String_charAt);
+#ifndef NOREGEXP
   addMethod(p->stringPrototype, "match", &String_match);
+#endif
   addField(p->vars, "String", s);
 
   Object *o = MapObject_new();
