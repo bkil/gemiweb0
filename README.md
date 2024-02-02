@@ -38,6 +38,7 @@ Play with an example game obeying this subset:
 
 * https://bkil.gitlab.io/static-wonders.js/game/rockpaper-sum.html
 * https://bkil.gitlab.io/static-wonders.js/game/memopair.htm
+* https://bkil.gitlab.io/static-wonders.js/edu/knowcard.htm#
 
 A scraper bookmarklet:
 
