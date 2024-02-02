@@ -200,7 +200,7 @@ The following restrictions are non-normative and being worked on pending the res
 ### Automatic ToString conversion
 
 * Verdict: partial
-* Restriction: only allowed for concatenation by `+`
+* Restriction: only allowed for concatenation of a String and Number, Object or undefined using `+`
 * Reason: expected by users, but would be beneficial to forbid
 * Drawbacks: can often cause bugs if working on values of unforeseen types
 * Incidence rate: high
@@ -244,7 +244,7 @@ The following restrictions are non-normative and being worked on pending the res
 ### RegExp
 
 * Verdict: partial, investigate
-* Restrictions: no RegExp class, String match, search or replace
+* Restrictions: only String.prototype.match, no RegExp class, PCRE subset
 * Incidence rate: intermediate to high
 * Implementation complexity: intermediate if platform has compatible built-ins, very high otherwise
 * Runtime overhead: variable memory and CPU utilization, may be exploited with ReDoS unless additional sanitization is implemented
@@ -514,3 +514,13 @@ https://en.wikipedia.org/wiki/ReDoS
 * Reason: uniform implementation is difficult, slow and uses more memory. Also considered bad practice for most use cases.
 * Workaround: emulate regular inheritance by function expressions or chain only pure functions where applicable
 * Standard: JS1
+
+## Standards
+
+* https://lists.w3.org/Archives/Public/www-tv/1999JanMar/0033.html
+* https://quirksmode.org/js/dom0.html
+* https://quirksmode.org/dom/core/
+* http://www.brainjar.com/dhtml/intro/default5.asp
+* https://www.yaldex.com/javascript_tutorial_2/LiB0178.html
+* https://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html
+* https://public.websites.umich.edu/~jwithrow/materials/dom1.html
