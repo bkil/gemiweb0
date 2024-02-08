@@ -2426,9 +2426,17 @@ global_eval(Parser *p, List *l) {
   if (!l || !isString(l->value)) {
     return setThrow(p, "expecting String argument");
   }
+  Object *before = p->vars;
+  Object *local = Object_clone(before);
+  p->vars = MapObject_new();
+  Map_set_const(&p->vars->V.m, "", local);
+
   Prog prog = p->prog;
   Object *o = Parser_evalWithThrow(p, l->value);
   p->prog = prog;
+
+  Object_free(local);
+  Object_setUnref(&p->vars, before);
   return o;
 }
 

@@ -342,12 +342,19 @@ main(void) {
   t("eval(4)", -2); /* non-conforming */
   t("eval('9')", 9);
   t("eval('4 + 5')", 9);
-  t("eval('var i'); eval('i = 9'); eval('i')", 9);
+  t("var i; eval('\"use strict\";i = 9'); eval('i')", 9);
+  t("var i; i = 9; eval('i')", 9);
+  t("eval('8; 9')", 9);
   t("eval('var i') === undefined", 1);
-  t("eval('var i; i = 9'); i", 9);
-  t("var i; eval('i = 8'); i + 1", 9);
+  t("var i; eval('\"use strict\";i = 9'); i", 9);
+  t("eval('\"use strict\";var i; i = 9'); i", -2);
+  t("eval('\"use strict\";var i; i = 9'); typeof i === 'undefined'", 1);
   t("eval(\"'1234567890'\") === '1234567890'", 1);
-  t("eval('function f() { return 9 }'); f()", 9);
+  t("eval('function f() { return 9 }'); f()", -2);
+  t("eval('function f() { return 9 }; f()')", 9);
+  t("var f = eval('function f() { return 9 }; f'); f()", 9);
+  t("(eval('function f() { return 9 }; f'))()", 9);
+  t("(eval('(function() { return 9 })'))()", 9);
   t("eval('try { throw 2 } catch (e) {}; 9')", 9);
   t("eval('return 2')", -2);
   t("eval('throw 2')", -2);
@@ -357,17 +364,17 @@ main(void) {
   t("var i; try { eval('throw 9') } catch (e) { i = e }; i", 9);
   t("var i; try { eval('x') } catch (e) { i = 9; }; i", 9);
   t("var i; try { eval(':') } catch (e) { i = 9; }; i", 9);
-  t("var i = 4; try { eval('var j = 5; throw 3') } catch (e) { }; i + j", 9);
-  t("eval('var i; try { throw 2 } catch (e) { i = 9 }; i')", 9);
+  t("var i = 4; var j; try { eval('j = 5; throw 3') } catch (e) { }; i + j", 9);
+  t("var i; eval('try { throw 2 } catch (e) { i = 9 }; i')", 9);
   t("eval(eval(\"'4+' + '5'\"))", 9);
   t("eval(\"eval('4+' + '5')\")", 9);
   t("function f(x) { return x } eval('f(9)')", 9);
   t("function f(x) { return function(y) { return x + y } } var g = f(4); eval('g(5)')", 9);
-  t("eval('function f() { return 9 }'); eval('f()')", 9);
-  t("eval('' + 'function g(yh) { return yh(4) + 5 }'); eval('' + 'function f(yh) { return g(yh) } function h(x) { return x }; f(h)')", 9);
+  t("var f = eval('(function() { return 9 })'); eval('f()')", 9);
+  t("var g = eval('' + 'function g(yh) { return yh(4) + 5 };g'); eval('' + 'function f(yh) { return g(yh) } function h(x) { return x }; f(h)')", 9);
   t("function g(yh) { return yh(4) + 5 }; eval('' + 'function f(yh) { return g(yh) } function h(x) { return x }; f(h)')", 9);
-  t("eval('' + 'function g(yh) { return yh(4) + 5 }'); function f(yh) { return g(yh) } function h(x) { return x }; f(h)", 9);
-  t("eval('' + 'function f(y) { return y(9) }'); function g(x) { return x }; f(g)", 9);
+  t("var g = eval('' + 'function g(yh) { return yh(4) + 5 }; g'); function f(yh) { return g(yh) } function h(x) { return x }; f(h)", 9);
+  t("var f = eval('' + 'function f(y) { return y(9) }; f'); function g(x) { return x }; f(g)", 9);
 
   t("eval2(new Object, '9')", 9);
   t("eval2(new Object, '4 + 5')", 9);
