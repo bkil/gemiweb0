@@ -6,7 +6,7 @@ to() {
   local CASE GIVEIN EXPOUT GOTOUT GOTRET
   readonly CASE="$1"
   readonly GIVEIN="$2"
-  readonly EXPOUT="$3"
+  readonly EXPOUT="`printf "$3"`"
 
   GOTOUT="`printf "$GIVEIN" | eval "$CASE"`"
   GOTRET="$?"
@@ -53,12 +53,12 @@ test_stdin() {
   readonly C="$B test-stdin.js"
 
   to "$C" '' 'EOF'
-  to "$C" '42' '42.EOF'
-  to "$C" '42\n' '42.EOF'
-  to "$C" '42\n69\n' '42.69.EOF'
+  to "$C" '42' '42.\nEOF'
+  to "$C" '42\n' '42.\nEOF'
+  to "$C" '42\n69\n' '42.\n69.\nEOF'
 
   tk "console.log('hi')" 0 'hi'
-  tk "console.log('hel');console.log('lo')" 0 'hello'
+  tk "console.log('hel');console.log('lo')" 0 'hel\nlo'
   tk "console.log('hel'+String.fromCharCode(10)+'lo')" 0 'hel\nlo'
 
   tk "process.stdin.on('data', undefined)" 0 ''
@@ -113,21 +113,21 @@ test_network() {
   PORT="21198"
 
   C="$B test-sock-end.js </dev/null"
-  tn "" ":connected" "!connected!writebad,expecting String argument (;\n  } catch (e) {\n    console.lo...)!end"
+  tn "" ":connected" "!connected\n!writebad,expecting String argument (;\n  } catch (e) {\n    console.lo...)\n!end"
 
   C="$B test-sock-conex.js </dev/null"
-  tn "" "" "!throw!error"
+  tn "" "" "!throw\n!error"
 
   C="$B test-sock-coner.js </dev/null"
-  tn "" "" "!fatal!error"
+  tn "" "" "!fatal\n!error"
 
   C="$B test-sock.js </dev/null"
 
   #TODO: sleeps for 1 second, should kill nc instead
-  tn "" ":connected" "!connected!eof,"
+  tn "" ":connected" "!connected\n!eof,"
 
-  tn "?bye" ":connected" "!connected!bye,?bye"
-  tn "?ping?bye" ":connected:pong" "!connected!pong!bye,?ping?bye"
+  tn "?bye" ":connected" "!connected\n!bye,?bye"
+  tn "?ping?bye" ":connected:pong" "!connected\n!pong\n!bye,?ping?bye"
 
   PORT="1"
   tn "-" "" "!error"

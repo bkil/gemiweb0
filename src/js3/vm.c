@@ -1859,6 +1859,7 @@ Console_log(Parser *p, List *l) {
   Object *os = Object_toString(p, e);
   if (os && !p->thrw) {
     putsn(os->V.s.s, os->V.s.len, stdout);
+    fputc(10, stdout);
     Object_free(os);
   } else {
     /* coverage:no */

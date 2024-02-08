@@ -16,6 +16,9 @@ var libJs = new Object;
 })();
 eval(libJs.s);
 
+// "\n"
+var nl = String.fromCharCode(10);
+
 function eval2To(j, prog) {
   function eval2To0(self, j, prog) {
     var g = j.vars;
@@ -23,7 +26,7 @@ function eval2To(j, prog) {
     try {
       o = eval2(g, prog);
     } catch (e) {
-      var msg = ('<p>Exception running JavaScript: ' + e) + '<p>';
+      var msg = '<pre>Exception running JavaScript:' + nl + e + '</pre>';
       if (j.d.documentWritten === undefined) {
         j.d.documentWritten = '';
       }
@@ -81,9 +84,6 @@ function escaped(x) {
 function isWs(c) {
   return (c === ' ') || (c.charCodeAt(0) === 10)
 }
-
-// "\n"
-var nl = String.fromCharCode(10);
 
 function copyLiteral(s) {
   var o = s['o'];
@@ -720,18 +720,18 @@ function callMeMaybe(self, acc, multiLine, cb) {
 }
 
 function show(text, defVal, multiLine, cb) {
-  console.log(text + nl);
+  console.log(text);
   var i = process.stdin;
   if (cb === undefined) {
     i.on('data', undefined);
   } else {
     if (multiLine) {
-      console.log('Please type in multiple lines of input terminated with a dot (".")' + nl);
+      console.log('Please type in multiple lines of input terminated with a dot (".")');
     } else {
-      console.log('Please type in a single line of input: ' + nl);
+      console.log('Please type in a single line of input: ');
     }
     if (defVal !== undefined) {
-      console.log((' default: ' + escaped(defVal)) + nl);
+      console.log(' default: ' + escapeHtml(defVal));
     }
     i.on('data', callMeMaybe(callMeMaybe, undefined, multiLine, cb));
   }
