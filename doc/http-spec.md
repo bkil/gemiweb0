@@ -56,3 +56,13 @@ See
 
 * [html-choices.md](html-choices.md)
 * [html-spec.md](html-spec.md)
+
+## Related protocols
+
+* Titan extension: https://communitywiki.org/wiki/Titan
+* iapetus extension: https://web.archive.org/web/20210925220953/codeberg.org/oppenlab/iapetus
+* Spartan protocol: http://spartan.mozz.us/
+* gemini+upload https://alexschroeder.ch/wiki/Baschdels_spin_on_Gemini_uploading
+* Guppy https://github.com/dimkr/guppy-protocol/blob/main/guppy-spec.gmi
+* Nex https://nightfall.city/nex/info/specification.txt
+* http://www.and.org/texts/server-http
