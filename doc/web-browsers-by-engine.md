@@ -139,6 +139,7 @@ JavaScript support was implemented with SpiderMonkey in the past, and recently w
 * https://github.com/SerenityOS/serenity/tree/master/Userland/Libraries/LibWeb
 * https://github.com/SerenityOS/serenity/tree/master/Ladybird
 * https://awesomekling.github.io/Ladybird-a-new-cross-platform-browser-project/
+* https://awesomekling.github.io/Memory-safety-for-SerenityOS/
 
 ### gngr
 
@@ -169,7 +170,7 @@ More of a tech demo than a product for end users, but it is a unique independent
 * language: C
 * features: tables, frames, animated GIF, subset of HTML 4.0, CSS 1.0 (color, background-color, font-size, font-style:italic, font-weight:bold, text-decoration:underline), supports an extensive plugin system
 * supported HTML tags: a (href, name), area, b (=em, strong), base (href), basefont (size, color, 3d, outline), bgsound (src, filename), big, blocquote, body (background, bgcolor, text, link, vlink, marginwidth, marginheight, mail, noresize, bgproperties), br (clear), button (uri, usr, url, to, subject, value, size, type, checked, active, name), caption (align, valign, nowrap, colspan, rowspan, bgcolor, background, height, width), center, code (=kbd), dd, div (align), embed (src, filename), font (size, color, 3d, outline), form (method, action), frame (src, name, framespacing, frameborder, border, scrolling, marginwidth, marginheight), frameset (frameborder, border, rows, cols), h1, h2, h3, h4, h5, h6, head, hr (size, noshade, align, width), i (=cite, address), iframe (src, name, framespacing, frameborder, border, scrolling, marginwidth, marginheight), img (src, align, ismap, usemap, border, height, width, alt, name), input (uri, usr, url, to, subject, value, size, type, checked, active, name), li (=dt), link (rel, href), map (name), meta (http-equiv, content), nobr, noframes, noscript, ol (=menu, dl, dir), option (selected, value), p (align), pre, s (=strike, del), script (?), select (size, name, multiple), small, style, sub, sup, table (border, frame, cellspacing, cellpadding, width, align, bgcolor, background), td (align, valign, nowrap, colspan, rowspan, bgcolor, background, height, width), textarea (rows, cols, name, wrap, active), th (align, valign, nowrap, colspan, rowspan, bgcolor, background, height, width), title, tr, tt, u (=ins), ul
-* contains a web browser, email client and dialer
+* contains a web browser, email client and modem dialer
 * DOS, Linux & SVGAlib
 
 ### Dillo
@@ -412,6 +413,14 @@ Projects listed here have not produced a browser a user could test yet or are on
 * features: start page, history, cookies, web proxy, utf-8
 * aim for compatibility with Netscape 3.0: HTML 3.2 formatting, images (jpeg, xbitmap, Inferno BIT, animated gif), JavaScript 1.1 (ES2)
 
+### Amaya
+
+https://en.wikipedia.org/wiki/Amaya_(web_editor)
+
+### Arena
+
+https://en.wikipedia.org/wiki/Arena_(web_browser)
+
 ### Odysseus
 
 * https://github.com/alcinnz/Odysseus
@@ -434,9 +443,15 @@ Hasn't been updated for a long time.
 
 ## Related
 
+HTML rich text support by desktop widget toolkits
+
 * https://github.com/bkil/wiki/blob/master/en/widget-toolkit-html-rich-text.md
 
-> HTML rich text support by desktop widget toolkits
+FOSS JavaScript interpreters, runtimes
+
+[./javascript-interpreter-runtimes.md](./javascript-interpreter-runtimes.md)
+
+Others:
 
 * https://wiki.archlinux.org/title/List_of_applications/Internet#Web_browsers
 * https://github.com/cliffordfajardo/awesome-web-browsers#user-content-desktop-web-browsers
@@ -446,3 +461,4 @@ Hasn't been updated for a long time.
 * https://github.com/gaeulbyul/non-webkit#user-content-non-webkit
 * https://github.com/nerdyslacker/desktop-web-browsers
 * https://blogs.gnome.org/mcatanzaro/2022/11/04/stop-using-qtwebkit/
+* https://en.wikipedia.org/wiki/Libwww#Applications_using_libwww

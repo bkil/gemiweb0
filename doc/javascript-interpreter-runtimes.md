@@ -139,6 +139,10 @@ Includes a web based example interpreter.
 
 ## Related
 
+HTML rich text support by desktop widget toolkits
+
 * https://github.com/bkil/wiki/blob/master/en/widget-toolkit-html-rich-text.md
 
-> HTML rich text support by desktop widget toolkits
+FOSS web browsers by engine
+
+[./web-browsers-by-engine.md](./web-browsers-by-engine.md)
