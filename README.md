@@ -46,9 +46,11 @@ A scraper bookmarklet:
 
 ## Contact
 
-Join our chat room to participate in brainstorming or to give a hand by implementing the standard from scratch:
+Join our chat room over Matrix, also relayed over XMPP and IRC to participate in brainstorming or to give a hand by implementing the standard from scratch:
 
 * https://matrix.to/#/#gemiweb:matrix.org
+* MUC xmpp:gemiweb0@conference.movim.eu
+* OFTC: #gemiweb0
 * https://github.com/bkil/gemiweb
 * https://gitlab.com/bkil/gemiweb
 
