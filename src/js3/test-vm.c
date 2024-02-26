@@ -68,6 +68,28 @@ main(void) {
   t("var s = 'abab'; s.indexOf('b', 2)", 3);
   t("var s = 'abab'; s.indexOf('b', 4) === -1", 1);
   t("var s = 'abab'; s.indexOf('b', 5) === -1", 1);
+  t("'a", -1);
+
+  /* optional: for easier interoperability through JSONP */
+  t("var s = '\\u000a'; s.charCodeAt(0)", 0x0a);
+  t("var s = '\\u000A'; s.charCodeAt(0)", 0x0a);
+  t("var s = '\\u000a'; s.length", 1);
+  t("'a\\u0062' === 'ab'", 1);
+  t("'\\u0061b' === 'ab'", 1);
+  t("'\\u0061\\u0062' === 'ab'", 1);
+  t("'\\u0061b\\u0063' === 'abc'", 1);
+  t("'a\\u0062c' === 'abc'", 1);
+  t("'a\\u0062c\\u0064\\u0065f' === 'abcdef'", 1);
+  t("'a\\\\c' === 'a\\u005cc'", 1);
+  t("'a\\'c' === 'a\\u0027c'", 1);
+  t("var s = '\\n'; s.length", 1);
+  t("var s = '\\n'; s.charCodeAt(0)", '\n');
+  t("var s = '\\t'; s.charCodeAt(0)", '\t');
+  t("'\\u000x'", -1);
+  t("'\\u00x0'", -1);
+  t("'\\u000", -1);
+  t("'\\", -1);
+
   t("var i; i = 9", 9);
   t("var i = 9; i", 9);
   t("9", 9);

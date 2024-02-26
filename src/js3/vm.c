@@ -786,6 +786,18 @@ parseIntLit(Parser *p) {
   return IntObject_new(x);
 }
 
+static int
+hex2char(char c) {
+  if ((c >= '0') && (c <= '9')) {
+    return c - '0';
+  } else if ((c >= 'a') && (c <= 'f')) {
+    return c - 'a' + 10;
+  } else if ((c >= 'A') && (c <= 'F')) {
+    return c - 'A' + 10;
+  }
+  return -1;
+}
+
 static Object *
 __attribute__((nonnull, warn_unused_result))
 parseStringLit(Parser *p) {
@@ -794,18 +806,72 @@ parseStringLit(Parser *p) {
   if (!acceptWs(p, c = '\'') && !acceptWs(p, c = '"')) {
     return 0;
   }
-  Id id = {.s = p->prog.s, .len = 0, .h = p->prog.h};
-  while ((p->prog.s < p->prog.end) && (*p->prog.s != c) && (*p->prog.s != '\\')) {
-    p->prog.s++;
-    id.len++;
-  }
+  Object *o = 0;
+  Object *part;
+  do {
+    Id id = {.s = p->prog.s, .len = 0, .h = p->prog.h};
+    while ((p->prog.s < p->prog.end) && (*p->prog.s != c) && (*p->prog.s != '\\')) {
+      p->prog.s++;
+      id.len++;
+    }
+    if (!p->nest) {
+      part = StringObject_new_const(id);
+      if (!o) {
+        o = part;
+      } else {
+        Object_setUnref(&o, String_concat(o, part));
+        Object_free(part);
+      }
+    }
+
+    if (*p->prog.s == '\\') {
+      int l, h;
+      if (p->prog.s + 1 < p->prog.end) {
+        if (p->prog.s[1] == 'u') {
+          if ((p->prog.s + 5 < p->prog.end) && (p->prog.s[2] == '0') && (p->prog.s[3] == '0') &&
+            ((h = hex2char(p->prog.s[4])) >= 0) && ((l = hex2char(p->prog.s[5])) >= 0)) {
+            if (!p->nest) {
+              part = StringObject_new_char((char)((h << 4) + l));
+              Object_setUnref(&o, String_concat(o, part));
+              Object_free(part);
+            }
+            p->prog.s += 6;
+          } else {
+            Object_freeMaybe(o);
+            return setThrow(p, "error in string escape syntax");
+          }
+        } else {
+          if (!p->nest) {
+            char t = p->prog.s[1];
+            switch (t) {
+              case 'n':
+                t = '\n';
+                break;
+              case 't':
+                t = '\t';
+                break;
+              default: {}
+            }
+            part = StringObject_new_char(t);
+            Object_setUnref(&o, String_concat(o, part));
+            Object_free(part);
+          }
+          p->prog.s += 2;
+        }
+      } else {
+        Object_freeMaybe(o);
+        return setThrow(p, "error in string escape syntax");
+      }
+    }
+  } while ((p->prog.s < p->prog.end) && (*p->prog.s != c));
   if (!expectWs(p, c)) {
+    Object_freeMaybe(o);
     return 0;
   }
   if (p->nest) {
     return &undefinedObject;
   }
-  return StringObject_new_const(id);
+  return o;
 }
 
 static Object *
