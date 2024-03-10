@@ -262,6 +262,15 @@ More of a tech demo than a product for end users, but it is a unique independent
 > Kosmonaut is built with Rust using OpenGL bindings via gl-rs, Glutin for window management and OpenGL context creation, Servo's html5ever and cssparser for HTML and CSS parsing, and various other auxiliary libraries.
 > Only a very limited subset of CSS is currently supported, so most web pages will not work.
 
+### kristall
+
+* https://github.com/MasterQ32/kristall
+* https://github.com/MasterQ32/kristall/blob/master/src/renderers/htmlrenderer.cpp
+
+> Graphical small-internet client for windows, linux, MacOS X and BSDs. Supports gemini, http, https, gopher, finger.
+> text/gemini, text/html (reduced feature set), text/markdown
+> Qt5
+
 ### mbrowser
 
 * https://github.com/MQuy/mbrowser
