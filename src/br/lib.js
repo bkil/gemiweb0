@@ -280,6 +280,160 @@ if ((typeof JSON === 'undefined') || !JSON.stringify) {
   JSON.stringify = JSON.stringify || JSON_stringify;
 }
 
+// ES5
+function JSON_parse(s) {
+  if ((typeof JSON !== 'undefined') && JSON.parse) {
+    return JSON.parse(s);
+  } else {
+    var i = 0;
+    var n;
+    var hex = '0123456789abcdef';
+    function hex2dec(c) {
+      var j = hex.indexOf(c);
+      if (j < 0) {
+        throw 'invalid hex character code "' + c + '" at position ' + i;
+      }
+      return j;
+    }
+
+    function peekCh() {
+      if (i < s.length) {
+        n = s.charCodeAt(i);
+      } else {
+        n = 0;
+      }
+    }
+
+    function nextCh() {
+      i = i + 1;
+      peekCh();
+    }
+
+    function parseString() {
+      var o = '';
+      if (n !== 34) {
+        throw 'expected " character instead "' + s.charAt(i) + '" at position ' + i;
+      }
+      nextCh();
+      var c;
+      while (n !== 34) {
+        if (((i + 5) < s.length) && (n === 92) && (s.charCodeAt(i + 1) === 117) &&
+            (s.charCodeAt(i + 2) === 48) && (s.charCodeAt(i + 3) === 48)) {
+          c = String.fromCharCode((hex2dec(s.charAt(i + 4)) << 4) + hex2dec(s.charAt(i + 5)));
+          i = i + 6;
+        } else if (((i + 1) < s.length) && (n === 92)) {
+          nextCh();
+          if (n === 110) {
+            c = String.fromCharCode(10);
+          } else {
+            c = s.charAt(i);
+          }
+          i = i + 1;
+        } else {
+          c = s.charAt(i);
+          i = i + 1;
+        }
+        o = o + c;
+        peekCh();
+      }
+      nextCh();
+      return o;
+    }
+
+    function JSON_parse_0(y) {
+      var o;
+      var saved;
+
+      if (n === 34) {
+        o = parseString();
+      } else if (((n > 47) && (n < 58)) || (n === 45)) {
+        saved = i;
+        o = 0;
+        var sign = 0;
+        if (n === 45) {
+          sign = 1;
+          nextCh();
+          if ((n < 48) || (n > 57)) {
+            throw 'expected number instead "' + s.charAt(i) + '" at position ' + i;
+          }
+        }
+        while ((n > 47) && (n < 58)) {
+          o = ((o * 10) + n) - 48;
+          nextCh();
+        }
+        if (n === 46) {
+          nextCh();
+          while ((n > 47) && (n < 58)) {
+            nextCh();
+          }
+          o = s.substring(saved, i);
+        } else if (sign) {
+          o = 0 - o;
+        }
+      } else if (n === 91) {
+        var j = 0;
+        o = new Array;
+        nextCh();
+        if (n !== 93) {
+          o[j] = y(y);
+          j = j + 1;
+          while (n === 44) {
+            nextCh();
+            o[j] = y(y);
+            j = j + 1;
+          }
+          if (n !== 93) {
+            throw 'expected ] character instead "' + s.charAt(i) + '" at position ' + i;
+          }
+        }
+        nextCh();
+      } else if (n === 123) {
+        o = new Object;
+        nextCh();
+        var k;
+        while (n !== 125) {
+          k = parseString();
+          if (n !== 58) {
+            throw 'expected : character instead "' + s.charAt(i) + '" at position ' + i;
+          }
+          nextCh();
+          o[k] = y(y);
+          if (n === 44) {
+            nextCh();
+          }
+        }
+        nextCh();
+      } else if (((i + 3) < s.length) && (n === 110) && (s.charCodeAt(i + 1) === 117) &&
+          (s.charCodeAt(i + 2) === 108) && (s.charCodeAt(i + 3) === 108)) {
+        o = null;
+        i = i + 4;
+        peekCh();
+      } else if (((i + 3) < s.length) && (n === 116) && (s.charCodeAt(i + 1) === 114) && (s.charCodeAt(i + 2) === 117) &&
+          (s.charCodeAt(i + 3) === 101)) {
+        o = 1;
+        i = i + 4;
+        peekCh();
+      } else if (((i + 4) < s.length) && (n === 102) && (s.charCodeAt(i + 1) === 97) && (s.charCodeAt(i + 2) === 108) &&
+          (s.charCodeAt(i + 3) === 115) && (s.charCodeAt(i + 4) === 101)) {
+        o = 0;
+        i = i + 5;
+        peekCh();
+      } else {
+        throw 'unexpected character "' + s.charAt(i) + '" at position ' + i;
+      }
+
+      return o;
+    }
+
+    peekCh();
+    var o = JSON_parse_0(JSON_parse_0);
+    if (i < s.length) {
+      throw 'extra characters at end "' + s.charAt(i) + '" at position ' + i;
+    }
+    return o;
+  }
+}
+
 // ES1, NS3
 if (typeof Function === 'undefined') {
   function Function(param, body) {
