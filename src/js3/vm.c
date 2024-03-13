@@ -2556,12 +2556,11 @@ Parser_evalResult(Parser *p, Object *o) {
   if (o) {
     int ret;
     if (p->thrw) {
+      Object *thrown = p->thrw;
+      p->thrw = 0;
       if (p->debug) {
         /* coverage:stderr */
-        Object *thrown = p->thrw;
-        p->thrw = 0;
         Object *os = Object_toString(p, thrown);
-        Object_free(thrown);
         fputs("runtime error: exception\n", stderr);
         if (os && !p->thrw) {
           putsn(os->V.s.s, os->V.s.len, stderr);
@@ -2569,9 +2568,8 @@ Parser_evalResult(Parser *p, Object *o) {
         Object_freeMaybe(os);
         fputs("\n", stderr);
         /* /coverage:stderr */
-      } else {
-        Object_set0(&p->thrw);
       }
+      Object_free(thrown);
       ret = -2;
     } else {
       ret = o->t != IntObject ? toBoolean(o) : o->V.i > 0 ? o->V.i : 0;
