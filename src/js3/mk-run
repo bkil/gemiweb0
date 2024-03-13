@@ -12,7 +12,11 @@ ARGS=""
 ./gcc-warn.sh -O2 -g vm.c run.c -o $BIN $ARGS &&
 
 {
-  cd ../br &&
+  if [ "$#" = 0 ]; then
+    cd ../br
+  else
+    true
+  fi &&
   if [ -n "$ISQUICK" ]; then
     $BIN "$JS"
   else
