@@ -133,8 +133,9 @@ The following restrictions are non-normative and being worked on pending the res
 
 ### Strict equality === !==
 
-* Verdict: recommended
+* Verdict: recommended, partial
 * Reason: suggested by style guides, avoids wide classes of errors, easy to understand by beginners
+* Restriction: can only homogeneously compare non-NaN integers or strings, along with `null` and `undefined` to any value to reduce bug potential
 * Incidence: high to always
 * Implementation complexity: low
 * Workaround: error prone and too verbose, invoke abstract equality and `typeof` or `instanceof` in every expression it occurs
