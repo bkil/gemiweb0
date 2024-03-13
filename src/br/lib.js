@@ -210,31 +210,51 @@ Array.prototype.reverse = Array.prototype.reverse || function() {
   return this;
 }
 
-if ((typeof JSON === 'undefined') || !JSON.stringify) {
-  function JSON_stringify(o) {
-    function JSON_stringify_0(f, o) {
-      var hex = '0123456789abcdef';
-      var bu00 = String.fromCharCode(92) + 'u00';
-      function escapeQuote(s) {
-        var o = '"';
-        var i = 0;
-        var c;
-        var n;
-        while (i < s.length) {
-          n = s.charCodeAt(i);
-          if (n > 126) {
-            return 'null';
-          }
-          if (((n === 34) || (n === 92)) || (n < 32)) {
-            o = ((o + bu00) + hex[n >> 4]) + hex[n & 15];
-          } else {
-            o = o + s.charAt(i);
-          }
-          i = i + 1;
-        }
-        return o + '"';
+// ES5
+function JSON_stringify(o) {
+  if ((typeof JSON !== 'undefined') && JSON.stringify) {
+    return JSON.stringify(o);
+  } else {
+    var hex = '0123456789abcdef';
+    var bu00 = String.fromCharCode(92) + 'u00';
+    var zero = String.fromCharCode(0);
+    var i = 0;
+    var safe = '';
+    while (i < 127) {
+      if ((i === 34) || (i === 92) || (i < 32)) {
+        safe = safe + zero;
+      } else {
+        safe = safe + '1';
       }
+      i = i + 1;
+    }
 
+    function escapeQuote(s) {
+      var o = '"';
+      var i = -1;
+      var n;
+      var c;
+      while (1) {
+        c = s.charAt(i = i + 1);
+        while (safe.charCodeAt(n = c.charCodeAt(0))) {
+          o = o + c;
+          c = s.charAt(i = i + 1);
+        }
+        if (isNaN(n)) {
+          o = o + '"';
+          return o;
+        }
+        if (n > 126) {
+          return 'null';
+        }
+        o = o + bu00;
+        c = hex[n >> 4] + hex[n & 15];
+        o = o + c;
+      }
+    }
+
+    function JSON_stringify_0(f, o) {
+      var c;
       var t = typeof o;
       if (t === 'string') {
         return escapeQuote(o);
@@ -245,14 +265,18 @@ if ((typeof JSON === 'undefined') || !JSON.stringify) {
         if (o.length !== undefined) {
           s = s + '[';
           if (o.length) {
-            s = s + f(f, o[0]);
+            c = f(f, o[0]);
+            s = s + c;
             var i = 1;
             while (i < o.length) {
-              s = (s + ',') + f(f, o[i]);
+              s = s + ',';
+              c = f(f, o[i]);
+              s = s + c;
               i = i + 1;
             }
           }
-          return s + ']';
+          s = s + ']';
+          return s;
         } else {
           s = s + '{';
           var rest = 0;
@@ -262,9 +286,13 @@ if ((typeof JSON === 'undefined') || !JSON.stringify) {
             } else {
               rest = 1;
             }
-            s = (s + f(f, i)) + (':' + f(f, o[i]));
+            c = f(f, i);
+            s = s + c + ':';
+            c = f(f, o[i]);
+            s = s + c;
           }
-          return s + '}';
+          s = s + '}';
+          return s;
         }
       } else {
         return 'null';
@@ -273,11 +301,6 @@ if ((typeof JSON === 'undefined') || !JSON.stringify) {
 
     return JSON_stringify_0(JSON_stringify_0, o);
   }
-
-  if (typeof JSON === 'undefined') {
-    var JSON = new Object;
-  }
-  JSON.stringify = JSON.stringify || JSON_stringify;
 }
 
 // ES5
