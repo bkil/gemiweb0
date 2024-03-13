@@ -1,7 +1,7 @@
 /* Copyright (C) 2023 bkil.hu
 Refer to the GNU GPL v2 in LICENSE for terms */
 
-#include "include.h" /* strnlen strdup strndup getline clock_gettime; strlen strcmp strncmp strncpy strstr */
+#include "include.h" /* strnlen strdup strndup getline clock_gettime; memcpy strlen strcmp strncmp strstr */
 #include "vm-impl.h"
 
 #include <stdio.h> /* STDIN_FILENO fputc fputs getline perror putchar stderr stdout */
@@ -430,7 +430,7 @@ String_substring(Object *o, int start, int end) {
   /* /coverage:no */
   size_t n = (size_t)end - (size_t)start;
   char *s = malloc(n + 1);
-  strncpy(s, o->V.s.s + start, n);
+  memcpy(s, o->V.s.s + start, n);
   s[n] = 0;
   return StringObject_new_str((Str){.s = s, .len = n});
 }
@@ -548,8 +548,8 @@ String_concat(Object *t1, Object *t2) {
   const size_t n = t1->V.s.len;
   const size_t m = t2->V.s.len;
   char *s = malloc(n + m + 1);
-  strncpy(s, t1->V.s.s, n);
-  strncpy(s + n, t2->V.s.s, m);
+  memcpy(s, t1->V.s.s, n);
+  memcpy(s + n, t2->V.s.s, m);
   s[n + m] = 0;
   return StringObject_new_str((Str){.s = s, .len = n + m});
 }
