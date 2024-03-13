@@ -466,23 +466,78 @@ if (typeof parseInt === 'undefined') {
 
 // ES3, NS5?
 if (typeof encodeURIComponent === 'undefined') {
-  function encodeURIComponent(s) {
-    var hex = '0123456789abcdef';
-    var o = '';
-    var i = 0;
-    while (i < s.length) {
-      var c = s[i];
-      var n = c.charCodeAt(0);
-      if (((n >= 44) && (n <= 59)) || ((n >= 64) && (n <= 126))) {
+  var encodeURIComponent2 = String.fromCharCode(256);
+  if (encodeURIComponent2.charCodeAt(0) === 256) {
+
+    var encodeURIComponent = function(s) {
+      var hex = '0123456789abcdef';
+      var o = '';
+      var c;
+      function push(x) {
+        o = o + '%';
+        c = hex[x >> 4] + hex[x & 15];
         o = o + c;
-      } else if (n < 128) {
-        o = ((o + '%') + hex[n >> 4]) + hex[n & 15];
-      } else {
-        return undefined;
       }
-      i = i + 1;
+      var i = 0;
+      var u;
+      var n;
+      var m;
+      while (i < s.length) {
+        n = s.charCodeAt(i);
+        i = i + 1;
+
+        if (((n >= 44) && (n <= 59)) || ((n >= 64) && (n <= 126))) {
+          o = o + String.fromCharCode(n);
+        } else if (n < 128) {
+          push(n);
+        } else if (n < 2048) {
+          push(192 | (n >> 6));
+          push(128 | (n & 63));
+        } else if ((n < 55296) || (n > 57344)) {
+          push(224 | (n >> 12));
+          push(128 | ((n >> 6) & 63));
+          push(128 | (n & 63));
+        } else {
+          if ((n > 56319) || (i >= s.length)) {
+            throw 'URIError';
+          }
+          m = s.charCodeAt(i);
+          i = i + 1;
+          if ((n > 56319) || (n < 55296)) {
+            throw 'URIError';
+          }
+          u = ((n >> 6) & 15) + 1;
+          push(240 + (u >> 2));
+          push(128 | ((u & 3) << 4) | ((n >> 2) & 15));
+          push(128 | ((n & 3) << 4) | ((m >> 6) & 15));
+          push(128 | (m & 63));
+        }
+      }
+      return o;
     }
-    return o;
+  } else {
+
+    var encodeURIComponent = function(s) {
+      var hex = '0123456789abcdef';
+      var o = '';
+      var n;
+      var i = 0;
+      var c;
+      while (i < s.length) {
+        n = s.charCodeAt(i);
+        i = i + 1;
+
+        if (((n >= 44) && (n <= 59)) || ((n >= 64) && (n <= 126))) {
+          c = String.fromCharCode(n);
+        } else if (n < 256) {
+          c = '%' + hex[n >> 4] + hex[n & 15];
+        } else {
+          return undefined;
+        }
+        o = o + c;
+      }
+      return o;
+    }
   }
 }
 
