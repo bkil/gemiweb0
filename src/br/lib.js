@@ -146,6 +146,24 @@ String.prototype.split = String.prototype.split || function(s) {
   return a;
 }
 
+// ES5
+String.prototype.trim = String.prototype.trim || function() {
+  var s = this;
+  function isWs(i) {
+    var n = s.charCodeAt(i);
+    return (n === 32) || (n === 9) || (n === 10);
+  }
+  var i = 0;
+  while ((i < s.length) && isWs(i)) {
+    i = i + 1;
+  }
+  var j = s.length - 1;
+  while ((j >= i) && isWs(j)) {
+    j = j - 1;
+  }
+  return s.substring(i, j + 1);
+};
+
 // ES1, NS3
 Array.prototype.join = Array.prototype.join || function(d) {
   if (d === undefined) {
@@ -165,6 +183,16 @@ Array.prototype.join = Array.prototype.join || function(d) {
     }
   }
   return s;
+}
+
+// ES5
+var Object_keys = Object.keys || function(o) {
+  var k = new Array;
+  var i;
+  for (i in o) {
+    k[k.length] = i;
+  }
+  return k;
 }
 
 // ES1, NS3
@@ -307,7 +335,38 @@ if (typeof encodeURIComponent === 'undefined') {
 // ES3, NS5?
 if (typeof decodeURIComponent === 'undefined') {
   function decodeURIComponent(s) {
-    return s; // TODO
+    function getHexDigit(n) {
+      if ((n > 47) && (n < 58)) {
+        return n - 48;
+      } else if ((n > 96) && (n < 103)) {
+        return n - 87;
+      } else if ((n > 64) && (n < 71)) {
+        return n - 55;
+      } else {
+        return -1;
+      }
+    }
+
+    var o = '';
+    var i = 0;
+    var c;
+    var n;
+    var u;
+    var v;
+    while (i < s.length) {
+      c = s.charAt(i);
+      n = c.charCodeAt(0);
+      if ((n === 37) && ((i + 2) < s.length)) {
+        u = getHexDigit(s.charCodeAt(i + 1));
+        v = getHexDigit(s.charCodeAt(i + 2));
+        if ((u >= 0) && (v >= 0)) {
+          c = String.fromCharCode((u << 4) | v);
+        }
+      }
+      o = o + c;
+      i = i + 1;
+    }
+    return o;
   }
 }
 
