@@ -541,7 +541,7 @@ toBoolean(Object *o) {
 
 static Object *
 __attribute__((nonnull, warn_unused_result))
-String_concat(Object *t1, Object *t2) {
+String_concat(Parser *p, Object *t1, Object *t2) {
   if (!isString(t1) || !isString(t2)) {
     return 0;
   }
@@ -554,21 +554,25 @@ String_concat(Object *t1, Object *t2) {
   return StringObject_new_str((Str){.s = s, .len = n + m});
 }
 
+static void
+__attribute__((nonnull))
+String_append_free(Parser *p, Object **acc, Object *part) {
+  Object *next = String_concat(p, *acc, part);
+  Object_free(part);
+  Object_setUnref(acc, next);
+}
+
 static Object *
 setThrow(Parser *p, const char *message) {
   clearErr(p);
   Object_setUnref(&p->thrw, StringObject_new(message));
-  Object *part = StringObject_new(" (");
-  Object_setUnref(&p->thrw, String_concat(p->thrw, part));
+  String_append_free(p, &p->thrw, StringObject_new(" ("));
 
   size_t left = off_t2size_t(p->prog.end - p->prog.s);
   left = left < 32 ? left : 32;
-  Object_setUnref(&part, StringObject_new_str((Str){.s = strndup(p->prog.s, left), .len = left}));
+  String_append_free(p, &p->thrw, StringObject_new_str((Str){.s = strndup(p->prog.s, left), .len = left}));
 
-  Object_setUnref(&p->thrw, String_concat(p->thrw, part));
-  Object_setUnref(&part, StringObject_new("...)"));
-  Object_setUnref(&p->thrw, String_concat(p->thrw, part));
-  Object_free(part);
+  String_append_free(p, &p->thrw, StringObject_new("...)"));
   p->nest++;
   return &undefinedObject;
 }
@@ -816,11 +820,10 @@ parseStringLit(Parser *p) {
     }
     if (!p->nest) {
       part = StringObject_new_const(id);
-      if (!o) {
-        o = part;
+      if (o) {
+        String_append_free(p, &o, part);
       } else {
-        Object_setUnref(&o, String_concat(o, part));
-        Object_free(part);
+        o = part;
       }
     }
 
@@ -831,9 +834,7 @@ parseStringLit(Parser *p) {
           if ((p->prog.s + 5 < p->prog.end) && (p->prog.s[2] == '0') && (p->prog.s[3] == '0') &&
             ((h = hex2char(p->prog.s[4])) >= 0) && ((l = hex2char(p->prog.s[5])) >= 0)) {
             if (!p->nest) {
-              part = StringObject_new_char((char)((h << 4) + l));
-              Object_setUnref(&o, String_concat(o, part));
-              Object_free(part);
+              String_append_free(p, &o, StringObject_new_char((char)((h << 4) + l)));
             }
             p->prog.s += 6;
           } else {
@@ -852,9 +853,7 @@ parseStringLit(Parser *p) {
                 break;
               default: {}
             }
-            part = StringObject_new_char(t);
-            Object_setUnref(&o, String_concat(o, part));
-            Object_free(part);
+            String_append_free(p, &o, StringObject_new_char(t));
           }
           p->prog.s += 2;
         }
@@ -1435,6 +1434,25 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
     return t1;
   }
 
+  if ((op == '+') && (isString(t1) || isString(t2))) {
+    Object *s = 0;
+    if (isString(t1)) {
+      s = t2;
+      t2 = Object_toString(p, s);
+      Object_free(s);
+    } else {
+      s = t1;
+      t1 = Object_toString(p, s);
+      Object_free(s);
+    }
+    if (s && t1 && t2 && !p->thrw) {
+      Object *o = String_concat(p, t1, t2);
+      Object_free(t1);
+      Object_free(t2);
+      return o;
+    }
+  }
+
   if (isBool) {
     Object_free(t1);
     switch (op) {
@@ -1533,23 +1551,6 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
     }
     return setThrow(p, "integer overflow");
 
-  } else if (op == '+') {
-    Object *s = 0;
-    if (isString(t1)) {
-      s = t2;
-      t2 = Object_toString(p, s);
-      Object_free(s);
-    } else if (isString(t2)) {
-      s = t1;
-      t1 = Object_toString(p, s);
-      Object_free(s);
-    }
-    if (s && t1 && t2 && !p->thrw) {
-      Object *o = String_concat(t1, t2);
-      Object_free(t1);
-      Object_free(t2);
-      return o;
-    }
   }
 
   Object_freeMaybe(t1);
