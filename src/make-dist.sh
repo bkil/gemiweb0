@@ -36,6 +36,7 @@ make_dev() {
     "$DEST/js0br0-dev.zip" \
     vm-smallbin.c \
     mk-run \
+    ../make-dist.sh \
     ../LICENSE \
     || return 1
 }
