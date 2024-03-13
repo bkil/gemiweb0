@@ -70,6 +70,49 @@ main(void) {
   t("var s = 'abab'; s.indexOf('b', 5) === -1", 1);
   t("'a", -1);
 
+  /* String_concat optimization */
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + ''; s === 'ab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = '' + s; s === 'ab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + 'x'; s === 'abx'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = 'x' + s; s === 'xab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = 'x' + 'y' + s; s === 'xyab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = 'x' + s + 'y'; s === 'xaby'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = 'x' + s + 'y' + s; s === 'xabyab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = 'x' + s + s; s === 'xabab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = 'x' + s + s + s; s === 'xababab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + s; s === 'abab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + s; s = s + s; s === 'abababab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + s + s; s === 'ababab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + (s + s); s === 'ababab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = (s + s) + s; s === 'ababab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + s + s + s; s === 'abababab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + s + (s + s); s === 'abababab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + (s + (s + s)); s === 'abababab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = (s + s) + (s + s); s === 'abababab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + 'c' + s; s === 'abcab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + 'c' + s + 'd' + s; s === 'abcabdab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + ('c' + s); s === 'abcab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = (s + 'c') + s; s === 'abcab'", 1);
+  t("var s; s = ''; s = 'ba' + s; s = 'dc' + s; s = 'fe' + s; s === 'fedcba';", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + 'c' + s.length + 'd'; s === 'abc2d'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + 'c' + s.charAt(2) + 'd'; s === 'abcd'", 1);
+  t("var s; s = ''; s = s + 'a' + 'b' + 'c' + !s + 'd'; s === 'abc1d'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + 'c' + !s + 'd'; s === 'abc0d'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + 'x' + s; s === 'abxab'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + 4 + 2 + 'c'; s === 'ab42c'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + (4 + 2) + 'c'; s === 'ab6c'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + (s = 'c'); s === 'abc'", 1);
+  t("var s; s = ''; s = s + ''; s = (s + 'a') + (s && 'b'); s === 'a'", 1);
+  t("var s; s = ''; s = s + 'x'; s = s + 'y'; s = (s + 'a') + (s && 'b'); s === 'xyab'", 1);
+  t("var s; s = ''; s = s + ''; s = (s + 'a') + (s || 'b'); s === 'ab'", 1);
+  t("var s; s = ''; s = s + 'x'; s = s + 'y'; s = (s + 'a') + (s || 'b'); s === 'xyaxy'", 1);
+  t("var s; s = ''; s = s + 'a'; s = s + 'b'; var t; t = 'c'; s = s + t; (s === 'abc') && (t === 'c')", 1);
+  t("var o; o = new Object; function f(){ o.s = 'd'; return 'c'; }; o.s = ''; o.s = o.s + 'a'; o.s = o.s + 'b'; o.s = o.s + f(); o.s === 'abc'", 1);
+  t("function f(){ return 'x'; }; var s; s = ''; s = s + 'a'; s = s + 'b'; s = s + f() + 'y'; s === 'abxy'", 1);
+  t("var q; q = 'x'; var s; s = q; var i; i = 0; var c; while (i < 256) { c = String.fromCharCode(65 + (i % 53)); s = s + c; i = i + 1; }; i = 1; while ((i < s.length) && (s.charCodeAt(i) === (65 + ((i - 1) % 53)))) { i = i + 1; }; (s.length === 257) && (i === s.length) && (s.charAt(0) === 'x') && (q === 'x')", 1);
+  t("var q; q = 'x'; var s; s = q; var i; i = 0; var c; while (i < 256) { c = String.fromCharCode(65 + (i % 53)); s = c + s; i = i + 1; }; i = 1; while ((i < s.length) && (s.charCodeAt(s.length - i - 1) === (65 + ((i - 1) % 53)))) { i = i + 1; }; (s.length === 257) && (i === s.length) && (s.charAt(s.length - 1) === 'x') && (q === 'x')", 1);
+  t("var s; s = ''; var i; i = 0; while (i < 256) { s = '.' + s + ','; i = i + 1; }; s = s + 'x' + s + 'y'; (s.length === 1026) && (s.charAt(0) === '.') && (s.charAt(510) === ',') && (s.charAt(511) === ',') && (s.charAt(512) === 'x') && (s.charAt(1024) === ',') && (s.charAt(1025) === 'y')", 1);
+
   /* optional: for easier interoperability through JSONP */
   t("var s = '\\u000a'; s.charCodeAt(0)", 0x0a);
   t("var s = '\\u000A'; s.charCodeAt(0)", 0x0a);

@@ -539,6 +539,49 @@ toBoolean(Object *o) {
   }
 }
 
+static void
+__attribute__((nonnull))
+String_concat_after_rhs(Parser *p) {
+  if (p->stringConcatLhs) {
+    Object_free(*p->stringConcatLhs);
+    p->stringConcatLhs = 0;
+  }
+}
+
+static void
+__attribute__((nonnull(1)))
+String_concat_rollback(Parser *p, Object **old) {
+  if (!p->stringConcatLhs) {
+    return;
+  }
+  char *s = malloc(p->stringConcatOldStorage);
+  memcpy(s, (*p->stringConcatLhs)->V.u.s + p->stringConcatOldOfs, p->stringConcatOldLen);
+  s[p->stringConcatOldLen] = 0;
+  Object *o = StringObject_new_str((MutStr){.s = s, .len = p->stringConcatOldLen, .storage = p->stringConcatOldStorage, .concats = p->stringConcatOldConcat});
+
+  if (old && (*old == *p->stringConcatLhs)) {
+    Object_set(old, o);
+  }
+  Object_free(*p->stringConcatLhs);
+  Object_set(p->stringConcatLhs, o);
+  String_concat_after_rhs(p);
+}
+
+static void
+__attribute__((nonnull))
+String_concat_set_lhs(Parser *p, Object **po) {
+  String_concat_rollback(p, 0);
+  Object *o = *po;
+  if (!o->ref && (o->t == StringObject) && (o->V.u.storage > o->V.u.len + 1)) {
+    p->stringConcatLhs = po;
+    p->stringConcatOldLen = o->V.u.len;
+    p->stringConcatOldStorage = o->V.u.storage;
+    p->stringConcatOldConcat = o->V.u.concats;
+    p->stringConcatOldOfs = 0;
+    Object_ref(o);
+  }
+}
+
 static Object *
 __attribute__((nonnull, warn_unused_result))
 String_concat(Parser *p, Object *t1, Object *t2) {
@@ -546,18 +589,91 @@ String_concat(Parser *p, Object *t1, Object *t2) {
     return 0;
   }
   const size_t n = t1->V.s.len;
-  const size_t m = t2->V.s.len;
-  char *s = malloc(n + m + 1);
+  size_t m = t2->V.s.len;
+  if (!n) {
+    return Object_ref(t2);
+  } else if (!m) {
+    return Object_ref(t1);
+  }
+  char *t2s = t2->V.s.s;
+
+  int concati = (int)(t1->t == StringObject ? t1->V.u.concats : 0) + 1;
+  Object *o = p->stringConcatLhs ? *p->stringConcatLhs : 0;
+  if ((t1 == o) && (t2 == o)) {
+    concati += p->stringConcatOldConcat;
+    m = p->stringConcatOldLen;
+    t2s += p->stringConcatOldOfs;
+  } else {
+    concati += (t2->t == StringObject ? t2->V.u.concats : 0);
+  }
+  unsigned char concats = UCHAR_MAX;
+  if (concati < concats) {
+    concats = (unsigned char)concati;
+  }
+  const size_t len = n + m;
+
+  if ((t1 == o) || (t2 == o)) {
+    if (o->V.u.storage <= len) {
+
+      Object **saved = p->stringConcatLhs;
+      p->stringConcatLhs = 0;
+      Object *s;
+      if (t1 != o) {
+        s = String_concat(p, t1, t2);
+        p->stringConcatLhs = saved;
+        String_concat_rollback(p, 0);
+      } else if (t2 != o) {
+        s = String_concat(p, t1, t2);
+        p->stringConcatLhs = saved;
+        String_concat_rollback(p, 0);
+      } else {
+        p->stringConcatLhs = saved;
+        Object_ref(t2);
+        String_concat_rollback(p, &t2);
+        s = String_concat(p, t1, t2);
+        Object_free(t2);
+      }
+      return s;
+    }
+
+    if (t1 == o) {
+      memcpy(o->V.u.s + n, t2s, m);
+      Object_ref(t1);
+    } else {
+      memmove(o->V.u.s + n, o->V.u.s, m);
+      memcpy(o->V.u.s, t1->V.u.s, n);
+      p->stringConcatOldOfs += n;
+    }
+    if (t2 == o) {
+      Object_ref(t2);
+    }
+
+    o->V.u.s[len] = 0;
+    o->V.u.len = len;
+    o->V.u.concats = concats;
+    return o;
+  }
+
+  size_t storage = len + 1;
+  if (concats > 63) {
+    storage = 48 + storage * 5 / 4;
+  } else {
+    storage += concats;
+  }
+
+  char *s = malloc(storage);
   memcpy(s, t1->V.s.s, n);
-  memcpy(s + n, t2->V.s.s, m);
-  s[n + m] = 0;
-  return StringObject_new_str((MutStr){.s = s, .len = n + m});
+  memcpy(s + n, t2s, m);
+  s[len] = 0;
+  return StringObject_new_str((MutStr){.s = s, .len = len, .storage = storage, .concats = concats});
 }
 
 static void
 __attribute__((nonnull))
 String_append_free(Parser *p, Object **acc, Object *part) {
+  String_concat_set_lhs(p, acc);
   Object *next = String_concat(p, *acc, part);
+  String_concat_after_rhs(p);
   Object_free(part);
   Object_setUnref(acc, next);
 }
@@ -1067,7 +1183,14 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got, Object *se
       return setRunError(p, "overwriting prototype unsupported", 0);
     }
     Object *r;
-    if ((r = parseExpr(p))) {
+    if (!p->nest && e) {
+      String_concat_set_lhs(p, &e->value);
+    }
+    r = parseExpr(p);
+    if (!p->nest && e) {
+      String_concat_after_rhs(p);
+    }
+    if (r) {
       if (!p->nest) {
         if (e) {
           Object_set(&e->value, r);
@@ -1093,6 +1216,7 @@ parseRHS(Parser *p, List **parent, Object *key, List *e, Object *got, Object *se
   Object *o = Object_ref(e ? e->value : got ? got : &undefinedObject);
   List *args = 0, *argsEnd = 0;
   if (acceptChar(p, '(')) {
+    String_concat_rollback(p, &o);
     if (!acceptWs(p, ')')) {
       do {
         Object *arg = parseExpr(p);
@@ -1164,6 +1288,9 @@ parseSTerm(Parser *p, Id *id) {
       self = field;
       field = 0;
       if (isString(self)) {
+        if ((p->stringConcatLhs) && (*p->stringConcatLhs == self)) {
+          String_concat_rollback(p, &self);
+        }
         if (isString(i)) {
           if (strncmpEq(i->V.c, "length")) {
             field = IntObject_new((int)self->V.c.len);
@@ -1293,9 +1420,11 @@ __attribute__((nonnull, warn_unused_result))
 parseLTerm(Parser *p) {
   char op = 0;
   Object *o;
-  if ((o = parseIntLit(p))) {
+  if ((o = parseStringLit(p))) {
     return o;
-  } else if ((o = parseStringLit(p))) {
+  }
+  String_concat_rollback(p, 0);
+  if ((o = parseIntLit(p))) {
     return o;
   } else if ((o = parseObjectLiteral(p))) {
     return o;
@@ -1408,9 +1537,11 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
   int isBool = 1;
   switch (op) {
     case 'A':
+      String_concat_rollback(p, &t1);
       sh = !toBoolean(t1);
       break;
     case 'O':
+      String_concat_rollback(p, &t1);
       sh = toBoolean(t1);
       break;
     default:
@@ -1465,8 +1596,10 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
         return 0;
         /* /coverage:unreachable */
     }
+  }
+  String_concat_rollback(p, &t1);
 
-  } else if ((op == '=') || (op == '!')) {
+  if ((op == '=') || (op == '!')) {
     int b = isString(t1) && isString(t2) ? isStringEq(t1->V.s, t2->V.s) :
       t1->t == t2->t ?
         t1->t == IntObject ? t1->V.i == t2->V.i :
@@ -2374,6 +2507,10 @@ Parser_new(void) {
   addFunction(p->vars, "require", &global_require);
   addFunction(p->vars, "setTimeout", &global_setTimeout);
 
+  p->stringConcatLhs = 0;
+  p->stringConcatOldLen = 0;
+  p->stringConcatOldConcat = 0;
+  p->stringConcatOldOfs = 0;
   p->onTimeout = 0;
   p->onStdinData = 0;
   p->connClient = 0;

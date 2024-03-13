@@ -97,6 +97,7 @@ typedef struct Parser {
   Object *objectPrototype;
   Object *arrayPrototype;
   Object *stringPrototype;
+  Object **stringConcatLhs;
   Object *onStdinData;
   Object *onTimeout;
   Object *connClient;
@@ -110,10 +111,14 @@ typedef struct Parser {
   Id errName;
   const char *parseErr;
 
+  size_t stringConcatOldLen;
+  size_t stringConcatOldStorage;
+  size_t stringConcatOldOfs;
   int sock;
   int debug;
   int nest;
   int needSemicolon;
+  unsigned char stringConcatOldConcat;
 
   char parseErrChar;
 } Parser;
