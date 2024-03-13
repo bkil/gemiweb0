@@ -3,6 +3,7 @@
 // Copyright (C) 2023 bkil.hu
 // Refer to the GNU GPL v2 in LICENSE for terms
 
+// JS1
 String.prototype.indexOf2 = String.prototype.indexOf2 || function(c) {
   var i = 0;
   var n = c.charCodeAt(0);
@@ -16,6 +17,7 @@ String.prototype.indexOf2 = String.prototype.indexOf2 || function(c) {
 }
 
 String.prototype.lastIndexOf2 = String.prototype.lastIndexOf2 || function(c) {
+// JS1
   var i = this.length - 1;
   var n = c.charCodeAt(0);
   while ((i >= 0) && (this.charCodeAt(i) !== n)) {
@@ -24,6 +26,7 @@ String.prototype.lastIndexOf2 = String.prototype.lastIndexOf2 || function(c) {
   return i;
 }
 
+// JS1
 String.prototype.toUpperCase = String.prototype.toUpperCase || function() {
   var o = '';
   var i = 0;
@@ -31,15 +34,15 @@ String.prototype.toUpperCase = String.prototype.toUpperCase || function() {
     var c = this.charAt(i);
     var n = c.charCodeAt(0);
     if ((n >= 97) && (n <= 122)) {
-      o = o + String.fromCharCode(n - 32);
-    } else {
-      o = o + c;
+      c = String.fromCharCode(n - 32);
     }
+    o = o + c;
     i = i + 1;
   }
   return o;
 }
 
+// JS1
 String.prototype.toLowerCase = String.prototype.toLowerCase || function() {
   var o = '';
   var i = 0;
@@ -47,24 +50,26 @@ String.prototype.toLowerCase = String.prototype.toLowerCase || function() {
     var c = this.charAt(i);
     var n = c.charCodeAt(0);
     if ((n >= 65) && (n <= 90)) {
-      o = o + String.fromCharCode(n + 32);
-    } else {
-      o = o + c;
+      c = String.fromCharCode(n + 32);
     }
+    o = o + c;
     i = i + 1;
   }
   return o;
 }
 
+// JS1
 String.prototype.substring = String.prototype.substring || function(from, to) {
   var o = '';
   if (!(from > 0)) {
     from = 0;
   }
   var i = from;
+  var c;
   if (to === undefined) {
     while (i < this.length) {
-      o = o + this.charAt(i);
+      c = this.charAt(i);
+      o = o + c;
       i = i + 1;
     }
   } else {
@@ -76,22 +81,26 @@ String.prototype.substring = String.prototype.substring || function(from, to) {
       to = from;
     }
     while ((i < this.length) && (i < to)) {
-      o = o + this.charAt(i);
+      c = this.charAt(i);
+      o = o + c;
       i = i + 1;
     }
   }
   return o;
 }
 
+// ES3, NS4
 String.prototype.substr = String.prototype.substr || function(from, n) {
   if (from < 0) {
     return undefined;
   }
   var o = '';
   var i = from;
+  var c;
   if (n === undefined) {
     while (i < this.length) {
-      o = o + this.charAt(i);
+      c = this.charAt(i);
+      o = o + c;
       i = i + 1;
     }
   } else {
@@ -100,13 +109,15 @@ String.prototype.substr = String.prototype.substr || function(from, n) {
         return o;
       }
       n = n - 1;
-      o = o + this.charAt(i);
+      c = this.charAt(i);
+      o = o + c;
       i = i + 1;
     }
   }
   return o;
 }
 
+// ES1, NS3
 String.prototype.split = String.prototype.split || function(s) {
   var a = new Array;
   if (s === undefined) {
@@ -135,22 +146,28 @@ String.prototype.split = String.prototype.split || function(s) {
   return a;
 }
 
+// ES1, NS3
 Array.prototype.join = Array.prototype.join || function(d) {
   if (d === undefined) {
     d = ',';
   }
   var s = '';
+  var c;
   if (this.length) {
-    s = s + this[0];
+    c = this[0];
+    s = s + c;
     var i = 1;
     while (i < this.length) {
-      s = (s + d) + this[i];
+      s = s + d;
+      c = this[i];
+      s = s + c;
       i = i + 1;
     }
   }
   return s;
 }
 
+// ES1, NS3
 Array.prototype.reverse = Array.prototype.reverse || function() {
   var i = 0;
   var j = this.length - 1;
@@ -235,12 +252,14 @@ if ((typeof JSON === 'undefined') || !JSON.stringify) {
   JSON.stringify = JSON.stringify || JSON_stringify;
 }
 
+// ES1, NS3
 if (typeof Function === 'undefined') {
   function Function(param, body) {
     return eval((('(function(' + param) + ('){' + body)) + '})')
   }
 }
 
+// JS1
 if (typeof parseInt === 'undefined') {
   function parseInt(s, b) {
     if (b === undefined) {
@@ -263,6 +282,7 @@ if (typeof parseInt === 'undefined') {
   }
 }
 
+// ES3, NS5?
 if (typeof encodeURIComponent === 'undefined') {
   function encodeURIComponent(s) {
     var hex = '0123456789abcdef';
@@ -284,12 +304,14 @@ if (typeof encodeURIComponent === 'undefined') {
   }
 }
 
+// ES3, NS5?
 if (typeof decodeURIComponent === 'undefined') {
   function decodeURIComponent(s) {
     return s; // TODO
   }
 }
 
+// NS4
 if ((typeof setInterval === 'undefined') && (typeof setTimeout === 'function')) {
   function setInterval(f, ms) {
     function g(self) {
