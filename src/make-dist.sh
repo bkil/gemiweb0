@@ -64,13 +64,17 @@ make_doc() {
 }
 
 compile() {
-  local COMP BIN
+  local COMP BIN OPT
   readonly BIN="$1"
   readonly COMP="$2"
   shift 2
+
+  OPT="-Os"
+  "$COMP" -c -Oz -o /dev/null run.c && OPT="-Oz"
+
   "$COMP" \
     -march=nocona -mtune=broadwell \
-    -Os \
+    "$OPT" \
     -flto \
     -fno-asynchronous-unwind-tables \
     -Wl,-z,norelro \
