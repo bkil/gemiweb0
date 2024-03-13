@@ -6,6 +6,13 @@ Refer to the GNU GPL v2 in LICENSE for terms */
 
 #include "vm.h"
 
+typedef struct MutStr {
+  char *s;
+  size_t len;
+  size_t storage;
+  unsigned char concats;
+} MutStr;
+
 typedef struct Str {
   char *s;
   size_t len;
@@ -70,6 +77,7 @@ typedef struct Object {
   union {
     int i;
     Str s;
+    MutStr u;
     Id c;
     Mmap mm;
     List *m;

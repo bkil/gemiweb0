@@ -122,11 +122,11 @@ IntObject_new(int x) {
 
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
-StringObject_new_str(Str s) {
-  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.s));
+StringObject_new_str(MutStr s) {
+  Object *o = malloc(offsetof(Object, V) + sizeof(o->V.u));
   o->ref = 0;
   o->t = StringObject;
-  o->V.s = s;
+  o->V.u = s;
   return o;
 }
 
@@ -134,7 +134,7 @@ StringObject_new_str(Str s) {
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 StringObject_new_dup(const char *s) {
-  return StringObject_new_str((Str){.s = strdup(s), .len = strlen(s)});
+  return StringObject_new_str((MutStr){.s = strdup(s), .len = strlen(s)});
 }
 /* /coverage:file */
 
@@ -175,7 +175,7 @@ StringObject_new(const char *s) {
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 StringObject_new_char(char c) {
-  Str s = {.s = 0, .len = 1};
+  MutStr s = {.s = 0, .len = 1};
   s.s = malloc(2);
   s.s[0] = c;
   s.s[1] = 0;
@@ -432,7 +432,7 @@ String_substring(Object *o, int start, int end) {
   char *s = malloc(n + 1);
   memcpy(s, o->V.s.s + start, n);
   s[n] = 0;
-  return StringObject_new_str((Str){.s = s, .len = n});
+  return StringObject_new_str((MutStr){.s = s, .len = n});
 }
 #endif
 
@@ -551,7 +551,7 @@ String_concat(Parser *p, Object *t1, Object *t2) {
   memcpy(s, t1->V.s.s, n);
   memcpy(s + n, t2->V.s.s, m);
   s[n + m] = 0;
-  return StringObject_new_str((Str){.s = s, .len = n + m});
+  return StringObject_new_str((MutStr){.s = s, .len = n + m});
 }
 
 static void
@@ -570,7 +570,7 @@ setThrow(Parser *p, const char *message) {
 
   size_t left = off_t2size_t(p->prog.end - p->prog.s);
   left = left < 32 ? left : 32;
-  String_append_free(p, &p->thrw, StringObject_new_str((Str){.s = strndup(p->prog.s, left), .len = left}));
+  String_append_free(p, &p->thrw, StringObject_new_str((MutStr){.s = strndup(p->prog.s, left), .len = left}));
 
   String_append_free(p, &p->thrw, StringObject_new("...)"));
   p->nest++;
@@ -585,7 +585,7 @@ Object_toString(Parser *p, Object *o) {
       char *s = malloc(16);
       int len = snprinti(s, 16, o->V.i);
       if ((len > 0) && (len < 16)) {
-        return StringObject_new_str((Str){.s = s, .len = (size_t)len});
+        return StringObject_new_str((MutStr){.s = s, .len = (size_t)len});
       } else {
         /* coverage:unreachable */
         mfree(s);
@@ -2661,7 +2661,7 @@ Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
     /* coverage:stdin */
     if (p->onStdinData && FD_ISSET(STDIN_FILENO, &rfd)) {
       size_t all = 0;
-      Str s = {.s = 0};
+      MutStr s = {.s = 0};
       ssize_t len = getline(&s.s, &all, stdin);
       Object *arg;
       if (len <= 0) {
