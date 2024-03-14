@@ -40,9 +40,10 @@ Play with an example game obeying this subset:
 * https://bkil.gitlab.io/static-wonders.js/game/memopair.htm
 * https://bkil.gitlab.io/static-wonders.js/edu/knowcard.htm#
 
-A scraper bookmarklet:
+Scraper bookmarklets:
 
 * https://bkil.gitlab.io/static-wonders.js/userjs/maltai-map.js0.html
+* https://bkil.gitlab.io/static-wonders.js/userjs/gmaps-embed.js0.html
 
 ## Contact
 
