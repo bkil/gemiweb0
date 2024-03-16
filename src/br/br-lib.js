@@ -6,6 +6,58 @@
 // "\n"
 var nl = String.fromCharCode(10);
 
+var safeHtml = new Object;
+
+function fillSafeHtml() {
+  if (safeHtml.s) {
+    return 0;
+  }
+  var zero = String.fromCharCode(0);
+  var i = 0;
+  var safe = '';
+  while (i < 127) {
+    if ((i === 34) || (i === 38) || (i === 39) || (i === 60) || (i === 62) || (i < 32)) {
+      safe = safe + zero;
+    } else {
+      safe = safe + '1';
+    }
+    i = i + 1;
+  }
+  safeHtml.s = safe;
+}
+
+function escapeHtml(h) {
+  fillSafeHtml();
+  var s = safeHtml.s;
+  var o = '';
+  var i = -1;
+  var n;
+  var c;
+  while (1) {
+    c = h.charAt(i = i + 1);
+    while (s.charCodeAt(n = c.charCodeAt(0))) {
+      o = o + c;
+      c = h.charAt(i = i + 1);
+    }
+    if (isNaN(n)) {
+      return o;
+    }
+    if (n > 126) {
+      o = o + c;
+    } else if (n === 34) {
+      o = o + '&quot;';
+    } else if (n === 38) {
+      o = o + '&amp;';
+    } else if (n === 39) {
+      o = o + '&apos;';
+    } else if (n === 60) {
+      o = o + '&lt;';
+    } else if (n === 62) {
+      o = o + '&gt;';
+    }
+  }
+}
+
 function eval2To(j, prog) {
   function eval2To0(self, j, prog) {
     var g = j.vars;
@@ -41,31 +93,6 @@ function eval2To(j, prog) {
   }
 
   return eval2To0(eval2To0, j, prog);
-}
-
-function escapedChar(c) {
-  if (c === '&') {
-    c = '&amp;';
-  } else if (c === '<') {
-    c = '&lt;';
-  } else if (c === '>') {
-    c = '&gt;';
-  } else if (c === '"') {
-    c = '&quot;';
-  } else if (c === "'") {
-    c = '&apos;';
-  }
-  return c;
-}
-
-function escaped(x) {
-  var o = '';
-  var i = 0;
-  while (i < x.length) {
-    o = o + escapedChar(x[i]);
-    i = i + 1;
-  }
-  return o;
 }
 
 function isWs(c) {
@@ -718,7 +745,7 @@ function show(text, defVal, multiLine, cb) {
       console.log('Please type in a single line of input: ');
     }
     if (defVal !== undefined) {
-      console.log(' default: ' + escapeHtml(defVal));
+      console.log(' default: ' + defVal);
     }
     i.on('data', callMeMaybe(callMeMaybe, undefined, multiLine, cb));
   }
