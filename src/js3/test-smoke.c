@@ -24,6 +24,9 @@ main(void) {
   t("3 - null", -2);
 
   t("process.stdin.on('data', function(d) { process.stdin.on('data', undefined); })", 0);
+  t("process.stdin.removeAllListeners()", -2);
+  t("process.stdin.removeAllListeners(2)", -2);
+  t("process.stdin.removeAllListeners(['data'])", 0);
 
   t("require()", -2);
   t("require(null)", -2);
@@ -73,6 +76,9 @@ main(void) {
   t("var n=require('node:net'); var o=new Object; o.host='localhost'; var c=n.createConnection(o); var e=new Object; c.on('error', function(m){e.e=m}); c.on('connect',function(){}); e.e==='expecting port'", 1);
   t("var n=require('node:net'); var o=new Object; o.port=1; var c=n.createConnection(o); var e=new Object; c.on('error', function(m){e.e=m}); c.on('connect',function(){}); e.e==='expecting host'", 1);
   t("var n=require('node:net'); var o=new Object; o.host='localhost'; var c=n.createConnection(o); var e=new Object; c.on('error', function(m){e.e=m;return m}); c.on('connect',function(){}); e.e==='expecting port'", 1);
+  t("var n=require('node:net'); var c=n.createConnection(new Object); c.removeAllListeners()", -2);
+  t("var n=require('node:net'); var c=n.createConnection(new Object); c.removeAllListeners(2)", -2);
+  t("var n=require('node:net'); var c=n.createConnection(new Object); c.removeAllListeners(['connect','data','end','error'])", 0);
 
   return exitWithErrorCount("smoke");
 }

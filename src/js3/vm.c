@@ -2092,6 +2092,22 @@ process_stdin_on(Parser *p, List *l) {
   Object_setUnref(&p->onStdinData, l->next->value->t == FunctionJs ? Object_ref(l->next->value) : 0);
   return &undefinedObject;
 }
+
+static Object *
+__attribute__((nonnull(1), warn_unused_result))
+process_stdin_removeAllListeners(Parser *p, List *l) {
+  if (!l || (l->value->t != ArrayObject)) {
+    return setThrow(p, "expecting Array argument");
+  }
+  l = l->value->V.m;
+  while (l) {
+    if (isString(l->value) && strncmpEq(l->value->V.c, "data")) {
+      Object_set0(&p->onStdinData);
+    }
+    l = l->next;
+  }
+  return &undefinedObject;
+}
 /* /coverage:stdin */
 
 static Object *
@@ -2390,6 +2406,32 @@ node_net_connection_on(Parser *p, List *l) {
 }
 
 static Object *
+__attribute__((nonnull(1), warn_unused_result))
+node_net_connection_removeAllListeners(Parser *p, List *l) {
+  if (!l || (l->value->t != ArrayObject)) {
+    /* coverage:netsmoke */
+    return setThrow(p, "expecting Array argument");
+    /* /coverage:netsmoke */
+  }
+  l = l->value->V.m;
+  while (l) {
+    if (isString(l->value)) {
+      if (strncmpEq(l->value->V.c, "data")) {
+        Object_set0(&p->onConnData);
+      } else if (strncmpEq(l->value->V.c, "end")) {
+        Object_set0(&p->onConnEnd);
+      } else if (strncmpEq(l->value->V.c, "error")) {
+        Object_set0(&p->onConnError);
+      }
+    }
+    l = l->next;
+  }
+  return &undefinedObject;
+}
+/* /coverage:stdin */
+
+
+static Object *
 __attribute__((warn_unused_result, nonnull(1)))
 node_net_connection_write(Parser *p, List *l) {
   if (!l || !isString(l->value)) {
@@ -2426,6 +2468,7 @@ node_net_createConnection(Parser *p, List *l) {
   addFunction(ret, "on", node_net_connection_on);
   addFunction(ret, "end", node_net_connection_end);
   addFunction(ret, "write", node_net_connection_write);
+  addFunction(ret, "removeAllListeners", node_net_connection_removeAllListeners);
   p->connClient = Object_ref(ret);
   return ret;
 }
@@ -2497,6 +2540,7 @@ Parser_new(void) {
 
   Object *ps = MapObject_new();
   addFunction(ps, "on", &process_stdin_on);
+  addFunction(ps, "removeAllListeners", &process_stdin_removeAllListeners);
   Object *pr = MapObject_new();
   addField(pr, "stdin", ps);
   addField(p->vars, "process", pr);

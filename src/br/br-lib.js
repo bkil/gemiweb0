@@ -711,7 +711,7 @@ function getUh() {
 
 function callMeMaybe(self, acc, multiLine, cb) {
   return function(data) {
-    process.stdin.on('data', undefined);
+    process.stdin.removeAllListeners(['data']);
     if ((data === undefined) || (data === null)) {
       cb(undefined);
     }
@@ -737,7 +737,7 @@ function show(text, defVal, multiLine, cb) {
   console.log(text);
   var i = process.stdin;
   if (cb === undefined) {
-    i.on('data', undefined);
+    i.removeAllListeners(['data']);
   } else {
     if (multiLine) {
       console.log('Please type in multiple lines of input terminated with a dot (".")');

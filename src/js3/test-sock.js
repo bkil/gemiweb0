@@ -17,6 +17,7 @@ function onConnect(client) {
 
   client.on('end', function() {
     console.log('!eof,' + s.buf);
+    client.removeAllListeners(['data', 'end', 'error', 'connect']);
   });
 
   client.write(':connected');

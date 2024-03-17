@@ -66,6 +66,8 @@ test_stdin() {
   tk "process.stdin.on(2)" -2 ''
   tk "process.stdin.on('bad')" -2 ''
   tk "process.stdin.on('data')" -2 ''
+  tk "process.stdin.removeAllListeners()" -2 ''
+  tk "process.stdin.removeAllListeners(2)" -2 ''
 }
 
 tn() {

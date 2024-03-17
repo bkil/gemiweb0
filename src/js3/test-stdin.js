@@ -1,7 +1,7 @@
 process.stdin.on('data', function(d) {
   if (d === undefined) {
     console.log('EOF');
-    process.stdin.on('data', undefined);
+    process.stdin.removeAllListeners(['data']);
   } else {
     console.log(d + '.');
   }
