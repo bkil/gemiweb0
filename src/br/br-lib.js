@@ -58,6 +58,155 @@ function escapeHtml(h) {
   }
 }
 
+function httpGet(host, port, path, ok, err) {
+  var crlf = String.fromCharCode(13) + nl;
+  var net = require('node:net');
+  var s = new Object;
+  s.buf = '';
+
+  function onConnect(client) {
+    client.on('data', function(d) {
+      s.buf = s.buf + d;
+    });
+
+    client.on('end', function() {
+      var i = s.buf.indexOf(crlf + crlf);
+      if ((i < 0) || ((s.buf.indexOf('HTTP/1.0 200') !== 0) && (s.buf.indexOf('HTTP/1.1 200') !== 0))) {
+        err('non-200 response');
+      } else {
+        ok(s.buf.substring(i + 4), 200);
+      }
+    });
+
+    client.write(
+      'GET ' + path + ' HTTP/1.1' + crlf +
+      'Host: ' + host + ':' + port + crlf +
+      'Connection: close' + crlf +
+      crlf
+    );
+  }
+
+  var opt = new Object;
+  opt.host = host;
+  opt.port = port;
+  var client = net.createConnection(opt);
+  client.on('error', function() {
+    err('network error');
+  });
+  client.on('connect', onConnect);
+}
+
+function newURL(url) {
+  var o = new Object;
+  o.protocol = undefined;
+  o.hostname = '';
+  o.port = '';
+  o.pathname = '/';
+  o.search = '';
+  o.hash = '';
+
+  var i = url.indexOf('//');
+  if (i < 0) {
+    return o;
+  }
+  o.protocol = url.substring(0, i);
+
+  i = i + 2;
+  var j;
+  if (o.protocol !== 'file:') {
+    j = url.indexOf('/', i);
+    if (j < 0) {
+      o.hostname = url.substring(i);
+      return o;
+    }
+    o.hostname = url.substring(i, j);
+    i = j;
+
+    j = o.hostname.indexOf(':');
+    if (j >= 0) {
+      o.port = o.hostname.substring(j + 1);
+      o.hostname = o.hostname.substring(0, j);
+    }
+  }
+
+  j = url.indexOf('#');
+  if (j >= 0) {
+    o.hash = url.substring(j);
+    url = url.substring(0, j);
+  }
+
+  j = url.indexOf('?');
+  if (j >= 0) {
+    o.search = url.substring(j);
+    url = url.substring(0, j);
+  }
+
+  o.pathname = url.substring(i);
+  return o;
+}
+
+function readLocalFile(pathname, onload, onerror) {
+  var fs = require('fs');
+  fs.readFile(pathname, function (e, d) {
+    if (e) {
+      onerror('fetch local file failed: ' + e);
+    } else {
+      onload('' + d);
+    }
+  });
+}
+
+function newFetch(location) {
+  if (typeof fetch === 'function') {
+    return fetch(location);
+  }
+
+  return function(url) {
+    function then(onload, onerror) {
+      var u = newURL(url);
+      if (!u.protocol) {
+        var orig = newURL(location.href);
+        u.protocol = orig.protocol;
+        u.hostname = orig.hostname;
+        u.port = orig.port;
+        if (u.pathname.charAt(0) !== '/') {
+          var i = orig.pathname.lastIndexOf('/');
+          if (i >= 0) {
+            u.pathname = orig.pathname.substring(0, i) + '/' + u.pathname;
+          }
+        }
+      }
+
+      var wrappedOnload = function(d) {
+        function getText() {
+          return '' + d;
+        }
+        var o = new Object;
+        o.text = getText;
+        onload(o);
+      };
+      if (u.protocol === 'http:') {
+        var port = 80;
+        if (u.port.length) {
+          port = parseInt(u.port);
+          if (isNaN(port)) {
+            onerror('invalid port');
+            return undefined;
+          }
+        }
+        httpGet(u.hostname, port, u.pathname + u.search, wrappedOnload, onerror);
+      } else if (u.protocol === 'file:') {
+        readLocalFile(u.pathname, wrappedOnload, onerror);
+      } else {
+        onerror('unknown protocol');
+      }
+    }
+    var o = new Object;
+    o.then = then;
+    return o;
+  }
+}
+
 function eval2To(j, prog) {
   function eval2To0(self, j, prog) {
     var g = j.vars;
@@ -249,15 +398,20 @@ function closeLastTag(j) {
     s['default'] = s['textContent'];
   } else if ((tag === 'script') && (s['textContent'] !== undefined)) {
     if (attr['src']) {
-      var get = j['get'];
-      var body = get(attr['src']);
-      if (body !== undefined) {
-        eval2To(j, body);
-      } else if (attr['onerror'] !== undefined) {
-        eval2To(j, attr['onerror']);
-      } else {
-        eval2To(j, s['textContent']);
+      function after(body) {
+        eval2To(j, body.text());
       }
+      function error(err) {
+        if (attr['onerror'] !== undefined) {
+          eval2To(j, attr['onerror']);
+        } else {
+          eval2To(j, s['textContent']);
+        }
+      }
+
+      var g = newFetch(j.vars.window.location);
+      g = g(attr['src']);
+      g = g.then(after, error);
     } else {
       eval2To(j, s['textContent']);
     }
@@ -584,6 +738,7 @@ function setInitState(j, href, html) {
     g.document = doc;
 
     g.require = undefined;
+    g.fetch = newFetch(l);
     eval2To(j, libJs.s);
   }
 }
@@ -677,30 +832,17 @@ function browse(j, url, brows) {
       }
     }
   } else {
-    var get = j['get'];
-    html = get(url);
-    if (html === undefined) {
-      html = "<!DOCTYPE html><html><head><meta charset=utf-8><title>title</title></head><body><h1>404 not found</h1>"  + (escaped(url) + "</body></html>");
+    function after(html) {
+      browseData(j, url, html.text(), 1, brows);
     }
-    browseData(j, url, html, 1, brows);
-  }
-}
-
-function fetchLocal(url) {
-  var i = url.indexOf('?');
-  if (i >= 0) {
-    url = url.substr(0, i);
-  }
-  var o = new Object;
-  var fs = require('fs');
-  fs.readFile(url, function (e, d) {
-    if (e !== undefined) {
-      console.log(('fetch failed: ' + e) + nl);
-    } else {
-      o.d = d;
+    function error(err) {
+      var html = "<!DOCTYPE html><html><head><meta charset=utf-8><title>title</title></head><body><h1>404 not found</h1>"  + (escapeHtml(url) + "</body></html>");
+      browseData(j, url, html, 1, brows);
     }
-  });
-  return o.d;
+    var g = newFetch(j.vars.window.location);
+    g = g(url);
+    g = g.then(after, error);
+  }
 }
 
 function getUh() {
@@ -756,11 +898,10 @@ function getInitState() {
   j.shutdown = 0;
   j.show = show;
   setInitState(j, '', '');
-  j.get = fetchLocal;
   j.updateHtml = getUh();
   return j;
 }
 
 function brLibInit() {
-  browse(getInitState(), 'index.htm', browse);
+  browse(getInitState(), 'file://index.htm', browse);
 }

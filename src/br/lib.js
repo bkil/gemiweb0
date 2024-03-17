@@ -16,8 +16,8 @@ String.prototype.indexOf2 = String.prototype.indexOf2 || function(c) {
   return i;
 }
 
-String.prototype.lastIndexOf2 = String.prototype.lastIndexOf2 || function(c) {
 // JS1
+String.prototype.lastIndexOf = String.prototype.lastIndexOf || function(c) {
   var i = this.length - 1;
   var n = c.charCodeAt(0);
   while ((i >= 0) && (this.charCodeAt(i) !== n)) {
