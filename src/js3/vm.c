@@ -2676,8 +2676,11 @@ Parser_evalWithThrow(Parser *p, Object *prog) {
     }
   } else if (!o && !p->thrw) {
     if (p->parseErr || !p->err) {
-      thrw = StringObject_new("eval: parse error: ");
-      String_append_free(p, &thrw, StringObject_new_dup(p->parseErr));
+      thrw = StringObject_new("eval: parse error");
+      if (p->parseErr) {
+        String_append_free(p, &thrw, StringObject_new(": "));
+        String_append_free(p, &thrw, StringObject_new_dup(p->parseErr));
+      }
       String_append_position(p, &thrw);
     } else {
       thrw = StringObject_new("eval: runtime error");
