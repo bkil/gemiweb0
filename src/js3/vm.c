@@ -138,6 +138,16 @@ StringObject_new_dup(const char *s) {
 }
 /* /coverage:file */
 
+/* coverage:net */
+static Object *
+__attribute__((malloc, returns_nonnull, warn_unused_result))
+StringObject_new_dup_len(const char *s, size_t len) {
+  char *dup = malloc(len);
+  memcpy(dup, s, len);
+  return StringObject_new_str((MutStr){.s = dup, .len = len});
+}
+/* /coverage:net */
+
 static Object *
 __attribute__((malloc, returns_nonnull, warn_unused_result))
 StringObject_new_const(Id s) {
@@ -2890,7 +2900,7 @@ Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
         }
         if (node_net_connection_end(p, 0)) {}
       } else {
-        Object *arg = StringObject_new_const((Id){.s = buf, .len = (size_t)nread});
+        Object *arg = StringObject_new_dup_len(buf, (size_t)nread);
         List *args = List_new(0, 0, arg);
         o = invokeFun(p, p->onConnData, args, 0);
         List_free(args);
