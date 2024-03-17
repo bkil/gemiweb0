@@ -2589,6 +2589,18 @@ Parser_evalString(Parser *p, Object *prog) {
   return parseStatements(p);
 }
 
+static void
+__attribute__((nonnull))
+String_append_position(Parser *p, Object **dest) {
+  String_append_free(p, dest, StringObject_new_char(' '));
+
+  size_t left = off_t2size_t(p->prog.end - p->prog.s);
+  left = left < 32 ? left : 32;
+  for (size_t i = 0; i < left; i++) {
+    String_append_free(p, dest, StringObject_new_char(p->prog.s[i]));
+  }
+}
+
 static Object *
 __attribute__((nonnull, warn_unused_result))
 Parser_evalWithThrow(Parser *p, Object *prog) {
@@ -2610,9 +2622,16 @@ Parser_evalWithThrow(Parser *p, Object *prog) {
     }
   } else if (!o && !p->thrw) {
     if (p->parseErr || !p->err) {
-      thrw = StringObject_new("eval: parse error");
+      thrw = StringObject_new("eval: parse error: ");
+      String_append_free(p, &thrw, StringObject_new_dup(p->parseErr));
+      String_append_position(p, &thrw);
     } else {
       thrw = StringObject_new("eval: runtime error");
+      if (p->err) {
+        String_append_free(p, &thrw, StringObject_new(": "));
+        String_append_free(p, &thrw, StringObject_new_dup(p->err));
+        String_append_position(p, &thrw);
+      }
     }
   }
   clearErr(p);
