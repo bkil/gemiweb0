@@ -541,25 +541,40 @@ if (typeof encodeURIComponent === 'undefined') {
   } else {
 
     var encodeURIComponent = function(s) {
+      var zero = String.fromCharCode(0);
+      var i = 1;
+      var safeList = "!'()*-._~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      var safe = zero;
       var hex = '0123456789abcdef';
-      var o = '';
-      var n;
-      var i = 0;
-      var c;
-      while (i < s.length) {
-        n = s.charCodeAt(i);
-        i = i + 1;
-
-        if (((n >= 44) && (n <= 59)) || ((n >= 64) && (n <= 126))) {
-          c = String.fromCharCode(n);
-        } else if (n < 256) {
-          c = '%' + hex[n >> 4] + hex[n & 15];
+      while (i < 127) {
+        if (safeList.indexOf(String.fromCharCode(i)) < 0) {
+          safe = safe + zero;
         } else {
+          safe = safe + '1';
+        }
+        i = i + 1;
+      }
+
+      var o = '';
+      i = -1;
+      var n;
+      var c;
+      while (1) {
+        c = s.charAt(i = i + 1);
+        while (safe.charCodeAt(n = c.charCodeAt(0))) {
+          o = o + c;
+          c = s.charAt(i = i + 1);
+        }
+        if (isNaN(n)) {
+          return o;
+        }
+        if (n > 255) {
           return undefined;
         }
+        c = hex[n >> 4] + hex[n & 15];
+        o = o + '%';
         o = o + c;
       }
-      return o;
     }
   }
 }
