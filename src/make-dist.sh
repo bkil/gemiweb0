@@ -15,6 +15,7 @@ make_head() {
     include.h \
     run.c \
     ../br/br0.js \
+    ../br/br-lib.js \
     ../br/lib.js \
     ../LICENSE \
     || return 1
@@ -30,7 +31,7 @@ make_dev() {
     '../br/*.js' \
     '../br/*.htm' \
     |
-  grep -E -v "^\.\./br/(br0|lib)\.js$" |
+  grep -E -v "^\.\./br/(br0|br-lib|lib)\.js$" |
   xargs zip \
     -j \
     "$DEST/js0br0-dev.zip" \
@@ -64,23 +65,23 @@ make_doc() {
 }
 
 compile() {
-  local COMP BIN OPT
+  local BIN COMP
   readonly BIN="$1"
   readonly COMP="$2"
   shift 2
-
-  OPT="-Os"
-  "$COMP" -c -Oz -o /dev/null run.c && OPT="-Oz"
 
   "$COMP" \
     -march=nocona -mtune=broadwell \
     "$OPT" \
     -flto \
+    -fconserve-stack \
     -fno-asynchronous-unwind-tables \
     -Wl,-z,norelro \
     -Wl,--build-id=none \
     -Wl,--gc-sections \
+    -fno-ident \
     -DSMALLBIN \
+    -DNDEBUG \
     -s \
     run.c vm.c \
     -o "$BIN" \
@@ -93,14 +94,22 @@ compile() {
 }
 
 bins() {
+  local COMP OPT
   cd "$ROOT/src/js3" || return 1
+
+  COMP="gcc"
+
+  which musl-gcc >/dev/null && COMP="musl-gcc"
+
+  OPT="-Os"
+  "$COMP" -c -Oz -o /dev/null run.c 2>/dev/null && OPT="-Oz"
+
   compile "$DEST/js0-dl" gcc || return 1
 
-  if which musl-gcc >/dev/null; then
-    compile "$DEST/js0-static" musl-gcc -static || return 1
-  else
-    compile "$DEST/js0-static" gcc -static || return 1
-  fi
+  compile "$DEST/js0-static" "$COMP" -static || return 1
+
+  compile "$DEST/js0-min-static" "$COMP" -static \
+    -DNOREGEXP || return 1
 }
 
 main() {
