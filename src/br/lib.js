@@ -216,7 +216,8 @@ function JSON_stringify(o) {
     return JSON.stringify(o);
   } else {
     var hex = '0123456789abcdef';
-    var bu00 = String.fromCharCode(92) + 'u00';
+    var bs = String.fromCharCode(92);
+    var bu00 = bs + 'u00';
     var zero = String.fromCharCode(0);
     var i = 0;
     var safe = '';
@@ -247,8 +248,16 @@ function JSON_stringify(o) {
         if (n > 126) {
           return 'null';
         }
-        o = o + bu00;
-        c = hex[n >> 4] + hex[n & 15];
+        if (n === 34) {
+          c = bs + '"';
+        } else if (n === 92) {
+          c = bs + bs;
+        } else if (n === 10) {
+          c = bs + 'n';
+        } else {
+          o = o + bu00;
+          c = hex[n >> 4] + hex[n & 15];
+        }
         o = o + c;
       }
     }
