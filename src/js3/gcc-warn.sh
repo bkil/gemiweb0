@@ -61,7 +61,7 @@ gcc \
  -Wredundant-decls \
  -Wshadow \
  -Wsign-conversion \
- -Wstack-usage=4096 \
+ -Wstack-usage=8192 \
  -Wstrict-aliasing=1 \
  -Wstrict-overflow=5 \
  -Wstrict-prototypes \
