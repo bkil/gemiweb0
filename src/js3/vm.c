@@ -423,13 +423,13 @@ List_push(Parser *p, List ***tail, Object *it, Object *value);
 #ifndef NOREGEXP
 static Object *
 __attribute__((nonnull, warn_unused_result))
-String_substring(Object *o, int start, int end) {
+String_substring(Object *o, long start, long end) {
   if (!isString(o)) {
     return 0;
   }
   /* coverage:no */
-  if (end > (int)o->V.s.len) {
-    end = (int)o->V.s.len;
+  if (end > (long)o->V.s.len) {
+    end = (long)o->V.s.len;
   }
   if (start < 0) {
     start = 0;
@@ -484,7 +484,7 @@ String_match(Parser *p, Object *self, List *l) {
   }
   Object_free(i);
 
-  i = IntObject_new(m[0].rm_so);
+  i = IntObject_new((int)m[0].rm_so);
   Map_set_const(&o->V.m, "index", i);
   Object_free(i);
 
@@ -2835,9 +2835,9 @@ Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
       fds++;
       /* /coverage:stdin */
     }
-    if (p->sock != -1) {
+    if (p->sock > -1) {
       /* coverage:no */
-      FD_SET(p->sock, &rfd);
+      FD_SET((unsigned)p->sock, &rfd);
       /* /coverage:no */
       /* coverage:net */
       fds = p->sock + 1;
@@ -2891,7 +2891,7 @@ Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
     }
     /* /coverage:stdin */
     /* coverage:no */
-    if ((p->sock != -1) && p->onConnData && FD_ISSET(p->sock, &rfd)) {
+    if ((p->sock > -1) && p->onConnData && FD_ISSET((unsigned)p->sock, &rfd)) {
     /* /coverage:no */
     /* coverage:net */
       char buf[2048];
