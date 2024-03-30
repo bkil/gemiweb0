@@ -2889,7 +2889,7 @@ Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
         mfree(s.s);
         arg = &undefinedObject;
       } else {
-        s.len = (size_t)len - (s.s[len - 1] == '\n' ? 1 : 0);
+        s.len = (size_t)len;
         arg = StringObject_new_str(s);
       }
       List *args = List_new(0, 0, arg);

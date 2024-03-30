@@ -54,9 +54,9 @@ test_stdin() {
 
   to "$C" '' 'EOF'
   to "$C" '42' '42.\nEOF'
-  to "$C" '42\n' '42.\nEOF'
+  to "$C" '42\n' '42\n.\nEOF'
   to "$C" 'q' 'quit'
-  to "$C" '42\n69\n' '42.\n69.\nEOF'
+  to "$C" '42\n69\n' '42\n.\n69\n.\nEOF'
 
   tk "console.log('hi')" 0 'hi'
   tk "console.log('hel');console.log('lo')" 0 'hel\nlo'
