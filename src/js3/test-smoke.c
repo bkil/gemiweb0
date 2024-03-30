@@ -27,6 +27,7 @@ main(void) {
   t("process.stdin.removeAllListeners()", -2);
   t("process.stdin.removeAllListeners(2)", -2);
   t("process.stdin.removeAllListeners(['data'])", 0);
+  t("process.stdin.pause()", 0);
 
   t("require()", -2);
   t("require(null)", -2);

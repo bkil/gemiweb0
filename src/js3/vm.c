@@ -2118,6 +2118,13 @@ process_stdin_removeAllListeners(Parser *p, List *l) {
   }
   return &undefinedObject;
 }
+
+static Object *
+__attribute__((nonnull(1), warn_unused_result))
+process_stdin_pause(Parser *p, List *l) {
+  Object_set0(&p->onStdinData);
+  return &undefinedObject;
+}
 /* /coverage:stdin */
 
 static Object *
@@ -2551,6 +2558,7 @@ Parser_new(void) {
   Object *ps = MapObject_new();
   addFunction(ps, "on", &process_stdin_on);
   addFunction(ps, "removeAllListeners", &process_stdin_removeAllListeners);
+  addFunction(ps, "pause", &process_stdin_pause);
   Object *pr = MapObject_new();
   addField(pr, "stdin", ps);
   addField(p->vars, "process", pr);
