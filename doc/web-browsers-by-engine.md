@@ -422,6 +422,13 @@ Projects listed here have not produced a browser a user could test yet or are on
 * features: start page, history, cookies, web proxy, utf-8
 * aim for compatibility with Netscape 3.0: HTML 3.2 formatting, images (jpeg, xbitmap, Inferno BIT, animated gif), JavaScript 1.1 (ES2)
 
+### Abaco
+
+https://en.wikipedia.org/wiki/Abaco_(web_browser)
+
+* OS: Plan 9 and Linux
+* HTML 4.01, frames, tables
+
 ### Amaya
 
 https://en.wikipedia.org/wiki/Amaya_(web_editor)
@@ -449,6 +456,13 @@ Hasn't been updated for a long time.
 ### NCSA-mosaic
 
 * https://github.com/alandipert/ncsa-mosaic
+
+### Uzbl
+
+https://en.wikipedia.org/wiki/Uzbl
+
+* WebkitGtk+
+* libsoup
 
 ## Related
 
