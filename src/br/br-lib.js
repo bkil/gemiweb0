@@ -8,6 +8,8 @@ var nl = String.fromCharCode(10);
 
 var safeHtml = new Object;
 
+var vmEval = require('vm');
+
 function fillSafeHtml() {
   if (safeHtml.s) {
     return 0;
@@ -212,7 +214,8 @@ function eval2To(j, prog) {
     var g = j.vars;
     var o;
     try {
-      o = eval2(g, prog);
+      vmEval.createContext(g);
+      o = vmEval.runInContext(prog, g);
     } catch (e) {
       var msg = '<pre>Exception running JavaScript:' + nl + e + '</pre>';
       if (j.d.documentWritten === undefined) {

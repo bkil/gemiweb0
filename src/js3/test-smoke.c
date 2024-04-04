@@ -58,14 +58,14 @@ main(void) {
   t("setTimeout(0, function(){})", -2);
   t("var o = new Object; setTimeout(function() { o.i = 9 }, 0); o.i === undefined", 1);
   te("var o = new Object; setTimeout(function() { o.i = 9 }, 0)", "o.i", 9);
-  t("var p = new Object; eval2(p, 'setTimeout(function() { }, 9)'); p['.timeoutMs']", 9);
-  t("var p = new Object; eval2(p, 'var o = new Object; setTimeout(function() { o.i = 9 }, 0)'); var f = p['.onTimeout']; eval2(p, f); eval2(p, 'o.i')", 9);
+  t("var v = require('vm'); var p = new Object; v.createContext(p); v.runInContext('setTimeout(function() { }, 9)', p); p['.timeoutMs']", 9);
+  t("var v = require('vm'); var p = new Object; v.createContext(p); v.runInContext('var o = new Object; setTimeout(function() { o.i = 9 }, 0)', p); var f = p['.onTimeout']; v.runInContext(f, p); v.runInContext('o.i', p)", 9);
 
   /* non-conforming */
   te("var o = new Object; setTimeout(function() { o.i = 9 }, 0); setTimeout(function(){}, 0)", "o.i === undefined", 1);
 
   /* non-conforming */
-  t("var p = new Object; eval2(p, 'var o = new Object; setTimeout(function() { o.i = 9 }, 0)'); eval2(p, 'setTimeout(function(){}, 0)'); var f = p['.onTimeout']; eval2(p, f); eval2(p, 'o.i === undefined')", 1);
+  t("var v = require('vm'); var p = new Object; v.createContext(p); v.runInContext('var o = new Object; setTimeout(function() { o.i = 9 }, 0)', p); v.runInContext('setTimeout(function() {}, 0)', p); var f = p['.onTimeout']; v.runInContext(f, p); v.runInContext('o.i === undefined', p)", 1);
 
   t("var n=require('node:net'); n.createConnection()", -2);
   t("var n=require('node:net'); n.createConnection(2)", -2);

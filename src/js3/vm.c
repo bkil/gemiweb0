@@ -2276,7 +2276,7 @@ static Object *
 global_eval(Parser *p, List *l);
 
 static Object *
-global_eval2(Parser *p, List *l);
+vm_runInContext(Parser *p, List *l);
 
 static Object *
 __attribute__((nonnull, returns_nonnull, warn_unused_result))
@@ -2491,6 +2491,15 @@ node_net_createConnection(Parser *p, List *l) {
 }
 /* /coverage:net */
 
+static Object *
+__attribute__((nonnull(1), warn_unused_result))
+vm_createContext(Parser *p, List *l) {
+  if (!l || (l->value->t != MapObject)) {
+    return setThrow(p, "expecting an Object argument");
+  }
+  return &undefinedObject;
+}
+
 /* coverage:smokesystem */
 static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
@@ -2510,6 +2519,11 @@ global_require(Parser *p, List *l) {
     addFunction(o, "createConnection", &node_net_createConnection);
     return o;
     /* /coverage:net */
+  } else if (strncmpEq(l->value->V.c, "vm")) {
+    Object *o = MapObject_new();
+    addFunction(o, "runInContext", &vm_runInContext);
+    addFunction(o, "createContext", &vm_createContext);
+    return o;
   } else {
     return &undefinedObject;
   }
@@ -2565,7 +2579,6 @@ Parser_new(void) {
 
   addFunction(p->vars, "isNaN", &global_isNaN);
   addFunction(p->vars, "eval", &global_eval);
-  addFunction(p->vars, "eval2", &global_eval2);
   addFunction(p->vars, "require", &global_require);
   addFunction(p->vars, "setTimeout", &global_setTimeout);
 
@@ -2737,21 +2750,21 @@ timeout2int(long int timeOut) {
 
 static Object *
 __attribute__((nonnull(1), warn_unused_result))
-global_eval2(Parser *p, List *l) {
-  if (!l || (l->value->t != MapObject) || !l->next || (!isString(l->next->value) && (l->next->value->t != FunctionJs))) {
-    return setThrow(p, "expecting an Object and a String or Function argument");
+vm_runInContext(Parser *p, List *l) {
+  if (!l || !l->next || (l->next->value->t != MapObject) || (!isString(l->value) && (l->value->t != FunctionJs))) {
+    return setThrow(p, "expecting a String or Function and an Object argument");
   }
 
-  Parser *q = Parser_new_vars(l->value);
-  List *r = Map_get_const(l->value->V.m, ".onTimeout");
+  Parser *q = Parser_new_vars(l->next->value);
+  List *r = Map_get_const(l->next->value->V.m, ".onTimeout");
   /* coverage:smoke */
   q->onTimeout = r && (r->value->t != UndefinedObject) ? Object_ref(r->value) : 0;
   /* /coverage:smoke */
-  r = Map_get_const(l->value->V.m, ".timeoutMs");
+  r = Map_get_const(l->next->value->V.m, ".timeoutMs");
   q->timeoutMs = r && (r->value->t == IntObject) ? r->value->V.i : 0;
   q->debug = p->debug;
 
-  Object *o = Parser_evalWithThrow(q, l->next->value);
+  Object *o = Parser_evalWithThrow(q, l->value);
 
   if (q->thrw) {
     p->thrw = q->thrw;
@@ -2763,10 +2776,10 @@ global_eval2(Parser *p, List *l) {
     /* /coverage:unreachable */
   }
   /* coverage:smoke */
-  Map_set_const(&l->value->V.m, ".onTimeout", q->onTimeout ? q->onTimeout : &undefinedObject);
+  Map_set_const(&l->next->value->V.m, ".onTimeout", q->onTimeout ? q->onTimeout : &undefinedObject);
   /* /coverage:smoke */
   Object *t = IntObject_new(timeout2int(q->timeoutMs));
-  Map_set_const(&l->value->V.m, ".timeoutMs", t);
+  Map_set_const(&l->next->value->V.m, ".timeoutMs", t);
   Object_free(t);
   Parser_free(q);
   return o;
