@@ -39,6 +39,7 @@ Play with an example game obeying this subset:
 * https://bkil.gitlab.io/static-wonders.js/game/rockpaper-sum.html
 * https://bkil.gitlab.io/static-wonders.js/game/memopair.htm
 * https://bkil.gitlab.io/static-wonders.js/edu/knowcard.htm#
+* https://bkil.gitlab.io/static-wonders.js/joke/js-nojs.htm
 
 Scraper bookmarklets:
 
@@ -49,9 +50,9 @@ Scraper bookmarklets:
 
 Join our chat room over Matrix, also relayed over XMPP and IRC to participate in brainstorming or to give a hand by implementing the standard from scratch:
 
-* https://matrix.to/#/#gemiweb:matrix.org
+* https://matrix.to/#/#gemiweb0:matrix.org
 * MUC xmpp:gemiweb0@conference.movim.eu
-* OFTC: #gemiweb0
+* OFTC, Libera, Freenode: #gemiweb0
 * https://github.com/bkil/gemiweb
 * https://gitlab.com/bkil/gemiweb
 
