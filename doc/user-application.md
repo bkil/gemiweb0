@@ -61,12 +61,19 @@ interactive programming courses:
 * JavaScript (ucode)
 * regexp
 
+### Learn morse code
+
+Morse code keying drills: input through pressing enter rhythmically, by typing in dots and dashes or by whistling or tapping into the microphone.
+
+Output dots, dashes, a blinking character or perhaps play back generated sound.
+
 ## Business
 
 * webshop
 * interactive site builder for a company or association
 * web hosting, web shell command line
 * banking, donations
+* CAPTCHA
 
 ## Consumption
 
