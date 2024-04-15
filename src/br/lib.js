@@ -245,16 +245,13 @@ function JSON_stringify(o) {
           o = o + '"';
           return o;
         }
-        if (n > 126) {
-          return 'null';
-        }
         if (n === 34) {
           c = bs + '"';
         } else if (n === 92) {
           c = bs + bs;
         } else if (n === 10) {
           c = bs + 'n';
-        } else {
+        } else if (n < 127) {
           o = o + bu00;
           c = hex[n >> 4] + hex[n & 15];
         }
