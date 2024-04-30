@@ -745,6 +745,62 @@ function setInitState(j, href, html) {
     eval2To(j, libJs.s);
   }
 }
+
+function onSingleLineInput(brows) {
+  return function (j, r) {
+    var s = j['s'];
+    var links = s['links'];
+    if ((r !== undefined) && (r = links[r])) {
+      brows(j, r, brows);
+    } else {
+      j.shutdown = 1;
+      var shw = j['show'];
+      shw('shutdown', undefined, 0, undefined);
+    }
+  };
+}
+
+function onMultiLineInput(brows) {
+  return function(j, r) {
+    var s = j['s'];
+    if (r === undefined) {
+      j.shutdown = 1;
+      var shw = j['show'];
+      shw('shutdown', undefined, 0, undefined);
+      return 0;
+    }
+    var url = j.vars.window.location.href;
+    if (s['formAction']) {
+      url = s['formAction'];
+    }
+    if (s.inputName) {
+      if (s.formName) {
+        var g = j.vars.window;
+        if (!g[s.formName]) {
+          g[s.formName] = new Object;
+        }
+        var n = g[s.formName];
+        if (!n[s.inputName]) {
+          n[s.inputName] = new Object;
+        }
+        var o = n[s.inputName];
+        o.value = r;
+      }
+
+      if (url.indexOf('javascript:') !== 0) {
+        var i = url.indexOf('?');
+        var arg = (encodeURIComponent(s['inputName']) + '=') + encodeURIComponent(r);
+        if (i < 0) {
+          url = url + ('?' + arg);
+        } else {
+          url = url + ('&' + arg); // TODO
+        }
+      }
+    }
+    brows(j, url, brows);
+  };
+}
+
 function browseData(j, url, html, isFile, brows) {
   var g = j['vars'];
   var w = g['window'];
@@ -773,51 +829,9 @@ function browseData(j, url, html, isFile, brows) {
   }
 
   if (s['multiLine'] === undefined) {
-    shw(text, undefined, 0, function(r) {
-      if (r === undefined) {
-        j.shutdown = 1;
-        return 0;
-      }
-      var links = s['links'];
-      if (links[r]) {
-        brows(j, links[r], brows);
-      }
-    });
+    shw(text, undefined, 0, onSingleLineInput(brows));
   } else {
-    shw(text, s['default'], s['multiLine'], function(r) {
-      if (r === undefined) {
-        j.shutdown = 1;
-        return 0;
-      }
-      if (s['formAction']) {
-        url = s['formAction'];
-      }
-      if (s.inputName) {
-        if (s.formName) {
-          var g = j.vars.window;
-          if (!g[s.formName]) {
-            g[s.formName] = new Object;
-          }
-          var n = g[s.formName];
-          if (!n[s.inputName]) {
-            n[s.inputName] = new Object;
-          }
-          var o = n[s.inputName];
-          o.value = r;
-        }
-
-        if (url.indexOf('javascript:') !== 0) {
-          var i = url.indexOf('?');
-          var arg = (encodeURIComponent(s['inputName']) + '=') + encodeURIComponent(r);
-          if (i < 0) {
-            url = url + ('?' + arg);
-          } else {
-            url = url + ('&' + arg); // TODO
-          }
-        }
-      }
-      brows(j, url, brows);
-    });
+    shw(text, s['default'], s['multiLine'], onMultiLineInput(brows));
   }
 }
 
@@ -854,35 +868,15 @@ function getUh() {
   };
 }
 
-function callMeMaybe(self, acc, multiLine, cb) {
-  return function(data) {
-    process.stdin.removeAllListeners(['data']);
-    if ((data === undefined) || (data === null)) {
-      cb(undefined);
-    }
-    if (multiLine) {
-      if (data === '.') {
-        if (acc === undefined) {
-          acc = '';
-        }
-        cb(acc);
-      } else {
-        if (acc !== undefined) {
-          data = (acc + nl) + data;
-        }
-        process.stdin.on('data', self(self, data, multiLine, cb));
-      }
-    } else {
-      cb(data);
-    }
-  }
-}
+var io = new Object;
 
 function show(text, defVal, multiLine, cb) {
   console.log(text);
   var i = process.stdin;
+  io.cb = cb;
   if (cb === undefined) {
     i.removeAllListeners(['data']);
+    i.pause();
   } else {
     if (multiLine) {
       console.log('Please type in multiple lines of input terminated with a dot (".")');
@@ -892,7 +886,8 @@ function show(text, defVal, multiLine, cb) {
     if (defVal !== undefined) {
       console.log(' default: ' + defVal);
     }
-    i.on('data', callMeMaybe(callMeMaybe, undefined, multiLine, cb));
+    io.acc = undefined;
+    io.multiLine = multiLine;
   }
 }
 
@@ -905,6 +900,50 @@ function getInitState() {
   return j;
 }
 
+function handleStdin(j) {
+  return function(data) {
+    var cb = io.cb;
+    if (!cb) {
+      return 0;
+    }
+
+    if ((data === undefined) || (data === null)) {
+      process.stdin.removeAllListeners(['data']);
+      process.stdin.pause();
+      j.shutdown = 1;
+      io.cb = undefined;
+      io.acc = undefined;
+      cb(j, undefined);
+      return 0;
+    }
+
+    data = data + '';
+    if (io.multiLine) {
+      var acc = io.acc;
+      if ((data.charAt(0) === '.') && ((data.length === 1) || ((data.length === 2) && (data.charCodeAt(1) === 10)))) {
+        if (acc === undefined) {
+          acc = '';
+        }
+        cb(j, acc);
+      } else {
+        if (acc !== undefined) {
+          data = acc + data;
+        }
+        io.acc = data;
+      }
+    } else {
+      io.cb = undefined;
+      io.acc = undefined;
+      if (data.charCodeAt(data.length - 1) === 10) {
+        data = data.substring(0, data.length - 1);
+      }
+      cb(j, data);
+    }
+  };
+}
+
 function brLibInit() {
-  browse(getInitState(), 'file://index.htm', browse);
+  var j = getInitState();
+  process.stdin.on('data', handleStdin(j));
+  browse(j, 'file://index.htm', browse);
 }
