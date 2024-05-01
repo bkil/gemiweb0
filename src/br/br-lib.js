@@ -953,7 +953,7 @@ function handleStdin(j) {
 function brLibInit() {
   var j = getInitState();
   var handle = handleStdin(j);
-  process.stdin.on('data', handle);
   process.stdin.on('end', function() { handle(undefined); });
+  process.stdin.on('data', handle);
   browse(j, 'file://index.htm', browse);
 }
