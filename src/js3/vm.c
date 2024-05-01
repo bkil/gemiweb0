@@ -2096,10 +2096,18 @@ String_fromCharCode(Parser *p, List *l) {
 static Object *
 __attribute__((nonnull(1), warn_unused_result))
 process_stdin_on(Parser *p, List *l) {
-  if (!l || !l->next || !isString(l->value) || !strncmpEq(l->value->V.c, "data")) {
+  if (!l || !l->next || !isString(l->value)) {
     return setThrow(p, "expecting String and Function argument");
   }
-  Object_setUnref(&p->onStdinData, l->next->value->t == FunctionJs ? Object_ref(l->next->value) : 0);
+  if (strncmpEq(l->value->V.c, "data")) {
+    Object_setUnref(&p->onStdinData, l->next->value->t == FunctionJs ? Object_ref(l->next->value) : 0);
+  } else if (strncmpEq(l->value->V.c, "end")) {
+    Object_setUnref(&p->onStdinEnd, l->next->value->t == FunctionJs ? Object_ref(l->next->value) : 0);
+  } else {
+    /* coverage:smoke */
+    return setThrow(p, "expecting 'data' or 'end' as argument");
+    /* /coverage:smoke */
+  }
   return &undefinedObject;
 }
 
@@ -2111,8 +2119,12 @@ process_stdin_removeAllListeners(Parser *p, List *l) {
   }
   l = l->value->V.m;
   while (l) {
-    if (isString(l->value) && strncmpEq(l->value->V.c, "data")) {
-      Object_set0(&p->onStdinData);
+    if (isString(l->value)) {
+      if (strncmpEq(l->value->V.c, "data")) {
+        Object_set0(&p->onStdinData);
+      } else if (strncmpEq(l->value->V.c, "end")) {
+        Object_set0(&p->onStdinEnd);
+      }
     }
     l = l->next;
   }
@@ -2445,8 +2457,6 @@ node_net_connection_removeAllListeners(Parser *p, List *l) {
   }
   return &undefinedObject;
 }
-/* /coverage:stdin */
-
 
 static Object *
 __attribute__((warn_unused_result, nonnull(1)))
@@ -2588,6 +2598,7 @@ Parser_new(void) {
   p->stringConcatOldOfs = 0;
   p->onTimeout = 0;
   p->onStdinData = 0;
+  p->onStdinEnd = 0;
   p->connClient = 0;
   p->connOptions = 0;
   p->onConnData = 0;
@@ -2897,18 +2908,21 @@ Parser_eventLoop(Parser *p, const char *prog, size_t plen, int debug) {
       size_t all = 0;
       MutStr s = {.s = 0};
       ssize_t len = getline(&s.s, &all, stdin);
-      Object *arg;
-      if (len <= 0) {
+      Object *o;
+      if (len < 0) {
         mfree(s.s);
-        arg = &undefinedObject;
+        if (p->onStdinEnd) {
+          o = invokeFun(p, p->onStdinEnd, 0, 0);
+          if (Parser_evalResult(p, o)) {}
+        }
+        Object_set0(&p->onStdinData);
       } else {
         s.len = (size_t)len;
-        arg = StringObject_new_str(s);
+        List *args = List_new(0, 0, StringObject_new_str(s));
+        o = invokeFun(p, p->onStdinData, args, 0);
+        List_free(args);
+        if (Parser_evalResult(p, o)) {}
       }
-      List *args = List_new(0, 0, arg);
-      Object *o = invokeFun(p, p->onStdinData, args, 0);
-      List_free(args);
-      if (Parser_evalResult(p, o)) {}
     }
     /* /coverage:stdin */
     /* coverage:no */

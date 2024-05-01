@@ -189,6 +189,11 @@ Parser_free(Parser *p) {
     Object_free(p->onStdinData);
     /* /coverage:smoke */
   }
+  if (p->onStdinEnd) {
+    /* coverage:smoke */
+    Object_free(p->onStdinEnd);
+    /* /coverage:smoke */
+  }
   /* coverage:net */
   Object_freeMaybe(p->connClient);
   Object_freeMaybe(p->connOptions);

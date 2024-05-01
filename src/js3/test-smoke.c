@@ -24,9 +24,11 @@ main(void) {
   t("3 - null", -2);
 
   t("process.stdin.on('data', function(d) { process.stdin.on('data', undefined); })", 0);
+  t("process.stdin.on('end', function(){})", 0);
+  t("process.stdin.on('x', function(d) {})", -2);
   t("process.stdin.removeAllListeners()", -2);
   t("process.stdin.removeAllListeners(2)", -2);
-  t("process.stdin.removeAllListeners(['data'])", 0);
+  t("process.stdin.removeAllListeners(['data', 'end'])", 0);
   t("process.stdin.pause()", 0);
 
   t("require()", -2);

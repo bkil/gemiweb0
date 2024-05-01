@@ -750,12 +750,20 @@ function onSingleLineInput(brows) {
   return function (j, r) {
     var s = j['s'];
     var links = s['links'];
-    if ((r !== undefined) && (r = links[r])) {
-      brows(j, r, brows);
+    var msg;
+    if (r === undefined) {
+      msg = 'eof';
     } else {
+      if (r = links[r]) {
+        brows(j, r, brows);
+      } else {
+        msg = 'quit';
+      }
+    }
+    if (msg) {
       j.shutdown = 1;
       var shw = j['show'];
-      shw('shutdown', undefined, 0, undefined);
+      shw(msg, undefined, 0, undefined);
     }
   };
 }
@@ -766,7 +774,7 @@ function onMultiLineInput(brows) {
     if (r === undefined) {
       j.shutdown = 1;
       var shw = j['show'];
-      shw('shutdown', undefined, 0, undefined);
+      shw('eof', undefined, 0, undefined);
       return 0;
     }
     var url = j.vars.window.location.href;
@@ -875,7 +883,7 @@ function show(text, defVal, multiLine, cb) {
   var i = process.stdin;
   io.cb = cb;
   if (cb === undefined) {
-    i.removeAllListeners(['data']);
+    i.removeAllListeners(['data', 'end']);
     i.pause();
   } else {
     if (multiLine) {
@@ -908,7 +916,7 @@ function handleStdin(j) {
     }
 
     if ((data === undefined) || (data === null)) {
-      process.stdin.removeAllListeners(['data']);
+      process.stdin.removeAllListeners(['data', 'end']);
       process.stdin.pause();
       j.shutdown = 1;
       io.cb = undefined;
@@ -944,6 +952,8 @@ function handleStdin(j) {
 
 function brLibInit() {
   var j = getInitState();
-  process.stdin.on('data', handleStdin(j));
+  var handle = handleStdin(j);
+  process.stdin.on('data', handle);
+  process.stdin.on('end', function() { handle(undefined); });
   browse(j, 'file://index.htm', browse);
 }

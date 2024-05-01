@@ -99,6 +99,7 @@ typedef struct Parser {
   Object *stringPrototype;
   Object **stringConcatLhs;
   Object *onStdinData;
+  Object *onStdinEnd;
   Object *onTimeout;
   Object *connClient;
   Object *connOptions;
