@@ -5,8 +5,7 @@ pages:
   - apk --update-cache add brotli git zip gcc musl-dev binutils binutils-gold
   script:
   - src/make-dist.sh .public
-  - find .public -type f -exec gzip -9 -f -k {} +
-  - find .public -type f -exec brotli -f -k {} +
+  - find .public -type f | while read f; do gzip -9 -f -k "$f"; brotli -f -k "$f"; done
   - mv .public public
   artifacts:
     paths:
