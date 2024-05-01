@@ -31,6 +31,7 @@ Note that it is not intended for general audience yet, hence it may not be safe 
 * https://bkil.gitlab.io/gemiweb/js0br0-doc.zip
 * https://bkil.gitlab.io/gemiweb/js0-dl
 * https://bkil.gitlab.io/gemiweb/js0-static
+* https://bkil.gitlab.io/gemiweb/js0-min-static
 
 ## Example web content
 
@@ -41,6 +42,7 @@ Play with an example game obeying this subset:
 * https://bkil.gitlab.io/static-wonders.js/game/markov.htm
 * https://bkil.gitlab.io/static-wonders.js/edu/knowcard.htm#
 * https://bkil.gitlab.io/static-wonders.js/joke/js-nojs.htm
+* https://bkil.gitlab.io/gemiweb/src/check/bf.html
 
 Scraper bookmarklets:
 
