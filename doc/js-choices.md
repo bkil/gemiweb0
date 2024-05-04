@@ -71,10 +71,12 @@ The following restrictions are non-normative and being worked on pending the res
 
 ### document.cookie
 
-* Verdict: required
+* Verdict: required, partial
+* Restriction: recommend working around property accessors by not reading this field after having written to it and only write to it once between browser preemption points (starting execution of a script, XHR, document.write, timeout, form submit, a href)
+* Implementation complexity: low if String backed, intermediate if property accessors need to be introduced to the language just for this
 * Incidence rate: low, but non-negligible
-* Reason: useful to interface with extant web hosting services
-* Workaround: none for web, adding custom headers for HTTP/TCP connections on native platforms
+* Reason: useful for authentication of extant web hosting services
+* Workaround: none on web, adding and parsing headers via HTTP/TCP connections on native platforms
 * Standard: NS2
 
 ### Call stack quota
