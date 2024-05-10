@@ -101,6 +101,15 @@ The following restrictions are non-normative and being worked on pending the res
 
 ## Quality of life improvement
 
+### window.localStorage
+
+* Verdict: recommended, partial
+* Reason: caching, private keys, state not uploaded on each request as with cookies, safer than cookies
+* Restriction: getItem(), setItem() and key(). Without getters, length is not supported, removeItem() and clear() optional
+* Implementation complexity: low, individual files with storage quota accounting
+* Workaround: store private keys and state in URI hash anchor and ask user to update bookmark after every session
+* Standard: 2009-2010 (Firefox 3.5, Safari 4, IE8, Opera 10.5, Chrome 5)
+
 ### Pause, resume and terminate script upon interactive command
 
 * Verdict: recommended
@@ -326,8 +335,22 @@ https://en.wikipedia.org/wiki/ReDoS
 ### window.location.href
 
 * Verdict: partial
-* Use cases: process arguments in the URI query or hash anchor, possibly `GET` form submissions
-* Restriction: can only get the full URL as a string
+* Use cases: process arguments in the URI query or hash anchor, possibly read `GET` form submissions
+* Restriction: can only get the full URL as a string, no property setter
+* Workaround: library
+* Standard: NS2
+
+### window.location.replace
+
+* Verdict: recommended
+* Use cases: change internal state in the URI query or hash anchor, possibly create `GET` form submissions
+* Workaround: library
+* Standard: NS3
+
+### window.location.assign
+
+* Verdict: recommended
+* Use cases: navigate to a different page without a setter for href
 * Workaround: library
 * Standard: NS2
 
