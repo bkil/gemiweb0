@@ -160,7 +160,7 @@ function readLocalFile(pathname, onload, onerror) {
 
 function newFetch(location) {
   if (typeof fetch === 'function') {
-    return fetch(location);
+    return function(url) { return fetch(url); };
   }
 
   return function(url) {
