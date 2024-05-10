@@ -382,7 +382,7 @@ function readQuoted(s) {
     o = accWhileFun(s, function(c) { return c !== "'" });
     acc1(s, "'");
   } else {
-    o = accWhileFun(s, function(c) { return (c !== ' ') && (c !== '>')});
+    o = accWhileFun(s, function(c) { return !isWs(c) && (c !== '>')});
   }
   return o;
 }
