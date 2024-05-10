@@ -498,7 +498,6 @@ function processTag(j, tag, fin, attr) {
       s['multiLine'] = 1;
       needText = 1;
     }
-    ignore = 1;
     ctx = 1;
     raw = 1;
   } else if (tag === 'li') {
@@ -879,6 +878,7 @@ function getUh() {
 var io = new Object;
 
 function show(text, defVal, multiLine, cb) {
+  var s;
   console.log(text);
   var i = process.stdin;
   io.cb = cb;
@@ -887,12 +887,19 @@ function show(text, defVal, multiLine, cb) {
     i.pause();
   } else {
     if (multiLine) {
-      console.log('Please type in multiple lines of input terminated with a dot (".")');
+      s = 'Please type in multiple lines of input terminated by a dot (".").';
+      if (defVal !== undefined) {
+        s = s + ' Default: ' + nl + defVal + nl;
+      }
+      console.log(s);
     } else {
-      console.log('Please type in a single line of input: ');
-    }
-    if (defVal !== undefined) {
-      console.log(' default: ' + defVal);
+      s = 'Please type in a single line of input';
+      if (defVal === undefined) {
+        s = s + ':';
+      } else {
+        s = s + '. Default: ' + defVal;
+      }
+      console.log(s);
     }
     io.acc = undefined;
     io.multiLine = multiLine;
