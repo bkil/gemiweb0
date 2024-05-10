@@ -147,6 +147,14 @@ function newURL(url) {
   return o;
 }
 
+function getUrlPre(url) {
+  var i = url.indexOf('#');
+  if (i >= 0) {
+    url = url.substring(0, i);
+  }
+  return url;
+}
+
 function readLocalFile(pathname, onload, onerror) {
   var fs = require('fs');
   fs.readFile(pathname, function (e, d) {
@@ -717,6 +725,12 @@ function Document_close(d) {
   };
 }
 
+function Location_assign(d) {
+  return function(x) {
+    d['nextUrl'] = x;
+  };
+}
+
 function setInitState(j, href, html) {
   var d = new Object;
   d['documentWritten'] = '';
@@ -724,6 +738,7 @@ function setInitState(j, href, html) {
 
   var l = new Object;
   l.href = href;
+  l.assign = Location_assign(d);
   var w = new Object;
   w.location = l;
   var g = new Object;
@@ -835,6 +850,18 @@ function browseData(j, url, html, isFile, brows) {
     text = s['o'];
   }
 
+  if (d.nextUrl) {
+    l.href = d.nextUrl;
+    d.nextUrl = undefined;
+  }
+  if (url && l.href && (l.href !== url)) {
+    if (getUrlPre(l.href) !== getUrlPre(url)) {
+      console.log(text);
+      return brows(j, l.href, brows);
+    }
+    console.log('DEBUG: onhashchange ' + l.href);
+  }
+
   if (s['multiLine'] === undefined) {
     shw(text, undefined, 0, onSingleLineInput(brows));
   } else {
@@ -845,7 +872,9 @@ function browseData(j, url, html, isFile, brows) {
 function browse(j, url, brows) {
   var html;
   if (url.indexOf('javascript:') === 0) {
-    html = eval2To(j, decodeURIComponent(url.substring(11)));
+    html = decodeURIComponent(url.substring(11));
+    url = j.vars.window.location.href;
+    html = eval2To(j, html);
     if (typeof html === 'string') {
       browseData(j, url, html, 0, brows);
     } else {
