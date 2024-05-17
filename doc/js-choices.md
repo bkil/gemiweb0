@@ -163,9 +163,9 @@ The following restrictions are non-normative and being worked on pending the res
 
 ### reading the value of a form input element
 
-* Verdict: required
+* Verdict: required, same for textarea
 * Incidence rate: high
-* Implementation complexity: low
+* Implementation complexity: low, read both the default value from the static HTML and text entered by the user
 * Reason: allow for interacting with typed user input without server involvement
 * Workaround: unsatisfactory due to lack of caching, allow to submit the form via GET and parse the values from the URI upon load, without forms, provide an on screen keyboard with individual links for each key
 * Standard: NS2
