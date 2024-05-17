@@ -52,7 +52,7 @@
 
 ### TEXT1
 
-`{ TEXT2 | " " | "&" { lt | gt | amp | apos | quot } ";" }*`
+`{ TEXT2 | " " | "&" { lt | gt | amp | apos | quot | nbsp } ";" }*`
 
 ### TEXT2
 
@@ -103,11 +103,11 @@ https://en.wikipedia.org/wiki/CDATA
 * textarea (name)
 * script (src, onerror)
 
-With a limitation of supporting up to one form input or textarea element along with a submit button and up to 1 form per web page.
+With a limitation of supporting up to one of a form input or a textarea element along with a submit button and up to 1 form per web page.
 
 ## Attributes to interpret
 
-id or name should be followed for fragment linking and may improve with preserving scroll position, focus or form input
+id or name should be followed for fragment linking and may improve user experience by allowing to preserve scroll position, focus or form input
 
 ### Accessibility
 
