@@ -1640,9 +1640,17 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
       case '*':
         return IntObject_new(x * y);
       case '/':
-        return IntObject_new(x / y);
+        if (y) {
+          return IntObject_new(x / y);
+        } else {
+          return setRunError(p, "division by zero", 0);
+        }
       case '%':
-        return IntObject_new(x % y);
+        if (y) {
+          return IntObject_new(x % y);
+        } else {
+          return setRunError(p, "division by zero for modulo", 0);
+        }
       case '^':
         return IntObject_new(x ^ y);
       case '|':
