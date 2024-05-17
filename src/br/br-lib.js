@@ -259,7 +259,7 @@ function isWs(c) {
   return (c === ' ') || (c.charCodeAt(0) === 10)
 }
 
-function copyLiteral(s) {
+function copyLiteral(s, c) {
   var o = s['o'];
   if (!s['pushTag']) {
     if (!s['inline']) {
@@ -273,13 +273,13 @@ function copyLiteral(s) {
     s['br'] = 0;
   }
 
-  var h = s['h'];
-  var c = h[s['i']];
   var b;
-  s['i'] = s['i'] + 1;
   if (!s['ctx']) {
     b = isWs(c);
     if (!b) {
+      if (!c.length) {
+        c = ' ';
+      }
       o = o + c;
     } else if (!s['lastWs']) {
       o = o + ' ';
@@ -290,16 +290,6 @@ function copyLiteral(s) {
     o = o + c;
   }
   s['o'] = o;
-}
-
-function copyText(s) {
-  if (s['textContent'] === undefined) {
-    copyLiteral(s);
-  } else {
-    var h = s['h'];
-    s['textContent'] = s['textContent'] + h[s['i']];
-    s['i'] = s['i'] + 1;
-  }
 }
 
 function more(s) {
@@ -349,10 +339,6 @@ function getLowerChar(s) {
   }
 }
 
-function isWChar(c) {
-  return (((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z'))) || ((c >= '0') && (c <= '9'));
-}
-
 function readWhileFun(s, fun) {
   var h = s['h'];
   var o;
@@ -377,8 +363,43 @@ function readLW(s) {
   return readWhileFun(s, getLowerChar);
 }
 
-function readWord(s) {
-  return accWhileFun(s, isWChar);
+function getUnencodedLiteral(s) {
+  var c;
+  var k;
+  var i = s.i;
+  if (acc1(s, '&')) {
+    k = readLW(s);
+    if (k === 'amp') {
+      c = '&';
+    } else if (k === 'apos') {
+      c = "'";
+    } else if (k === 'gt') {
+      c = '>';
+    } else if (k === 'lt') {
+      c = '<';
+    } else if (k === 'quot') {
+      c = '"';
+    } else if (k === 'nbsp') {
+      c = '';
+    }
+  }
+  if (c === undefined) {
+    var h = s.h;
+    c = h[i];
+    s.i = i + 1;
+  } else {
+    acc1(s, ';');
+  }
+  return c;
+}
+
+function copyText(s) {
+  var c = getUnencodedLiteral(s);
+  if (s['textContent'] === undefined) {
+    copyLiteral(s, c);
+  } else {
+    s['textContent'] = s['textContent'] + c;
+  }
 }
 
 function readQuoted(s) {
