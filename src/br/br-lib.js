@@ -416,6 +416,26 @@ function readQuoted(s) {
   return o;
 }
 
+function updateInput(j, value) {
+  var s = j.s;
+  var nf = s.formName;
+  var ni = s.inputName;
+  if (nf && ni) {
+    var w = j.vars.window;
+    var f = w[nf];
+    if (!f) {
+      f = new Object;
+      w[nf] = f;
+    }
+    var i = f[ni];
+    if (!i) {
+      i = new Object;
+      f[ni] = i;
+    }
+    i.value = value;
+  }
+}
+
 function closeLastTag(j) {
   var s = j['s'];
   var tag = s['pushTag'];
@@ -427,7 +447,7 @@ function closeLastTag(j) {
   } else if (tag === 'pre') {
     s['o'] = s['o'] + (nl + '```');
   } else if (tag === 'textarea') {
-    s['default'] = s['textContent'];
+    updateInput(j, s['default'] = s['textContent']);
   } else if ((tag === 'script') && (s['textContent'] !== undefined)) {
     if (attr['src']) {
       function after(body) {
@@ -517,8 +537,8 @@ function processTag(j, tag, fin, attr) {
   } else if (tag === 'input') {
     if (attr['type'] !== 'submit') {
       s['inputName'] = attr['name'];
-      s['default'] = attr['value'];
       s['multiLine'] = 0;
+      updateInput(j, s['default'] = attr['value']);
     }
     ignore = 1;
   } else if (tag === 'textarea') {
@@ -816,20 +836,8 @@ function onMultiLineInput(brows) {
     if (s['formAction']) {
       url = s['formAction'];
     }
+    updateInput(j, r);
     if (s.inputName) {
-      if (s.formName) {
-        var g = j.vars.window;
-        if (!g[s.formName]) {
-          g[s.formName] = new Object;
-        }
-        var n = g[s.formName];
-        if (!n[s.inputName]) {
-          n[s.inputName] = new Object;
-        }
-        var o = n[s.inputName];
-        o.value = r;
-      }
-
       if (url.indexOf('javascript:') !== 0) {
         var i = url.indexOf('?');
         var arg = (encodeURIComponent(s['inputName']) + '=') + encodeURIComponent(r);
