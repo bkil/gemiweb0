@@ -268,7 +268,7 @@ function JSON_stringify(o) {
         return '' + o;
       } else if ((t === 'object') && (o !== null)) {
         var s = '';
-        if (o.length !== undefined) {
+        if (((typeof o.length) === 'number') && ((o.length === 0) || ((o.length > 0) && (o[o.length - 1] !== undefined)))) {
           s = s + '[';
           if (o.length) {
             c = f(f, o[0]);
