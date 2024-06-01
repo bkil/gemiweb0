@@ -140,7 +140,7 @@ readonly, role=status (or alert, log) and aria-live=polite (or assertive) added 
 * https://indieweb.org/progressive_enhancement
 * http://eev.ee/blog/2016/03/06/maybe-we-could-tone-down-the-javascript/
 
-### HTML
+### HTML standards
 
 1991-10-29 HTML Tags (1.0):
 
