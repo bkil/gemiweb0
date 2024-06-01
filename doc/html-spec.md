@@ -122,18 +122,49 @@ readonly, role=status (or alert, log) and aria-live=polite (or assertive) added 
 * javascript:
 * optional https:
 
-## Similar halted efforts
+## References
+
+### Similar halted efforts
 
 * https://en.wikipedia.org/wiki/Small-C
 * https://gemini.circumlunar.space/
 * https://codeberg.org/Weblite/HTMLite/src/branch/master/htmlite.md
 
-## Similar ongoing efforts
+### Similar ongoing efforts
 
 * https://codeberg.org/smolweb/smolweb-spec
 
-## Compatible best practices
+### Compatible best practices
 
 * https://seirdy.one/posts/2020/11/23/website-best-practices/
 * https://indieweb.org/progressive_enhancement
 * http://eev.ee/blog/2016/03/06/maybe-we-could-tone-down-the-javascript/
+
+### HTML
+
+1991-10-29 HTML Tags (1.0):
+
+* http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html
+* https://www.w3.org/History/19921103-hypertext/hypertext/WWW/MarkUp/Tags.html
+* https://lists.w3.org/Archives/Public/www-talk/1991SepOct/0003.html
+
+1993-06 HTML 1.2:
+
+https://www.w3.org/MarkUp/draft-ietf-iiir-html-01.txt
+
+1993-11-08 HTML+
+
+* https://www.w3.org/MarkUp/HTMLPlus/htmlplus_1.html
+* https://www.w3.org/MarkUp/htmlplus_paper/htmlplus.html
+
+1995-11-24 HTML 2.0:
+
+https://datatracker.ietf.org/doc/html/rfc1866
+
+1997-01-14 HTML 3.2:
+
+https://www.w3.org/TR/REC-html32
+
+1997-12-18 HTML 4.0:
+
+https://www.w3.org/TR/REC-html40-971218/
