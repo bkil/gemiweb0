@@ -46,10 +46,11 @@ Play with an example game obeying this subset:
 * https://bkil.gitlab.io/static-wonders.js/draw/pixfont.htm
 * https://bkil.gitlab.io/gemiweb/src/check/bf.html
 
-Scraper bookmarklets:
+Bookmarklets:
 
-* https://bkil.gitlab.io/static-wonders.js/userjs/maltai-map.js0.html
 * https://bkil.gitlab.io/static-wonders.js/userjs/gmaps-embed.js0.html
+* https://bkil.gitlab.io/static-wonders.js/userjs/localStorage-stub.html
+* https://bkil.gitlab.io/static-wonders.js/userjs/maltai-map.js0.html
 
 ## Contact
 
