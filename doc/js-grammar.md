@@ -66,7 +66,7 @@ stm: while ( <expr> ) <stmBody> | <funExpr> | <id> <iStm>
 funExpr: function <id> ( ) <stmBody>
 iStm: [ '[' <expr> ']' ]? = <expr> | ( [ <expr> ]? )
 expr: <term> [<op> <term>]?
-term: <int> | { } | <id> [ '[' <expr> ']' ]?
+term: <int> | new Array | <id> [ '[' <expr> ']' ]?
 op: + | - | '<'
 int = [0-9]+
 id = [a-zA-Z_.]+
@@ -84,7 +84,7 @@ iStm: <idx> <iRest>
 idx: [ '[' <expr> ']' | . <id> ]*
 iRest: = <expr> | ( [ <expr> ]? )
 expr: <term> [<op> <term>]?
-term: <int> | { } | <id> [ '[' <expr> ']' ]?
+term: <int> | new Array | new Object | <id> [ '[' <expr> ']' ]?
 op: + | - | '<'
 int = [0-9]+
 id = [a-zA-Z_][a-zA-Z_0-9]*
@@ -175,7 +175,7 @@ mstm: if '(' <expr> ')' <body> | while '(' <expr> ')' <body> | <cstm>
 body: '{' <mstm> [ ';' <mstm> ]* '}'
 cstm: <builtin> | <funcId> '(' ')' | <arrId> <idx> '=' <expr> | <intId> '=' <expr>
 expr: <term> [ <op> <term> ]?
-term: <int> | <intId> | '(' [ 'form.text.value.charCodeAt(' <expr> ')' | <arrId> <idx> | <term> '/' <term> ] '|' '0' ')'
+term: <int> | <intId> | '(' [ 'form.text.value.charCodeAt(' <expr> ')' | <arrId> <idx> | '(' <term> '/' <term> ')' ] '|' '0' ')'
 idx: '[' <expr> ']'
 op: '+' | '-' | '*' | '%' | '<' | '>' | '<=' | '>=' | '^' | '|' | '&' | '<<' | '>>' | '>>>' | '===' | '!=='
 builtin: 'console.log(String.fromCharCode(' <expr> '))'
@@ -191,6 +191,7 @@ Notes:
 * Standard input must not be consumed multiple times or out of sequence
 * Integer variables may already be initialized to zero, the array may already be allocated and zeroed
 * You must not access a negative array index or read a value before initializing it, but both may return zero
+* Each function must be defined above the point of invocation
 * You may assume that the interpreter stores the first few variables in CPU registers, so utilize them in lexicographical order
 
 ### Level 7 assembly 1
