@@ -241,7 +241,9 @@ fstm: if '(' <expr> ')' <fBody> [ else <fBody> ]? | while ( <expr> ) <fBody> | d
 cstm: break | continue | <expr>
 mBody: { [ <mstm> [ ; <mstm> ]* ]? [;]? }
 fBody: { [ <fstm> [ ; <fstm> ]* ; ]? return <expr> [;]? }
-expr: [ [ '!' | '~' | '-' ]? <term> ] [ '?' <expr> ':' <expr> | [ <opRel> <term> ]* ]? | '(' <term> '/' <term> ')' '|' '0'
+expr: <qexpr> [ '?' <qexpr> ':' <qexpr> ]?
+qexpr: <uterm> [ [ <opRel> <uterm> ]* ]? | '(' <uterm> '/' <uterm> ')' '|' '0'
+uterm: [ '++' | '--' ] [ <intId> | <parId> | <arrId> <idx> ] | [ [ '!' | '~' | '-' ]? <term> ]
 term: <int> | <builtin> | <funcId> '(' [ <expr> [, <expr>]* ]? ')' | [ <intId> | <parId> ] [ <rhs> ]? | <arrId> <idx> <rhs> | <bracketed>
 bracketed: '(' [ 'form.text.value.charCodeAt(' <expr> ')|0' | <arrId> <idx> '|0' | <expr> [ ',' <expr> ]* ] ')'
 rhs: '++' | '--' | [ <op> ]? '=' <expr>
