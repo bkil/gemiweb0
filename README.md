@@ -37,6 +37,7 @@ Note that it is not intended for general audience yet, hence it may not be safe 
 
 Play with an example game obeying this subset:
 
+* https://bkil.gitlab.io/static-wonders.js/game/guard.htm
 * https://bkil.gitlab.io/static-wonders.js/game/rockpaper-sum.html
 * https://bkil.gitlab.io/static-wonders.js/game/memopair.htm
 * https://bkil.gitlab.io/static-wonders.js/game/markov.htm
