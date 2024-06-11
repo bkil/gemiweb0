@@ -61,6 +61,7 @@ See
 
 * Titan extension: https://communitywiki.org/wiki/Titan
 * iapetus extension: https://web.archive.org/web/20210925220953/codeberg.org/oppenlab/iapetus
+* Mercury https://portal.mozz.us/gemini/zaibatsu.circumlunar.space/~solderpunk/gemlog/the-mercury-protocol.gmi
 * Spartan protocol: http://spartan.mozz.us/
 * gemini+upload https://alexschroeder.ch/wiki/Baschdels_spin_on_Gemini_uploading
 * Guppy https://github.com/dimkr/guppy-protocol/blob/main/guppy-spec.gmi
