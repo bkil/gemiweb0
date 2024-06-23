@@ -125,7 +125,7 @@ make_html() {
     printf %s "$MD" | "$DEST/js0-min-static" "$ROOT/src/convert/gem2htm.js" |
     sed -r "s~\.md((#[^\"]*)?\">)~.htm\1~g" > "$DEST/$PAR/$BASE.htm" || return 1
   done
-  mv "$DEST/README.htm" "$DEST/index.htm" || return 1
+  mv "$DEST/README.htm" "$DEST/index.html" || return 1
 }
 
 main() {
