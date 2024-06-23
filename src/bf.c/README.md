@@ -4,7 +4,7 @@
 
 This is an absolute minimal JavaScript subset that corresponds to the capabilities of Brainfuck. The formal grammar definition for the language subset is available:
 
-[../../doc/js-grammar.md](../../doc/js-grammar.md#level-bf)
+[../../doc/js-grammar.md](../../doc/js-grammar.md#Level-bf)
 
 Scrolling through the test cases also illustrates the syntax:
 
@@ -16,12 +16,11 @@ Standard input is handled similarly as if you were handling a form submit button
 
 This one takes only a few hundred lines of C code - originally 300 SLOC, resulting in ~1400 bytes of gzip'ped compiled object code. Its bulk stems from offering a dynamically growing array and extensive diagnostic warning message generation that's still not exhaustive, though. Assuming input resulting from flawless code generation, most of the safeties could even be removed. See the following example for web browsers:
 
-[https://bkil.gitlab.io/gemiweb/src/bf.c/rot1.html](https://bkil.gitlab.io/gemiweb/src/bf.c/rot1.html)
+[rot1.html](rot1.html)
 
 Here is a syntax checker for its grammar implemented in HTML0/JS0:
 
-[https://bkil.gitlab.io/gemiweb/src/check/bf.html](https://bkil.gitlab.io/gemiweb/src/check/bf.html
-)
+[../check/bf.html](../check/bf.html)
 
 ## Motivation
 

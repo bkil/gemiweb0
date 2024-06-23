@@ -43,10 +43,10 @@ make_dev() {
 }
 
 make_doc() {
-  local S
+  local S TMP
   cd "$ROOT" || return 1
 
-  TMP="$DEST/bf-js.md"
+  readonly TMP="$DEST/bf-js.md"
   cp -dp "src/bf.c/README.md" "$TMP" || return 1
 
   git ls-files \
@@ -112,8 +112,24 @@ bins() {
     -DNOREGEXP || return 1
 }
 
+make_html() {
+  local MD PAR BASE
+  cd "$ROOT" || return 1
+
+  git ls-files |
+  grep -E '\.md$' |
+  while read MD; do
+    PAR="`dirname "$MD"`"
+    BASE="`basename "$MD" .md`"
+    mkdir -p "$DEST/$PAR" || return 1
+    printf %s "$MD" | "$DEST/js0-min-static" "$ROOT/src/convert/gem2htm.js" |
+    sed -r "s~\.md((#[^\"]*)?\">)~.htm\1~g" > "$DEST/$PAR/$BASE.htm" || return 1
+  done
+  mv "$DEST/README.htm" "$DEST/index.htm" || return 1
+}
+
 main() {
-  local DESTNAME DEST ROOT TMP
+  local DESTNAME DEST ROOT
   readonly DESTNAME="$1"
   readonly ROOT="$(readlink -f "`dirname "$0"`/..")"
 
@@ -127,14 +143,15 @@ main() {
   cd "$ROOT" || return 1
 
   git ls-files |
-  grep -E '\.(html?|js|css|sh)$' |
-  xargs tar -c |
+  grep -E '(\.(html?|js|css|sh)|/LICENSE|/(js[23]|bf\.c)/test-vm\.c)$' |
+  xargs tar -c --dereference |
   tar -xC "$DEST"
 
   make_head || return 1
   make_dev || return 1
   make_doc || return 1
   bins || return 1
+  make_html || return 1
 }
 
 main "$@"

@@ -16,6 +16,11 @@ See the doc folder for more information:
 * [doc/js-grammar.md](doc/js-grammar.md)
 * [doc/web-browsers-by-engine.md](doc/web-browsers-by-engine.md)
 * [doc/javascript-interpreter-runtimes.md](doc/javascript-interpreter-runtimes.md)
+* [doc/http-choices.htm](doc/http-choices.htm)
+* [doc/js-choices.htm](doc/js-choices.htm)
+* [doc/html-choices.htm](doc/html-choices.htm)
+* [doc/test.htm](doc/test.htm)
+* [src/bf.c/README.htm](src/bf.c/README.htm)
 
 Older notes:
 
@@ -24,7 +29,7 @@ Older notes:
 
 ## Development snapshots
 
-Note that it is not intended for general audience yet, hence it may not be safe to run these. Do consider containerization before testing.
+Note that it is not intended for general audiences yet, hence it may not be safe to run these. Do consider containerization before testing.
 
 * https://bkil.gitlab.io/gemiweb/js0br0.zip
 * https://bkil.gitlab.io/gemiweb/js0br0-dev.zip
@@ -45,7 +50,9 @@ Play with an example game obeying this subset:
 * https://bkil.gitlab.io/static-wonders.js/joke/js-nojs.htm
 * https://bkil.gitlab.io/static-wonders.js/crypto/papotp.htm
 * https://bkil.gitlab.io/static-wonders.js/draw/pixfont.htm
-* https://bkil.gitlab.io/gemiweb/src/check/bf.html
+* [src/br/index.htm](src/br/index.htm)
+* [src/check/bf.html](src/check/bf.html)
+* [src/bf.c/rot1.html](src/bf.c/rot1.html)
 
 Bookmarklets:
 
@@ -55,13 +62,14 @@ Bookmarklets:
 
 ## Contact
 
-Join our chat room over Matrix, also relayed over XMPP and IRC to participate in brainstorming or to give a hand by implementing the standard from scratch:
+Join our chat room on Matrix, also relayed over XMPP and IRC to participate in brainstorming or to give a hand by implementing the standard from scratch:
 
 * https://matrix.to/#/#gemiweb0:matrix.org
-* MUC xmpp:gemiweb0@conference.movim.eu
+* MUC xmpp:gemiweb0@conference.movim.eu?join
 * OFTC, Libera, Freenode: #gemiweb0
 * https://github.com/bkil/gemiweb
 * https://gitlab.com/bkil/gemiweb
+* https://bkil.gitlab.io/gemiweb
 
 ## LICENSE
 

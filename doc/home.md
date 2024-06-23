@@ -8,9 +8,9 @@ We were inspired by the gemini protocol, but would like to further extend the ge
 
 * Serve users who lack a gemini browser or TLS
 * Serve content creators who do not run a gemini server themselves, but would have access to HTTP-based shared web hosting
-  * No-cost shared web hosting is easy to come by
+* No-cost shared web hosting is easy to come by
 
-<https://en.wikipedia.org/wiki/Gemini_(protocol)>
+https://en.wikipedia.org/wiki/Gemini_(protocol)
 
 ### Open platform
 
@@ -42,5 +42,5 @@ We were inspired by the gemini protocol, but would like to further extend the ge
 
 * If you would like to add support in your existing gopher or gemini browser, feel free to use one of our libraries that will convert GemiWeb content to a form of your choice.
 * We publish and explain our algorithms if you would like to reimplement it yourself.
-  * Happy to help
-  * Improvements welcome
+* Happy to help
+* Improvements welcome

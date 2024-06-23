@@ -10,7 +10,9 @@ If a browser supports multiple engines, it is present under the heading of the s
 
 * https://en.wikipedia.org/wiki/Chromium_(web_browser)
 
-`apt install chromium-browser`
+```
+apt install chromium-browser
+```
 
 ### Dooble
 
@@ -25,7 +27,9 @@ If a browser supports multiple engines, it is present under the heading of the s
 
 * KDE: https://en.wikipedia.org/wiki/Falkon
 
-`apt install falkon`
+```
+apt install falkon
+```
 
 ### SRWare Iron
 
@@ -40,7 +44,9 @@ If a browser supports multiple engines, it is present under the heading of the s
 * Blink by default (QtWebEngine), but an extension for WebKit2 (QtWebKit) is available
 * https://github.com/KDE/kwebkitpart
 
-`apt install konqueror`
+```
+apt install konqueror
+```
 
 ### Otter Browser
 
@@ -52,7 +58,9 @@ If a browser supports multiple engines, it is present under the heading of the s
 * https://en.wikipedia.org/wiki/GNOME_Web
 * libwebkit2gtk
 
-`apt install epiphany-browser`
+```
+apt install epiphany-browser
+```
 
 ### Surf
 
@@ -60,7 +68,9 @@ If a browser supports multiple engines, it is present under the heading of the s
 * unusual, keyboard control
 * libwebkit2gtk
 
-`apt install surf`
+```
+apt install surf
+```
 
 ### Qutebrowser
 
@@ -68,7 +78,9 @@ If a browser supports multiple engines, it is present under the heading of the s
 * radical, keyboard interface
 * Blink by default (QtWebEngine), but a WebKit2 (libqt5webkit5) variant is also available (qutebrowser-qtwebkit)
 
-`apt install qutebrowser`
+```
+apt install qutebrowser
+```
 
 ### Nyxt
 
@@ -88,7 +100,9 @@ If a browser supports multiple engines, it is present under the heading of the s
 
 * https://en.wikipedia.org/wiki/Firefox
 
-`apt install firefox`
+```
+apt install firefox
+```
 
 ### GNU IceCat
 
@@ -204,7 +218,9 @@ More of a tech demo than a product for end users, but it is a unique independent
 * version 2.1pre28 was the last version that could interpret Netscape JavaScript 1.1
 * http://links.twibright.com/download/ChangeLog
 
-`links2 -g`
+```
+links2 -g
+```
 
 ### HV3
 
@@ -220,7 +236,9 @@ More of a tech demo than a product for end users, but it is a unique independent
 * text-based
 * it formerly used DukTape JavaScript but recently migrated to QuickJS
 
-`apt install edbrowse`
+```
+apt install edbrowse
+```
 
 ### ELinks
 
@@ -451,7 +469,9 @@ Hasn't been updated for a long time.
 
 * https://en.wikipedia.org/wiki/Midori_(web_browser)
 
-`apt install midori`
+```
+apt install midori
+```
 
 ### NCSA-mosaic
 
