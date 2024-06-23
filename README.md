@@ -1,8 +1,10 @@
-# GemiWeb, the gemini-HTTP/HTML subset
+# gemiweb0, the gemini-HTTP/HTML subset
 
 ## Status
 
 Status: not public yet, volunteer developers and user brainstorming welcome!
+
+The internal names of the work in progress subsets used are HTTP0, HTML0, JS0 and CSS0 respectively.
 
 ## Documentation
 
@@ -31,19 +33,19 @@ Older notes:
 
 Note that it is not intended for general audiences yet, hence it may not be safe to run these. Do consider containerization before testing.
 
-* https://bkil.gitlab.io/gemiweb/js0br0.zip
-* https://bkil.gitlab.io/gemiweb/js0br0-dev.zip
-* https://bkil.gitlab.io/gemiweb/js0br0-doc.zip
-* https://bkil.gitlab.io/gemiweb/js0-dl
-* https://bkil.gitlab.io/gemiweb/js0-static
-* https://bkil.gitlab.io/gemiweb/js0-min-static
+* https://bkil.gitlab.io/gemiweb0/js0br0.zip
+* https://bkil.gitlab.io/gemiweb0/js0br0-dev.zip
+* https://bkil.gitlab.io/gemiweb0/js0br0-doc.zip
+* https://bkil.gitlab.io/gemiweb0/js0-dl
+* https://bkil.gitlab.io/gemiweb0/js0-static
+* https://bkil.gitlab.io/gemiweb0/js0-min-static
 
 ## Example web content
 
 Play with an example game obeying this subset:
 
 * https://bkil.gitlab.io/static-wonders.js/game/guard.htm
-* https://bkil.gitlab.io/static-wonders.js/game/rockpaper-sum.html
+* https://bkil.gitlab.io/static-wonders.js/game/rockpaps.htm
 * https://bkil.gitlab.io/static-wonders.js/game/memopair.htm
 * https://bkil.gitlab.io/static-wonders.js/game/markov.htm
 * https://bkil.gitlab.io/static-wonders.js/edu/knowcard.htm#
@@ -67,10 +69,20 @@ Join our chat room on Matrix, also relayed over XMPP and IRC to participate in b
 * https://matrix.to/#/#gemiweb0:matrix.org
 * MUC xmpp:gemiweb0@conference.movim.eu?join
 * OFTC, Libera, Freenode: #gemiweb0
-* https://github.com/bkil/gemiweb
-* https://gitlab.com/bkil/gemiweb
-* https://bkil.gitlab.io/gemiweb
 
-## LICENSE
+## Source code repository
+
+May be blocked from some ISP due to load.
+
+* https://gitlab.com/bkil/gemiweb0
+* https://github.com/bkil/gemiweb0
+
+### Rendered website
+
+Should be better available.
+
+* https://bkil.gitlab.io/gemiweb0
+
+### LICENSE
 
 * [LICENSE.md](LICENSE.md)
