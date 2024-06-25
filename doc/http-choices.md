@@ -1,5 +1,7 @@
 # HTTP restrictions
 
+Explain some of the restrictions we impose to balance minimal implementation and being able to implement all targeted user applications.
+
 ## Mandatory
 
 ## Quality of life improvement

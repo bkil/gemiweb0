@@ -1,4 +1,6 @@
-# Development
+# Implementing tests
+
+Either the specification or each implementation should cover its critical functionality with automated test cases. This ensures quality and pins down interoperability.
 
 ## Types of tests
 

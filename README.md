@@ -1,4 +1,6 @@
-# gemiweb0, the gemini-HTTP/HTML subset
+# gemiweb0, a gemini-HTTP/HTML subset
+
+Don't install a special client or pay for a custom server: enables HTTP-based shared web hosting.
 
 ## Status
 

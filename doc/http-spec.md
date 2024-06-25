@@ -1,5 +1,9 @@
 # HTTP subset specification
 
+Cover as little of it as possible to correspond to gemini while remaining compatible with most free hosting providers and existing web browsers. Allow implementing all targeted user application.
+
+The following restrictions are non-normative and being worked on pending the result of proof of concepts.
+
 ## HTTP common
 
 PATH: "[^? ]*" [ "?" PARAMS ]?

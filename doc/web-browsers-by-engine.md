@@ -1,8 +1,6 @@
 # FOSS web browsers by engine
 
-The question that we wanted to research when assembling this list is to enumerate potentially lightweight web browsers for old computers.
-However, as the resource consumption of most browsers should somewhat correlate with the engine used, they are grouped by engine.
-If a browser supports multiple engines, it is present under the heading of the supposedly lighter engine.
+We've originally tried to enumerate lightweight web browsers for outdated computers. They are grouped by engine as resource consumption usually correlates well. One supporting multiple engines is listed under the lightest engine.
 
 ## Blink engine
 
@@ -494,7 +492,7 @@ FOSS JavaScript interpreters, runtimes
 
 [./javascript-interpreter-runtimes.md](./javascript-interpreter-runtimes.md)
 
-Others:
+### References
 
 * https://wiki.archlinux.org/title/List_of_applications/Internet#Web_browsers
 * https://github.com/cliffordfajardo/awesome-web-browsers#user-content-desktop-web-browsers

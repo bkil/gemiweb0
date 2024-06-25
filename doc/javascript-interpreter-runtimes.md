@@ -1,7 +1,6 @@
-# FOSS JavaScript interpreters, runtimes
+# FOSS JavaScript interpreters and runtimes
 
-Implementing the relevant standards of JavaScript fully would be prohibitively expensive for a hobby project.
-Feel free to review the complexity of existing small independent solutions that are work in progress.
+Implementing the relevant standards of JavaScript fully would be prohibitively expensive for a hobby project. Feel free to review the complexity of existing small independent solutions as an alternative.
 
 ## Production
 

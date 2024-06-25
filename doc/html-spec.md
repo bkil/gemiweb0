@@ -1,5 +1,7 @@
 # HTML subset specification
 
+Cover as little as possible to correspond to gemini (gemtex) while remaining compatible with existing web browsers. Allow implementing all targeted user application.
+
 ## Grammar
 
 ### HTML

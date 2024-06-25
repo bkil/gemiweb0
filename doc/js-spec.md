@@ -1,6 +1,8 @@
 # JavaScript feature set overview
 
-This is non normative work in progress. See the following document for a detailed reasoning about each choice of cutting features from the grammar:
+Enumerating which language constructs and types are allowed. Some high level design goals, example implementation and inspirations are mentioned. This is non normative work in progress.
+
+See the following document for a detailed reasoning about each choice of cutting features from the grammar:
 
 * [js-choices.md](js-choices.md)
 

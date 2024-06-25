@@ -1,4 +1,6 @@
-# User application
+# User applications to cover with implementation
+
+The minimal specification is only considered useful if it is possible an efficiently implement a service to solve each of the following use cases.
 
 ## Web search
 
@@ -34,7 +36,7 @@
 * webmail
 * end to end encryption
 
-social networking service:
+### Social networking services
 
 * microblog, blog
 * group eventing

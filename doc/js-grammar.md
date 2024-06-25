@@ -1,10 +1,8 @@
 # JavaScript alternative subset grammars
 
-Note that this is a work in progress file.
-The headings will be renamed.
-Some of the variants may be removed.
-Feel free to propose new variants that could serve as good milestones for beginners.
-If you implement a variant completely, please save it as a branch or a separate file before moving to the next level and log the additional time you spent on implementing it so we could better gauge the power to weight ratio.
+You should separate each implemented variant on a branch or file before moving on to the next level. Log time you spend on it so we can compare power to weight ratio. Feel free to propose new variants that could serve as good milestones for beginners.
+
+Note that this is a work in progress file. The headings will be renamed. Some of the variants may be removed.
 
 ## Warm-up
 

@@ -1,6 +1,8 @@
 # Community and project management
 
-## Factoring
+We welcome participants and other collaborating projects whose interests intersect. It enhances group cohesion and satisfaction to declare the aims to target.
+
+## In scope
 
 * anti-bloat: feature creep
 * code golfing, minimalism, small is beautiful, less is more
@@ -19,5 +21,3 @@
 
 * making it look pretty
 * create a browser according to this specification and expect to be able to view arbitrary old websites from the 1990s
-
-## Common

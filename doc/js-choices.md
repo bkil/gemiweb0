@@ -1,8 +1,6 @@
 # JavaScript restrictions
 
-A heavy set of restrictions are imposed on user code that can be executed by the interpreter. This allows to make the runtime as simple to implement and reason about as possible.
-
-The following restrictions are non-normative and being worked on pending the result of proof of concepts implemented in various host programming languages.
+A heavy set of restrictions are imposed on user code that can be executed by the interpreter. This allows to make the runtime as simple to implement and reason about as possible. The following restrictions are non-normative and being worked on pending the result of proof of concepts implemented in various host programming languages.
 
 ## Mandatory
 
