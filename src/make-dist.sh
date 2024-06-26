@@ -126,7 +126,7 @@ make_html() {
     sed -r "s~\.md((#[^\"]*)?\">)~.htm\1~g" > "$DEST/$PAR/$BASE.htm" || return 1
   done
   mv "$DEST/README.htm" "$DEST/index.html" || return 1
-  cp -a "$ROOT/doc/gemiweb-icon.gif" "$DEST/favicon.ico" || return 1
+  cp -a "$ROOT/doc/gemiweb-icon.png" "$DEST/favicon.ico" || return 1
 }
 
 main() {
