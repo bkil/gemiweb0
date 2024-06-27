@@ -42,6 +42,12 @@ Note that it is not intended for general audiences yet, hence it may not be safe
 * https://bkil.gitlab.io/gemiweb0/js0-static
 * https://bkil.gitlab.io/gemiweb0/js0-min-static
 
+### Feeds
+
+Subscribe to the feed of changes via Atom (RSS):
+
+* https://gitlab.com/bkil/gemiweb0/-/commits/master?format=atom
+
 ## Example web content
 
 Play with an example game obeying this subset:
