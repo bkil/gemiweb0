@@ -99,6 +99,14 @@ A heavy set of restrictions are imposed on user code that can be executed by the
 
 ## Quality of life improvement
 
+### Array object
+
+* Verdict: recommended, partial
+* Restriction: creation with the 0-argument constructor, only the `.length` getter can be used and square bracket indexing, missing: join, reverse, sort
+* Implementation complexity: low, intermediate with an efficient data structure
+* Workaround: substitute an Object, manually update a length property with each addition or iterate over it until reaching `undefined` instead of a given length
+* Standard: ES1
+
 ### window.localStorage
 
 * Verdict: recommended, partial
@@ -391,7 +399,7 @@ https://en.wikipedia.org/wiki/ReDoS
 ### Instantiate class with new keyword
 
 * Verdict: partial
-* Restriction: only for a few predetermined classes (Array, Object, Date, XMLHttpRequest), see constructor arguments detailed separately.
+* Restriction: only for a few predetermined classes (Array*, Object*, Date, XMLHttpRequest), see constructor arguments detailed separately.
 * Incidence rate: low for custom classes, intermediate for built-in
 * Implementation complexity: high if assuming full OOP, prototype and this support
 * Drawbacks: prototype based inheritance is disfavored
