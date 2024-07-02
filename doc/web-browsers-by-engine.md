@@ -138,6 +138,7 @@ A fork of older Firefox/Gecko for security and to keep older extensions working.
 * https://en.wikipedia.org/wiki/NetSurf
 * independent and are working to support common web pages in iterations
 * support for GTK and Linux Framebuffer
+* language: C
 
 JavaScript support was implemented with SpiderMonkey in the past, and recently with DukTape:
 
@@ -146,12 +147,28 @@ JavaScript support was implemented with SpiderMonkey in the past, and recently w
 
 ### SerenityOS LibWeb
 
+### Ladybird
+
+It first started as the document rendering component LibWeb built into SerenityOS in 2019:
+
 * https://en.wikipedia.org/wiki/SerenityOS
 * https://github.com/SerenityOS/serenity/tree/master/Userland/Applications/Browser
 * https://github.com/SerenityOS/serenity/tree/master/Userland/Libraries/LibWeb
 * https://github.com/SerenityOS/serenity/tree/master/Ladybird
 * https://awesomekling.github.io/Ladybird-a-new-cross-platform-browser-project/
 * https://awesomekling.github.io/Memory-safety-for-SerenityOS/
+* language: C++
+* JavaScript is supported by its own interpreter (LibJS)
+
+It was then split to create a separate cross-platform browser:
+
+* https://awesomekling.substack.com/p/forking-ladybird-and-stepping-down-serenityos
+* https://github.com/LadybirdBrowser/ladybird
+
+It received $1M funding on 2024-07-01 to help release a public beta by 2026.
+
+* https://ladybird.org/announcement.html
+* https://ladybird.org/why-ladybird.html
 
 ### gngr
 
@@ -184,6 +201,7 @@ More of a tech demo than a product for end users, but it is a unique independent
 * supported HTML tags: a (href, name), area, b (=em, strong), base (href), basefont (size, color, 3d, outline), bgsound (src, filename), big, blocquote, body (background, bgcolor, text, link, vlink, marginwidth, marginheight, mail, noresize, bgproperties), br (clear), button (uri, usr, url, to, subject, value, size, type, checked, active, name), caption (align, valign, nowrap, colspan, rowspan, bgcolor, background, height, width), center, code (=kbd), dd, div (align), embed (src, filename), font (size, color, 3d, outline), form (method, action), frame (src, name, framespacing, frameborder, border, scrolling, marginwidth, marginheight), frameset (frameborder, border, rows, cols), h1, h2, h3, h4, h5, h6, head, hr (size, noshade, align, width), i (=cite, address), iframe (src, name, framespacing, frameborder, border, scrolling, marginwidth, marginheight), img (src, align, ismap, usemap, border, height, width, alt, name), input (uri, usr, url, to, subject, value, size, type, checked, active, name), li (=dt), link (rel, href), map (name), meta (http-equiv, content), nobr, noframes, noscript, ol (=menu, dl, dir), option (selected, value), p (align), pre, s (=strike, del), script (?), select (size, name, multiple), small, style, sub, sup, table (border, frame, cellspacing, cellpadding, width, align, bgcolor, background), td (align, valign, nowrap, colspan, rowspan, bgcolor, background, height, width), textarea (rows, cols, name, wrap, active), th (align, valign, nowrap, colspan, rowspan, bgcolor, background, height, width), title, tr, tt, u (=ins), ul
 * contains a web browser, email client and modem dialer
 * DOS, Linux & SVGAlib
+* no JavaScript
 
 ### Dillo
 
@@ -207,6 +225,7 @@ More of a tech demo than a product for end users, but it is a unique independent
 * supported attributes: name, id
 * features: HTML 4.0, character sets, up to 255 byte long anchor, control via mouse, CDATA comment, ignore content within script, style, binary and select
 * language: C--, assembly
+* no JavaScript
 * only supports HTTPS through a custom hosted HTTP downgrade proxy
 * platform: KolibriOS
 
