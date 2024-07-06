@@ -14,16 +14,17 @@ See the doc folder for more information:
 
 * [doc/project-community.md](doc/project-community.md)
 * [doc/user-application.md](doc/user-application.md)
-* [doc/html-spec.md](doc/html-spec.md)
+* [doc/http-choices.md](doc/http-choices.md)
 * [doc/http-spec.md](doc/http-spec.md)
+* [doc/html-choices.md](doc/html-choices.md)
+* [doc/html-spec.md](doc/html-spec.md)
+* [doc/js-choices.md](doc/js-choices.md)
 * [doc/js-spec.md](doc/js-spec.md)
 * [doc/js-grammar.md](doc/js-grammar.md)
+* [doc/css-spec.md](doc/css-choices.md)
 * [doc/web-browsers-by-engine.md](doc/web-browsers-by-engine.md)
 * [doc/javascript-interpreter-runtimes.md](doc/javascript-interpreter-runtimes.md)
-* [doc/http-choices.htm](doc/http-choices.htm)
-* [doc/js-choices.htm](doc/js-choices.htm)
-* [doc/html-choices.htm](doc/html-choices.htm)
-* [doc/test.htm](doc/test.htm)
+* [doc/test.md](doc/test.md)
 * [src/bf.c/README.htm](src/bf.c/README.htm)
 
 Older notes:
@@ -41,12 +42,6 @@ Note that it is not intended for general audiences yet, hence it may not be safe
 * https://bkil.gitlab.io/gemiweb0/js0-dl
 * https://bkil.gitlab.io/gemiweb0/js0-static
 * https://bkil.gitlab.io/gemiweb0/js0-min-static
-
-### Feeds
-
-Subscribe to the feed of changes via Atom (RSS):
-
-* https://gitlab.com/bkil/gemiweb0/-/commits/master?format=atom
 
 ## Example web content
 
@@ -85,6 +80,12 @@ May be blocked from some ISP due to load.
 
 * https://gitlab.com/bkil/gemiweb0
 * https://github.com/bkil/gemiweb0
+
+### Feeds
+
+Subscribe to the feed of changes via Atom (RSS):
+
+* https://gitlab.com/bkil/gemiweb0/-/commits/master?format=atom
 
 ### Rendered website
 
