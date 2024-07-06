@@ -21,7 +21,7 @@ See the doc folder for more information:
 * [doc/js-choices.md](doc/js-choices.md)
 * [doc/js-spec.md](doc/js-spec.md)
 * [doc/js-grammar.md](doc/js-grammar.md)
-* [doc/css-spec.md](doc/css-choices.md)
+* [doc/css-spec.md](doc/css-spec.md)
 * [doc/web-browsers-by-engine.md](doc/web-browsers-by-engine.md)
 * [doc/javascript-interpreter-runtimes.md](doc/javascript-interpreter-runtimes.md)
 * [doc/test.md](doc/test.md)
