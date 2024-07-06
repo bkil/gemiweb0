@@ -26,7 +26,6 @@ Features:
 * Inheritance: only assume `<body>` (and optionally `<html>`) can be inherited from
 * Element type selector
 * ".Class" as selector: `[A-Za-z][0-9A-Za-z-]*`
-* "#ID" as selector
 * Cascading order: specificity
 * Length units: px, em
 * Color units: #abc, #abcdef
@@ -49,6 +48,7 @@ Features:
 
 * Comments
 * "!important"
+* "#ID" as selector
 * Anchor pseudo-classes: :link :visited :active
 * The ":first-letter" pseudo-element [advanced]
 * The ":first-line" pseudo-element [advanced]
