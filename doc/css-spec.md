@@ -16,6 +16,8 @@ Information content within a document should remain legible and an application a
 * CSS0
 * CSS1 core
 * Subsets of CSS level 1, 2, 2.1, 3, 4 supported by contemporary browsers
+* Screen resolution of 320x240 on 3-inch to 1920x1080 on 24-inch diameter
+* Lack of colours
 
 ## Mandatory for ANSI formatting
 
@@ -23,7 +25,7 @@ Features:
 
 * Containment in HTML: class attribute, inline style element (in `<head>`), link rel href
 * Grouping: ",", ";"
-* Inheritance: only assume `<body>` (and optionally `<html>`) can be inherited from
+* Inheritance: assume that only `<body>` (and optionally `<html>`) can be inherited from as element nesting is discouraged
 * Element type selector
 * ".Class" as selector: `[A-Za-z][0-9A-Za-z-]*`
 * Cascading order: specificity
@@ -44,6 +46,8 @@ Properties:
 
 ## Recommended for user style extensions
 
+Negative lengths are not supported and truncate to zero.
+
 Features:
 
 * Comments
@@ -60,7 +64,7 @@ Properties:
 * border-color
 * border-left
 * border-right
-* border-style: none, solid
+* border-style: none, solid [core]
 * border-top
 * display [advanced]
 * font-family: sans-serif, monospace
@@ -180,3 +184,4 @@ Pseudo-elements:
 ### CSS1 standard
 
 * https://www.w3.org/TR/CSS1/
+* https://www.w3.org/TR/CSS2/
