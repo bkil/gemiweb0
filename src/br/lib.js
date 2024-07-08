@@ -476,18 +476,29 @@ if (typeof parseInt === 'undefined') {
     if (b === undefined) {
       b = 10;
     }
-    if (b !== 10) {
+    if ((b !== 10) || !s.length) {
       return NaN;
     }
+    var n = 0;
     var k = 0;
-    var i = 0;
-    while (i < s.length) {
-      var c = s.charCodeAt(i);
-      if ((c < 48) || (c > 57)) {
+    var i = -1;
+    if (s.charCodeAt(0) === 45) {
+      if (2 > s.length) {
         return NaN;
       }
-      k = (k * 10) + (c - 48);
-      i = i + 1;
+      i = 0;
+      n = 1;
+    }
+    var c;
+    while (s.length > (i = i + 1)) {
+      c = s.charCodeAt(i) - 48;
+      if ((0 > c) || (c > 9)) {
+        return NaN;
+      }
+      k = (k * 10) + c;
+    }
+    if (n) {
+      k = 0 - k;
     }
     return k;
   }
