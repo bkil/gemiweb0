@@ -1107,7 +1107,11 @@ parseIndex(Parser *p) {
   } else if (acceptChar(p, '.')) {
     Id id;
     if (parseId(p, &id)) {
-      return StringObject_new_const(id);
+      if (p->nest) {
+        return &undefinedObject;
+      } else {
+        return StringObject_new_const(id);
+      }
     }
     p->parseErr = "expecting field name";
   }
@@ -1378,6 +1382,9 @@ parseITerm(Parser *p, Id *id) {
     skipWs(p);
     if (!parseId(p, id)) {
       return 0;
+    }
+    if (p->nest) {
+      return &undefinedObject;
     }
     if (strncmpEq(*id, "Object")) {
       return MapObject_new();
