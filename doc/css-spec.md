@@ -67,7 +67,7 @@ Properties:
 * border-style: none, solid [core]
 * border-top
 * display [advanced]
-* font-family: sans-serif, monospace
+* font-family: sans-serif, monospace (not efficient on Opera mini outside `<textarea>`)
 * font-variant [advanced]
 * letter-spacing [advanced]
 * line-height
