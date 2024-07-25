@@ -135,6 +135,8 @@ readonly, role=status (or alert, log) and aria-live=polite (or assertive) added 
 ### Similar ongoing efforts
 
 * https://codeberg.org/smolweb/smolweb-spec
+* https://github.com/acidus99/stargate-proxy
+* https://github.com/matthewp/quack-proxy
 
 ### Compatible best practices
 
