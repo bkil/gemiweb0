@@ -70,5 +70,6 @@ See
 * [gemini+upload](https://alexschroeder.ch/wiki/Baschdels_spin_on_Gemini_uploading)
 * [Guppy](https://github.com/dimkr/guppy-protocol/blob/main/guppy-spec.gmi)
 * [Nex](https://nightfall.city/nex/info/specification.txt)
+* http://portal.mozz.us/gemini/inimeg.space/specification.gmi
 * http://scrollprotocol.us.to/
 * http://www.and.org/texts/server-http
