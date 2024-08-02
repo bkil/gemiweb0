@@ -554,6 +554,8 @@ function processTag(j, tag, fin, attr) {
       t = '* ';
     }
     displayLi = 1;
+  } else if ((tag === 'ul') && fin && s.displayLi) {
+    inline = 1;
   } else if ((tag === 'script') || (tag === 'style')) {
     needText = 1;
     ctx = 1;
