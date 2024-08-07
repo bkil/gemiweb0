@@ -197,62 +197,61 @@ function gemtext2htmBody(t, pr) {
   var nl = String.fromCharCode(10);
   var lin = String_split(t, nl);
   var i = -1;
-  var n = lin.length;
-  var l;
-  var p;
+  var line;
+  var literal;
   var j;
   var inList = 0;
-  while (n > (i = i + 1)) {
-    l = lin[i];
-    if (p = consume(l, '*')) {
+  while (lin.length > (i = i + 1)) {
+    line = lin[i];
+    if (literal = consume(line, '*')) {
       if (!inList) {
         o = o + '<ul>';
       }
-      l = autolink(p);
-      o = o + '<li>' + l + '</li>';
+      literal = autolink(literal);
+      o = o + '<li>' + literal + '</li>';
       inList = 1;
     } else {
       if (inList) {
         o = o + '</ul>';
         inList = 0;
       }
-      if (p = consume(l, '###')) {
-        desc = desc + ' ' + p;
-        l = genId(p);
-        o = o + '<a href="#' + l + '" name="' + l + '"><h3 id="' + l + '">' + p + '</h3></a>';
-      } else if (p = consume(l, '##')) {
-        desc = desc + ' ' + p;
-        l = genId(p);
-        o = o + '<a href="#' + l + '" name="' + l + '"><h2 id="' + l + '">' + p + '</h2></a>';
-      } else if (p = consume(l, '#')) {
+      if (literal = consume(line, '###')) {
+        desc = desc + ' ' + literal;
+        line = genId(literal);
+        o = o + '<a href="#' + line + '" name="' + line + '"><h3 id="' + line + '">' + literal + '</h3></a>';
+      } else if (literal = consume(line, '##')) {
+        desc = desc + ' ' + literal;
+        line = genId(literal);
+        o = o + '<a href="#' + line + '" name="' + line + '"><h2 id="' + line + '">' + literal + '</h2></a>';
+      } else if (literal = consume(line, '#')) {
         if (!title) {
-          title = p;
+          title = literal;
         }
-        o = o + '<h1>' + p + '</h1>';
-      } else if (p = consume(l, '>')) {
-        o = o + '<blockquote>' + p + '</blockquote>';
-      } else if (p = consume(l, '=>')) {
-        j = l.indexOf(' ');
+        o = o + '<h1>' + literal + '</h1>';
+      } else if (literal = consume(line, '>')) {
+        o = o + '<blockquote>' + literal + '</blockquote>';
+      } else if (literal = consume(line, '=>')) {
+        j = line.indexOf(' ');
         if (0 > j) {
-          l = p;
+          line = literal;
         } else {
-          l = String_substring(p, 0, j);
-          p = String_substring(p, j + 1, p.length);
+          line = String_substring(literal, 0, j);
+          literal = String_substring(literal, j + 1, literal.length);
         }
-        o = o + '<a href="' + l + '">' + p + '</a>';
-      } else if (l === '```') {
+        o = o + '<a href="' + line + '">' + literal + '</a>';
+      } else if (line === '```') {
         o = o + '<pre>';
-        while ((n > (i = i + 1)) && ((l = escapeHtml(lin[i])) !== '```')) {
-          o = o + l + nl;
+        while ((lin.length > (i = i + 1)) && ((line = escapeHtml(lin[i])) !== '```')) {
+          o = o + line + nl;
         }
         o = o + '</pre>';
       } else {
-        p = escapeHtml(l);
-        l = autolink(p);
-        if ((p === l) && !first) {
-          first = p;
+        literal = escapeHtml(line);
+        line = autolink(literal);
+        if ((literal === line) && !first) {
+          first = literal;
         }
-        o = o + l + '<p>';
+        o = o + line + '<p>';
       }
     }
   }
