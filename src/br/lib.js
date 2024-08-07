@@ -17,11 +17,16 @@ String.prototype.indexOf2 = String.prototype.indexOf2 || function(c) {
 }
 
 // JS1
-String.prototype.lastIndexOf = String.prototype.lastIndexOf || function(c) {
-  var i = this.length - 1;
+String.prototype.lastIndexOf = String.prototype.lastIndexOf || function(c, i) {
+  if ((i === undefined) || (i > this.length)) {
+    i = this.length;
+  } else if (0 > i) {
+    i = 1;
+  } else {
+    i = i + 1;
+  }
   var n = c.charCodeAt(0);
-  while ((i >= 0) && (this.charCodeAt(i) !== n)) {
-    i = i - 1;
+  while (((i = i - 1) >= 0) && (this.charCodeAt(i) !== n)) {
   }
   return i;
 }
