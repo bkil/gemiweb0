@@ -61,7 +61,13 @@ See
 * [html-choices.md](html-choices.md)
 * [html-spec.md](html-spec.md)
 
-## Related protocols
+## Related
+
+### Simple implementation
+
+* https://github.com/mvbasov/lWS/blob/master/app/src/main/java/net/basov/lws/ServerHandler.java
+
+### Simple protocols
 
 * [Titan extension](https://communitywiki.org/wiki/Titan)
 * [iapetus extension](https://web.archive.org/web/20210925220953/codeberg.org/oppenlab/iapetus)
