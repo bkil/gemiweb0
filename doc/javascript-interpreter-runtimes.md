@@ -85,9 +85,8 @@ Includes a web based example interpreter.
 
 ## Planned
 
-### this project
+### gemiweb0
 
-* As this project is not public yet, only an internal working name is available.
 * The main scope is producing only documentation, specification and conformance tests. Developers are expected to implement it on their own.
 * A proof of concept JavaScript0 interpreter plugin for gemini and web browsers and for CLI/CGI web server integration will be provided later in multiple languages, both low level and high level.
 * Language: C, PHP, busybox ash & awk, JavaScript0

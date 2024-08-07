@@ -139,11 +139,7 @@ A fork of older Firefox/Gecko for security and to keep older extensions working.
 * independent and are working to support common web pages in iterations
 * support for GTK and Linux Framebuffer
 * language: C
-
-JavaScript support was implemented with SpiderMonkey in the past, and recently with DukTape:
-
-* https://duktape.org/
-* https://kangax.github.io/compat-table/es6/
+* JavaScript support was implemented with SpiderMonkey in the past, and recently with DukTape.
 
 ### SerenityOS LibWeb
 
