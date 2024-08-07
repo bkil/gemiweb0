@@ -83,6 +83,7 @@ function httpGet(host, port, path, ok, err) {
     client.write(
       'GET ' + path + ' HTTP/1.1' + crlf +
       'Host: ' + host + ':' + port + crlf +
+      'User-Agent: gemiweb0-br0/0.1' + crlf +
       'Connection: close' + crlf +
       crlf
     );
