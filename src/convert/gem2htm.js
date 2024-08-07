@@ -71,6 +71,24 @@ function String_trim(th) {
   return String_substring(th, i, j + 1);
 }
 
+function countMatch(s, d) {
+  var j = 0;
+  var i = -1;
+  while ((i = s.indexOf(d, i + 1)) >= 0) {
+    j = j + 1;
+  }
+  return j;
+}
+
+function getRelativeRoot(file) {
+  var s = '';
+  var i = countMatch(file, '/') + 1;
+  while (i = i - 1) {
+    s = s + '../';
+  }
+  return s;
+}
+
 function getBasename(file) {
   var i = String_lastIndexOf(file, '/');
   if (i >= 0) {
@@ -258,6 +276,7 @@ function gemtext2htmFile(t, name) {
   var title = pr.title;
   var desc = pr.desc;
   pr = undefined;
+  var root;
 
   if (!title) {
     title = getBasename(name);
@@ -268,6 +287,11 @@ function gemtext2htmFile(t, name) {
     desc = '<meta property="og:description" content="' +
       desc +
       '" name="description">';
+  }
+
+  if (name !== 'README.md') {
+    root = getRelativeRoot(name);
+    o = o + '<h2>Navigation</h2><ul><li><a href="' + root + '">Back to gemiweb0</a></li></ul>';
   }
 
   o = '<!DOCTYPE html><html lang=en><head><meta charset="utf-8"><title>' +
