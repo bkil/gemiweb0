@@ -4,6 +4,14 @@ We've originally tried to enumerate lightweight web browsers for outdated comput
 
 ## Blink engine
 
+### AgregoreWeb
+
+* https://github.com/AgregoreWeb/agregore-browser
+* interface: Electron BrowserWindow and BrowserView
+* implemented in: interface in JavaScript, Electron and Blink in C++
+* license: interface is AGPL-3.0, Electron is MIT, Blink is BSD-3
+* protocols: HTTP, HTTPS, Hypercore, Dat, Gemini, IPFS, BitTorrent, magnet, SSB
+
 ### Chromium
 
 * https://en.wikipedia.org/wiki/Chromium_(web_browser)
