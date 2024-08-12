@@ -33,9 +33,33 @@ apt install chromium-browser
 apt install falkon
 ```
 
+### morph-browser
+
+* https://gitlab.com/ubports/development/core/morph-browser
+* interface: Qt, Lomiri (Ubuntu Touch)
+* implemented in: QML, C++
+* rendering engine: QtWebEngine
+* license: GNU GPLv3
+
+```
+apt install morph-browser
+```
+
 ### New Edge
 
 * https://en.wikipedia.org/wiki/Microsoft_Edge#New_Edge_(2019%E2%80%93present)
+
+### privacybrowser
+
+* https://packages.debian.org/sid/privacybrowser
+* https://gitweb.stoutner.com/?p=PrivacyBrowserPC.git;a=tree
+* rendering engine: QtWebEngine
+* implemented in: C++
+* license: GPLv3+
+
+```
+apt install privacybrowser
+```
 
 ### SRWare Iron
 
@@ -63,6 +87,19 @@ apt install epiphany-browser
 apt install konqueror
 ```
 
+### Luakit
+
+* https://github.com/luakit/luakit
+* https://github.com/luakit/luakit-plugins
+* rendering engine: libwebkit2gtk
+* interface: GTK 3+
+* implemented in: C
+* plugins: Lua 5.1
+
+```
+apt install luakit
+```
+
 ### Nyxt
 
 * https://github.com/atlas-engineer/nyxt/blob/master/documents/README.org
@@ -85,6 +122,19 @@ apt install konqueror
 apt install qutebrowser
 ```
 
+### sugar-browse-activity
+
+* https://github.com/sugarlabs/browse-activity
+* https://github.com/godiard/help-activity/blob/master/source/browse.rst
+* interface: GTK+ 3, GIR, Sugar Learning Platform
+* rendering engine: libwebkit2gtk, gir1.2-webkit2, libsoup
+* implemented in: Python3
+* license: GNU GPL v2
+
+```
+apt install sugar-browse-activity
+```
+
 ### Surf
 
 * https://en.wikipedia.org/wiki/Surf_(web_browser)
@@ -94,6 +144,13 @@ apt install qutebrowser
 ```
 apt install surf
 ```
+
+### vimb
+
+* https://github.com/fanglingsu/vimb
+* rendering engine: webkit2gtk
+* interface: GTK+ 3
+* implemented in: C
 
 ## KHTML engine
 
@@ -108,6 +165,7 @@ apt install surf
 
 ```
 apt install firefox
+apt install firefox-esr
 ```
 
 ### GNU IceCat
@@ -260,14 +318,18 @@ apt install edbrowse
 * tables, frames
 * some CSS
 * JavaScript using Mozilla SpiderMonkey only for user interface automation
-* colours
+* colors
 
-### Eww
+### Emacs Eww
 
 * https://en.wikipedia.org/wiki/Eww_(web_browser)
+* https://www.gnu.org/software/emacs/manual/html_mono/eww.html
+* https://www.emacswiki.org/emacs/eww
+* https://git.savannah.gnu.org/cgit/emacs.git/tree/lisp/net/eww.el
 * interface: text-based, embedded within Emacs
-* can show images inline
+* features: cookies, utf-8, text color, bookmarks, TLS, can show images inline
 * no CSS, no JS
+* implemented in: Emacs LISP
 
 ### Links2
 
@@ -277,7 +339,51 @@ apt install edbrowse
 * can run either a text-only version from the terminal or display images inline and antialiases fonts if running on X11 or DirectFB
 
 ```
+apt install links2
 links2 -g
+```
+
+### lynx
+
+* https://en.wikipedia.org/wiki/Lynx_(web_browser)
+* https://github.com/ThomasDickey/lynx-snapshots
+* https://lynx.invisible-island.net/
+* interface: text-only
+* features: table without layout, cookies, forms, lists, quotes
+* protocols: HTTP, HTTPS, FTP, NNTP, gopher, finger, wais, telnet, tn3270, rlogin, file
+* implemented in: C
+* license: GNU GPL v2
+
+```
+apt install lynx
+```
+
+### netrik
+
+* https://salsa.debian.org/debian/netrik
+* interface: text-only
+* text color, bold, italic, forms, table placeholder markers without layout
+* UTF-8 rendering glitches, no CSS, no JS, no TLS, no cookies
+* implemented in: C
+* license: GNU GPL v2 or later
+
+```
+apt install netrik
+```
+
+### w3m
+
+* https://en.wikipedia.org/wiki/W3m
+* https://salsa.debian.org/debian/w3m/-/tree/master
+* interface: text-based
+* features: cookies, forms, FTP, dl, dt, frameset, table, no CSS, no JS
+* can show images inline with sixel (Bobcat, Contour, ctx terminal, Darktile, DomTerm, Eat, foot, iTerm2, konsole, LaTerminal, MacTerm, mintty, mlterm, Rlogin, sixel-tmux, SwiftTerm, SyncTERM, tmux, toyterm, U++, Visual Studio Code, wezterm, xfce-terminal, xterm, xterm.js, yaft, Yakuake, Zellij, Hyper, Theia), osc5379, iTerm2, kitty (WezTerm, Konsole, wayst)
+* can open images with a viewer for X11, DirectFB and Windows
+* implemented in: C
+* license: MIT
+
+```
+apt install w3m
 ```
 
 ## Experimental
@@ -339,7 +445,7 @@ links2 -g
 ### Satori
 
 * https://github.com/vercel/satori/
-* TypeScript
+* implemented in: TypeScript
 * platform: browser, Web Worker, Node.js
 * not a web browser, only a rendering engine producing SVG
 
@@ -347,7 +453,7 @@ links2 -g
 
 * https://github.com/carliros/Simple-San-Simon-Functional-Web-Browser
 * https://hsbrowser.wordpress.com/
-* Haskell
+* implemented in: Haskell
 * uu-parsinglib, url, tagsoup, gd-haskell, curl-haskell, wxHaskell
 
 > support for a small sub-set of HTML, XHTML and XML grammar
@@ -364,7 +470,7 @@ links2 -g
 ### WebWhir
 
 * https://github.com/reesmichael1/WebWhir
-* C++
+* implemented in: C++
 
 > WebWhir uses Boost sparingly and SFML for graphics.
 > designed to be very easy to link into any application
@@ -410,6 +516,7 @@ Projects listed here have not produced a browser a user could test yet or are on
 
 * https://haphaestus.org/
 * https://argonaut-constellation.org/
+* implemented in: Haskell
 
 ### Lexbor
 
@@ -478,6 +585,16 @@ https://en.wikipedia.org/wiki/Arena_(web_browser)
 * features: start page, history, cookies, web proxy, utf-8
 * aim for compatibility with Netscape 3.0: HTML 3.2 formatting, images (jpeg, xbitmap, Inferno BIT, animated gif), JavaScript 1.1 (ES2)
 
+### Emacs w3
+
+* https://www.emacswiki.org/emacs/w3
+* https://elpa.gnu.org/packages/w3.html
+* https://git.savannah.gnu.org/cgit/w3.git/tree/
+* https://github.com/emacs-straight/w3
+* interface: text-only, embedded within Emacs
+* no CSS, no JS
+* implemented in: Emacs LISP
+
 ### kweb
 
 * https://github.com/ekapujiw2002/kweb
@@ -519,6 +636,7 @@ FOSS JavaScript interpreters, runtimes
 
 ### References
 
+* https://packages.debian.org/bookworm/www-browser
 * https://wiki.archlinux.org/title/List_of_applications/Internet#Web_browsers
 * https://github.com/cliffordfajardo/awesome-web-browsers#user-content-desktop-web-browsers
 * https://github.com/metov/awesome-browser#user-content-desktop-gui
