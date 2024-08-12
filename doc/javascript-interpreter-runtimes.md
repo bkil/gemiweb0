@@ -60,6 +60,12 @@ Includes a web based example interpreter.
 > Garbage collection using reference counting (to reduce memory usage and have deterministic behavior) with cycle removal.
 > Small built-in standard library with C library wrappers.
 
+### quickjs-ng
+
+* https://github.com/quickjs-ng/quickjs
+
+> Friendly QuickJS fork focused on reigniting the project.
+
 ### JS-Interpreter
 
 * https://github.com/NeilFraser/JS-Interpreter
