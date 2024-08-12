@@ -239,17 +239,9 @@ More of a tech demo than a product for end users, but it is a unique independent
 * only supports HTTPS through a custom hosted HTTP downgrade proxy
 * platform: KolibriOS
 
-### Links2
-
-* CSS support to be improved
-* version 2.1pre28 was the last version that could interpret Netscape JavaScript 1.1
-* http://links.twibright.com/download/ChangeLog
-
-```
-links2 -g
-```
-
 ## Text-only
+
+## Terminal
 
 ### edbrowse
 
@@ -267,15 +259,26 @@ apt install edbrowse
 * text-only
 * tables, frames
 * some CSS
-* some JavaScript using Mozilla SpiderMonkey
+* JavaScript using Mozilla SpiderMonkey only for user interface automation
 * colours
 
 ### Eww
 
 * https://en.wikipedia.org/wiki/Eww_(web_browser)
-* text-only
-* images
+* interface: text-based, embedded within Emacs
+* can show images inline
 * no CSS, no JS
+
+### Links2
+
+* CSS support to be improved
+* version 2.1pre28 was the last version that could interpret Netscape JavaScript 1.1
+* http://links.twibright.com/download/ChangeLog
+* can run either a text-only version from the terminal or display images inline and antialiases fonts if running on X11 or DirectFB
+
+```
+links2 -g
+```
 
 ## Experimental
 
