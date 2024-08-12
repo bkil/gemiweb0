@@ -388,12 +388,15 @@ apt install w3m
 
 ## Experimental
 
-### Chawn
+### Chawan
 
 * https://sr.ht/~bptato/chawan/
 * text-only
-* CSS, forms, cookies, FTP, Gopher
+* features: CSS with layout (flow, table, flexbox), forms, cookies, mouse
+* protocols: FTP, Gopher, Gemini, Finger
 * QuickJS JavaScript for link navigation and basic DOM manipulation
+* implemented in: Nim
+* license: public domain
 
 ### Cocktail
 
