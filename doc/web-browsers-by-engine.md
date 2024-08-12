@@ -25,10 +25,6 @@ apt install chromium-browser
 * https://en.wikipedia.org/wiki/Dooble
 * QtWebEngine
 
-### New Edge
-
-* https://en.wikipedia.org/wiki/Microsoft_Edge#New_Edge_(2019%E2%80%93present)
-
 ### Falkon
 
 * KDE: https://en.wikipedia.org/wiki/Falkon
@@ -37,11 +33,24 @@ apt install chromium-browser
 apt install falkon
 ```
 
+### New Edge
+
+* https://en.wikipedia.org/wiki/Microsoft_Edge#New_Edge_(2019%E2%80%93present)
+
 ### SRWare Iron
 
 * https://en.wikipedia.org/wiki/SRWare_Iron
 
 ## WebKit engine
+
+### GNOME Web
+
+* https://en.wikipedia.org/wiki/GNOME_Web
+* libwebkit2gtk
+
+```
+apt install epiphany-browser
+```
 
 ### Konqueror
 
@@ -54,29 +63,17 @@ apt install falkon
 apt install konqueror
 ```
 
+### Nyxt
+
+* https://github.com/atlas-engineer/nyxt/blob/master/documents/README.org
+* Emacs, vi, CUA
+* libwebkit2gtk
+* beta: Blink engine
+
 ### Otter Browser
 
 * https://en.wikipedia.org/wiki/Otter_Browser
 * can choose between Blink (QtWebEngine) and WebKit (QtWebKit)
-
-### GNOME Web
-
-* https://en.wikipedia.org/wiki/GNOME_Web
-* libwebkit2gtk
-
-```
-apt install epiphany-browser
-```
-
-### Surf
-
-* https://en.wikipedia.org/wiki/Surf_(web_browser)
-* unusual, keyboard control
-* libwebkit2gtk
-
-```
-apt install surf
-```
 
 ### Qutebrowser
 
@@ -88,12 +85,15 @@ apt install surf
 apt install qutebrowser
 ```
 
-### Nyxt
+### Surf
 
-* https://github.com/atlas-engineer/nyxt/blob/master/documents/README.org
-* Emacs, vi, CUA
+* https://en.wikipedia.org/wiki/Surf_(web_browser)
+* unusual, keyboard control
 * libwebkit2gtk
-* beta: Blink engine
+
+```
+apt install surf
+```
 
 ## KHTML engine
 
@@ -126,14 +126,14 @@ apt install firefox
 
 A fork of older Firefox/Gecko for security and to keep older extensions working.
 
+### Basilisk
+
+* https://en.wikipedia.org/wiki/Pale_Moon_(web_browser)#Basilisk_browser
+
 ### Conkeror
 
 * https://en.wikipedia.org/wiki/Conkeror
 * Radical, keyboard driven, not for the faint of heart. Needs to catch up with the code of Pale Moon updates.
-
-### Basilisk
-
-* https://en.wikipedia.org/wiki/Pale_Moon_(web_browser)#Basilisk_browser
 
 ### Pale Moon
 
@@ -141,17 +141,18 @@ A fork of older Firefox/Gecko for security and to keep older extensions working.
 
 ## May become full featured
 
-### NetSurf
+### gngr
 
-* https://en.wikipedia.org/wiki/NetSurf
-* independent and are working to support common web pages in iterations
-* support for GTK and Linux Framebuffer
-* language: C
-* JavaScript support was implemented with SpiderMonkey in the past, and recently with DukTape.
+More of a tech demo than a product for end users, but it is a unique independent engine with theoretically good coverage of standards.
 
-### SerenityOS LibWeb
+* https://github.com/gngrOrg/gngr
+* https://en.wikipedia.org/wiki/Rhino_(JavaScript_engine)
+
+> Based on The Lobo Project. jStyleParser: for parsing and analysing CSS, okhttp: support for cookies, SPDY.
 
 ### Ladybird
+
+### SerenityOS LibWeb
 
 It first started as the document rendering component LibWeb built into SerenityOS in 2019:
 
@@ -174,14 +175,13 @@ It received $1M funding on 2024-07-01 to help release a public beta by 2026.
 * https://ladybird.org/announcement.html
 * https://ladybird.org/why-ladybird.html
 
-### gngr
+### NetSurf
 
-More of a tech demo than a product for end users, but it is a unique independent engine with theoretically good coverage of standards.
-
-* https://github.com/gngrOrg/gngr
-* https://en.wikipedia.org/wiki/Rhino_(JavaScript_engine)
-
-> Based on The Lobo Project. jStyleParser: for parsing and analysing CSS, okhttp: support for cookies, SPDY.
+* https://en.wikipedia.org/wiki/NetSurf
+* independent and are working to support common web pages in iterations
+* support for GTK and Linux Framebuffer
+* language: C
+* JavaScript support was implemented with SpiderMonkey in the past, and recently with DukTape.
 
 ### Web-K
 
@@ -218,6 +218,12 @@ More of a tech demo than a product for end users, but it is a unique independent
 * their domain name was squatted by a Wordpress clone
 * CSS support to be improved
 
+### HV3
+
+* https://packages.debian.org/bullseye/hv3
+* CSS (from around 2008)
+* optionally JavaScript if compiled from source (ES3, from around 2009)
+
 ### KolibriOS WebView
 
 * https://github.com/KolibriOS/kolibrios/tree/main/programs/cmm/browser
@@ -242,12 +248,6 @@ More of a tech demo than a product for end users, but it is a unique independent
 ```
 links2 -g
 ```
-
-### HV3
-
-* https://packages.debian.org/bullseye/hv3
-* CSS (from around 2008)
-* optionally JavaScript if compiled from source (ES3, from around 2009)
 
 ## Text-only
 
@@ -378,11 +378,6 @@ apt install edbrowse
 
 Projects listed here have not produced a browser a user could test yet or are only components that others may build a web browser from in the future.
 
-### gemiweb0
-
-* The main scope is producing only documentation, specification and conformance tests. Developers are expected to implement it on their own.
-* A proof of concept web browser, web server and bot user agent will be provided later in multiple languages, both low level and high level.
-
 ### CSSBox
 
 * https://github.com/philborlin/CSSBox
@@ -393,6 +388,11 @@ Projects listed here have not produced a browser a user could test yet or are on
 > CSSBox relies on the jStyleParser open source CSS parser
 > the NekoHTML parser is used for creating the DOM tree. As an alternative, the The Validator.nu HTML Parser has been tested with CSSBox too.
 > The Xerces library may be replaced by any other DOM implementation.
+
+### gemiweb0
+
+* The main scope is producing only documentation, specification and conformance tests. Developers are expected to implement it on their own.
+* A proof of concept web browser, web server and bot user agent will be provided later in multiple languages, both low level and high level.
 
 ### gosub-browser
 
@@ -451,15 +451,6 @@ Projects listed here have not produced a browser a user could test yet or are on
 
 ## Unmaintained
 
-### Charon
-
-* https://en.wikipedia.org/wiki/Charon_(web_browser)
-* written in Limbo
-* runs graphically under wm on Inferno
-* schemes: HTTP 1.1, SSL v3, FTP, file
-* features: start page, history, cookies, web proxy, utf-8
-* aim for compatibility with Netscape 3.0: HTML 3.2 formatting, images (jpeg, xbitmap, Inferno BIT, animated gif), JavaScript 1.1 (ES2)
-
 ### Abaco
 
 https://en.wikipedia.org/wiki/Abaco_(web_browser)
@@ -475,9 +466,14 @@ https://en.wikipedia.org/wiki/Amaya_(web_editor)
 
 https://en.wikipedia.org/wiki/Arena_(web_browser)
 
-### Odysseus
+### Charon
 
-* https://github.com/alcinnz/Odysseus
+* https://en.wikipedia.org/wiki/Charon_(web_browser)
+* written in Limbo
+* runs graphically under wm on Inferno
+* schemes: HTTP 1.1, SSL v3, FTP, file
+* features: start page, history, cookies, web proxy, utf-8
+* aim for compatibility with Netscape 3.0: HTML 3.2 formatting, images (jpeg, xbitmap, Inferno BIT, animated gif), JavaScript 1.1 (ES2)
 
 ### kweb
 
@@ -496,6 +492,10 @@ apt install midori
 ### NCSA-mosaic
 
 * https://github.com/alandipert/ncsa-mosaic
+
+### Odysseus
+
+* https://github.com/alcinnz/Odysseus
 
 ### Uzbl
 
