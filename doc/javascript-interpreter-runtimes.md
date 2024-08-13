@@ -81,6 +81,16 @@ Includes a web based example interpreter.
 
 > Friendly QuickJS fork focused on reigniting the project.
 
+### Rhino
+
+* https://en.wikipedia.org/wiki/Rhino_(JavaScript_engine)
+* https://github.com/mozilla/rhino
+* status: bundled with JRE
+* used by LibreOffice, gngr
+* features: ES5 with additions from ES6 and ES2016+
+* implemented in: Java
+* license: MPL 2.0
+
 ### ucode
 
 * https://github.com/jow-/ucode
@@ -155,6 +165,16 @@ Includes a web based example interpreter.
 
 > Narcissus is a JavaScript interpreter written in pure JavaScript (i.e., a meta-circular evaluator), using the SpiderMonkey engine.
 > Originally a proof-of-concept, a test-bed for rapidly prototyping new language features for the JavaScript language (as well as the ECMAScript standard).
+
+### Nashorn
+
+* https://en.wikipedia.org/wiki/Nashorn_(JavaScript_engine)
+* https://github.com/openjdk/nashorn
+* status: only a few patches up to 2023, deprecated since 2017, removed from JRE
+* used by: Web-K
+* features: fully compliant with ES5.1, also has additions from ES6
+* implemented in: Java
+* license: GNU GPL v2 with Classpath exception
 
 ### NGS NJS-JavaScript.org
 
