@@ -16,14 +16,6 @@ Implementing the relevant standards of JavaScript fully would be prohibitively e
 
 Includes a web based example interpreter.
 
-### ucode
-
-* https://github.com/jow-/ucode
-
-> JavaScript-like language with optional templating
-> The ucode language is a small, general-purpose scripting language that resembles ECMAScript syntax. It can be used as a standalone interpreter or embedded into host applications. Ucode supports template mode with control flow and expression logic statements embedded in Jinja-like markup blocks.
-> The development of ucode was motivated by the need to rewrite the OpenWrt firewall framework using nftables. Initially intended as a template processor, ucode evolved into a versatile scripting language for various system scripting tasks. Its design goals include easy integration with C applications, efficient handling of JSON data and complex data structures, support for OpenWrt's ubus message bus system, and a comprehensive set of built-in functions inspired by Perl 5.
-
 ### Espruino
 
 * https://github.com/espruino/Espruino
@@ -39,6 +31,12 @@ Includes a web based example interpreter.
 > Heavily optimized for low memory consumption
 > Snapshot support for precompiling JavaScript source code to byte code
 
+### JS-Interpreter
+
+* https://github.com/NeilFraser/JS-Interpreter
+
+> A sandboxed JavaScript interpreter in JavaScript. Execute arbitrary ES5 JavaScript code line by line in isolation and safety.
+
 ### mujs
 
 * https://mujs.com/
@@ -48,6 +46,23 @@ Includes a web based example interpreter.
 > MuJS is a lightweight Javascript interpreter designed for embedding in other software to extend them with scripting capabilities.
 > MuJS was designed with a focus on small size, correctness, and simplicity. It is written in portable C and implements ECMAScript as specified by ECMA-262. The interface for binding with native code is designed to be as simple as possible to use, and is very similar to Lua.
 > It was originally developed for use with the MuPDF viewer
+
+### nginx njs
+
+* https://github.com/nginx/njs
+* https://nginx.org/en/docs/njs/
+* https://packages.debian.org/trixie/njs
+* ES5.1 strict with some ES6 extensions
+
+### otto
+
+* https://github.com/robertkrimen/otto
+* https://github.com/robertkrimen/natto
+
+> Package otto is a JavaScript parser and interpreter written natively in Go.
+> Otto targets ES5
+> Go translates JavaScript-style regular expressions into something that is "regexp" compatible via parser.TransformRegExp. Unfortunately, RegExp requires backtracking for some patterns, and backtracking is not supported by the standard Go engine. re2 (Go) has a different definition for \s: [\t\n\f\r ]
+> Package natto is an example/offshoot of otto that implements an event loop (supporting setTimeout/setInterval).
 
 ### quickjs
 
@@ -66,28 +81,13 @@ Includes a web based example interpreter.
 
 > Friendly QuickJS fork focused on reigniting the project.
 
-### JS-Interpreter
+### ucode
 
-* https://github.com/NeilFraser/JS-Interpreter
+* https://github.com/jow-/ucode
 
-> A sandboxed JavaScript interpreter in JavaScript. Execute arbitrary ES5 JavaScript code line by line in isolation and safety.
-
-### nginx njs
-
-* https://github.com/nginx/njs
-* https://nginx.org/en/docs/njs/
-* https://packages.debian.org/trixie/njs
-* ES5.1 strict with some ES6 extensions
-
-### otto
-
-* https://github.com/robertkrimen/otto
-* https://github.com/robertkrimen/natto
-
-> Package otto is a JavaScript parser and interpreter written natively in Go.
-> Otto targets ES5
-> Go translates JavaScript-style regular expressions into something that is "regexp" compatible via parser.TransformRegExp. Unfortunately, RegExp requires backtracking for some patterns, and backtracking is not supported by the standard Go engine. re2 (Go) has a different definition for \s: [\t\n\f\r ]
-> Package natto is an example/offshoot of otto that implements an event loop (supporting setTimeout/setInterval).
+> JavaScript-like language with optional templating
+> The ucode language is a small, general-purpose scripting language that resembles ECMAScript syntax. It can be used as a standalone interpreter or embedded into host applications. Ucode supports template mode with control flow and expression logic statements embedded in Jinja-like markup blocks.
+> The development of ucode was motivated by the need to rewrite the OpenWrt firewall framework using nftables. Initially intended as a template processor, ucode evolved into a versatile scripting language for various system scripting tasks. Its design goals include easy integration with C applications, efficient handling of JSON data and complex data structures, support for OpenWrt's ubus message bus system, and a comprehensive set of built-in functions inspired by Perl 5.
 
 ## Planned
 
