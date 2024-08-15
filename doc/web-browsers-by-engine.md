@@ -304,8 +304,11 @@ More of a tech demo than a product for end users, but it is a unique independent
 ### edbrowse
 
 * https://github.com/CMB/edbrowse
-* text-based
-* it formerly used DukTape JavaScript but recently migrated to QuickJS
+* https://github.com/CMB/edbrowse/blob/master/src/html-tags.c
+* text-only
+* features: tables, forms, some CSS, some JS with a subset of DOM level 1
+* v2 used a custom JavaScript engine, v3 used SpiderMonkey, then migrated to DukTape, and are currently using QuickJS
+* protocol: http, https, gopher, ftp, sftp, smtp, pop3, pop3s, imap, imaps
 
 ```
 apt install edbrowse
@@ -314,11 +317,11 @@ apt install edbrowse
 ### ELinks
 
 * https://en.wikipedia.org/wiki/ELinks
-* text-only
-* tables, frames
-* some CSS
-* JavaScript using Mozilla SpiderMonkey only for user interface automation
-* colors
+* text-based
+* interface can be scripted via guile, Lua, Perl, Python, Ruby or SpiderMonkey
+* features: mouse, utf-8, idn, brotli, zstd, text color, tables, frames, inline images using Sixel, some CSS, some JS with a subset of DOM level 1
+* content JavaScript engine can be configured at compilation: SpiderMonkey, QuickJS or MuJS (formerly: NJS)
+* protocol: http, https, gopher, gemini, ftp, sftp, nntp, smb, bittorrent, fsp
 
 ### Emacs Eww
 
@@ -336,7 +339,7 @@ apt install edbrowse
 * CSS support to be improved
 * version 2.1pre28 was the last version that could interpret Netscape JavaScript 1.1
 * http://links.twibright.com/download/ChangeLog
-* can run either a text-only version from the terminal or display images inline and antialiases fonts if running on X11 or DirectFB
+* can run either a text-only version from the terminal or display images inline and antialiased fonts if running on X11 or DirectFB
 
 ```
 apt install links2
