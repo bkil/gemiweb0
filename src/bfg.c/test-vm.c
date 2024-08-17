@@ -143,7 +143,7 @@ main(void) {
     102, "42", "");
 
   tio(0,
-    "var i;i=0;var j;j=0;var v;v=new Array;v[i]=form.text.value.charCodeAt(j)|0;while(v[i]){v[i]=(v[i]|0)+1;document.write(String.fromCharCode(v[i]));j++;v[i]=form.text.value.charCodeAt(j)|0}",
+    "var i;i=0;var j;j=0;var v;v=new Array;v[i]=form.text.value.charCodeAt(j)|0;while(v[i]){v[i]=(v[i]|0)+1;document.write(String.fromCharCode(v[i]));j++;v[i]=form.text.value.charCodeAt(j)|0};document.close()",
     0, "42", "53");
 
 /* 52 = '4', 50 = '2' */

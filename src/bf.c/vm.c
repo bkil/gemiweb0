@@ -173,6 +173,7 @@ parseStatement(Parser *p) {
     } else {
       fputc(p->v[p->i], stdout);
     }
+  } else if (accept(p, "document.close()")) {
   } else if (accept(p, "var ") && (accept(p, "i") || accept(p, "j") || expect(p, "v"))) {
   } else {
     return parseAssignment(p);

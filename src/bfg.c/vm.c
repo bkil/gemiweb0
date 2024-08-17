@@ -450,7 +450,8 @@ Parser_eval(Parser *p, const char *prog, const char *inp, char **out, int debug)
         ),
         LIT("(String.fromCharCode(v[i]))"),
         FUN(g_write)
-      )
+      ),
+      LIT("document.close()")
     ),
     whitespace
   );
