@@ -8,7 +8,7 @@ This can avoid flash of unstyled content and having to implement reflowing. We a
 
 HTML markup should convey the semantic structure of the document. Certain legacy HTML tags and attributes also allow conveying slight visual information: b (strong), body (bgcolor, text, link), big, br, center, del, i (em), font (color, size, face), hr, small, strike, sub, sup, u and more.
 
-Allowing to override as much of the appearance of a page with user CSS allows for accessibility and easy customization. If a user agent has no support for CSS or the stylesheet failed to load, information loss may occur. We need to strike a good balance between HTML vs. CSS.
+Allowing to override as much of the appearance of a page with user CSS as possible allows for accessibility and easy customization. Information loss may occur if a user agent has no support for CSS or the stylesheet failed to load and the content developer was not careful. We need to strike a good balance between HTML vs. CSS.
 
 Information content within a document should remain legible and an application accessible regardless of web browser support:
 
@@ -25,7 +25,7 @@ Features:
 
 * Containment in HTML: class attribute, inline style element (in `<head>`), link rel href
 * Grouping: ",", ";"
-* Inheritance: assume that only `<body>` (and optionally `<html>`) can be inherited from as element nesting is discouraged
+* Inheritance: assume that only `<body>` (and optionally `<html>`) can be inherited from as element nesting is discouraged in HTML0
 * Element type selector
 * ".Class" as selector: `[A-Za-z][0-9A-Za-z-]*`
 * Cascading order: specificity
@@ -37,7 +37,7 @@ Properties:
 
 * background-color
 * color
-* font-size: medium, large (may render as double height and double width line)
+* font-size: medium, large (may render as double height and double width line in terminals)
 * font-style: normal, italic (not supported by Opera Mini)
 * font-weight: normal, bold
 * font-weight: lighter (not supported by Opera Mini)
@@ -66,13 +66,13 @@ Properties:
 * border-right
 * border-style: none, solid [core]
 * border-top
-* display [advanced]
+* display: block, inline, list-item, none [advanced]
 * font-family: sans-serif, monospace (not efficient on Opera mini outside `<textarea>`)
-* font-variant [advanced]
+* font-variant: normal, small-caps [advanced]
 * letter-spacing [advanced]
 * line-height
-* list-style-position
-* list-style-type: disc, circle, square, decimal, lower-alpha, upper-alpha, none
+* list-style-position: inside, outside
+* list-style-type: disc, circle, square, decimal, none
 * margin
 * margin-bottom
 * margin-left
@@ -84,8 +84,8 @@ Properties:
 * padding-right
 * padding-top
 * text-indent
-* text-transform [advanced]
-* white-space [advanced]
+* text-transform: capitalize, uppercase, lowercase, none [advanced]
+* white-space: normal, pre, nowrap [advanced]
 * width: 100% for `<form>`, `<input>`, `<textarea>`
 * word-spacing [advanced]
 
@@ -111,6 +111,7 @@ Properties:
 * border-width
 * font
 * list-style
+* list-style-type: lower-roman, upper-roman, lower-alpha, upper-alpha
 
 ### Requires viewport layout
 
