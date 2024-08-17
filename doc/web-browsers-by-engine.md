@@ -379,7 +379,7 @@ apt install netrik
 * https://en.wikipedia.org/wiki/W3m
 * https://salsa.debian.org/debian/w3m/-/tree/master
 * interface: text-based
-* features: cookies, forms, FTP, dl, dt, frameset, table, no CSS, no JS
+* features: mouse, cookies, forms, FTP, dl, dt, frameset, table, no CSS, no JS
 * can show images inline with sixel (Bobcat, Contour, ctx terminal, Darktile, DomTerm, Eat, foot, iTerm2, konsole, LaTerminal, MacTerm, mintty, mlterm, Rlogin, sixel-tmux, SwiftTerm, SyncTERM, tmux, toyterm, U++, Visual Studio Code, wezterm, xfce-terminal, xterm, xterm.js, yaft, Yakuake, Zellij, Hyper, Theia), osc5379, iTerm2, kitty (WezTerm, Konsole, wayst)
 * can open images with a viewer for X11, DirectFB and Windows
 * implemented in: C
@@ -593,12 +593,15 @@ https://en.wikipedia.org/wiki/Arena_(web_browser)
 
 ### Emacs w3
 
+* last update: 2008
 * https://www.emacswiki.org/emacs/w3
 * https://elpa.gnu.org/packages/w3.html
 * https://git.savannah.gnu.org/cgit/w3.git/tree/
 * https://github.com/emacs-straight/w3
 * interface: text-only, embedded within Emacs
-* no CSS, no JS
+* features: tables, utf-8, no frames, some CSS1
+* protocols: http, https
+* no JS
 * implemented in: Emacs LISP
 
 ### kweb
@@ -622,6 +625,15 @@ apt install midori
 ### Odysseus
 
 * https://github.com/alcinnz/Odysseus
+
+### retawq
+
+* last update: 2006
+* https://retawq.sourceforge.net/
+* text-only
+* features: mouse, incremental rendering, forms partially, tables partially, frames partially
+* no CSS, no JS
+* protocols: http, https, ftp, ftps, nntp, finger, file, local cgi
 
 ### Uzbl
 
