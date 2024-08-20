@@ -37,6 +37,12 @@ Includes a web based example interpreter.
 
 > A sandboxed JavaScript interpreter in JavaScript. Execute arbitrary ES5 JavaScript code line by line in isolation and safety.
 
+### Ladybird LibJS
+
+* formerly for SerenityOS LibWeb
+* https://github.com/LadybirdBrowser/ladybird/tree/master/Userland/Libraries/LibJS
+* used by Ladybird
+
 ### mujs
 
 * https://mujs.com/
@@ -119,6 +125,15 @@ Includes a web based example interpreter.
 * C
 * used by the HV3 web prowser
 
+### AWeb
+
+* last update: 2009
+* https://github.com/mirq/aweb/tree/master/aweblibs/awebjs
+* features: JavaScript ES3 (claimed 1.1)
+* implemented in C
+* platform: Amiga
+* license: AWebPL
+
 ### cesanta mJS
 
 * https://github.com/cesanta/mjs
@@ -138,6 +153,30 @@ Includes a web based example interpreter.
 > Standard: V7 implements JavaScript 5.1
 > Usable out-of-the-box: V7 provides an auxiliary library with Hardware (SPI, UART, etc), File, Crypto, Network API
 > part of the full stack Mongoose OS Platform
+
+### Charon
+
+* last update: 2007
+* https://bitbucket.org/inferno-os/inferno-os/src/master/appl/charon/
+* https://bitbucket.org/inferno-os/inferno-os/src/master/appl/lib/ecmascript/
+* JavaScript ES3
+* implemented in Limbo
+
+### edbrowse 2
+
+* last update: 2006
+* https://web.archive.org/web/20101027132444/http://eklhad.net/edbrowse/edbrowse-2.2.10.zip
+* JavaScript ES3 with a subset of DOM level 1
+* implemented in C
+* used by edbrowse up to v2.2.10
+
+### Links 2.1pre28
+
+* last update: 2007
+* http://dezip.org/http://links.twibright.com/download/links-2.1pre28.tar.gz
+* JavaScript 1.1
+* implemented in C
+* used by links2 up to 2.1.pre28
 
 ### lugrin.ch FESI
 
@@ -209,6 +248,15 @@ Includes a web based example interpreter.
 > operators: + - * / ** %, > < >= <= ==, ! && ||, ++foo foo++ --foo foo--
 > separators: ; for expressions, ( ) for sub-expressions, { }
 > literals: booleans, float/integers, strings
+
+### Voyager
+
+* last update: 2002
+* https://zapek.com/software/voyager/
+* features: JavaScript 1.3, DOM level 1 (IE)
+* implemented in C
+* platform: Amiga
+* license: GNU GPL v2
 
 ## Benchmarks
 
