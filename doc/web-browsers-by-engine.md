@@ -305,9 +305,11 @@ More of a tech demo than a product for end users, but it is a unique independent
 
 * https://github.com/CMB/edbrowse
 * https://github.com/CMB/edbrowse/blob/master/src/html-tags.c
+* https://web.archive.org/web/20101027132444/http://eklhad.net/edbrowse/edbrowse-2.2.10.zip
+* https://web.archive.org/web/20101027130615/http://eklhad.net/edbrowse/edbrowse.pl
 * text-only
-* features: tables, forms, some CSS, some JS with a subset of DOM level 1
-* v2 used a custom JavaScript engine, v3 used SpiderMonkey, then migrated to DukTape, and are currently using QuickJS
+* features: tables, forms, some CSS, some JavaScript with a subset of DOM level 1
+* v2 up to 2.2.10 used a custom JavaScript engine, 3.1.1 used SpiderMonkey, 3.7.0 used DukTape, 3.8.0 uses QuickJS up to now
 * protocol: http, https, gopher, ftp, sftp, smtp, pop3, pop3s, imap, imaps
 
 ```
@@ -404,10 +406,18 @@ apt install w3m
 ### Cocktail
 
 * https://github.com/silexlabs/Cocktail
-* TODO: could not find JavaScript implementation in the source code
+* no JavaScript, basic CSS
 
-> With Cocktail, write HTML/CSS applications in Haxe and build them for OpenFL and flash/Air. As Cocktail uses the standard DOM API, you can also build your app to regular JavaScript.
+> With Cocktail, write HTML/CSS applications in Haxe and build them for OpenFL and flash/Air. As Cocktail uses the standard DOM API
 > NME (another Haxe library)
+
+### Cog
+
+* https://github.com/Igalia/cog
+* https://packages.debian.org/trixie/cog
+* rendering engine: WPE WebKit
+
+> It provides no user interface and is suitable to be used as a web application container for embedded devices in kiosk mode.
 
 ### kosmonaut
 
@@ -447,6 +457,17 @@ apt install w3m
 * gtk-rs
 
 > A toy web browser implemented in Rust from scratch
+
+### Odyssey Web Browser
+
+* former name: Origyn Web Browser
+* https://en.wikipedia.org/wiki/Origyn_Web_Browser
+* https://github.com/deadwood2/OdysseyWebBrowser
+* rendering engine: WebKit (libwebkitgtk?), Cairo
+* features: HTML5 video and audio, CSS 2.1, some CSS3, SVG, MathML, JavaScript, DOM
+* implemented in C++
+* platform: Amiga, GTK, Qt, SDL
+* license: BSD3
 
 ### Satori
 
@@ -582,14 +603,28 @@ https://en.wikipedia.org/wiki/Amaya_(web_editor)
 
 https://en.wikipedia.org/wiki/Arena_(web_browser)
 
+### AWeb
+
+* last update: 2009
+* https://en.wikipedia.org/wiki/AWeb
+* https://github.com/mirq/aweb
+* https://github.com/matjam/aweb
+* features: HTML 3.2, parts of HTML 4.01, forms, frames, animated GIF, JPEG, PNG, ILBM, WAV, AU, basic auth, utf-8, arexx, JavaScript ES3 (claimed 1.1), no CSS
+* protocols: http, https, ftp, gopher, nntp, mailto (smtp)
+* implemented in C
+* platform: Amiga
+* license: AWebPL
+
 ### Charon
 
+* last update: 2007
 * https://en.wikipedia.org/wiki/Charon_(web_browser)
-* written in Limbo
+* https://bitbucket.org/inferno-os/inferno-os/src/master/appl/charon/
+* implemented in Limbo
 * runs graphically under wm on Inferno
 * schemes: HTTP 1.1, SSL v3, FTP, file
 * features: start page, history, cookies, web proxy, utf-8
-* aim for compatibility with Netscape 3.0: HTML 3.2 formatting, images (jpeg, xbitmap, Inferno BIT, animated gif), JavaScript 1.1 (ES2)
+* aim for compatibility with Netscape 3.0: HTML 3.2 formatting, images (jpeg, xbitmap, Inferno BIT, animated gif), aimed for JavaScript 1.1 (ES2), but runtime has ES3 features
 
 ### Emacs w3
 
@@ -641,6 +676,17 @@ https://en.wikipedia.org/wiki/Uzbl
 
 * WebkitGtk+
 * libsoup
+
+### Voyager
+
+* last update: 2002
+* https://en.wikipedia.org/wiki/Voyager_(web_browser)
+* https://zapek.com/software/voyager/
+* features: HTML 3.2, frames, parts of HTML 4.01, table layout, basic auth, JavaScript 1.3, DOM level 1 (IE), CSS, pdf, animated gif, jpeg, alpha png, xbm
+* protocols: http, https (TLS v1), ftp, mailto (smtp)
+* implemented in C
+* platform: Amiga
+* license: GNU GPL v2
 
 ## Related
 
