@@ -86,6 +86,9 @@ function getRelativeRoot(file) {
   while (i = i - 1) {
     s = s + '../';
   }
+  if (!s) {
+    s = '.';
+  }
   return s;
 }
 
