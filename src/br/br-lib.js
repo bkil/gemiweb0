@@ -783,6 +783,7 @@ function setInitState(j, href, html) {
   var l = new Object;
   l.href = href;
   l.assign = Location_assign(d);
+  l.replace = Location_assign(d);
   var w = new Object;
   w.location = l;
   var g = new Object;
