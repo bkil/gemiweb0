@@ -80,6 +80,17 @@ function countMatch(s, d) {
   return j;
 }
 
+function truncateAtWord(s, n) {
+  var o = String_substring(s, 0, n);
+  if (s.length > n) {
+    var i = String_lastIndexOf(o, ' ');
+    if (i > 0) {
+      o = String_substring(o, 0, i);
+    }
+  }
+  return o;
+}
+
 function getRelativeRoot(file) {
   var s = '';
   var i = countMatch(file, '/') + 1;
@@ -283,9 +294,9 @@ function gemtext2htmFile(t, name) {
   if (!title) {
     title = getBasename(name);
   }
-  title = String_substring(title, 0, 1024);
+  title = truncateAtWord(1024);
   if (desc) {
-    desc = String_substring(desc, 0, 1024);
+    desc = truncateAtWord(desc, 2048);
     desc = '<meta property="og:description" content="' +
       desc +
       '" name="description">';
