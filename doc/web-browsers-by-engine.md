@@ -241,6 +241,11 @@ It received $1M funding on 2024-07-01 to help release a public beta by 2026.
 * language: C
 * JavaScript support was implemented with SpiderMonkey in the past, and recently with DukTape.
 
+### visurf
+
+* https://git.sr.ht/~sircmpwn/visurf
+* fork of NetSurf to add frontend user interface with vi key bindings
+
 ### Web-K
 
 More of a tech demo than a product for end users, but it is a unique independent engine with theoretically good coverage of standards.
