@@ -113,7 +113,7 @@ bins() {
 }
 
 make_html() {
-  local MD PAR BASE
+  local MD PAR BASE OH
   cd "$ROOT" || return 1
 
   git ls-files |
@@ -121,9 +121,11 @@ make_html() {
   while read MD; do
     PAR="`dirname "$MD"`"
     BASE="`basename "$MD" .md`"
+    OH="$DEST/$PAR/$BASE.htm"
     mkdir -p "$DEST/$PAR" || return 1
     printf %s "$MD" | "$DEST/js0-min-static" "$ROOT/src/convert/gem2htm.js" |
-    sed -r "s~\.md((#[^\"]*)?\">)~.htm\1~g" > "$DEST/$PAR/$BASE.htm" || return 1
+    sed -r "s~\.md((#[^\"]*)?\">)~.htm\1~g" > "$OH" || return 1
+    [ -s "$OH" ] || return 1
   done
   mv "$DEST/README.htm" "$DEST/index.html" || return 1
   cp -a "$ROOT/doc/gemiweb-icon.ico" "$DEST/favicon.ico" || return 1
