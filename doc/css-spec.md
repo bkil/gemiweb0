@@ -37,8 +37,8 @@ Properties:
 
 * background-color
 * color
-* font-size: medium, large (may render as double height and double width line in terminals)
-* font-style: normal, italic (not supported by Opera Mini)
+* font-size: medium, large (may render as double height and double width line on terminals)
+* font-style: normal, italic (not supported by Opera Mini and on some terminals)
 * font-weight: normal, bold
 * font-weight: lighter (not supported by Opera Mini)
 * text-decoration: none, underline, overline, line-through
