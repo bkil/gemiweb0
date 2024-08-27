@@ -294,7 +294,7 @@ function gemtext2htmFile(t, name) {
   if (!title) {
     title = getBasename(name);
   }
-  title = truncateAtWord(1024);
+  title = truncateAtWord(title, 1024);
   if (desc) {
     desc = truncateAtWord(desc, 2048);
     desc = '<meta property="og:description" content="' +
