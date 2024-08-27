@@ -617,23 +617,23 @@ if (typeof decodeURIComponent === 'undefined') {
     }
 
     var o = '';
-    var i = 0;
+    var i = -1;
     var c;
     var n;
     var u;
     var v;
-    while (i < s.length) {
+    while (s.length > (i = i + 1)) {
       c = s.charAt(i);
       n = c.charCodeAt(0);
-      if ((n === 37) && ((i + 2) < s.length)) {
+      if (!(n - 37) && ((i + 2) < s.length)) {
         u = getHexDigit(s.charCodeAt(i + 1));
         v = getHexDigit(s.charCodeAt(i + 2));
         if ((u >= 0) && (v >= 0)) {
           c = String.fromCharCode((u << 4) | v);
+          i = i + 2;
         }
       }
       o = o + c;
-      i = i + 1;
     }
     return o;
   }
