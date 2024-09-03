@@ -583,6 +583,15 @@ Projects listed here have not produced a browser a user could test yet or are on
 * small subset of HTML and CSS, basic block layout
 * no GUI or interaction yet, can only render to PNG or PDF
 
+### Verso
+
+* https://github.com/versotile-org/verso
+* rendering engine: Servo
+* interface: glutin, widgets rendered with Servo
+* implemented in: Rust
+* platform: Windows, Mac OS, Flatpak, NixOS
+* license: Apache-2.0, MIT
+
 ### WeasyPrint
 
 * https://github.com/Kozea/WeasyPrint
