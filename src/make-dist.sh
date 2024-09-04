@@ -9,7 +9,7 @@ make_head() {
     -j \
     "$DEST/js0br0.zip" \
     vm.c \
-    vm-free.c \
+    vm-free.c.inc \
     vm.h \
     vm-impl.h \
     include.h \
@@ -35,7 +35,7 @@ make_dev() {
   xargs zip \
     -j \
     "$DEST/js0br0-dev.zip" \
-    vm-smallbin.c \
+    vm-smallbin.c.inc \
     mk-run \
     ../make-dist.sh \
     ../LICENSE \

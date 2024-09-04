@@ -19,7 +19,7 @@ test_coverage() {
     --relative-only \
     vm.c $SRC > /dev/null || return 1
 
-  grep -H '' vm.c.gcov vm-free.c.gcov 2>/dev/null |
+  grep -H '' vm.c.gcov vm-free.c.inc.gcov 2>/dev/null |
   sed '
     /\/\* coverage:no \*\//,/\/\* \/coverage:no \*\//d
     /\/\* coverage:unreachable \*\//,/\/\* \/coverage:unreachable \*\//d

@@ -41,7 +41,7 @@ showProg(Parser *p) {
 /* /coverage:stderr */
 
 #ifdef SMALLBIN
-# include "vm-smallbin.c"
+# include "vm-smallbin.c.inc"
 
 #else
 
@@ -74,7 +74,7 @@ static Object *MapObject_new(void);
 List *List_new(List *next, char *key, Object *value);
 # define mfree(o) free(o)
 
-# include "vm-free.c"
+# include "vm-free.c.inc"
 #endif
 
 static void
