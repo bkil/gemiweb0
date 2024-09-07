@@ -134,7 +134,7 @@ function escapeHtmlInit() {
   }
 }
 
-function escapeHtml(s) {
+function escapeHtml(s, isBody) {
   escapeHtmlInit();
   var o = '';
   var i = -1;
@@ -151,26 +151,28 @@ function escapeHtml(s) {
       return o;
     }
 
-    if (n === 34) {
-      c = '&quot;';
-    } else if (n === 38) {
+    if (n === 38) {
       c = '&amp;';
-    } else if (n === 39) {
-      c = '&apos;';
     } else if (n === 60) {
       c = '&lt;';
     } else if (n === 62) {
       c = '&gt;';
+    } else if (!isBody) {
+      if (n === 34) {
+        c = '&quot;';
+      } else if (n === 39) {
+        c = '&apos;';
+      }
     }
     o = o + c;
   }
 }
 
-function consume(s, pre) {
+function consume(s, pre, isBody) {
   if (s.indexOf(pre)) {
     return '';
   }
-  return escapeHtml(String_trim(String_substring(s, pre.length, s.length)));
+  return escapeHtml(String_trim(String_substring(s, pre.length, s.length)), isBody);
 }
 
 function genId(s) {
@@ -217,7 +219,7 @@ function gemtext2htmBody(t, pr) {
   var inList = 0;
   while (lin.length > (i = i + 1)) {
     line = lin[i];
-    if (literal = consume(line, '*')) {
+    if (literal = consume(line, '*', 1)) {
       if (!inList) {
         o = o + '<ul>';
       }
@@ -229,22 +231,22 @@ function gemtext2htmBody(t, pr) {
         o = o + '</ul>';
         inList = 0;
       }
-      if (literal = consume(line, '###')) {
+      if (literal = consume(line, '###', 0)) {
         desc = desc + ' ' + literal;
         line = genId(literal);
         o = o + '<a href="#' + line + '" name="' + line + '"><h3 id="' + line + '">' + literal + '</h3></a>';
-      } else if (literal = consume(line, '##')) {
+      } else if (literal = consume(line, '##', 0)) {
         desc = desc + ' ' + literal;
         line = genId(literal);
         o = o + '<a href="#' + line + '" name="' + line + '"><h2 id="' + line + '">' + literal + '</h2></a>';
-      } else if (literal = consume(line, '#')) {
+      } else if (literal = consume(line, '#', 0)) {
         if (!title) {
           title = literal;
         }
         o = o + '<h1>' + literal + '</h1>';
-      } else if (literal = consume(line, '>')) {
+      } else if (literal = consume(line, '>', 1)) {
         o = o + '<blockquote>' + literal + '</blockquote>';
-      } else if (literal = consume(line, '=>')) {
+      } else if (literal = consume(line, '=>', 0)) {
         j = line.indexOf(' ');
         if (0 > j) {
           line = literal;
@@ -255,12 +257,12 @@ function gemtext2htmBody(t, pr) {
         o = o + '<a href="' + line + '">' + literal + '</a>';
       } else if (line === '```') {
         o = o + '<pre>';
-        while ((lin.length > (i = i + 1)) && ((line = escapeHtml(lin[i])) !== '```')) {
+        while ((lin.length > (i = i + 1)) && ((line = escapeHtml(lin[i], 1)) !== '```')) {
           o = o + line + nl;
         }
         o = o + '</pre>';
       } else {
-        literal = escapeHtml(line);
+        literal = escapeHtml(line, 1);
         line = autolink(literal);
         if ((literal === line) && !first) {
           first = literal;
