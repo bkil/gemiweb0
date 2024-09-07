@@ -209,8 +209,8 @@ function gemtext2htmBody(t, pr) {
   var title = '';
   var first = '';
   var desc = '';
-  var o = '';
   var nl = String.fromCharCode(10);
+  var o = nl;
   var lin = String_split(t, nl);
   var i = -1;
   var line;
@@ -270,6 +270,7 @@ function gemtext2htmBody(t, pr) {
         o = o + line + '<p>';
       }
     }
+    o = o + nl;
   }
   escapeHtmlStatic = undefined;
   if (!title) {
