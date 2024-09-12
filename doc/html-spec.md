@@ -131,10 +131,10 @@ readonly, role=status (or alert, log) and aria-live=polite (or assertive) added 
 * https://en.wikipedia.org/wiki/Small-C
 * https://gemini.circumlunar.space/
 * https://codeberg.org/Weblite/HTMLite/src/branch/master/htmlite.md
+* https://codeberg.org/smolweb/smolweb-spec
 
 ### Similar ongoing efforts
 
-* https://codeberg.org/smolweb/smolweb-spec
 * https://github.com/acidus99/stargate-proxy
 * https://github.com/matthewp/quack-proxy
 
