@@ -221,6 +221,7 @@ Planned on shortlist:
 * https://t3x.org/subc/
 * https://github.com/DoctorWkt/acwj
 * https://github.com/KolibriOS/kolibrios/tree/main/programs/develop/cmm
+* https://github.com/andrei-markeev/ts2c/blob/master/COVERAGE.md
 
 ## Best practices
 
