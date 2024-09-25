@@ -640,6 +640,19 @@ https://en.wikipedia.org/wiki/Arena_(web_browser)
 * features: start page, history, cookies, web proxy, utf-8
 * aim for compatibility with Netscape 3.0: HTML 3.2 formatting, images (jpeg, xbitmap, Inferno BIT, animated gif), aimed for JavaScript 1.1 (ES2), but runtime has ES3 features
 
+### contiki-os webbrowser
+
+* last update: repository in 2018, browser mostly written in 2003
+* https://github.com/contiki-os/contiki/blob/master/apps/webbrowser/
+* interface: text-only
+* features: a href links, img (only shows alt instead of the image), no layout (breaks flow on: p, h1, h2, h3, h4, newline on: br, tr, div), li, comments, form (action, input, submit), skips inline content of style, script and select
+* protocols: HTTP 1.0 (with host header added, supporting 301/302 redirects)
+* `User-Agent: Contiki/3.x (; http://www.contiki-os.org/)`
+* no CSS, no JS
+* implemented in C, up to 256 bytes of buffer lookahead
+* platform: contiki-os
+* license: BSD3
+
 ### Emacs w3
 
 * last update: 2008
