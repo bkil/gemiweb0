@@ -154,7 +154,7 @@ apt install surf
 
 ## KHTML engine
 
-* https://github.com/KDE/khtml
+* https://github.com/KDE/khtml/tree/0c0f313659504be0fcd2feec92fd7a7a425379fb
 * Konqueror also used this up to Ubuntu Focal and Debian Buster, but then switched
 
 ## Gecko engine
@@ -628,6 +628,19 @@ https://en.wikipedia.org/wiki/Arena_(web_browser)
 * implemented in C
 * platform: Amiga
 * license: AWebPL
+
+### BrowseX
+
+* last update: 2001
+* https://web.archive.org/web/20180515103826/http://jsish.org:80/browsex/Features.html
+* https://web.archive.org/web/20020225144633/http://browsex.com/index.html
+* https://web.archive.org/web/20180515103955/http://jsish.org:80/browsex/Javascript.html
+* rendering engine: Tkhtml
+* features: HTML 3.2, frames, form, cookies, basic auth, print to text and postscript, JavaScript (NGS javascript compiler), partial DOM, jpeg, png, animated gif, no CSS
+* applications: web browser, web server with free dynamic DNS, password manager, mailbox, peer-to-peer Talk to chat based on hostname
+* schemes: HTTP, HTTPS (SSL/TLS), FTP, POP3, file, proxy
+* implemented in C, Tcl
+* license: Artistic License
 
 ### Charon
 
