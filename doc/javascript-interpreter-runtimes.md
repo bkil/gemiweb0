@@ -4,6 +4,24 @@ Implementing the relevant standards of JavaScript fully would be prohibitively e
 
 ## Production
 
+### cesanta elk
+
+* https://github.com/cesanta/elk
+* supports a tiny subset of ES6 (numerous restrictions below ES1)
+* implemented in: C
+
+> Elk: a tiny JS engine for embedded systems. Does not use malloc. Operates with a given memory buffer only. Small footprint: about 20KB on flash/disk, about 100 bytes RAM for core VM. No bytecode. Interprets JS code directly.  Elk is completely bare, it does not even have a standard library.
+
+### CL-JavaScript
+
+* https://github.com/akapav/js
+* https://marijnhaverbeke.nl/cl-javascript/
+* license: MIT
+* implemented in: Common Lisp
+
+> CL-JavaScript allows you to add user scripting to your Common Lisp application without requiring your poor users to learn Common Lisp. It is a JavaScript to Common Lisp translator, runtime, and standard library. We are ECMAScript 3 compatible, with some of the ECMAScript 5 extensions.
+> By using the Lisp compiler to compile JavaScript (and by using some clever tricks for the things that Lisp normally isn't good at), this implementation manages to be faster than most of the 2009 generation of JavaScript engines. The new generation (V8, Jägermonkey) beats it by, depending on the benchmark, a factor 4 or so.
+
 ### DukTape
 
 * https://duktape.org/dukweb.html
@@ -19,8 +37,24 @@ Includes a web based example interpreter.
 ### Espruino
 
 * https://github.com/espruino/Espruino
+* implemented in: C
 
 > Espruino is a JavaScript interpreter for microcontrollers. It is designed for devices with as little as 128kB Flash and 8kB RAM.
+
+### GraalJS
+
+* https://github.com/oracle/graaljs
+* implemented in: Java
+* features: ECMAScript 2023, Node.js
+
+> includes all the benefits from the GraalVM stack including interoperability with Java.
+
+### Hermes
+
+* https://github.com/facebook/hermes
+* implemented in: C++
+
+> Hermes is a JavaScript engine optimized for fast start-up of React Native apps. It features ahead-of-time static optimization and compact bytecode.
 
 ### jerryscript
 
@@ -31,17 +65,29 @@ Includes a web based example interpreter.
 > Heavily optimized for low memory consumption
 > Snapshot support for precompiling JavaScript source code to byte code
 
-### JS-Interpreter
+### Kinoma XS6
 
-* https://github.com/NeilFraser/JS-Interpreter
+* https://github.com/Kinoma/kinomajs
+* https://www.moddable.com/XS7-TC-39
 
-> A sandboxed JavaScript interpreter in JavaScript. Execute arbitrary ES5 JavaScript code line by line in isolation and safety.
+> Kinoma's XS6 library implements a JavaScript virtual machine optimized for devices with limited resources. This virtual machine conforms to the 6th edition of the ECMAScript specification (ECMAScript 2015).
+> The Kinoma Porting Layer (KPL) is the bottom of the KinomaJS stack. It is a very light portability layer, modeled, as much as practical, on POSIX. Because KinomaJS runs on a wide variety of operating systems, the goal is to isolate all direct calls to the host operating in KPL. Some RTOS hosts do not support the full ANSI C library, so it cannot even be safely assumed that functions like printf are available. To avoid surprises with the size of types, a portable-type system modeled on that used by QuickTime is used.
 
 ### Ladybird LibJS
 
 * formerly for SerenityOS LibWeb
 * https://github.com/LadybirdBrowser/ladybird/tree/master/Userland/Libraries/LibJS
 * used by Ladybird
+
+### microvium
+
+* https://github.com/coder-mike/microvium/blob/main/doc/supported-language.md#not-supported
+* https://coder-mike.com/behind-microvium/
+* https://coder-mike.com/blog/2022/06/11/microvium-is-very-small/
+* implemented in: C
+* supports a small subset of ES3 with some ES6 features
+
+> Microvium is a tiny JavaScript engine (less than 16kB compiled size) for microcontrollers for running a small but useful subset of the JavaScript language. The runtime engine is portable C code and easy to integrate. Microvium takes the unique approach partially running the JS code at build time and deploying a snapshot, which leads to a number of advantages over other embedded JavaScript engines.
 
 ### mujs
 
@@ -69,6 +115,17 @@ Includes a web based example interpreter.
 > Otto targets ES5
 > Go translates JavaScript-style regular expressions into something that is "regexp" compatible via parser.TransformRegExp. Unfortunately, RegExp requires backtracking for some patterns, and backtracking is not supported by the standard Go engine. re2 (Go) has a different definition for \s: [\t\n\f\r ]
 > Package natto is an example/offshoot of otto that implements an event loop (supporting setTimeout/setInterval).
+
+### Qt V4
+
+* https://doc.qt.io/qt-6/qtqml-javascript-hostenvironment.html
+* https://doc.qt.io/qt-6/qtjavascript.html
+* https://wiki.qt.io/V4
+* https://wiki.qt.io/Application_Scripting_with_QJSEngine
+* https://wiki.qt.io/Qt-contributors-summit-2013-QML-engine
+* implemented in: C++
+* features: ES7, JIT
+* Used for QML and QJSEngine
 
 ### quickjs
 
@@ -105,6 +162,28 @@ Includes a web based example interpreter.
 > The ucode language is a small, general-purpose scripting language that resembles ECMAScript syntax. It can be used as a standalone interpreter or embedded into host applications. Ucode supports template mode with control flow and expression logic statements embedded in Jinja-like markup blocks.
 > The development of ucode was motivated by the need to rewrite the OpenWrt firewall framework using nftables. Initially intended as a template processor, ucode evolved into a versatile scripting language for various system scripting tasks. Its design goals include easy integration with C applications, efficient handling of JSON data and complex data structures, support for OpenWrt's ubus message bus system, and a comprehensive set of built-in functions inspired by Perl 5.
 
+## Maintained metacircular
+
+### engine262
+
+* https://github.com/engine262/engine262
+* implemented in: JavaScript
+
+### JS-Interpreter
+
+* https://github.com/NeilFraser/JS-Interpreter
+
+> A sandboxed JavaScript interpreter in JavaScript. Execute arbitrary ES5 JavaScript code line by line in isolation and safety.
+
+### Siubaak sval
+
+* https://github.com/Siubaak/sval
+* implemented in: JavaScript ES5
+* features: ES5
+* license: MIT
+
+> Both invasived and sandbox modes available. Based on parser Acorn.
+
 ## Planned
 
 ### gemiweb0
@@ -112,6 +191,31 @@ Includes a web based example interpreter.
 * The main scope is producing only documentation, specification and conformance tests. Developers are expected to implement it on their own.
 * A proof of concept JavaScript0 interpreter plugin for gemini and web browsers and for CLI/CGI web server integration will be provided later in multiple languages, both low level and high level.
 * Language: C, PHP, busybox ash & awk, JavaScript0
+
+## Experimental
+
+### boa
+
+* https://github.com/boa-dev/boa
+* implemented in Rust
+* license: Unlicense or MIT
+
+> Boa is an embeddable and experimental Javascript engine written in Rust. Currently, it has support for some of the language.
+
+### Guile ECMAScript
+
+* implemented around 2009, but still maintained
+* https://git.savannah.gnu.org/cgit/guile.git/tree/module/language/ecmascript/
+* https://www.gnu.org/software/guile/manual/html_node/ECMAScript.html
+* approximately ES3 (not finished)
+
+> It's probably not as fast as compilers that produce native code, but because it hooks into Guile's compiler at a high level, as Guile's compiler improves and eventually gets native code compilation, it will be plenty fast.
+
+### Toshok EchoJS
+
+* https://github.com/toshok/echojs
+
+> An ahead of time compiler and runtime for ES6. Things only build reliably on OSX. You'll need a couple of external dependencies to get things running: node.js, llvm 3.6, coffeescript
 
 ## Unmaintained
 
@@ -133,6 +237,14 @@ Includes a web based example interpreter.
 * implemented in C
 * platform: Amiga
 * license: AWebPL
+
+### BeRo1985 besen
+
+* last update: 2020
+* https://github.com/BeRo1985/besen
+* licence: LGPL2
+
+> Complete ECMAScript Fifth Edition Implemention in Object Pascal
 
 ### cesanta mJS
 
@@ -162,6 +274,16 @@ Includes a web based example interpreter.
 * JavaScript ES3
 * implemented in Limbo
 
+### Constellation iv lv5
+
+* last update: 2015
+* https://github.com/Constellation/iv/tree/master/iv/lv5
+* ES 5.1
+* implemented in C++
+* license: 2-BSD
+
+> ECMAScript Lexer / Parser / Interpreter / VM / method JIT written in C++
+
 ### edbrowse 2
 
 * last update: 2006
@@ -169,6 +291,23 @@ Includes a web based example interpreter.
 * JavaScript ES3 with a subset of DOM level 1
 * implemented in C
 * used by edbrowse up to v2.2.10
+
+### Jsish
+
+* last update: 2018
+* https://sourceforge.net/projects/jsish/
+* https://web.archive.org/web/20180315190341/http://jsish.org/jsi/www/home.wiki
+* https://web.archive.org/web/20180315195803/http://jsish.org/jsi/doc/tip/jsi/www/language.wiki#syntax
+* https://web.archive.org/web/20180316140742/http://jsish.org/jsi/doc/tip/jsi/www/background.wiki#ecma
+* support aimed at ES5.1
+* implemented in: C
+
+> provides types to increase maintainability, has builtin support for web and database, A Jsi function may have parameters with types and default values
+
+### KHTML KJS
+
+* https://github.com/KDE/khtml/tree/0c0f313659504be0fcd2feec92fd7a7a425379fb/src/ecma
+* Used by Konqueror (KHTML) in the past
 
 ### Links 2.1pre28
 
@@ -197,14 +336,6 @@ Includes a web based example interpreter.
 * C++
 * GNU GPL
 
-### narcissus
-
-* https://github.com/mozilla/narcissus/
-* 2012
-
-> Narcissus is a JavaScript interpreter written in pure JavaScript (i.e., a meta-circular evaluator), using the SpiderMonkey engine.
-> Originally a proof-of-concept, a test-bed for rapidly prototyping new language features for the JavaScript language (as well as the ECMAScript standard).
-
 ### Nashorn
 
 * https://en.wikipedia.org/wiki/Nashorn_(JavaScript_engine)
@@ -225,6 +356,17 @@ Includes a web based example interpreter.
 * no regexp, no Unicode
 * C
 * GNU LGPL
+
+### QtScript 4.5
+
+* last update: 2009
+* https://wiki.qt.io/JavaScript
+* https://wiki.qt.io/Category:Developing_Qt::Qt_Script#History
+* https://download.qt.io/archive/qt/4.3/
+* http://dezip.org/v1/9/https/download.qt.io/archive/qt/4.5/qt-all-opensource-src-4.5.3.zip/qt-all-opensource-src-4.5.3/src/script/
+* implemented in: C++
+* features: ES5
+* used in QtScript in Qt 4.3, 4.4 and 4.5 (2009)
 
 ### tiny-js
 
@@ -249,6 +391,14 @@ Includes a web based example interpreter.
 > separators: ; for expressions, ( ) for sub-expressions, { }
 > literals: booleans, float/integers, strings
 
+### neades yaji
+
+* last update: 2012
+* https://github.com/neades/yaji-ecmascript-interpreter/tree/master/yaji-ecmascript-interpreter
+* fork of FESI
+* at least ES3 (aiming for ES5)
+* implemented in: Java
+
 ### Voyager
 
 * last update: 2002
@@ -257,6 +407,36 @@ Includes a web based example interpreter.
 * implemented in C
 * platform: Amiga
 * license: GNU GPL v2
+
+### Unmaintained metacircular
+
+### bramblex jsjs
+
+* last update: 2018
+* https://github.com/bramblex/jsjs
+
+### benvie continuum
+
+* last update: 2012
+* https://web.archive.org/web/20121203041426/http://benvie.github.com/continuum/
+* https://web.archive.org/web/20150619174908/github.com/benvie/continuum
+* supports ES6 draft
+* implemented in JavaScript ES3
+
+### MetaES
+
+* last update: 2022
+* https://github.com/metaes/metaes
+* implemented in: JavaScript
+* license: MIT
+
+### narcissus
+
+* https://github.com/mozilla/narcissus/
+* 2012
+
+> Narcissus is a JavaScript interpreter written in pure JavaScript (i.e., a meta-circular evaluator), using the SpiderMonkey engine.
+> Originally a proof-of-concept, a test-bed for rapidly prototyping new language features for the JavaScript language (as well as the ECMAScript standard).
 
 ## Benchmarks
 
