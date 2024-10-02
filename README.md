@@ -57,6 +57,7 @@ Play with an example game obeying this subset:
 * https://bkil.gitlab.io/static-wonders.js/edu/knowcard.htm#
 * https://bkil.gitlab.io/static-wonders.js/toy/busybvr.htm
 * https://bkil.gitlab.io/static-wonders.js/toy/busybvr4.htm
+* https://bkil.gitlab.io/static-wonders.js/toy/logismap.htm
 * https://bkil.gitlab.io/static-wonders.js/toy/langtona.htm
 * https://bkil.gitlab.io/static-wonders.js/toy/rule110.htm
 * https://bkil.gitlab.io/static-wonders.js/toy/namegen.htm
