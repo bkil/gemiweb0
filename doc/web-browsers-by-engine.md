@@ -280,12 +280,16 @@ More of a tech demo than a product for end users, but it is a unique independent
 * no JavaScript
 * their domain name was squatted by a Wordpress clone
 * CSS support to be improved
+* implemented in: C (parts in C++)
 
 ### HV3
 
 * https://packages.debian.org/bullseye/hv3
 * CSS (from around 2008)
 * optionally JavaScript if compiled from source (ES3, from around 2009)
+* interface: Tk
+* rendering engine: Tkhtml
+* implemented in: Tcl
 
 ### KolibriOS WebView
 
@@ -316,6 +320,7 @@ More of a tech demo than a product for end users, but it is a unique independent
 * features: tables, forms, some CSS, some JavaScript with a subset of DOM level 1
 * v2 up to 2.2.10 used a custom JavaScript engine, 3.1.1 used SpiderMonkey, 3.7.0 used DukTape, 3.8.0 uses QuickJS up to now
 * protocol: http, https, gopher, ftp, sftp, smtp, pop3, pop3s, imap, imaps
+* implemented in: C
 
 ```
 apt install edbrowse
@@ -324,11 +329,13 @@ apt install edbrowse
 ### ELinks
 
 * https://en.wikipedia.org/wiki/ELinks
+* https://github.com/rkd77/elinks
 * text-based
 * interface can be scripted via guile, Lua, Perl, Python, Ruby or SpiderMonkey
 * features: mouse, utf-8, idn, brotli, zstd, text color, tables, frames, inline images using Sixel, some CSS, some JS with a subset of DOM level 1
 * content JavaScript engine can be configured at compilation: SpiderMonkey, QuickJS or MuJS (formerly: NJS)
 * protocol: http, https, gopher, gemini, ftp, sftp, nntp, smb, bittorrent, fsp
+* implemented in: C
 
 ### Emacs Eww
 
@@ -347,6 +354,7 @@ apt install edbrowse
 * version 2.1pre28 was the last version that could interpret Netscape JavaScript 1.1
 * http://links.twibright.com/download/ChangeLog
 * can run either a text-only version from the terminal or display images inline and antialiased fonts if running on X11 or DirectFB
+* implemented in: C
 
 ```
 apt install links2
@@ -435,6 +443,7 @@ apt install w3m
 
 * https://github.com/MasterQ32/kristall
 * https://github.com/MasterQ32/kristall/blob/master/src/renderers/htmlrenderer.cpp
+* implemented in: C++
 
 > Graphical small-internet client for windows, linux, MacOS X and BSDs. Supports gemini, http, https, gopher, finger.
 > text/gemini, text/html (reduced feature set), text/markdown
@@ -455,6 +464,22 @@ apt install w3m
 * GTK GUI
 
 > This is a web browser developed from scratch using Rust. To fit with the "make from scratch" spirit, the development of the browser avoids the use of external libraries as much as possible.
+
+### Mycel
+
+* https://github.com/psilva261/mycel
+* https://github.com/mjl-/duit
+* https://github.com/psilva261/6to5
+* https://github.com/andybalholm/cascadia
+* https://github.com/tdewolff/parse/tree/master/js
+* interface: graphical (using duit)
+* features: images, small subset of HTML5 and CSS (using cascadia)
+* JavaScript: forked from goja (otto), uses tdewolff/parse, basic DOM, AJAX, ES5 (ES6 with 6to5 translator)
+* protocol: HTTP (TLS)
+* platform: Plan 9, Mac OS, Linux
+* implemented in: Go
+
+> Since the implementation is very limited anyway, DOM changes are only computed initially and during click events. A handful of jQuery UI widgets work
 
 ### naglfar
 
@@ -681,9 +706,21 @@ https://en.wikipedia.org/wiki/Arena_(web_browser)
 
 ### kweb
 
+* last update: 2014
 * https://github.com/ekapujiw2002/kweb
+* rendering engine: WebKit
 
-Hasn't been updated for a long time.
+### Line Mode Browser
+
+* last update: 2017
+* https://en.wikipedia.org/wiki/Line_Mode_Browser
+* https://github.com/w3c/libwww/blob/master/LineMode/Overview.html
+* interface: text-only
+* rendering engine: libwww
+* features: HTML 4.0
+* protocols: http 1.1 (pipelining, PUT, POST, digest authentication, deflate, IDN, SSL), ftp, nntp, wais, finger, rlogin, telnet, gopher
+* no CSS, no JS
+* implemented in: C
 
 ### Midori
 
@@ -750,3 +787,4 @@ FOSS JavaScript interpreters, runtimes
 * https://github.com/nerdyslacker/desktop-web-browsers
 * https://blogs.gnome.org/mcatanzaro/2022/11/04/stop-using-qtwebkit/
 * https://en.wikipedia.org/wiki/Libwww#Applications_using_libwww
+* https://eylenburg.github.io/browser_engines.htm
