@@ -6,9 +6,10 @@ Refer to the GNU GPL v2 in LICENSE for terms */
 
 #include <stdio.h> /* STDIN_FILENO fputc fputs getline perror putchar stderr stdout */
 #include <malloc.h> /* free malloc */
-#include <stdlib.h> /* atoi size_t */
+#include <stdlib.h> /* size_t */
 #include <sys/mman.h> /* mmap */
 #include <sys/stat.h> /* fstat open */
+#include <sys/types.h> /* fstat open opendir regcomp regexec regfree select */
 #include <fcntl.h> /* open */
 #include <unistd.h> /* close fstat read select write */
 #include <sys/time.h> /* select */
@@ -18,7 +19,6 @@ Refer to the GNU GPL v2 in LICENSE for terms */
 #include <errno.h> /* errno */
 
 #ifndef NOREGEXP
-#include <sys/types.h> /* fstat open opendir regcomp regexec regfree select */
 #include <regex.h> /* regcomp regexec regfree */
 #endif
 
@@ -390,7 +390,7 @@ isString(Object *o) {
 }
 
 static int
-__attribute__((pure, nonnull, warn_unused_result))
+__attribute__((pure, warn_unused_result))
 isStringEq(Str a, Str b) {
   return (a.len == b.len) && (!strncmp(a.s, b.s, a.len));
 }
@@ -883,37 +883,28 @@ __attribute__((nonnull, warn_unused_result))
 parseIntLit(Parser *p) {
   skipWs(p);
 
+  int minus = 0;
+  int x = 0;
   const char *s = p->prog.s;
   char c = s < p->prog.end ? *s : 0;
   if (c == '-') {
-    s++;
-    c = s < p->prog.end ? *s : 0;
+    minus = 1;
+    c = ++s < p->prog.end ? *s : 0;
   }
   const char *digitStart = s;
   while ((c >= '0') && (c <= '9')) {
-    s++;
-    c = s < p->prog.end ? *s : 0;
+    x = 10 * x + (c - '0');
+    c = ++s < p->prog.end ? *s : 0;
   }
-  size_t len = off_t2size_t(s - p->prog.s);
-  size_t digits = off_t2size_t(s - digitStart);
-  if (!digits || (c == '_') || (c == '.') || ((c >= 'A' && (c <= 'Z'))) || ((c >= 'a') && (c <= 'z'))) {
+  if ((digitStart == s) || (c == '_') || (c == '.') || ((c >= 'A' && (c <= 'Z'))) || ((c >= 'a') && (c <= 'z'))) {
     return 0;
   }
 
+  p->prog.s = s;
   if (p->nest) {
-    p->prog.s = s;
     return &undefinedObject;
   }
-  int x;
-  if (s < p->prog.end) {
-    x = atoi(p->prog.s);
-  } else {
-    char *t = strndup(p->prog.s, len);
-    x = atoi(t);
-    mfree(t);
-  }
-  p->prog.s = s;
-  return IntObject_new(x);
+  return IntObject_new(minus ? -x : x);
 }
 
 static int
