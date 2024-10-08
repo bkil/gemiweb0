@@ -107,6 +107,16 @@ apt install luakit
 * libwebkit2gtk
 * beta: Blink engine
 
+### Oku
+
+* https://github.com/OkuBrowser/oku
+* rendering engine: webkit2gtk
+* implemented in: Rust (and C++)
+* platform: Linux
+* license: AGPL v3
+
+> Oku lets you create replicas, virtual drives that you can share online. A read-only ticket can be used to view, but not edit, your replica. Is this ready to be my default browser? No. Oku is still actively in development.
+
 ### Otter Browser
 
 * https://en.wikipedia.org/wiki/Otter_Browser
@@ -233,13 +243,25 @@ It received $1M funding on 2024-07-01 to help release a public beta by 2026.
 * https://ladybird.org/announcement.html
 * https://ladybird.org/why-ladybird.html
 
+### LoboEvolution
+
+* https://github.com/LoboEvolution/LoboEvolution
+* https://github.com/LoboEvolution/CobraEvolution
+* rendering engine: CobraEvolution
+* fork of LoboBrowser
+* features: CSS, Rhino JavaScript
+* languages: English, French
+* implemented in: Java
+* license: MIT
+
 ### NetSurf
 
 * https://en.wikipedia.org/wiki/NetSurf
-* independent and are working to support common web pages in iterations
-* support for GTK and Linux Framebuffer
-* language: C
-* JavaScript support was implemented with SpiderMonkey in the past, and recently with DukTape.
+* rendering engine: Hubbub (independent and are working to support common web pages in iterations)
+* interface: support for GTK and Linux Framebuffer
+* features: HTML5, simple CSS (LibCSS), JavaScript support was implemented with SpiderMonkey in the past, and recently with DukTape.
+* platform: RISC OS, Linux, Haiku (BeOS), AmigaOS, Windows, Atari
+* implemented in: C
 
 ### visurf
 
@@ -432,6 +454,17 @@ apt install w3m
 
 > It provides no user interface and is suitable to be used as a web application container for embedded devices in kiosk mode.
 
+### HighWire
+
+* last update: mostly implemented in 2010, but many recent commits
+* https://github.com/freemint/highwire
+* uses: HTMLtidy
+* features: HTML 3.2, images (gif, jpg, png), tables, hyperlinks, sound, file selector, Gemscript, HTTP, forms
+* partially working: HTML 4.0, frameset, PDF, Unicode characters up to U+FFFD, no CSS, no JavaScript
+* platform: Atari (MiNT, MagiC)
+* implemented in: C
+* license: Zlib
+
 ### kosmonaut
 
 * https://github.com/twilco/kosmonaut
@@ -465,22 +498,6 @@ apt install w3m
 
 > This is a web browser developed from scratch using Rust. To fit with the "make from scratch" spirit, the development of the browser avoids the use of external libraries as much as possible.
 
-### Mycel
-
-* https://github.com/psilva261/mycel
-* https://github.com/mjl-/duit
-* https://github.com/psilva261/6to5
-* https://github.com/andybalholm/cascadia
-* https://github.com/tdewolff/parse/tree/master/js
-* interface: graphical (using duit)
-* features: images, small subset of HTML5 and CSS (using cascadia)
-* JavaScript: forked from goja (otto), uses tdewolff/parse, basic DOM, AJAX, ES5 (ES6 with 6to5 translator)
-* protocol: HTTP (TLS)
-* platform: Plan 9, Mac OS, Linux
-* implemented in: Go
-
-> Since the implementation is very limited anyway, DOM changes are only computed initially and during click events. A handful of jQuery UI widgets work
-
 ### naglfar
 
 * https://github.com/maekawatoshiki/naglfar
@@ -498,6 +515,16 @@ apt install w3m
 * implemented in C++
 * platform: Amiga, GTK, Qt, SDL
 * license: BSD3
+
+### QEmacs
+
+* https://bellard.org/qemacs/qe-doc.html#SEC32
+* https://github.com/qemacs/qemacs/tree/master/libqhtml
+* implemented in: C
+* features: a WYSIWYG HTML editor, some CSS2, tables, no JavaScript, no images
+* license: MIT
+
+> WYSIWYG HTML/XML/CSS2 mode graphical editing. Also supports lynx like rendering on VT100 terminals. Quite complete CSS2 support (including generated content and counters). Full Bidirectionnal Unicode support. Table support with both 'fixed' and 'auto' layout algorithms.
 
 ### Satori
 
@@ -636,11 +663,20 @@ https://en.wikipedia.org/wiki/Abaco_(web_browser)
 
 ### Amaya
 
-https://en.wikipedia.org/wiki/Amaya_(web_editor)
+* last update: 2013
+* https://en.wikipedia.org/wiki/Amaya_(web_editor)
+* https://github.com/w3c/Amaya-Editor
+* features: CSS, MathML, images (png, SVG)
+* implemented in: C
 
 ### Arena
 
-https://en.wikipedia.org/wiki/Arena_(web_browser)
+* last update: 1998
+* https://en.wikipedia.org/wiki/Arena_(web_browser)
+* features: HTML 3.0, tables, math, links, images (jpg, png, gif, xpm, xbm), forms, CSS1, Java applets, no JavaScript
+* protocol: HTTP 1.1, FTP, NNTP, gopher, WAIS, mailto
+* parser and networking: libwww
+* implemented in: C
 
 ### AWeb
 
@@ -704,6 +740,11 @@ https://en.wikipedia.org/wiki/Arena_(web_browser)
 * no JS
 * implemented in: Emacs LISP
 
+### Erwise
+
+* last update: 1992
+* https://browsers.flanigan.us/browsers/erwise/index.html#run
+
 ### kweb
 
 * last update: 2014
@@ -730,9 +771,36 @@ https://en.wikipedia.org/wiki/Arena_(web_browser)
 apt install midori
 ```
 
+### Mycel
+
+* renamed from opossum in 2024, but no other change since 2022
+* https://github.com/psilva261/mycel
+* https://github.com/mjl-/duit
+* https://github.com/andybalholm/cascadia
+* https://github.com/psilva261/sparklefs
+* https://github.com/psilva261/sparkle
+* https://github.com/psilva261/6to5
+* https://github.com/tdewolff/parse/tree/master/js
+* interface: graphical (using duit)
+* features: images, small subset of HTML5 and CSS (using cascadia)
+* JavaScript: sparklefs (forked from goja and otto, uses sparkle and tdewolff/parse), basic DOM, AJAX, ES5 (ES6 with 6to5 translator)
+* protocol: HTTP (TLS)
+* platform: Plan 9 (9front, 9legacy, plan9port, 9pi), Mac OS, Linux
+* implemented in: Go
+
+> Still experimental and a lot of features are missing. Rudimentary HTML5 and CSS support, large parts like float/flex layout are just stub implementations. Since the implementation is very limited anyway, DOM changes are only computed initially and during click events. A handful of jQuery UI widgets work
+
 ### NCSA-mosaic
 
 * https://github.com/alandipert/ncsa-mosaic
+
+### Nexus WorldWideWeb
+
+* last update: 1994
+* https://en.wikipedia.org/wiki/WorldWideWeb
+* https://www.w3.org/People/Berners-Lee/WorldWideWeb.html
+* https://www.w3.org/History/1991-WWW-NeXT/Implementation/
+* parser and networking: libwww
 
 ### Odysseus
 
@@ -746,6 +814,15 @@ apt install midori
 * features: mouse, incremental rendering, forms partially, tables partially, frames partially
 * no CSS, no JS
 * protocols: http, https, ftp, ftps, nntp, finger, file, local cgi
+
+### tkWWW
+
+* last update: 1995
+* https://en.wikipedia.org/wiki/TkWWW
+* http://web.mit.edu/course/other/cdsdev/html/tk-www/help/overview.html
+* parser and networking: libwww
+* implemented in: Tcl/Tk
+* license: GPL v2
 
 ### Uzbl
 
