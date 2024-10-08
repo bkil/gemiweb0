@@ -41,6 +41,13 @@ Includes a web based example interpreter.
 
 > Espruino is a JavaScript interpreter for microcontrollers. It is designed for devices with as little as 128kB Flash and 8kB RAM.
 
+### goja
+
+* https://github.com/dop251/goja
+* forked from Otto
+* features: ES 5.1
+* implemented in: Go
+
 ### GraalJS
 
 * https://github.com/oracle/graaljs
@@ -292,6 +299,25 @@ Includes a web based example interpreter.
 * implemented in C
 * used by edbrowse up to v2.2.10
 
+### Ejacs
+
+* last update: 2018, but most code is from 2008
+* https://github.com/emacsattic/ejacs
+* features: ES3 and some JavaScript 1.5
+* implemented in Emacs LISP
+* license: GPL v2
+
+> Ejacs is basically a toy. It is regrettably insufficient in several important dimensions
+
+### HJS
+
+* last update: 2008
+* https://wiki.haskell.org/Libraries_and_tools/HJS
+* https://hackage.haskell.org/package/hjs-0.2.1
+* features: ES3 and some JavaScript 1.5
+* implemented in: Haskell
+* license: 3-BSD
+
 ### Jsish
 
 * last update: 2018
@@ -368,6 +394,15 @@ Includes a web based example interpreter.
 * features: ES5
 * used in QtScript in Qt 4.3, 4.4 and 4.5 (2009)
 
+### sparkle
+
+* last update: 2022
+* https://github.com/psilva261/sparkle
+* forked from goja
+* features: ES 5.1 with BigInt arrays
+* implemented in: Go
+* used by: Mycel browser
+
 ### tiny-js
 
 * https://github.com/gfwilliams/tiny-js
@@ -398,6 +433,16 @@ Includes a web based example interpreter.
 * fork of FESI
 * at least ES3 (aiming for ES5)
 * implemented in: Java
+
+### UweSchmidt js0
+
+* last update: 2017
+* https://github.com/UweSchmidt/js0/blob/master/src/Lang/JS0/Parser.hs
+* features: unfinished, but the parser and the types seem to have progressed well
+* implemented in: Haskell
+* license: 3-BSD
+
+> A Simplified JavaScript Compiler and Virtual Machine
 
 ### Voyager
 
