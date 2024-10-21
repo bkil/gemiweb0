@@ -205,11 +205,12 @@ function autolink(t) {
   return t;
 }
 
+var nl = String.fromCharCode(10);
+
 function gemtext2htmBody(t, pr) {
   var title = '';
   var first = '';
   var desc = '';
-  var nl = String.fromCharCode(10);
   var o = nl;
   var lin = String_split(t, nl);
   var i = -1;
@@ -312,8 +313,12 @@ function gemtext2htmFile(t, name) {
 
   o = '<!DOCTYPE html><html lang=en><head><meta charset="utf-8"><title>' +
     title +
-    '</title><link rel="shortcut icon" type="image/png" href="/gemiweb0/favicon.ico"><meta property="og:image" content="/gemiweb0/favicon.ico"><meta name=viewport content="width=device-width, initial-scale=1">' +
-    desc +
+    '</title><link rel="shortcut icon" href="/gemiweb0/favicon.ico"><meta property="og:image" content="/gemiweb0/favicon.ico"><meta name=viewport content="width=device-width, initial-scale=1">' +
+    desc + nl +
+    '<style>' + nl +
+    ':target { border-style: solid; }' + nl +
+    'blockquote { border-left: solid; padding-left: 1em; }' + nl +
+    '</style>' +
     '</head><body>' +
     o +
     '</body></html>';
