@@ -224,14 +224,14 @@ function gemtext2htmBody(t, pr) {
     line = lin[i];
     if (literal = consume(line, '*', 1)) {
       if (!inList) {
-        o = o + '<ul>';
+        o = o + '<ul>' + nl;
       }
       literal = autolink(literal);
       o = o + '<li>' + literal + '</li>';
       inList = 1;
     } else {
       if (inList) {
-        o = o + '</ul>';
+        o = o + '</ul>' + nl;
         inList = 0;
       }
       if (literal = consume(line, '###', 0)) {
@@ -292,10 +292,10 @@ function gemtext2htmBody(t, pr) {
   }
   desc = first + desc;
   if (inList) {
-    o = o + '</ul>';
+    o = o + '</ul>' + nl;
   }
   if (toc) {
-    toc = '<ul>' + toc + '</ul>' + nl;
+    toc = '<ul>' + nl + toc + '</ul>' + nl;
   }
   o = pretoc + toc + o;
   pr.title = title;
