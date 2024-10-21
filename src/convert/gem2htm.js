@@ -211,6 +211,8 @@ function gemtext2htmBody(t, pr) {
   var title = '';
   var first = '';
   var desc = '';
+  var pretoc = '';
+  var toc = '';
   var o = nl;
   var lin = String_split(t, nl);
   var i = -1;
@@ -233,13 +235,23 @@ function gemtext2htmBody(t, pr) {
         inList = 0;
       }
       if (literal = consume(line, '###', 0)) {
+        if (!pretoc) {
+          pretoc = o;
+          o = '';
+        }
         desc = desc + ' ' + literal;
         line = genId(literal);
         o = o + '<a href="#' + line + '" name="' + line + '"><h3 id="' + line + '">' + literal + '</h3></a>';
+        toc = toc + '<li><a href="#' + line + '"> &nbsp; ' + literal + '</a></li>' + nl;
       } else if (literal = consume(line, '##', 0)) {
+        if (!pretoc) {
+          pretoc = o;
+          o = '';
+        }
         desc = desc + ' ' + literal;
         line = genId(literal);
         o = o + '<a href="#' + line + '" name="' + line + '"><h2 id="' + line + '">' + literal + '</h2></a>';
+        toc = toc + '<li><a href="#' + line + '">' + literal + '</a></li>' + nl;
       } else if (literal = consume(line, '#', 0)) {
         if (!title) {
           title = literal;
@@ -282,6 +294,10 @@ function gemtext2htmBody(t, pr) {
   if (inList) {
     o = o + '</ul>';
   }
+  if (toc) {
+    toc = '<ul>' + toc + '</ul>' + nl;
+  }
+  o = pretoc + toc + o;
   pr.title = title;
   pr.desc = desc;
   return o;
