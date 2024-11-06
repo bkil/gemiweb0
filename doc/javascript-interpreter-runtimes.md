@@ -234,7 +234,7 @@ Includes a web based example interpreter.
 * ES3, JavaScript 1.5
 * BSD
 * C
-* used by the HV3 web prowser
+* used by the HV3 web browser
 
 ### AWeb
 
