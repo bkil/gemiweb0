@@ -38,6 +38,7 @@ Properties:
 * background-color
 * color
 * font-size: medium, large (may render as double height and double width line on terminals)
+* font-size: small, x-large (Opera mini supports up to 4 font sizes on screen, not supported on terminals, small fonts pose accessibility issues)
 * font-style: normal, italic (not supported by Opera Mini and on some terminals)
 * font-weight: normal, bold
 * font-weight: lighter (not supported by Opera Mini)
