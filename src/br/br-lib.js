@@ -555,7 +555,16 @@ function processTag(j, tag, fin, attr) {
       t = '* ';
     }
     displayLi = 1;
-  } else if ((tag === 'ul') && fin && s.displayLi) {
+  } else if ((tag === 'td') || (tag === 'th')) {
+    if (!fin) {
+      if (s.inTr) {
+        t = ' ';
+      } else {
+        s.inTr = 1;
+      }
+    }
+    displayLi = 1;
+  } else if (((tag === 'ul') || (tag === 'table')) && fin && s.displayLi) {
     inline = 1;
   } else if ((tag === 'script') || (tag === 'style')) {
     needText = 1;
@@ -571,6 +580,9 @@ function processTag(j, tag, fin, attr) {
     br = 1;
     memo = 0;
   } else {
+    if (tag === 'tr') {
+      s.inTr = 0;
+    }
     memo = 0;
     inline = 1;
     ignore = 1;
