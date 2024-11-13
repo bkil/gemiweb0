@@ -34,7 +34,7 @@ Older notes:
 
 ## Development snapshots
 
-Note that it is not intended for general audiences yet, hence it may not be safe to run these. Do consider containerization before testing.
+Note that we are still accepting developer feedback on the specification. You should not build anything serious on it until we have finalized it. The proof of concept implementation of the js0 runtime, http0 fetcher and html0 renderer (so called "picobrowser") is not intended for general audiences yet and serves more of a code sample to review and be inspired by. All example web content is tested for compatibility with this kit. For safety, do consider running with containerization during testing.
 
 * https://bkil.gitlab.io/gemiweb0/js0br0.zip
 * https://bkil.gitlab.io/gemiweb0/js0br0-dev.zip
