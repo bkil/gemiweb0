@@ -61,6 +61,7 @@ Play with an example game obeying this subset:
 * https://bkil.gitlab.io/static-wonders.js/toy/langtona.htm
 * https://bkil.gitlab.io/static-wonders.js/toy/rule110.htm
 * https://bkil.gitlab.io/static-wonders.js/toy/namegen.htm
+* https://bkil.gitlab.io/static-wonders.js/joke/dare.htm
 * https://bkil.gitlab.io/static-wonders.js/joke/js-nojs.htm
 * https://bkil.gitlab.io/static-wonders.js/joke/hole-dimension-dirt-volume.htm
 * https://bkil.gitlab.io/static-wonders.js/crypto/papotp.htm
