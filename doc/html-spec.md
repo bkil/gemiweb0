@@ -133,6 +133,13 @@ readonly, role=status (or alert, log) and aria-live=polite (or assertive) added 
 * https://codeberg.org/Weblite/HTMLite/src/branch/master/htmlite.md
 * https://codeberg.org/smolweb/smolweb-spec
 
+### C-HTML
+
+* https://www.w3.org/TR/1998/NOTE-compactHTML-19980209/#www3-1
+* https://en.wikipedia.org/wiki/I-mode#Description
+
+> As a simpler form of HTML, C-HTML does not support tables, image maps, multiple fonts and styling of fonts, background colors and images, frames, or style sheets, and is limited to a monochromatic display. Includes GIF image support.
+
 ### Similar ongoing efforts
 
 * https://github.com/acidus99/stargate-proxy
