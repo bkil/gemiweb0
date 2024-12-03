@@ -131,7 +131,12 @@ readonly, role=status (or alert, log) and aria-live=polite (or assertive) added 
 * https://en.wikipedia.org/wiki/Small-C
 * https://gemini.circumlunar.space/
 * https://codeberg.org/Weblite/HTMLite/src/branch/master/htmlite.md
+
+### Smolweb
+
+* https://smolweb.org/guidelines.html
 * https://codeberg.org/smolweb/smolweb-spec
+* https://smolweb.org/specs/index.html
 
 ### C-HTML
 
@@ -150,7 +155,6 @@ readonly, role=status (or alert, log) and aria-live=polite (or assertive) added 
 * https://seirdy.one/posts/2020/11/23/website-best-practices/
 * https://indieweb.org/progressive_enhancement
 * http://eev.ee/blog/2016/03/06/maybe-we-could-tone-down-the-javascript/
-* https://smolweb.org/guidelines.html
 * https://ar.al/2020/08/07/what-is-the-small-web/
 * https://benhoyt.com/writings/the-small-web-is-beautiful/
 * https://shkspr.mobi/blog/2021/01/the-unreasonable-effectiveness-of-simple-html/
