@@ -69,6 +69,9 @@ See
 
 ### Simple protocols
 
+* https://en.wikipedia.org/wiki/Gopher_%28protocol%29
+* https://en.wikipedia.org/wiki/File_Transfer_Protocol#Simple_File_Transfer_Protocol
+* https://en.wikipedia.org/wiki/Trivial_File_Transfer_Protocol
 * [Titan extension](https://communitywiki.org/wiki/Titan)
 * [iapetus extension](https://web.archive.org/web/20210925220953/codeberg.org/oppenlab/iapetus)
 * [Mercury](https://portal.mozz.us/gemini/zaibatsu.circumlunar.space/~solderpunk/gemlog/the-mercury-protocol.gmi)
