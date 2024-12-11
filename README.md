@@ -55,6 +55,7 @@ Play with an example game obeying this subset:
 * https://bkil.gitlab.io/static-wonders.js/game/towhanoi.htm
 * https://bkil.gitlab.io/static-wonders.js/game/permslid.htm
 * https://bkil.gitlab.io/static-wonders.js/edu/knowcard.htm#
+* https://bkil.gitlab.io/static-wonders.js/edu/sortfun.htm
 * https://bkil.gitlab.io/static-wonders.js/toy/busybvr.htm
 * https://bkil.gitlab.io/static-wonders.js/toy/busybvr4.htm
 * https://bkil.gitlab.io/static-wonders.js/toy/logismap.htm
