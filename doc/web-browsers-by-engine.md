@@ -516,12 +516,14 @@ apt install w3m
 * platform: Amiga, GTK, Qt, SDL
 * license: BSD3
 
-### QEmacs
+### QEmacs html-mode
 
 * https://bellard.org/qemacs/qe-doc.html#SEC32
 * https://github.com/qemacs/qemacs/tree/master/libqhtml
+* interface: text-only
 * implemented in: C
-* features: a WYSIWYG HTML editor, some CSS2, tables, no JavaScript, no images
+* features: a WYSIWYG HTML editor, some CSS2 with layout, tables
+* limitations: no JavaScript, no images, no external resources, no frames
 * license: MIT
 
 > WYSIWYG HTML/XML/CSS2 mode graphical editing. Also supports lynx like rendering on VT100 terminals. Quite complete CSS2 support (including generated content and counters). Full Bidirectionnal Unicode support. Table support with both 'fixed' and 'auto' layout algorithms.
@@ -529,9 +531,12 @@ apt install w3m
 ### Satori
 
 * https://github.com/vercel/satori/
+* https://github.com/facebook/yoga
+* rendering engine: Yoga
 * implemented in: TypeScript
 * platform: browser, Web Worker, Node.js
 * not a web browser, only a rendering engine producing SVG
+* dependencies: opentype.js, css-background-parser, css-box-shadow, css-gradient-parser, css-to-react-native, emoji-regex, escape-html, linebreak, parse-css-color, postcss-value-parser, yoga-wasm-web
 
 ### Simple-San-Simon-Functional-Web-Browser
 

@@ -388,7 +388,7 @@ Includes a web based example interpreter.
 * last update: 2009
 * https://wiki.qt.io/JavaScript
 * https://wiki.qt.io/Category:Developing_Qt::Qt_Script#History
-* https://download.qt.io/archive/qt/4.3/
+* https://download.qt.io/archive/qt/4.5/
 * http://dezip.org/v1/9/https/download.qt.io/archive/qt/4.5/qt-all-opensource-src-4.5.3.zip/qt-all-opensource-src-4.5.3/src/script/
 * implemented in: C++
 * features: ES5
