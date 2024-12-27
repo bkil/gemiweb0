@@ -329,7 +329,7 @@ function gemtext2htmFile(t, name) {
 
   o = '<!DOCTYPE html><html lang=en><head><meta charset="utf-8"><title>' +
     title +
-    '</title><link rel="shortcut icon" href="/gemiweb0/favicon.ico"><meta property="og:image" content="/gemiweb0/favicon.ico"><meta name=viewport content="width=device-width, initial-scale=1">' +
+    '</title><link rel="shortcut icon" href="/gemiweb0/favicon.ico"><meta property="og:image" content="https://gitlab.bkil.io/gemiweb0/favicon.png"><meta name=viewport content="width=device-width, initial-scale=1">' +
     desc + nl +
     '<style>' + nl +
     ':target { border-style: solid; }' + nl +
