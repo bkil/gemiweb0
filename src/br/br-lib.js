@@ -226,12 +226,7 @@ function eval2To(j, prog) {
       vmEval.createContext(g);
       o = vmEval.runInContext(prog, g);
     } catch (e) {
-      var msg = '<pre>Exception running JavaScript:' + nl + e + '</pre>';
-      if (j.d.documentWritten === undefined) {
-        j.d.documentWritten = '';
-      }
-      j.d.documentIsOpen = 1;
-      j.d.documentWritten = j.d.documentWritten + msg;
+      g.document.write('<pre>Exception running JavaScript:' + nl + e + '</pre>');
     }
     var f = g['.onTimeout'];
     var t = g['.timeoutMs'];
@@ -770,7 +765,7 @@ function Document_write(d) {
     } else if (d['documentWritten'] === undefined) {
       d['documentWritten'] = x;
     } else {
-      d['documentWritten'] = s['documentWritten'] + x;
+      d['documentWritten'] = d['documentWritten'] + x;
     }
   }
 }
