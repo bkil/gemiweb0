@@ -218,6 +218,34 @@ function newFetch(location) {
   }
 }
 
+function getFormValue(j) {
+  var f;
+  var val;
+  var s = j.s;
+  var g = j.vars;
+  if (!s || !g || !s.formName || !s.inputName || !g.window ||
+    ((f = g.window[s.formName]) && 0) || (typeof f !== 'object') ||
+    ((val = f[s.inputName]) && 0) || (typeof val !== 'object')) {
+      return undefined;
+  }
+  return val.value;
+}
+
+function checkFormChange(j) {
+  var s = j.s;
+  var val = getFormValue(j);
+  if (!s || (s.oldFormValue === val)) {
+    return 0;
+  }
+  var g = j.vars;
+  if (j.d.documentIsOpen) {
+    g.document.write('<br>' + escapeHtml('window.' + s.formName + '.' + s.inputName) + '=<br>' + escapeHtml(val) + '<br>');
+  } else {
+    console.log('window.' + s.formName + '.' + s.inputName + '=' + nl + val);
+  }
+  s.oldFormValue = val;
+}
+
 function eval2To(j, prog) {
   function eval2To0(self, j, prog) {
     var g = j.vars;
@@ -228,6 +256,7 @@ function eval2To(j, prog) {
     } catch (e) {
       g.document.write('<pre>Exception running JavaScript:' + nl + e + '</pre>');
     }
+    checkFormChange(j);
     var f = g['.onTimeout'];
     var t = g['.timeoutMs'];
     if (t && (t < 1000)) {
@@ -429,6 +458,7 @@ function updateInput(j, value) {
       f[ni] = i;
     }
     i.value = value;
+    s.oldFormValue = value;
   }
 }
 
@@ -443,7 +473,7 @@ function closeLastTag(j) {
   } else if (tag === 'pre') {
     s['o'] = s['o'] + (nl + '```');
   } else if (tag === 'textarea') {
-    updateInput(j, s['default'] = s['textContent']);
+    updateInput(j, s['textContent']);
   } else if ((tag === 'script') && (s['textContent'] !== undefined)) {
     if (attr['src']) {
       function after(body) {
@@ -534,7 +564,7 @@ function processTag(j, tag, fin, attr) {
     if (attr['type'] !== 'submit') {
       s['inputName'] = attr['name'];
       s['multiLine'] = 0;
-      updateInput(j, s['default'] = attr['value']);
+      updateInput(j, attr['value']);
     }
     ignore = 1;
   } else if (tag === 'textarea') {
@@ -721,7 +751,7 @@ function render(j, h) {
   s.formAction = undefined;
   s.inputName = undefined;
   s.multiLine = undefined;
-  s.default = undefined;
+  s.oldFormValue = undefined;
   j['s'] = s;
   var i;
   var k;
@@ -905,7 +935,7 @@ function browseData(j, url, html, isFile, brows) {
   if (s['multiLine'] === undefined) {
     shw(text, undefined, 0, onSingleLineInput(brows));
   } else {
-    shw(text, s['default'], s['multiLine'], onMultiLineInput(brows));
+    shw(text, getFormValue(j), s['multiLine'], onMultiLineInput(brows));
   }
 }
 
