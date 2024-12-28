@@ -254,7 +254,7 @@ function eval2To(j, prog) {
       vmEval.createContext(g);
       o = vmEval.runInContext(prog, g);
     } catch (e) {
-      g.document.write('<pre>Exception running JavaScript:' + nl + e + '</pre>');
+      g.document.write('<pre>Exception running JavaScript:' + nl + escapeHtml(e) + '</pre>');
     }
     checkFormChange(j);
     var f = g['.onTimeout'];
