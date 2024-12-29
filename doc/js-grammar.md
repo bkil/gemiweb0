@@ -26,10 +26,11 @@ id = [a-zA-Z_.]+
 program: <expr>
 expr: <fun> | <id> [ <iExpr> ]? | <cTerm> [ <nExpr> ]?
 fun: 'function' '(' [<id> [ ',' <id>]* ]? ')' '{' 'return' <expr> '}'
-iExpr: '(' [ <expr> [ ',' <expr>]* ]? ')' | <nExpr>
+iExpr: <args> | <nExpr>
+args: '(' [ <expr> [ ',' <expr>]* ]? ')'
 nExpr: <op> <term> | '?' <expr> ':' <expr>
 term: <id> | <cTerm>
-cTerm: '(' <expr> ')' | <int>
+cTerm: '(' [ <fun> ')' <args> | <expr> ')' ] | <int>
 op: + | - | '<'
 int = [0-9]+
 id = 'Array' | 'document.write' | 'console.log' | [a-zA-Z_.]+
