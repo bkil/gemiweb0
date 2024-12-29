@@ -20,6 +20,21 @@ int = [0-9]+
 id = [a-zA-Z_.]+
 ```
 
+### Level lisp anonymous function
+
+```
+program: <expr>
+expr: <fun> | <id> [ <iExpr> ]? | <cTerm> [ <nExpr> ]?
+fun: 'function' '(' [<id> [ ',' <id>]* ]? ')' '{' 'return' <expr> '}'
+iExpr: '(' [ <expr> [ ',' <expr>]* ]? ')' | <nExpr>
+nExpr: <op> <term> | '?' <expr> ':' <expr>
+term: <id> | <cTerm>
+cTerm: '(' <expr> ')' | <int>
+op: + | - | '<'
+int = [0-9]+
+id = 'Array' | 'document.write' | 'console.log' | [a-zA-Z_.]+
+```
+
 ### Level lisp if
 
 ```
