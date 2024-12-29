@@ -6,7 +6,21 @@ Note that this is a work in progress file. The headings will be renamed. Some of
 
 ## Warm-up
 
-### Level lisp
+### Level lisp expr
+
+```
+program: [ <fun> ]* <expr> [ ';' ]?
+fun: 'function' <id> '(' [<id> [ ',' <id>]* ]? ')' '{' [ <expr> ';' ]* 'return' <expr> [ ';' ]? '}'
+expr: <id> [ <iExpr> ]? | <int> [ <nExpr> ]?
+iExpr: '(' [ <expr> [ ',' <expr>]* ]? ')' | <nExpr>
+nExpr: <op> <term> | '?' <expr> ':' <expr>
+term: <int> | <id>
+op: + | - | '<'
+int = [0-9]+
+id = [a-zA-Z_.]+
+```
+
+### Level lisp if
 
 ```
 program: <stms>
