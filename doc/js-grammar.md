@@ -33,8 +33,10 @@ term: <id> | <cTerm>
 cTerm: '(' [ <fun> ')' <args> | <expr> ')' ] | <int>
 op: + | - | '<'
 int = [0-9]+
-id = 'Array' | 'document.write' | 'console.log' | [a-zA-Z_.]+
+id = 'document.write' | 'console.log' | [a-zA-Z_.]+
 ```
+
+> (function(f){return (document.write(f(f,8)))?0:document.close()})(function(f,n){return(n<2)?n:(f(f,n-1))+(f(f,n-2))})
 
 ### Level lisp if
 
