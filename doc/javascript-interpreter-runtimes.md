@@ -164,6 +164,10 @@ Includes a web based example interpreter.
 ### ucode
 
 * https://github.com/jow-/ucode
+* https://github.com/ynezz/openwrt-ucode
+* https://github.com/openwrt/luci/tree/master/modules/luci-base/ucode
+* https://github.com/openwrt/luci/tree/master/applications/luci-app-commands/ucode
+* https://github.com/openwrt/luci/blob/master/modules/luci-base/root/usr/share/rpcd/ucode/luci
 
 > JavaScript-like language with optional templating
 > The ucode language is a small, general-purpose scripting language that resembles ECMAScript syntax. It can be used as a standalone interpreter or embedded into host applications. Ucode supports template mode with control flow and expression logic statements embedded in Jinja-like markup blocks.
