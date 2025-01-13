@@ -2665,7 +2665,7 @@ showRunError(Parser *p) {
 static void
 __attribute__((nonnull))
 Parser_evalInit(Parser *p) {
-  p->err = 0;
+  setRunError(p, 0, 0);
   p->nest = 0;
   p->ret = 0;
   p->thrw = 0;
@@ -2696,6 +2696,7 @@ String_append_position(Parser *p, Object **dest) {
 static Object *
 __attribute__((nonnull, warn_unused_result))
 Parser_evalWithThrow(Parser *p, Object *prog) {
+  int needSemicolon = p->needSemicolon;
   Object *o;
   if (isString(prog)) {
     o = Parser_evalString(p, prog);
@@ -2706,13 +2707,13 @@ Parser_evalWithThrow(Parser *p, Object *prog) {
   } else {
     return 0;
   }
-  Object *thrw = 0;
+  Object *thrw = p->thrw;
   if (p->ret) {
     Object_set0(&p->ret);
-    if (!p->thrw) {
+    if (!thrw) {
       thrw = StringObject_new("eval: return outside function");
     }
-  } else if (!o && !p->thrw) {
+  } else if (!o && !thrw) {
     if (p->parseErr || !p->err) {
       thrw = StringObject_new("eval: parse error");
       if (p->parseErr) {
@@ -2729,8 +2730,8 @@ Parser_evalWithThrow(Parser *p, Object *prog) {
       }
     }
   }
-  clearErr(p);
-  setRunError(p, 0, 0);
+  Parser_evalInit(p);
+  p->needSemicolon = needSemicolon;
   if (thrw) {
     p->thrw = thrw;
     p->nest++;

@@ -431,6 +431,7 @@ main(void) {
   t("eval('throw 2')", -2);
   t("eval('x')", -2);
   t("eval(':')", -2);
+  t("try { . } catch (e) { }", -1);
   t("var i; try { eval('return 2') } catch (e) { i = 9; }; i", 9);
   t("var i; try { eval('throw 9') } catch (e) { i = e }; i", 9);
   t("var i; try { eval('x') } catch (e) { i = 9; }; i", 9);
@@ -446,6 +447,25 @@ main(void) {
   t("function g(yh) { return yh(4) + 5 }; eval('' + 'function f(yh) { return g(yh) } function h(x) { return x }; f(h)')", 9);
   t("var g = eval('' + 'function g(yh) { return yh(4) + 5 }; g'); function f(yh) { return g(yh) } function h(x) { return x }; f(h)", 9);
   t("var f = eval('' + 'function f(y) { return y(9) }; f'); function g(x) { return x }; f(g)", 9);
+
+  t("var x=1;try{eval('if(0){}')x=2}catch(e){x=3};x", -1);
+  t("var x=1;try{eval('function(){');x=2}catch(e){x=3};x", 3);
+  t("var x=1;try{eval('if(0){');x=2}catch(e){x=3};x", 3);
+  t("var x=1;try{eval('.');x=2}catch(e){x=3};x", 3);
+  t("var x=1;try{eval('0||.');x=2}catch(e){x=3};x", 3);
+  t("var x=1;try{eval('function f(){.}');x=2}catch(e){x=3};x", 3);
+  t("var x=1;try{eval('while(0){.}');x=2}catch(e){x=3};x", 3);
+  t("var x=1;try{eval('var o=new Object;var i;for(i in o){.}');x=2}catch(e){x=3};x", 3);
+  t("var x=1;try{eval('if(0){.}');x=2}catch(e){x=3};x", 3);
+  t("var x=1;try{eval('throw 0;.');x=2}catch(e){x=3};x", 3);
+
+  t("eval('var x=1;try{eval(\".\");x=2}catch(e){x=3};x')", 3);
+  t("eval('var x=1;try{eval(\"0||.\");x=2}catch(e){x=3};x')", 3);
+  t("eval('var x=1;try{eval(\"function f(){.}\");x=2}catch(e){x=3};x')", 3);
+  t("eval('var x=1;try{eval(\"while(0){.}\");x=2}catch(e){x=3};x')", 3);
+  t("eval('var x=1;try{eval(\"var o=new Object;var i;for(i in o){.}\");x=2}catch(e){x=3};x')", 3);
+  t("eval('var x=1;try{eval(\"if(0){.}\");x=2}catch(e){x=3};x')", 3);
+  t("eval('var x=1;try{eval(\"throw 0;.\");x=2}catch(e){x=3};x')", 3);
 
   t("var v = require('vm'); var p = new Object; v.createContext(p); v.runInContext('9', p)", 9);
   t("var v = require('vm'); var p = new Object; v.createContext(p); v.runInContext('4 + 5', p)", 9);
