@@ -80,5 +80,5 @@ See
 * [Guppy](https://github.com/dimkr/guppy-protocol/blob/main/guppy-spec.gmi)
 * [Nex](https://nightfall.city/nex/info/specification.txt)
 * http://portal.mozz.us/gemini/inimeg.space/specification.gmi
-* http://scrollprotocol.us.to/
+* https://web.archive.org/web/20241225235035/http://scrollprotocol.us.to/
 * http://www.and.org/texts/server-http
