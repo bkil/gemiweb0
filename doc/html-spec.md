@@ -2,6 +2,19 @@
 
 Cover as little as possible to correspond to gemini (gemtex) while remaining compatible with existing web browsers. Allow implementing all targeted user application.
 
+## Motivation
+
+### Goals
+
+* Streaming parse with a small constant amount of memory
+* Process without building a DOM graph
+* Single pass online rendering without reflowing
+
+### Restrictions
+
+* Should not nest elements freely or deeply other than as indicated: head and body under html, content under body, li under ul, textarea and input under form
+* Must not nest an element under a subtree that already contains an ancestor of the same type of element
+
 ## Grammar
 
 ### HTML
@@ -111,11 +124,15 @@ With a limitation of supporting up to one of a form input or a textarea element 
 
 id or name should be followed for fragment linking and may improve user experience by allowing to preserve scroll position, focus or form input
 
+class may be interpreted if CSS is supported:
+
+[./css-spec.md](./css-spec.md)
+
 ### Accessibility
 
 role=img and aria-label="..." added to a pre, blockquote or textarea should improve accessibility of ASCII art
 
-readonly, role=status (or alert, log) and aria-live=polite (or assertive) added to a textarea might allow for status updates
+readonly, disabled, role=status (or alert, log) and aria-live=polite (or assertive) added to a textarea might allow for status updates
 
 ## Protocol schemes
 
