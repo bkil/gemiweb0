@@ -162,6 +162,12 @@ readonly, disabled, role=status (or alert, log) and aria-live=polite (or asserti
 
 > As a simpler form of HTML, C-HTML does not support tables, image maps, multiple fonts and styling of fonts, background colors and images, frames, or style sheets, and is limited to a monochromatic display. Includes GIF image support.
 
+### Uggly
+
+https://github.com/rendicott/uggly/tree/master/doc#user-content-uggly-proto
+
+> generate Terminal User Interfaces in a client-server architecture. Think of it as TUI over-the-wire (TUIOW). The client requests content from the server via gRPC protobuffers and the client handles rendering of that content. The server is sending "pages" of content one screen at a time. The protocol and page definitions take inspiration from CSS/HTML in that there are constructs such as DivBoxes, TextBlobs, Links, and Forms for example.
+
 ### Similar ongoing efforts
 
 * https://github.com/acidus99/stargate-proxy
