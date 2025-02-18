@@ -616,6 +616,17 @@ Projects listed here have not produced a browser a user could test yet or are on
 * finished: HTML parser, CSS parser, character encoding
 * deprecated implementation: fonts
 
+### LibreOffice Writer Web
+
+* https://github.com/LibreOffice/core/tree/master/sw/source/filter/html
+* https://books.libreoffice.org/en/GS248/GS24810-FileFormatsSecurityExporting.html#bkmRefHeadingToc55582630270332
+* https://books.libreoffice.org/en/GS73/GS7312-CreatingHTMLFiles.html#toc20
+* interface: not a browser
+* features: layout and rendering present in another subsystem, only parser and formatter for HTML and CSS
+* schemes: file
+* license: GPLv3
+* implemented in: C++
+
 ### litehtml
 
 * https://github.com/litehtml/litehtml
@@ -639,6 +650,18 @@ Projects listed here have not produced a browser a user could test yet or are on
 * Rust
 * small subset of HTML and CSS, basic block layout
 * no GUI or interaction yet, can only render to PNG or PDF
+
+### SumatraPDF Reader
+
+* https://github.com/sumatrapdfreader/sumatrapdf/blob/master/src/HtmlFormatter.cpp
+* https://github.com/sumatrapdfreader/sumatrapdf/blob/master/src/utils/HtmlPullParser.cpp
+* https://github.com/sumatrapdfreader/sumatrapdf/blob/master/do/scripts/gen_htmlparserlookup.py
+* interface: not a browser
+* features: contains a parser and renderer for HTML
+* implemented in: C, C++, Python
+* schemes: file
+* license: GPLv3
+* platform: Windows
 
 ### Verso
 
@@ -775,6 +798,19 @@ https://en.wikipedia.org/wiki/Abaco_(web_browser)
 ```
 apt install midori
 ```
+
+### Mothra
+
+* https://github.com/ocoufal/mothra
+* https://en.everybodywiki.com/Mothra_(web_browser)
+* http://man.9front.org/1/mothra
+* platform: Plan 9
+* interface: graphical
+* features: forms, cache, proxy, utf-8, images (rendered using external programs: gif, jpeg, png, pic, tiff, xbm)
+* tags: a, address, b, base, blockquote, body, br, center, cite, code, dd, dfn, dir, dl, dr, em, font, form, h1. h2, h3, h4, h5, h6, hr, i, input, img, isindex, kbd, key, li, link, listing, menu, meta, nextid, ol, option, p, plaintext, pre, samp, select, strong, table, td, textarea, title, tr, tt, u, ul, var, xmpp, frame
+* protocols: http, gopher, ftp
+* no CSS, no JS
+* implemented in: C
 
 ### Mycel
 
