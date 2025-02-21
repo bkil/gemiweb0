@@ -72,13 +72,16 @@ See
 * https://en.wikipedia.org/wiki/Gopher_%28protocol%29
 * https://en.wikipedia.org/wiki/File_Transfer_Protocol#Simple_File_Transfer_Protocol
 * https://en.wikipedia.org/wiki/Trivial_File_Transfer_Protocol
-* [Titan extension](https://communitywiki.org/wiki/Titan)
-* [iapetus extension](https://web.archive.org/web/20210925220953/codeberg.org/oppenlab/iapetus)
 * [Mercury](https://portal.mozz.us/gemini/zaibatsu.circumlunar.space/~solderpunk/gemlog/the-mercury-protocol.gmi)
 * [Spartan protocol](http://spartan.mozz.us/)
-* [gemini+upload](https://alexschroeder.ch/wiki/Baschdels_spin_on_Gemini_uploading)
 * [Guppy](https://github.com/dimkr/guppy-protocol/blob/main/guppy-spec.gmi)
 * [Nex](https://nightfall.city/nex/info/specification.txt)
-* http://portal.mozz.us/gemini/inimeg.space/specification.gmi
-* https://web.archive.org/web/20241225235035/http://scrollprotocol.us.to/
+* [Scroll Protocol](https://web.archive.org/web/20241225235035/http://scrollprotocol.us.to/)
+* [Inimeg](https://web.archive.org/web/20241225235035/portal.mozz.us/gemini/inimeg.space/specification.gmi)
 * http://www.and.org/texts/server-http
+
+Upload-only extensions:
+
+* [Titan](https://web.archive.org/web/20241225235037/communitywiki.org/wiki/Titan)
+* [iapetus](https://web.archive.org/web/20210925220953/codeberg.org/oppenlab/iapetus)
+* [gemini+upload](https://web.archive.org/web/20241004190129/https://alexschroeder.ch/view/Baschdels_spin_on_Gemini_uploading)
