@@ -239,7 +239,10 @@ function gemtext2htmBody(t, pr) {
           pretoc = o;
           o = '';
         }
-        desc = desc + ' ' + literal;
+        if (desc) {
+          desc = desc + '; ';
+        }
+        desc = desc + literal;
         line = genId(literal);
         o = o + '<a href="#' + line + '" name="' + line + '"><h3 id="' + line + '">' + literal + '</h3></a>';
         toc = toc + '<li><a href="#' + line + '"> &nbsp; ' + literal + '</a></li>' + nl;
@@ -248,7 +251,10 @@ function gemtext2htmBody(t, pr) {
           pretoc = o;
           o = '';
         }
-        desc = desc + ' ' + literal;
+        if (desc) {
+          desc = desc + '; ';
+        }
+        desc = desc + literal;
         line = genId(literal);
         o = o + '<a href="#' + line + '" name="' + line + '"><h2 id="' + line + '">' + literal + '</h2></a>';
         toc = toc + '<li><a href="#' + line + '">' + literal + '</a></li>' + nl;
@@ -290,7 +296,13 @@ function gemtext2htmBody(t, pr) {
     title = first;
     first = '';
   }
-  desc = first + desc;
+  if (first) {
+    if (desc) {
+      desc = first + '; ' + desc;
+    } else {
+      desc = first;
+    }
+  }
   if (inList) {
     o = o + '</ul>' + nl;
   }
