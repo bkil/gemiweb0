@@ -339,17 +339,27 @@ function gemtext2htmFile(t, name) {
     o = o + '<h2>Navigation</h2><ul><li><a href="' + root + '">Back to gemiweb0</a></li></ul>';
   }
 
-  o = '<!DOCTYPE html><html lang=en><head><meta charset="utf-8"><title>' +
+  o = '<!DOCTYPE html>' + nl +
+    '<html lang=en>' + nl +
+    '<head>' + nl +
+    '<meta charset="utf-8">' + nl +
+    '<title>' +
     title +
-    '</title><link rel="shortcut icon" href="/gemiweb0/favicon.ico"><meta property="og:image" content="https://gitlab.bkil.io/gemiweb0/favicon.png"><meta name=viewport content="width=device-width, initial-scale=1">' +
+    '</title>' + nl +
+    '<link rel="shortcut icon" href="/gemiweb0/favicon.ico">' + nl +
+    '<meta property="og:image" content="https://gitlab.bkil.io/gemiweb0/favicon.png">' + nl +
+    '<meta name=viewport content="width=device-width, initial-scale=1">' + nl +
+    "<meta name=color-scheme content='light dark'>" + nl +
     desc + nl +
     '<style>' + nl +
     ':target { border-style: solid; }' + nl +
     'blockquote { border-left: solid; padding-left: 1em; }' + nl +
-    '</style>' +
-    '</head><body>' +
+    '</style>' + nl +
+    '</head>' + nl +
+    '<body>' +
     o +
-    '</body></html>';
+    '</body>' + nl +
+    '</html>';
   return o;
 }
 
