@@ -198,7 +198,7 @@ function autolink(t) {
   if (!t.indexOf('[') && (i > 0) && (t.charAt(t.length - 1) === ')')) {
     l = String_substring(t, 1, i);
     t = String_substring(t, i + 2, t.length - 1);
-    t = '<a href="' + t + '">' + l + '</a>';
+    t = '<a href="' + t + '" target=_blank>' + l + '</a>';
   } else if ((0 > t.indexOf(' ')) && (!t.indexOf('http://') || !t.indexOf('https://'))) {
     t = '<a href="' + t + '" target=_blank>' + t + '</a>';
   }
@@ -347,8 +347,10 @@ function gemtext2htmFile(t, name) {
     title +
     '</title>' + nl +
     '<link rel="shortcut icon" href="/gemiweb0/favicon.ico">' + nl +
-    '<meta property="og:image" content="https://gitlab.bkil.io/gemiweb0/favicon.png">' + nl +
+    '<meta property="og:image" content="https://bkil.gitlab.io/gemiweb0/favicon.png">' + nl +
     '<meta name=viewport content="width=device-width, initial-scale=1">' + nl +
+    '<meta name=referrer content=unsafe-url>' + nl +
+    '<meta http-equiv=x-dns-prefetch-control content=off>' + nl +
     "<meta name=color-scheme content='light dark'>" + nl +
     desc + nl +
     '<style>' + nl +
