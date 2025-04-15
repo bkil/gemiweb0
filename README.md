@@ -84,11 +84,13 @@ Bookmarklets:
 
 ## Contact
 
-Join our chat room on Matrix, also relayed over XMPP and IRC to participate in brainstorming or to give a hand by implementing the standard from scratch:
+Join our chat room on Matrix, also relayed over a XMPP MUC and the IRC channel #gemiweb0. You can participate in brainstorming and give a hand by implementing the standard from scratch:
 
 * https://matrix.to/#/#gemiweb0:matrix.org
-* MUC xmpp:gemiweb0@conference.movim.eu?join
-* OFTC, Libera, Freenode: #gemiweb0
+* [xmpp:gemiweb0@conference.movim.eu](xmpp:gemiweb0@conference.movim.eu?join)
+* [irc.oftc.net/#gemiweb0](irc://irc.oftc.net/%23gemiweb0)
+* [irc.libera.chat/#gemiweb0](irc://irc.libera.chat/%23gemiweb0)
+* [chat.freenode.net/#gemiweb0](irc://chat.freenode.net/%23gemiweb0)
 
 ## Source code repository
 
