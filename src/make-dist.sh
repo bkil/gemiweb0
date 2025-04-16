@@ -124,7 +124,7 @@ make_html() {
     OH="$DEST/$PAR/$BASE.htm"
     mkdir -p "$DEST/$PAR" || return 1
     printf %s "$MD" | "$DEST/js0-min-static" "$ROOT/src/convert/gem2htm.js" |
-    sed -r "s~\.md((#[^\"]*)?\">)~.htm\1~g" > "$OH" || return 1
+    sed -r "s~\.md((#[^\"]*)?\")( target=_blank)?(>)~.htm\1\4~g" > "$OH" || return 1
     [ -s "$OH" ] || return 1
   done
   mv "$DEST/README.htm" "$DEST/index.html" || return 1
