@@ -322,9 +322,10 @@ function gemtext2htmFile(t, name) {
   var desc = pr.desc;
   pr = undefined;
   var root;
+  var basename = getBasename(name);
 
   if (!title) {
-    title = getBasename(name);
+    title = baseName;
   }
   title = truncateAtWord(title, 1024);
   if (desc) {
@@ -334,20 +335,26 @@ function gemtext2htmFile(t, name) {
       '" name="description">';
   }
 
+  var pre = 'https://bkil.gitlab.io/gemiweb0/';
+  var url = pre;
   if (name !== 'README.md') {
+    url = url + basename + '.html';
     root = getRelativeRoot(name);
     o = o + '<h2>Navigation</h2><ul><li><a href="' + root + '">Back to gemiweb0</a></li></ul>';
   }
 
   o = '<!DOCTYPE html>' + nl +
-    '<html lang=en>' + nl +
+    '<html lang=en prefix="og: http://ogp.me/ns#">' + nl +
     '<head>' + nl +
     '<meta charset="utf-8">' + nl +
     '<title>' +
     title +
     '</title>' + nl +
     '<link rel="shortcut icon" href="/gemiweb0/favicon.ico">' + nl +
-    '<meta property="og:image" content="https://bkil.gitlab.io/gemiweb0/gemiweb0-avatar.png">' + nl +
+    '<meta property="og:title" content="' + title + '">' + nl +
+    '<meta property="og:type" content="article">' + nl +
+    '<meta property="og:url" content="' + url + '">' + nl +
+    '<meta property="og:image" content="' + pre + 'gemiweb0-avatar.png">' + nl +
     '<meta name=viewport content="width=device-width, initial-scale=1">' + nl +
     '<meta name=referrer content=unsafe-url>' + nl +
     '<meta http-equiv=x-dns-prefetch-control content=off>' + nl +
