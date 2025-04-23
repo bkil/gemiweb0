@@ -129,7 +129,7 @@ make_html() {
   done
   mv "$DEST/README.htm" "$DEST/index.html" || return 1
   cp -a "$ROOT/doc/gemiweb-icon.ico" "$DEST/favicon.ico" || return 1
-  cp -a "$ROOT/doc/gemiweb-icon.png" "$DEST/favicon.png" || return 1
+  cp -at "$DEST" "$ROOT/doc/gemiweb0-avatar.png" || return 1
 }
 
 main() {

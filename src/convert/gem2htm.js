@@ -347,7 +347,7 @@ function gemtext2htmFile(t, name) {
     title +
     '</title>' + nl +
     '<link rel="shortcut icon" href="/gemiweb0/favicon.ico">' + nl +
-    '<meta property="og:image" content="https://bkil.gitlab.io/gemiweb0/favicon.png">' + nl +
+    '<meta property="og:image" content="https://bkil.gitlab.io/gemiweb0/gemiweb0-avatar.png">' + nl +
     '<meta name=viewport content="width=device-width, initial-scale=1">' + nl +
     '<meta name=referrer content=unsafe-url>' + nl +
     '<meta http-equiv=x-dns-prefetch-control content=off>' + nl +
