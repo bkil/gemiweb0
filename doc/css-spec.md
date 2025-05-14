@@ -23,7 +23,8 @@ Information content within a document should remain legible and an application a
 
 Features:
 
-* Containment in HTML: class attribute, inline style element (in `<head>`), link rel href
+* Containment in HTML: class attribute (recommended), inline style element (in `<head>`), link rel href
+* Containment in HTML: style attribute (the content creator should prefer the class attribute instead to allow overriding by usercss unless it would lead to a huge loss of efficiency)
 * Grouping: ",", ";"
 * Inheritance: assume that only `<body>` (and optionally `<html>`) can be inherited from as element nesting is discouraged in HTML0
 * Element type selector
@@ -96,7 +97,6 @@ Properties:
 
 Features:
 
-* Containment in HTML: style attribute
 * Contextual selectors (descendant combinator)
 * @import directive
 * Length units: pt, mm, cm, pc, in, ex
