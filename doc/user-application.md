@@ -59,9 +59,11 @@ The minimal specification is only considered useful if it is possible an efficie
 interactive programming courses:
 
 * PHP
-* busybox sh, awk
+* busybox sh, awk shell scripting
 * JavaScript (ucode)
 * regexp
+* flash card spaced repetition learning
+* quiz
 
 ### Learn morse code
 
@@ -72,6 +74,7 @@ Output dots, dashes, a blinking character or perhaps play back generated sound.
 ## Business
 
 * webshop
+* classified ads marketplace
 * interactive site builder for a company or association
 * web hosting, web shell command line
 * banking, donations
@@ -94,10 +97,12 @@ Output dots, dashes, a blinking character or perhaps play back generated sound.
 ## Mapping
 
 * POI finder around location
-* directions, turn by turn navigation
+* routing directions, turn by turn navigation
 * ASCII art neighborhood visualizer
 * Description for the visual impaired
 * Contribution
+* Static public transport schedule timetable
+* Real time public transport fleet tracking
 
 ## Productivity
 
