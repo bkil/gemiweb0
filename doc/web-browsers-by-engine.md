@@ -896,6 +896,7 @@ FOSS JavaScript interpreters, runtimes
 ### References
 
 * https://packages.debian.org/bookworm/www-browser
+* https://en.wikipedia.org/wiki/List_of_web_browsers
 * https://wiki.archlinux.org/title/List_of_applications/Internet#Web_browsers
 * https://github.com/cliffordfajardo/awesome-web-browsers#user-content-desktop-web-browsers
 * https://github.com/metov/awesome-browser#user-content-desktop-gui
