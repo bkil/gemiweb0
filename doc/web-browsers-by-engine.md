@@ -538,6 +538,19 @@ apt install w3m
 * not a web browser, only a rendering engine producing SVG
 * dependencies: opentype.js, css-background-parser, css-box-shadow, css-gradient-parser, css-to-react-native, emoji-regex, escape-html, linebreak, parse-css-color, postcss-value-parser, yoga-wasm-web
 
+### Servoshell
+
+* https://github.com/servo/servo/tree/main/ports/servoshell
+* https://servo.org/download/
+* https://servo.org/blog/2024/09/11/building-browser/
+* rendering engine: Servo
+* interface: egui
+* implemented in: Rust
+* platform: Linux, MacOS, Windows, Android, OpenHarmony
+* license: MPL-2.0
+
+> Complex sites such as Gmail and Google Chat are now usable in Servo, with some caveats
+
 ### Simple-San-Simon-Functional-Web-Browser
 
 * https://github.com/carliros/Simple-San-Simon-Functional-Web-Browser
