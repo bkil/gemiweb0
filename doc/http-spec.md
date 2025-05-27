@@ -71,19 +71,41 @@ See
 
 ### Simple protocols
 
+gemini-adjacent:
+
 * https://en.wikipedia.org/wiki/Gopher_%28protocol%29
-* https://en.wikipedia.org/wiki/File_Transfer_Protocol#Simple_File_Transfer_Protocol
-* https://en.wikipedia.org/wiki/Trivial_File_Transfer_Protocol
+* https://en.wikipedia.org/wiki/Gemini_(protocol)
 * [Mercury](https://portal.mozz.us/gemini/zaibatsu.circumlunar.space/~solderpunk/gemlog/the-mercury-protocol.gmi)
 * [Spartan protocol](http://spartan.mozz.us/)
 * [Guppy](https://github.com/dimkr/guppy-protocol/blob/main/guppy-spec.gmi)
 * [Nex](https://nightfall.city/nex/info/specification.txt)
 * [Scroll Protocol](https://web.archive.org/web/20241225235035/http://scrollprotocol.us.to/)
-* [Inimeg](https://web.archive.org/web/20241225235035/portal.mozz.us/gemini/inimeg.space/specification.gmi)
-* http://www.and.org/texts/server-http
+* [Text Protocol](https://textprotocol.org/)
+* [SuperTXT](https://supertxt.net/00-intro.html)
+* [Scorpion Protocol/File-Format](https://github.com/zzo38/scorpion)
+* [molerat](https://molerat.trinket.icu/)
+* [TerseNet](https://github.com/runvnc/tersenet)
 
 Upload-only extensions:
 
+* [Inimeg](https://web.archive.org/web/20241225235035/portal.mozz.us/gemini/inimeg.space/specification.gmi)
 * [Titan](https://web.archive.org/web/20241225235037/communitywiki.org/wiki/Titan)
 * [iapetus](https://web.archive.org/web/20210925220953/codeberg.org/oppenlab/iapetus)
 * [gemini+upload](https://web.archive.org/web/20241004190129/https://alexschroeder.ch/view/Baschdels_spin_on_Gemini_uploading)
+
+Communication:
+
+* [misfin](http://portal.mozz.us/gemini/misfin.org/)
+* [nanomail](http://portal.mozz.us/gemini/misfin.org/)
+* [Nightfall's Postal Service](https://nightfall.city/nps/info/form.txt)
+
+General:
+
+* https://en.wikipedia.org/wiki/File_Transfer_Protocol#Simple_File_Transfer_Protocol
+* https://en.wikipedia.org/wiki/Trivial_File_Transfer_Protocol
+* http://www.and.org/texts/server-http
+
+## References
+
+* https://wiki.archiveteam.org/index.php/SmolNet
+* https://dbohdan.com/archive/scorpion/zzo38computer.org/smallweb.txt/
