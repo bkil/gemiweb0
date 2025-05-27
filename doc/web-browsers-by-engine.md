@@ -432,9 +432,10 @@ apt install w3m
 
 * https://sr.ht/~bptato/chawan/
 * text-only
-* features: CSS with layout (flow, table, flexbox), forms, cookies, mouse
-* protocols: FTP, Gopher, Gemini, Finger
+* features: CSS with layout (flow, table, flexbox), UTF-8, forms, cookies, mouse, bookmarks, history, inline images (Sixel, Kitty)
+* protocols: HTTP, HTTPS, FTP, SFTP, Gopher, Gemini, Finger, Spartan
 * QuickJS JavaScript for link navigation and basic DOM manipulation
+* platforms: Unix-like (Linux, FreeBSD, OpenBSD, Haiku, Mac OS, WSL)
 * implemented in: Nim
 * license: public domain
 
