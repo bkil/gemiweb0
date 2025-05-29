@@ -186,6 +186,14 @@ Includes a web based example interpreter.
 
 > A sandboxed JavaScript interpreter in JavaScript. Execute arbitrary ES5 JavaScript code line by line in isolation and safety.
 
+### Porffor
+
+* https://github.com/CanadaHonk/porffor
+* implemented in: JavaScript
+* license: MIT
+
+> A from-scratch experimental AOT optimizing JS/TS -> Wasm/C engine/compiler/runtime in JS. Research project, not yet intended for serious use. Expect nothing to work! Only very limited JS is currently supported.
+
 ### Siubaak sval
 
 * https://github.com/Siubaak/sval
@@ -221,6 +229,21 @@ Includes a web based example interpreter.
 * approximately ES3 (not finished)
 
 > It's probably not as fast as compilers that produce native code, but because it hooks into Guile's compiler at a high level, as Guile's compiler improves and eventually gets native code compilation, it will be plenty fast.
+
+### Kiesel
+
+* https://codeberg.org/kiesel-js/kiesel
+* implemented in: Zig
+
+> The implementation style is similar to LibJS - the JS engine used in SerenityOS and the Ladybird browser which I worked on before - in various aspects, most notably the desire to stay very close to spec. Development is still at an early stage and the engine's usefulness thus limited. While there are various things that already work well, there's an equal amount of things that don't :^)
+
+### Nova
+
+* https://github.com/trynova/nova
+* implemented in: Rust
+* license: MPL-2.0
+
+> The execution model is currently greatly inspired by Kiesel and SerenityOS's LibJS. See the code for more details. Passing about 70% of the test262 test suite
 
 ### Toshok EchoJS
 
