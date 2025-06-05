@@ -27,7 +27,8 @@ apt install chromium-browser
 
 ### Falkon
 
-* KDE: https://en.wikipedia.org/wiki/Falkon
+* https://en.wikipedia.org/wiki/Falkon
+* QtWebEngine
 
 ```
 apt install falkon
@@ -431,7 +432,7 @@ apt install w3m
 ### Chawan
 
 * https://sr.ht/~bptato/chawan/
-* text-only
+* text-based
 * features: CSS with layout (flow, table, flexbox), UTF-8, forms, cookies, mouse, bookmarks, history, inline images (Sixel, Kitty)
 * protocols: HTTP, HTTPS, FTP, SFTP, Gopher, Gemini, Finger, Spartan
 * QuickJS JavaScript for link navigation and basic DOM manipulation
@@ -720,6 +721,17 @@ https://en.wikipedia.org/wiki/Abaco_(web_browser)
 * parser and networking: libwww
 * implemented in: C
 
+### Arora
+
+* last update: 2023, but engine stopped security patches earlier
+* https://en.wikipedia.org/wiki/Arora_(web_browser)
+* https://sourceforge.net/projects/zbrowser-linux/
+* https://github.com/ZeromusSoftware/BlueLightCat
+* https://github.com/EndorphinBrowser/browser
+* rendering engine: QtWebkit
+* implemented in: C++
+* license: GPL v2 or later
+
 ### AWeb
 
 * last update: 2009
@@ -776,9 +788,11 @@ https://en.wikipedia.org/wiki/Abaco_(web_browser)
 * https://elpa.gnu.org/packages/w3.html
 * https://git.savannah.gnu.org/cgit/w3.git/tree/
 * https://github.com/emacs-straight/w3
-* interface: text-only, embedded within Emacs
-* features: tables, utf-8, no frames, some CSS1
-* protocols: http, https
+* https://www.xemacs.org/Documentation/21.5/html/xemacs-faq_5.html#Q6_002e4_002e1
+* https://packages.ubuntu.com/plucky/xemacs21-basesupport
+* interface: text-based, embedded within Emacs
+* features: tables, utf-8, SOCKS v5, forms, images, mouse, no frames, some CSS1
+* protocols: http 1.0, https, file, gopher, mailto, nntp
 * no JS
 * implemented in: Emacs LISP
 
