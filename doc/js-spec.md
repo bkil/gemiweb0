@@ -133,7 +133,7 @@ missing:
 TODO This section still needs more research, a proof of concept and then drafting.
 ```
 
-* console.log()
+* console.log('string')
 * process.stdin.on('data', function(data) {})
 * require('fs').readFileSync(file)
 * require('fs').writeFileSync(file, data)
