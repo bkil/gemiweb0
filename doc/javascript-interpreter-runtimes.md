@@ -26,6 +26,10 @@ Implementing the relevant standards of JavaScript fully would be prohibitively e
 
 * https://duktape.org/dukweb.html
 * https://github.com/svaarala/duktape
+* https://packages.ubuntu.com/plucky/duktape
+* https://packages.debian.org/buster/libduktape203
+* https://packages.debian.org/bullseye/libduktape205
+* https://packages.ubuntu.com/plucky/libduktape207
 
 > Embeddable, portable, compact: can run on platforms with 160kB flash and 64kB RAM
 > ECMAScript E5/E5.1, with some semantics updated from ES2015+
@@ -44,6 +48,7 @@ Includes a web based example interpreter.
 ### goja
 
 * https://github.com/dop251/goja
+* https://packages.ubuntu.com/plucky/golang-github-dop251-goja-dev
 * forked from Otto
 * features: ES 5.1
 * implemented in: Go
@@ -100,7 +105,10 @@ Includes a web based example interpreter.
 
 * https://mujs.com/
 * https://github.com/ccxvii/mujs
-* ISC
+* https://packages.ubuntu.com/plucky/mujs
+* https://packages.ubuntu.com/jammy/libmujs1
+* https://packages.ubuntu.com/plucky/libmujs3
+* license: ISC
 
 > MuJS is a lightweight Javascript interpreter designed for embedding in other software to extend them with scripting capabilities.
 > MuJS was designed with a focus on small size, correctness, and simplicity. It is written in portable C and implements ECMAScript as specified by ECMA-262. The interface for binding with native code is designed to be as simple as possible to use, and is very similar to Lua.
@@ -117,6 +125,7 @@ Includes a web based example interpreter.
 
 * https://github.com/robertkrimen/otto
 * https://github.com/robertkrimen/natto
+* https://packages.ubuntu.com/jammy/golang-github-robertkrimen-otto-dev
 
 > Package otto is a JavaScript parser and interpreter written natively in Go.
 > Otto targets ES5
@@ -130,6 +139,8 @@ Includes a web based example interpreter.
 * https://wiki.qt.io/V4
 * https://wiki.qt.io/Application_Scripting_with_QJSEngine
 * https://wiki.qt.io/Qt-contributors-summit-2013-QML-engine
+* https://packages.ubuntu.com/oracular/libqt5qml5
+* https://packages.ubuntu.com/oracular/libqt6qml6
 * implemented in: C++
 * features: ES7, JIT
 * Used for QML and QJSEngine
@@ -137,6 +148,11 @@ Includes a web based example interpreter.
 ### quickjs
 
 * https://github.com/bellard/quickjs
+* https://packages.ubuntu.com/plucky/libjavascript-quickjs-perl
+* https://packages.ubuntu.com/plucky/r-cran-quickjsr
+* https://packages.ubuntu.com/plucky/node-quickjs-emscripten
+* https://packages.ubuntu.com/plucky/libquickjs
+* https://packages.ubuntu.com/plucky/quickjs
 
 > QuickJS is a small and embeddable Javascript engine. It supports the ES2020 specification including modules, asynchronous generators, proxies and BigInt.
 > It supports mathematical extensions such as big decimal float float numbers (BigDecimal), big binary floating point numbers (BigFloat), and operator overloading.
@@ -155,6 +171,8 @@ Includes a web based example interpreter.
 
 * https://en.wikipedia.org/wiki/Rhino_(JavaScript_engine)
 * https://github.com/mozilla/rhino
+* https://packages.ubuntu.com/plucky/rhino
+* https://packages.ubuntu.com/plucky/librhino-java
 * status: bundled with JRE
 * used by LibreOffice, gngr
 * features: ES5 with additions from ES6 and ES2016+
@@ -300,6 +318,16 @@ Includes a web based example interpreter.
 > Usable out-of-the-box: V7 provides an auxiliary library with Hardware (SPI, UART, etc), File, Crypto, Network API
 > part of the full stack Mongoose OS Platform
 
+### ChakraCore
+
+* last update: 2020
+* https://en.wikipedia.org/wiki/Chakra_(JavaScript_engine)
+* https://github.com/chakra-core/ChakraCore
+* used in Microsoft Edge Legacy (EdgeHTML)
+* features: ES5.1 with additions from ES6
+* implemented in: C++
+* license: MIT
+
 ### Charon
 
 * last update: 2007
@@ -345,6 +373,15 @@ Includes a web based example interpreter.
 * implemented in: Haskell
 * license: 3-BSD
 
+### JE
+
+* last update: 2014
+* https://metacpan.org/dist/JE
+* https://packages.ubuntu.com/plucky/libje-perl
+* features: ES3 with some ES5 behavior
+* implemented in: Perl 5.0.4
+* license: perl
+
 ### Jsish
 
 * last update: 2018
@@ -360,6 +397,7 @@ Includes a web based example interpreter.
 ### KHTML KJS
 
 * https://github.com/KDE/khtml/tree/0c0f313659504be0fcd2feec92fd7a7a425379fb/src/ecma
+* https://packages.debian.org/buster/libkjsapi4
 * Used by Konqueror (KHTML) in the past
 
 ### Links 2.1pre28
@@ -417,6 +455,8 @@ Includes a web based example interpreter.
 * https://wiki.qt.io/Category:Developing_Qt::Qt_Script#History
 * https://download.qt.io/archive/qt/4.5/
 * http://dezip.org/v1/9/https/download.qt.io/archive/qt/4.5/qt-all-opensource-src-4.5.3.zip/qt-all-opensource-src-4.5.3/src/script/
+* https://packages.debian.org/buster/libqt4-script
+* https://packages.ubuntu.com/plucky/libqt5script5
 * implemented in: C++
 * features: ES5
 * used in QtScript in Qt 4.3, 4.4 and 4.5 (2009)
