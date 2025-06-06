@@ -68,6 +68,22 @@ Includes a web based example interpreter.
 
 > Hermes is a JavaScript engine optimized for fast start-up of React Native apps. It features ahead-of-time static optimization and compact bytecode.
 
+### JavaScriptCore
+
+* https://en.wikipedia.org/wiki/WebKit#JavaScriptCore
+* https://github.com/WebKit/WebKit/tree/main/Source/JavaScriptCore
+* https://packages.debian.org/buster/libqtwebkit4
+* https://packages.ubuntu.com/oracular/libqt5webkit5
+* https://web.archive.org/web/20210507015325/packages.ubuntu.com/bionic/libjavascriptcoregtk-1.0-0
+* https://web.archive.org/web/20210507015325/http://packages.ubuntu.com/libjavascriptcoregtk-3.0-0
+* https://packages.debian.org/bookworm-backports/libjavascriptcoregtk-4.0-18
+* https://packages.ubuntu.com/oracular/libjavascriptcoregtk-4.1-0
+* https://packages.ubuntu.com/oracular/libjavascriptcoregtk-6.0-1
+* used by: Webkit (Safari)
+* implemented in: C++
+* platforms: Linux, Mac, iOS, Windows
+* license: LGPLv2.1 and 2-BSD
+
 ### jerryscript
 
 * https://github.com/jerryscript-project/jerryscript
@@ -118,6 +134,7 @@ Includes a web based example interpreter.
 
 * https://github.com/nginx/njs
 * https://nginx.org/en/docs/njs/
+* https://packages.ubuntu.com/plucky/njs
 * https://packages.debian.org/trixie/njs
 * ES5.1 strict with some ES6 extensions
 
@@ -167,6 +184,17 @@ Includes a web based example interpreter.
 
 > Friendly QuickJS fork focused on reigniting the project.
 
+### SpiderMonkey
+
+* https://en.wikipedia.org/wiki/SpiderMonkey
+* https://github.com/mozilla-spidermonkey/spidermonkey.dev
+* https://github.com/mozilla-firefox/firefox/tree/main/js/src
+* https://packages.ubuntu.com/plucky/libmozjs-128-0
+* used by: Gecko (Mozilla Firefox)
+* implemented in: C, C++, Rust
+* architectures: IA-32, x86-64, ARM, MIPS, SPARC, RISC-V
+* license: MPL 2.0
+
 ### Rhino
 
 * https://en.wikipedia.org/wiki/Rhino_(JavaScript_engine)
@@ -190,6 +218,17 @@ Includes a web based example interpreter.
 > JavaScript-like language with optional templating
 > The ucode language is a small, general-purpose scripting language that resembles ECMAScript syntax. It can be used as a standalone interpreter or embedded into host applications. Ucode supports template mode with control flow and expression logic statements embedded in Jinja-like markup blocks.
 > The development of ucode was motivated by the need to rewrite the OpenWrt firewall framework using nftables. Initially intended as a template processor, ucode evolved into a versatile scripting language for various system scripting tasks. Its design goals include easy integration with C applications, efficient handling of JSON data and complex data structures, support for OpenWrt's ubus message bus system, and a comprehensive set of built-in functions inspired by Perl 5.
+
+### V8
+
+* https://en.wikipedia.org/wiki/V8_(JavaScript_engine)
+* https://chromium.googlesource.com/v8/v8
+* https://packages.ubuntu.com/oracular/libqt5webenginecore5
+* https://packages.ubuntu.com/oracular/libqt6webenginecore6
+* used by: Blink (Chromium, Google Chrome)
+* architectures: IA-32, x86-64, 32-bit ARM, AArch64, 32-bit MIPS, MIPS64, PowerPC, IBM ESA/390, z/Architecture
+* implemented in: C++
+* license: BSD
 
 ## Maintained metacircular
 
@@ -397,8 +436,11 @@ Includes a web based example interpreter.
 ### KHTML KJS
 
 * https://github.com/KDE/khtml/tree/0c0f313659504be0fcd2feec92fd7a7a425379fb/src/ecma
+* https://en.wikipedia.org/wiki/KHTML
 * https://packages.debian.org/buster/libkjsapi4
 * Used by Konqueror (KHTML) in the past
+* implemented in: C++
+* license: LGPLv2.1
 
 ### Links 2.1pre28
 
@@ -448,6 +490,15 @@ Includes a web based example interpreter.
 * C
 * GNU LGPL
 
+### Qt Script for Applications
+
+* last update: 2008
+* https://doc.qt.io/archives/qsa-1.2.2/getting-started.html
+* https://web.archive.org/web/20131202231949/http://blog.qt.digia.com/blog/2007/01/05/say-hello-to-qtscript/
+* https://github.com/aschet/qsaqt5
+* deprecated by QtScript (4.3, 4.4, 4.5)
+* implemented in: C++
+
 ### QtScript 4.5
 
 * last update: 2009
@@ -460,6 +511,16 @@ Includes a web based example interpreter.
 * implemented in: C++
 * features: ES5
 * used in QtScript in Qt 4.3, 4.4 and 4.5 (2009)
+
+### Tamarin
+
+* last update: 2016
+* https://en.wikipedia.org/wiki/Tamarin_(software)
+* https://github.com/adobe/avmplus
+* features: ES3, ActionScript 3, ES4 draft
+* license: Tri-licensed GPL, LGPL, and MPL
+* used in: Adobe Flash Player 9
+* implemented in: C++
 
 ### sparkle
 
@@ -556,7 +617,7 @@ Includes a web based example interpreter.
 
 ## References
 
-* https://en.wikipedia.org/wiki/List_of_ECMAScript_engines
+* https://en.wikipedia.org/wiki/List_of_JavaScript_engines
 
 ## Related
 
