@@ -110,11 +110,13 @@ Subscribe to the feed of changes via Atom (RSS):
 
 * https://gitlab.com/bkil/gemiweb0/-/commits/master?format=atom
 
-### Rendered website
+### 88x31 badges
 
-Should be better available.
+The rendered website should be faster and more accessible than the git repository.
 
-* https://bkil.gitlab.io/gemiweb0
+```html
+<a href='https://bkil.gitlab.io/gemiweb0' target='_blank' rel=noopener referrerpolicy=unsafe-url><img alt="with(js0){bkil.write('minimal','browser');for 80x25" src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAMAAABUFvrSAAAAElBMVEWSkpIAANv///8AAAC2trZJSUmYHcNQAAABvUlEQVRIx7WWC5bDIAhFBXT/Wx7kIxg1STsz1BiLOTdPithSAAqe7W7u1sqTYeWn+KpVO7lJQ0Bze28+7sHAJLbBwgDLZb2ClaEv1cEgw6NiAdcFLAozWNdhYAAD08F4qhZf/kmxqa0fKmawC/b1Yo5xDvEaYzpLrv+VFQxurfFzTVvTe6RiEQRar3kk461in1CwUYVn75jBY+R9uVFsM6FYcRdwCcUT2IVRqA4w3ir2jPpCscxtY9y7DlbBHo2ke6eYEpgn259nBeo7O5i1ETfqjS/Srz5Utzhyd1U8syUUgI4RglyEMXQ3bcC3eexgnGk+dDdlsO682mptq/US4eBBGbT56wiUBTjAB5MtDRm8xNjXE65RhA6Ku+jf1YoHxUOIyZmjEJnifpjAc2gX8K5ZaNNPZn54WY8viinnCG0Um2Q5f8SOhX6rmFJgkmL0w+nNCTJrHctPi4hMMcGWFZQ+velgpNudtaN18MqtRpYNAk7xAy5OObRq18Yb0KvhRnFw8waZD1I7TnuZ1hba1dNexBhcc/oXdFGMg+6HTfPSu9s7nCnwiWKMmLwBwwxG//dSrzHOih9DUb7Oih9DzBZkW3A0/AAAAABJRU5ErkJggg=='></a>
+```
 
 ### LICENSE
 
