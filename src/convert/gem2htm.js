@@ -274,6 +274,10 @@ function gemtext2htmBody(t, pr) {
           literal = String_substring(literal, j + 1, literal.length);
         }
         o = o + '<a href="' + line + '">' + literal + '</a>';
+      } else if (line === '```html') {
+        while ((lin.length > (i = i + 1)) && ((line = lin[i]) !== '```')) {
+          o = o + line + nl;
+        }
       } else if (line === '```') {
         o = o + '<pre>';
         while ((lin.length > (i = i + 1)) && ((line = escapeHtml(lin[i], 1)) !== '```')) {
