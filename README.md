@@ -122,6 +122,11 @@ The rendered website should be faster and more accessible than the git repositor
 <a href='https://bkil.gitlab.io/gemiweb0' target='_blank' rel=noopener referrerpolicy=unsafe-url><img alt="# gemiweb0 &gt; tiny * browser ``` js0 ```" src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfAgAAAAAME02dAAABI0lEQVR4AWzRgWYEMRAG4GiAg7xCAVWABQh5iraAPkldFdCnqMNZAfcArV0WYBnAAu4VwrhbmO10NptI1P0IPmMk+ZW/GdXxjfxmRmYmDuvhoDBHBseiKPwNrIPVA5GcKwOS8EkTgh2RRrA4CkviNGEfubcIidM0EZICKpx2E1kM1oT6gshVLk+SZ2EyNV+95Chcp+b9XPPB+4+j+hH+P/0g0/vlZVpez/vM7+1u5bMsWebC7cHfC8+R58LtY5m+bGiE/WfczdPyNi8bN8Jfu3iTmMRWuH7OxDHOXe8yV3FQXukqxvxVUHOj88cCKzIDYk+mZwWp+dPoLLLFxq3dkEnNd5o3HoJxzLn5rokcNCGvnLsk1sgDgiLj/gYXxpEGcaRYAGFvKWO1y20TAAAAAElFTkSuQmCC'></a>
 ```
 
+### 80x15 badges
+
+```html
+<a href='https://bkil.gitlab.io/gemiweb0' target='_blank' rel=noopener referrerpolicy=unsafe-url><img alt="best viewed in 80x25" src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPBAMAAACB51W8AAAAElBMVEWqqqoAAKr///9VVVUAAABV//98YHRCAAAA1klEQVR4AX2OR3IDMQwEIRd8J/gCk6W78x0lj86O+/+vGFPjoNybl10N2qpNcmOPlzEzhxXtCZd4MbIjGtJhMAfcs94cnnWUCJC8k8jVBE84ZVBEpopEooouUUVnkaKCtlNE/okOiip6qVXMJ2ygYrIo3cqB9igkrnEWFZESJyAcJHax6+fPx+LtjuJfMo3ijBjl9BFzSFwWiRPCk9Eeo/egWb4ZswXFDXZFFksco7Reo5fttk4WgfWJIo+IGv319bXU6FbiAdrjGH3Wm11Nsmrt8YjY5RtO9WlG330VjQAAAABJRU5ErkJggg=='></a>
+```
 
 ### LICENSE
 
