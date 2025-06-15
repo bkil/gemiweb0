@@ -118,6 +118,11 @@ The rendered website should be faster and more accessible than the git repositor
 <a href='https://bkil.gitlab.io/gemiweb0' target='_blank' rel=noopener referrerpolicy=unsafe-url><img alt="with(js0){bkil.write('minimal','browser');for 80x25" src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfBAMAAACR5hfTAAAAElBMVEWSkpIAAP////+2trYAAABJSUnoleIEAAABnklEQVR4AY2TUc7bIBCEidUDOJzADPZ7FP6+R4QDVFS+/1U60xWBlibqsEIb+ePTCsfusmLMhg9xfyciIt1jSrhHBMSkUofg+fhbKY8Xu0ZosQR76CjbOzz5BnU4NphygxMEhysk7nm4mwYYzUn1xnzTg3Q3GIGtqs0scw/hD5nMx4kDlXsFsHG5hbU5x30wu0WwyAOoL3jRplpGs86bub7gTWaDIZl7yP0QjD/NwfP0WzO2YeazBo9lEWzybi6CAffjf29jWRxhv6PseS/IbPKeC5Cxa0MzG84xAsiUjMwj4CoF+97hMQbnLFgYQR2AYL3B7+ls+ZluhIFsS4yWpgJgcA9heMF9ZsL2EwGDWSH8IZNZOtVusxRJC7sAdHOH86u46das92G+jWYWkKk1s2CZL9frOsDo5qJpsplBs5/MMC0p2BWzBAdojK/fSc/0fKY03cY5xjlCzFfiEhw8gJgQ9fERJn6Qq/o3djPV7aXY56pCPY9aZWVzzjNfvcwkm7mSOypkdhhyWdd/mrkon+FgsGYWbDObeRrDfbqNX38Fwj0z4oOFAAAAAElFTkSuQmCC'></a>
 ```
 
+```html
+<a href='https://bkil.gitlab.io/gemiweb0' target='_blank' rel=noopener referrerpolicy=unsafe-url><img alt="# gemiweb0 &gt; tiny * browser ``` js0 ```" src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfAgAAAAAME02dAAABI0lEQVR4AWzRgWYEMRAG4GiAg7xCAVWABQh5iraAPkldFdCnqMNZAfcArV0WYBnAAu4VwrhbmO10NptI1P0IPmMk+ZW/GdXxjfxmRmYmDuvhoDBHBseiKPwNrIPVA5GcKwOS8EkTgh2RRrA4CkviNGEfubcIidM0EZICKpx2E1kM1oT6gshVLk+SZ2EyNV+95Chcp+b9XPPB+4+j+hH+P/0g0/vlZVpez/vM7+1u5bMsWebC7cHfC8+R58LtY5m+bGiE/WfczdPyNi8bN8Jfu3iTmMRWuH7OxDHOXe8yV3FQXukqxvxVUHOj88cCKzIDYk+mZwWp+dPoLLLFxq3dkEnNd5o3HoJxzLn5rokcNCGvnLsk1sgDgiLj/gYXxpEGcaRYAGFvKWO1y20TAAAAAElFTkSuQmCC'></a>
+```
+
+
 ### LICENSE
 
 * [LICENSE.md](LICENSE.md)
