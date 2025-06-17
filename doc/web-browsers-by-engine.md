@@ -432,10 +432,11 @@ apt install w3m
 ### Chawan
 
 * https://sr.ht/~bptato/chawan/
+* https://codeberg.org/bptato/chawan
 * text-based
-* features: CSS with layout (flow, table, flexbox), UTF-8, forms, cookies, mouse, bookmarks, history, inline images (Sixel, Kitty)
+* features: CSS with layout (flow, table, flexbox, colors), UTF-8, forms, cookies, mouse, bookmarks, history, inline images (Sixel, Kitty)
 * protocols: HTTP, HTTPS, FTP, SFTP, Gopher, Gemini, Finger, Spartan
-* QuickJS JavaScript for link navigation and basic DOM manipulation
+* QuickJS-ng JavaScript for link navigation, basic DOM manipulation and network requests
 * platforms: Unix-like (Linux, FreeBSD, OpenBSD, Haiku, Mac OS, WSL)
 * implemented in: Nim
 * license: public domain
