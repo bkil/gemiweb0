@@ -270,6 +270,16 @@ Includes a web based example interpreter.
 
 ## Experimental
 
+### bali
+
+* https://github.com/ferus-web/bali
+* implemented in: Nim with C++ dependencies
+* used by: Ferus web engine, Basket Wayland launcher
+* license: LGPLv3
+
+> Bali is still not in a usable state yet and is probably unstable. It is not meant to be used in production for now. As of 9th of November, 2024, Bali can successfully run 1% of the entire Test262 suite
+> With some recent codegen optimizations, Bali is already pretty fast on cherry-picked benchmarks. Bali can perform some optimizations when it is generating code for the provided JavaScript source, granted that it can prove that there is an opportunity to optimize away things. Bali has some loop elision optimizations in place which can fully eliminate an expensive loop when it sees the opportunity. It also has some rudimentary dead code elimination for some cases.
+
 ### boa
 
 * https://github.com/boa-dev/boa
@@ -628,3 +638,7 @@ HTML rich text support by desktop widget toolkits
 FOSS web browsers by engine
 
 [./web-browsers-by-engine.md](./web-browsers-by-engine.md)
+
+Daily runner of test262 and comparison chart for many engines:
+
+* https://test262.fyi/
