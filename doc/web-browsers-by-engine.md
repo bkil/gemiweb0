@@ -602,6 +602,12 @@ Projects listed here have not produced a browser a user could test yet or are on
 > the NekoHTML parser is used for creating the DOM tree. As an alternative, the The Validator.nu HTML Parser has been tested with CSSBox too.
 > The Xerces library may be replaced by any other DOM implementation.
 
+### Ferus
+
+* https://github.com/ferus-web/ferus
+* dependencies: HTML5/DOM parser of Chawan, Stylus CSS3 parser, Bali JavaScript engine, ferusgfx rendering pipeline, sanchar URL utilities, ferrite for decoding UTF-16 and UTF-8
+* implemented in: Nim
+
 ### gemiweb0
 
 * The main scope is producing only documentation, specification and conformance tests. Developers are expected to implement it on their own.
