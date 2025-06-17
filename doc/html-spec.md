@@ -148,6 +148,7 @@ readonly, disabled, role=status (or alert, log) and aria-live=polite (or asserti
 * https://en.wikipedia.org/wiki/Small-C
 * https://gemini.circumlunar.space/
 * https://codeberg.org/Weblite/HTMLite/src/branch/master/htmlite.md
+* https://forums.macrumors.com/threads/web-1-1-building-the-renegade-net.2290616/
 
 ### Smolweb
 
