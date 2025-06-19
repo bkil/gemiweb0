@@ -309,7 +309,7 @@ More of a tech demo than a product for end users, but it is a unique independent
 
 * https://packages.debian.org/bullseye/hv3
 * CSS (from around 2008)
-* optionally JavaScript if compiled from source (ES3, from around 2009)
+* optional JavaScript if compiled from source (Adaptive Enterprises SEE, ES3, from around 2009)
 * interface: Tk
 * rendering engine: Tkhtml
 * implemented in: Tcl
