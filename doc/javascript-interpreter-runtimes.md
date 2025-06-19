@@ -489,16 +489,28 @@ Includes a web based example interpreter.
 * implemented in: Java
 * license: GNU GPL v2 with Classpath exception
 
-### NGS NJS-JavaScript.org
+### NGS JavaScript interpreter
 
+* last update: 2023 (development halted in 1999 and resumed in 2023)
+* https://github.com/markkurossi/js
+* https://docs.stendahls.net/js/ngs/
+* features: ES3
+* no regexp, no Unicode
+* used by: BrowseX
+* implemented in: C
+* license: GNU LGPL
+
+### NJS-JavaScript.org
+
+* last update: 2013
 * https://sourceforge.net/projects/njs/
 * https://web.archive.org/web/20080509072332/http://www.njs-javascript.org/
 * https://web.archive.org/web/20080517015930/www.bbassett.net/njs/
-* 2013
-* ES3
+* forked from NGS when it was discontinued in 1999
+* features: ES3
 * no regexp, no Unicode
-* C
-* GNU LGPL
+* implemented in: C
+* license: GNU LGPL
 
 ### Qt Script for Applications
 
