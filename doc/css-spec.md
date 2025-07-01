@@ -31,7 +31,7 @@ Features:
 * ".Class" as selector: `[A-Za-z][0-9A-Za-z-]*`
 * Cascading order: specificity
 * Length units: px, em
-* Color units: #abc, #abcdef
+* Color units: #abc, #abcdef (the content creator should ensure proper background contrast and sufficient difference between adjacent colors on a device with a small palette such as on terminal emulators)
 * Forward-compatible parsing
 
 Properties:
