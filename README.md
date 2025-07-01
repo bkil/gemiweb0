@@ -58,6 +58,7 @@ Play with an example game obeying this subset:
 * https://bkil.gitlab.io/static-wonders.js/game/towhanoi.htm
 * https://bkil.gitlab.io/static-wonders.js/game/permslid.htm
 * https://bkil.gitlab.io/static-wonders.js/share/colword.htm
+* https://bkil.gitlab.io/static-wonders.js/share/rot13.htm
 * https://bkil.gitlab.io/static-wonders.js/share/sumlist.htm
 * https://bkil.gitlab.io/static-wonders.js/audio/ansimus.htm
 * https://bkil.gitlab.io/static-wonders.js/edu/knowende.htm
