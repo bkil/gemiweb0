@@ -941,9 +941,10 @@ function browseData(j, url, html, isFile, brows) {
 
 function browse(j, url, brows) {
   var html;
+  var l = j.vars.window.location;
   if (url.indexOf('javascript:') === 0) {
     html = decodeURIComponent(url.substring(11));
-    url = j.vars.window.location.href;
+    url = l.href;
     html = eval2To(j, html);
     if (typeof html === 'string') {
       browseData(j, url, html, 0, brows);
@@ -952,6 +953,10 @@ function browse(j, url, brows) {
       html = d['documentWritten'];
       if (html !== undefined) {
         browseData(j, url, '' + html, 0, brows);
+      } else if (d.nextUrl && (getUrlPre(d.nextUrl) === getUrlPre(url))) {
+        console.log('DEBUG: onhashchange ' + d.nextUrl);
+        l.href = d.nextUrl;
+        d.nextUrl = undefined;
       }
     }
   } else {
@@ -962,7 +967,7 @@ function browse(j, url, brows) {
       var html = "<!DOCTYPE html><html><head><meta charset=utf-8><title>title</title></head><body><h1>404 not found</h1>"  + (escapeHtml(url) + "</body></html>");
       browseData(j, url, html, 1, brows);
     }
-    var g = newFetch(j.vars.window.location);
+    var g = newFetch(l);
     g = g(url);
     g = g.then(after, error);
   }
