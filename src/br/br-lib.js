@@ -1038,6 +1038,7 @@ function handleStdin(j) {
         if (acc === undefined) {
           acc = '';
         }
+        io.acc = undefined;
         cb(j, acc);
       } else {
         if (acc !== undefined) {
