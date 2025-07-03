@@ -223,6 +223,16 @@ Planned on shortlist:
 * https://github.com/KolibriOS/kolibrios/tree/main/programs/develop/cmm
 * https://github.com/andrei-markeev/ts2c/blob/master/COVERAGE.md
 
+### gemini
+
+* https://portal.mozz.us/gemini/ultimatumlabs.com/gemlog/20250504.gmi
+* https://portal.mozz.us/gemini/freeshell.de/gemlog/2025-06-28__I_d_never_do_this__sounds_like_a_challenge.gmi
+* https://portal.mozz.us/gemini/jsreed5.org/log/2025/202506/20250629-scripts-in-gemini.gmi
+* https://portal.mozz.us/gemini/bbs.geminispace.org/s/discuss/29783
+* https://portal.mozz.us/gemini/ultimatumlabs.com/gemlog/20250630.gmi
+* https://portal.mozz.us/gemini/auragem.ddns.net/techlog/20250630.gmi
+* https://portal.mozz.us/gemini/freeshell.de/gemlog/2025-07-01_No_scripting__honest_.gmi
+
 ## Best practices
 
 * https://biomejs.dev/linter/rules
