@@ -123,7 +123,7 @@ make_html() {
     BASE="`basename "$MD" .md`"
     OH="$DEST/$PAR/$BASE.htm"
     mkdir -p "$DEST/$PAR" || return 1
-    printf %s "$MD" | "$DEST/js0-min-static" "$ROOT/src/convert/gem2htm.js" |
+    printf '%s\n%s' "$IX" "$MD" | "$DEST/js0-min-static" "$ROOT/src/convert/gem2htm.js" |
     sed -r "s~\.md((#[^\"]*)?\")( target=_blank)?(>)~.htm\1\4~g" > "$OH" || return 1
     [ -s "$OH" ] || return 1
   done
@@ -132,8 +132,19 @@ make_html() {
   cp -at "$DEST" "$ROOT/doc/gemiweb0-avatar.png" || return 1
 }
 
+fetch_index() {
+  local PRE
+cat << EOF |
+https://bkil.gitlab.io/static-wonders.js/
+EOF
+  while read PRE; do
+    wget -U "gemiweb0-makedist.sh/0.1" -O - "$PRE/files.csv" |
+    sed "s~^~${PRE}~; N; N"
+  done > "$1"
+}
+
 main() {
-  local DESTNAME DEST ROOT
+  local DESTNAME DEST ROOT IX
   readonly DESTNAME="$1"
   readonly ROOT="$(readlink -f "`dirname "$0"`/..")"
 
@@ -144,6 +155,7 @@ main() {
 
   mkdir -p "$DESTNAME" || return 1
   readonly DEST="`readlink -f "$DESTNAME"`"
+  readonly IX="$DEST/static-wonders.js.files.csv"
   cd "$ROOT" || return 1
 
   git ls-files |
@@ -155,7 +167,9 @@ main() {
   make_dev || return 1
   make_doc || return 1
   bins || return 1
-  make_html || return 1
+  fetch_index "$IX" || return 1
+  make_html "$IX" || return 1
+  rm "$IX" 2>/dev/null || true
 }
 
 main "$@"

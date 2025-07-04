@@ -47,38 +47,70 @@ Note that we are still accepting developer feedback on the specification. You sh
 
 Play with an example game obeying this subset:
 
-* https://bkil.gitlab.io/static-wonders.js/game/rgbname.htm
-* https://bkil.gitlab.io/static-wonders.js/game/guard.htm
-* https://bkil.gitlab.io/static-wonders.js/game/rockpaps.htm
-* https://bkil.gitlab.io/static-wonders.js/game/wallrace.htm
-* https://bkil.gitlab.io/static-wonders.js/game/holejump.htm
-* https://bkil.gitlab.io/static-wonders.js/game/memopair.htm
-* https://bkil.gitlab.io/static-wonders.js/game/memonums.htm
-* https://bkil.gitlab.io/static-wonders.js/game/markov.htm
-* https://bkil.gitlab.io/static-wonders.js/game/towhanoi.htm
-* https://bkil.gitlab.io/static-wonders.js/game/permslid.htm
-* https://bkil.gitlab.io/static-wonders.js/share/colword.htm
-* https://bkil.gitlab.io/static-wonders.js/share/rot13.htm
-* https://bkil.gitlab.io/static-wonders.js/share/sumlist.htm
-* https://bkil.gitlab.io/static-wonders.js/audio/ansimus.htm
-* https://bkil.gitlab.io/static-wonders.js/edu/knowende.htm
-* https://bkil.gitlab.io/static-wonders.js/edu/knownone.htm
-* https://bkil.gitlab.io/static-wonders.js/edu/goodshuf.htm#
-* https://bkil.gitlab.io/static-wonders.js/edu/knowcard.htm#
-* https://bkil.gitlab.io/static-wonders.js/edu/sortfun.htm
-* https://bkil.gitlab.io/static-wonders.js/toy/busybvr.htm
-* https://bkil.gitlab.io/static-wonders.js/toy/busybvr4.htm
-* https://bkil.gitlab.io/static-wonders.js/toy/logismap.htm
-* https://bkil.gitlab.io/static-wonders.js/toy/langtona.htm
-* https://bkil.gitlab.io/static-wonders.js/toy/rule110.htm
-* https://bkil.gitlab.io/static-wonders.js/toy/namegen.htm
-* https://bkil.gitlab.io/static-wonders.js/toy/snowdown.htm
-* https://bkil.gitlab.io/static-wonders.js/joke/dare.htm
-* https://bkil.gitlab.io/static-wonders.js/joke/js-nojs.htm
-* https://bkil.gitlab.io/static-wonders.js/joke/hole-dimension-dirt-volume.htm
-* https://bkil.gitlab.io/static-wonders.js/crypto/randhash.htm
-* https://bkil.gitlab.io/static-wonders.js/crypto/papotp.htm
-* https://bkil.gitlab.io/static-wonders.js/draw/pixfont.htm
+https://bkil.gitlab.io/static-wonders.js/game/rgbname.htm
+
+https://bkil.gitlab.io/static-wonders.js/game/guard.htm
+
+https://bkil.gitlab.io/static-wonders.js/game/rockpaps.htm
+
+https://bkil.gitlab.io/static-wonders.js/game/wallrace.htm
+
+https://bkil.gitlab.io/static-wonders.js/game/holejump.htm
+
+https://bkil.gitlab.io/static-wonders.js/game/memopair.htm
+
+https://bkil.gitlab.io/static-wonders.js/game/memonums.htm
+
+https://bkil.gitlab.io/static-wonders.js/game/markov.htm
+
+https://bkil.gitlab.io/static-wonders.js/game/towhanoi.htm
+
+https://bkil.gitlab.io/static-wonders.js/game/permslid.htm
+
+https://bkil.gitlab.io/static-wonders.js/share/colword.htm
+
+https://bkil.gitlab.io/static-wonders.js/share/rot13.htm
+
+https://bkil.gitlab.io/static-wonders.js/share/sumlist.htm
+
+https://bkil.gitlab.io/static-wonders.js/audio/ansimus.htm
+
+https://bkil.gitlab.io/static-wonders.js/edu/knowende.htm
+
+https://bkil.gitlab.io/static-wonders.js/edu/knownone.htm
+
+https://bkil.gitlab.io/static-wonders.js/edu/goodshuf.htm#
+
+https://bkil.gitlab.io/static-wonders.js/edu/knowcard.htm#
+
+https://bkil.gitlab.io/static-wonders.js/edu/sortfun.htm
+
+https://bkil.gitlab.io/static-wonders.js/toy/busybvr.htm
+
+https://bkil.gitlab.io/static-wonders.js/toy/busybvr4.htm
+
+https://bkil.gitlab.io/static-wonders.js/toy/logismap.htm
+
+https://bkil.gitlab.io/static-wonders.js/toy/langtona.htm
+
+https://bkil.gitlab.io/static-wonders.js/toy/rule110.htm
+
+https://bkil.gitlab.io/static-wonders.js/toy/namegen.htm
+
+https://bkil.gitlab.io/static-wonders.js/toy/snowdown.htm
+
+https://bkil.gitlab.io/static-wonders.js/joke/dare.htm
+
+https://bkil.gitlab.io/static-wonders.js/joke/js-nojs.htm
+
+https://bkil.gitlab.io/static-wonders.js/joke/hole-dimension-dirt-volume.htm
+
+https://bkil.gitlab.io/static-wonders.js/crypto/randhash.htm
+
+https://bkil.gitlab.io/static-wonders.js/crypto/papotp.htm
+
+https://bkil.gitlab.io/static-wonders.js/draw/pixfont.htm
+
 * [src/br/index.htm](src/br/index.htm)
 * [src/check/bf.html](src/check/bf.html)
 * [src/bf.c/rot1.html](src/bf.c/rot1.html)

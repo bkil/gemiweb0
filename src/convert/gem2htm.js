@@ -1,4 +1,31 @@
 'use strict';
+var st = new Object;
+
+// JS1
+function strEqual(u, v) {
+  return !(u.length - v.length) && !u.indexOf(v);
+}
+
+// JS1
+function parseIntPlus(s) {
+  if (!strEqual(typeof parseInt, 'undefined')) {
+    return parseInt(s);
+  }
+  var k = NaN;
+  var i = -1;
+  var c;
+  while (s.length > (i = i + 1)) {
+    c = s.charCodeAt(i) - 48;
+    if ((0 > c) || (c > 9)) {
+      return k;
+    }
+    if (!i) {
+      k = 0;
+    }
+    k = (k * 10) + c;
+  }
+  return k;
+}
 
 // JS1
 function String_substring(th, from, to) {
@@ -192,20 +219,83 @@ function genId(s) {
   return o;
 }
 
-function autolink(t) {
+var nl = String.fromCharCode(10);
+
+function makeLink0(u, l) {
+  return '<a href="' + u + '" target=_blank>' + l + '</a>';
+}
+
+function wrapIf(s, x, y) {
+  s = '' + s;
+  if (s) {
+    return x + s + y;
+  }
+  return '';
+}
+
+function makeLink(u, l, nested) {
+  var k = u;
+  var i = u.indexOf('#');
+  if (i >= 0) {
+    k = String_substring(u, 0, i);
+  }
+  var o = st.ix[k];
+  if (!o || (nested && (u !== l))) {
+    return makeLink0(u, l);
+  }
+
+  var name = u;
+  i = String_lastIndexOf(name, '/');
+  if (i >= -1) {
+    name = String_substring(name, i + 1, name.length);
+  }
+  i = name.indexOf('.');
+  if (i >= -1) {
+    name = String_substring(name, 0, i);
+  }
+  var time = o[4];
+  if (o[6]) {
+    time = o[6] + '/' + time;
+  }
+  var kb = parseIntPlus(o[2]);
+  if (isNaN(kb)) {
+    kb = '';
+  } else {
+    kb = (((kb + 1024) / 1024) | 0) + ' kB';
+  }
+  var title = kb + ' | ' + time + ' | ' + name;
+  if (o[0]) {
+    title = o[0] + ' | ' + title;
+  }
+
+  if (nested) {
+    return makeLink0(u, title);
+  }
+  if (u !== l) {
+    return makeLink0(u, l) + nl +
+      wrapIf(o[0], '<blockquote>', '</blockquote>' + nl) +
+      wrapIf(o[1], '<blockquote>', '</blockquote>' + nl) +
+      '<blockquote>' + kb + ' | ' + time + '</blockquote>';
+  }
+  if (o[0]) {
+    l = o[0];
+  }
+  return makeLink0(u, l) + nl +
+    wrapIf(o[1], '<blockquote>', '</blockquote>' + nl) +
+    '<blockquote>' + kb + ' | ' + time + ' | ' + name + '</blockquote>';
+}
+
+function autolink(t, nested) {
   var l;
   var i = t.indexOf('](');
   if (!t.indexOf('[') && (i > 0) && (t.charAt(t.length - 1) === ')')) {
     l = String_substring(t, 1, i);
-    t = String_substring(t, i + 2, t.length - 1);
-    t = '<a href="' + t + '" target=_blank>' + l + '</a>';
+    t = makeLink(String_substring(t, i + 2, t.length - 1), l, nested);
   } else if ((0 > t.indexOf(' ')) && (!t.indexOf('http://') || !t.indexOf('https://'))) {
-    t = '<a href="' + t + '" target=_blank>' + t + '</a>';
+    t = makeLink(t, t, nested);
   }
   return t;
 }
-
-var nl = String.fromCharCode(10);
 
 function gemtext2htmBody(t, pr) {
   var title = '';
@@ -226,7 +316,7 @@ function gemtext2htmBody(t, pr) {
       if (!inList) {
         o = o + '<ul>' + nl;
       }
-      literal = autolink(literal);
+      literal = autolink(literal, 1);
       o = o + '<li>' + literal + '</li>';
       inList = 1;
     } else {
@@ -273,7 +363,8 @@ function gemtext2htmBody(t, pr) {
           line = String_substring(literal, 0, j);
           literal = String_substring(literal, j + 1, literal.length);
         }
-        o = o + '<a href="' + line + '">' + literal + '</a>';
+        literal = makeLink(line, literal, 0);
+        o = o + literal;
       } else if (line === '```html') {
         while ((lin.length > (i = i + 1)) && ((line = lin[i]) !== '```')) {
           o = o + line + nl;
@@ -286,7 +377,7 @@ function gemtext2htmBody(t, pr) {
         o = o + '</pre>';
       } else {
         literal = escapeHtml(line, 1);
-        line = autolink(literal);
+        line = autolink(literal, 0);
         if ((literal === line) && !first) {
           first = literal;
         }
@@ -316,6 +407,26 @@ function gemtext2htmBody(t, pr) {
   o = pretoc + toc + o;
   pr.title = title;
   pr.desc = desc;
+  return o;
+}
+
+function parseIndex(t) {
+  var o = new Object;
+  if (!t) {
+    return o;
+  }
+  var l = String_split(t, nl);
+  var n = l.length;
+  var u;
+  var r;
+  var i = -1;
+  while (n > (i = i + 3)) {
+    r = String_split(l[i-2], ' ');
+    u = r[0];
+    r[0] = l[i - 1];
+    r[1] = l[i];
+    o[u] = r;
+  }
   return o;
 }
 
@@ -378,18 +489,35 @@ function gemtext2htmFile(t, name) {
 
 var fs = require('fs');
 
-function init() {
-  process.stdin.on('data', function(name) {
-    process.stdin.removeAllListeners(['data']);
-    process.stdin.pause();
-    name = String_trim('' + name);
-    fs.readFile(name, function(e, d) {
+function processInput(files) {
+  files = String_split(String_trim('' + files), nl);
+  if (files.length - 2) {
+    console.log('usage: [file-index.csv] [input.md]');
+    return 0;
+  }
+  var ixn = files[0];
+  var md  = files[1];
+  fs.readFile(ixn, function(e, ixd) {
+    st.ix = parseIndex(ixd);
+    fs.readFile(md, function(e, d) {
       if (e) {
-        console.log(name + ': ' + e);
+        console.log(md + ': ' + e);
       } else {
-        console.log(gemtext2htmFile('' + d, name));
+        console.log(gemtext2htmFile('' + d, md));
       }
     });
+  });
+}
+
+function init() {
+  var b = '';
+  process.stdin.on('end', function(d) {
+    processInput(b);
+    process.stdin.pause();
+    process.stdin.removeAllListeners(['data', 'end']);
+  });
+  process.stdin.on('data', function(d) {
+    b = b + d;
   });
 }
 

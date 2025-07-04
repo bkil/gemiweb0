@@ -192,9 +192,11 @@ missing:
 
 Multiple proof of concept interpreter runtimes are in progress. If you would like to help with implementing this subset in a minimalistic way and provide feedback, let's get in touch to help shape the specification for the better.
 
-* https://bkil.gitlab.io/static-wonders.js/browser-vm/fun-var-array-bf.html
-* https://bkil.gitlab.io/static-wonders.js/browser-vm/fun-err-obj-js.html
-* https://bkil.gitlab.io/static-wonders.js/browser-vm/parse-dispatch-js.html
+https://bkil.gitlab.io/static-wonders.js/browser-vm/fun-var-array-bf.html
+
+https://bkil.gitlab.io/static-wonders.js/browser-vm/fun-err-obj-js.html
+
+https://bkil.gitlab.io/static-wonders.js/browser-vm/parse-dispatch-js.html
 
 A simple, text-entry & pre based browser written in the JavaScript subset interpreted by the interpreter in the browser:
 
