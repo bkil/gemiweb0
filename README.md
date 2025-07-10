@@ -61,8 +61,6 @@ https://bkil.gitlab.io/static-wonders.js/game/memopair.htm
 
 https://bkil.gitlab.io/static-wonders.js/game/memonums.htm
 
-https://bkil.gitlab.io/static-wonders.js/game/markov.htm
-
 https://bkil.gitlab.io/static-wonders.js/game/towhanoi.htm
 
 https://bkil.gitlab.io/static-wonders.js/game/permslid.htm
@@ -84,6 +82,10 @@ https://bkil.gitlab.io/static-wonders.js/edu/goodshuf.htm#
 https://bkil.gitlab.io/static-wonders.js/edu/knowcard.htm#
 
 https://bkil.gitlab.io/static-wonders.js/edu/sortfun.htm
+
+https://bkil.gitlab.io/static-wonders.js/game/markov.htm
+
+https://bkil.gitlab.io/static-wonders.js/toy/randjs.htm
 
 https://bkil.gitlab.io/static-wonders.js/toy/busybvr.htm
 
