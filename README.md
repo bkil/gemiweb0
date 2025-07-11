@@ -71,6 +71,8 @@ https://bkil.gitlab.io/static-wonders.js/share/rot13.htm
 
 https://bkil.gitlab.io/static-wonders.js/share/sumlist.htm
 
+https://bkil.gitlab.io/static-wonders.js/audio/evalmus.htm
+
 https://bkil.gitlab.io/static-wonders.js/audio/ansimus.htm
 
 https://bkil.gitlab.io/static-wonders.js/edu/knowende.htm
