@@ -53,6 +53,8 @@ https://bkil.gitlab.io/static-wonders.js/game/guard.htm
 
 https://bkil.gitlab.io/static-wonders.js/game/rockpaps.htm
 
+https://bkil.gitlab.io/static-wonders.js/game/talkidea.htm
+
 https://bkil.gitlab.io/static-wonders.js/game/wallrace.htm
 
 https://bkil.gitlab.io/static-wonders.js/game/holejump.htm
