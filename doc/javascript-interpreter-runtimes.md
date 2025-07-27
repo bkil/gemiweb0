@@ -618,6 +618,13 @@ Includes a web based example interpreter.
 * supports ES6 draft
 * implemented in JavaScript ES3
 
+### es-lab
+
+* https://github.com/tvcutsem/es-lab/blob/master/src/parser/es5parser.ojs
+* https://github.com/tvcutsem/es-lab/blob/master/src/eval/eval.js
+
+> ES-lab: experiments with proposed extensions to JavaScript. A "reify eval, absorb apply" style meta-interpreter for ES5.
+
 ### MetaES
 
 * last update: 2022
@@ -632,6 +639,15 @@ Includes a web based example interpreter.
 
 > Narcissus is a JavaScript interpreter written in pure JavaScript (i.e., a meta-circular evaluator), using the SpiderMonkey engine.
 > Originally a proof-of-concept, a test-bed for rapidly prototyping new language features for the JavaScript language (as well as the ECMAScript standard).
+
+### ohmjs ecmascript
+
+Only a parser:
+
+* https://github.com/ohmjs/ohm/blob/main/examples/ecmascript/README.md
+* https://github.com/ohmjs/ohm/blob/main/examples/ecmascript/src/es5.ohm
+
+> Ohm grammars for various versions of the ECMAScript spec. Based on Tom Van Cutsem's ES5 parser from the es-lab project. Currently, only the ES5 grammar is reasonably complete, but we are working on ES6.
 
 ## Benchmarks
 
