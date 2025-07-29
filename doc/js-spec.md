@@ -40,7 +40,7 @@ convenience:
 
 missing:
 
-* ==, !=, +=, ++, class, new (mocked for some built-in objects), precedence (have to fully parenthesize)
+* ==, !=, +=, ++, class, new (mocked for some built-in objects), precedence (have to fully parenthesize except for repetitions of the same operator)
 * ES3/NS5: instanceof
 * ES1/NS2: ternary operator
 * ES1/NS2: comma operator
@@ -54,7 +54,8 @@ missing:
 * decimal integers
 * NaN
 * string literals (without escaping)
-* Object and Array square bracket member accessor ([])
+* Object square bracket ([]) with string index
+* Array square bracket member accessor ([]) with non-negative integer index
 
 convenience:
 

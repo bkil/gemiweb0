@@ -102,7 +102,7 @@ A heavy set of restrictions are imposed on user code that can be executed by the
 ### Array object
 
 * Verdict: recommended, partial
-* Restriction: creation with the 0-argument constructor, only the `.length` getter can be used and square bracket indexing, missing: join, reverse, sort
+* Restriction: creation with the 0-argument constructor, only the `.length` getter can be used and square bracket indexing with non-negative integers, missing: join, reverse, sort
 * Implementation complexity: low, intermediate with an efficient data structure
 * Workaround: substitute an Object, manually update a length property with each addition or iterate over it until reaching `undefined` instead of a given length
 * Standard: ES1
