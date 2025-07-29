@@ -97,6 +97,8 @@ https://bkil.gitlab.io/static-wonders.js/toy/busybvr4.htm
 
 https://bkil.gitlab.io/static-wonders.js/toy/ploteval.htm
 
+https://bkil.gitlab.io/static-wonders.js/toy/mandbrot.htm
+
 https://bkil.gitlab.io/static-wonders.js/toy/logismap.htm
 
 https://bkil.gitlab.io/static-wonders.js/toy/langtona.htm
