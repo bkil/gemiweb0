@@ -1,6 +1,6 @@
 # gemiweb0, a gemini-HTTP/HTML subset
 
-Don't install a special client or pay for a custom server: enables HTTP-based shared web hosting.
+No need to install a special client or pay for a custom server: enables HTTP-based shared web hosting of the simplest artisan content possible.
 
 ## Status
 
@@ -133,7 +133,7 @@ Bookmarklets:
 
 ## Contact
 
-Join our chat room on Matrix, also relayed over a XMPP MUC and the IRC channel #gemiweb0. You can participate in brainstorming and give a hand by implementing the standard from scratch:
+Join our free chat room on Matrix, also relayed over an XMPP MUC and the IRC channel #gemiweb0. You can participate in brainstorming and give a hand by implementing the standard from scratch in your favorite language:
 
 * https://matrix.to/#/#gemiweb0:matrix.org
 * [xmpp:gemiweb0@conference.movim.eu](xmpp:gemiweb0@conference.movim.eu?join)
@@ -143,7 +143,7 @@ Join our chat room on Matrix, also relayed over a XMPP MUC and the IRC channel #
 
 ## Source code repository
 
-May be blocked from some ISP due to load.
+Web viewing may be blocked from some ISP due to load.
 
 * https://gitlab.com/bkil/gemiweb0
 * https://github.com/bkil/gemiweb0
