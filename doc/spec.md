@@ -1,4 +1,4 @@
-# Specification of GemiWeb, the gemini-HTTP/HTML subset
+# Specification drafts
 
 ## Components
 
@@ -31,7 +31,7 @@
 * Subject to calibration against the server's time from previous HTTP responses
 * The server could also echo the public IP of the client in each response
 * An HTTP HTTP-only session cookie based workaround would be possible where signing would initiate "signing in"
-  * The session cookie could simulated via URI paths
+  * The session cookie could be simulated via URI paths
 
 ### Unicode byte order mark
 
@@ -60,8 +60,17 @@
 
 * https://linuxreviews.org/Gemini
 * https://tildegit.org/solderpunk/agena _Gemini-to-Gopher proxy written in Python_
-* https://github.com/LukeEmmet/duckling-proxy _Duckling proxy 🦆 is a Gemini proxy to access the Small Web_
+* https://github.com/LukeEmmet/duckling-proxy
+
+> Duckling proxy is a Gemini proxy to access the Small Web
+
 * https://github.com/kr1sp1n/awesome-gemini
 * https://gitlab.com/gemini-specification/protocol
-* https://github.com/Aarontheissueguy/Html2GeminiPy _Convert html sites to fully functional gemini containers using python._
-* https://git.rdelaage.ovh/Gemini/mastoGem _MastoGem: a Mastodon proxy for Gemini_
+
+* https://github.com/Aarontheissueguy/Html2GeminiPy
+
+> Convert html sites to fully functional gemini containers using python.
+
+* https://git.rdelaage.ovh/Gemini/mastoGem
+
+> MastoGem: a Mastodon proxy for Gemini
