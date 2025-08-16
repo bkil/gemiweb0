@@ -49,8 +49,6 @@ By first standards revision it was mentioned in.
 
 ### ES5
 * let
-
-### ES5.1
 * yield
 
 ### ES6
