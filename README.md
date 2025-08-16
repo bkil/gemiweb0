@@ -24,6 +24,7 @@ See the doc folder for more information:
 * [doc/css-spec.md](doc/css-spec.md)
 * [doc/web-browsers-by-engine.md](doc/web-browsers-by-engine.md)
 * [doc/javascript-interpreter-runtimes.md](doc/javascript-interpreter-runtimes.md)
+* [doc/jhistory.md](doc/jhistory.md)
 * [doc/test.md](doc/test.md)
 * [src/bf.c/README.htm](src/bf.c/README.htm)
 
