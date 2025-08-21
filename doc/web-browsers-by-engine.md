@@ -269,16 +269,16 @@ It received $1M funding on 2024-07-01 to help release a public beta by 2026.
 * https://git.sr.ht/~sircmpwn/visurf
 * fork of NetSurf to add frontend user interface with vi key bindings
 
-### Web-K
+### Flying Saucer
 
-More of a tech demo than a product for end users, but it is a unique independent engine with theoretically good coverage of standards.
+Not a web browser, only a rendering engine. Includes a demo browser.
 
-* https://github.com/Earnix/Web-K
 * https://en.wikipedia.org/wiki/Flying_Saucer_(library)
 * https://en.wikipedia.org/wiki/Nashorn_(JavaScript_engine)
-* https://github.com/flyingsaucerproject/flyingsaucer/blob/828de14f7991350d069ed858ba4ed7bf63490313/www/feature-list.html
+* https://github.com/flyingsaucerproject/flyingsaucer/blob/f61e50c5068538837e90b35342b44d079caba38d/www/feature-list.html
+* https://flyingsaucerproject.github.io/flyingsaucer/r8/guide/users-guide-R8.html#xil_10
 
-> Web-K is FlyingSaucer-based pure Java browser and Swing browser component. Nashorn JavaScript runtime, Canvas, es6-shim polyfill. Modified JSoup library provides support of HTML5 at parsing level.
+> pure-Java library for rendering arbitrary well-formed XML (or XHTML) using CSS 2.1 for layout and formatting, output to Swing panels, PDF, and images.
 
 ## Graphical browsers with compromises
 
@@ -917,6 +917,16 @@ https://en.wikipedia.org/wiki/Uzbl
 * implemented in C
 * platform: Amiga
 * license: GNU GPL v2
+
+### Web-K
+
+More of a tech demo than a product for end users, but it is a unique independent engine with theoretically good coverage of standards.
+
+* last update: 2020, repository removed
+* https://github.com/Earnix/Web-K
+* rendering engine: Flying Saucer
+
+> Web-K is FlyingSaucer-based pure Java browser and Swing browser component. Nashorn JavaScript runtime, Canvas, es6-shim polyfill. Modified JSoup library provides support of HTML5 at parsing level.
 
 ## Related
 
