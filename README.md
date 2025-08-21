@@ -14,6 +14,7 @@ See the doc folder for more information:
 
 * [doc/project-community.md](doc/project-community.md)
 * [doc/user-application.md](doc/user-application.md)
+* [doc/platform.md](doc/platform.md)
 * [doc/http-choices.md](doc/http-choices.md)
 * [doc/http-spec.md](doc/http-spec.md)
 * [doc/html-choices.md](doc/html-choices.md)
