@@ -1,12 +1,10 @@
 # Targeted platform configurations
 
+A platform configuration would be compromised of the OS, the web browser, interface (resolution, DPI, touch, mouse, keyboard) and device limitations (CPU, RAM). Each content developer can pick which ones they specifically want to support. We might suggest that they also publish their choice on their web site.
+
 ## Overview
 
-A platform configuration would be compromised of the OS, the web browser, interface (resolution, DPI, touch, mouse, keyboard) and device limitations (CPU, RAM).
-
-Configurations can be tested inside a virtual machine or using browser matrix services. We can assume a high network speed to investigate that question separately.
-
-Each content developer can pick which ones they specifically want to support. We might suggest that they also publish their choice on their page.
+Configurations can be tested inside a virtual machine or using online browser matrix services. We can assume a high network speed to investigate that question separately.
 
 ### Common problems
 
