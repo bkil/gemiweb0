@@ -22,6 +22,7 @@ Hardware is assumed to be purchased a few years ago usually from a low budget. E
 
 ### Microcontroller
 
+* https://github.com/Allegra42/ZEReader
 * ESP32 or RP2040 (32-bit ARM Cortex-M0+), 256-512kB RAM, 2-4MB flash
 * browser: gemiweb0
 
