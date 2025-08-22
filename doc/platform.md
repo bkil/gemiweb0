@@ -1,6 +1,6 @@
 # Targeted platform configurations
 
-A platform configuration would be compromised of the OS, the web browser, interface (resolution, DPI, touch, mouse, keyboard) and device limitations (CPU, RAM). Each content developer can pick which ones they specifically want to support. We might suggest that they also publish their choice on their web site.
+A platform configuration would be compromised of the OS, the web browser, interface (resolution, DPI, touch, mouse, keyboard) and device limitations (CPU, RAM). Each content producer can pick which ones they specifically want to support. We might suggest that they also publish their choices on their web site.
 
 ## Overview
 
@@ -18,7 +18,7 @@ If we don't want to go into all nuance details of responsive design, the main pa
 
 ## Example platforms
 
-Hardware is assumed to be purchased a few years ago usually from a low budget. Each software is assumed to be the latest version except when noted otherwise.
+Hardware is assumed to be purchased a few years ago usually from a low budget. Each software is assumed to be the latest version except where noted otherwise.
 
 ### Microcontroller
 
@@ -31,14 +31,14 @@ Hardware is assumed to be purchased a few years ago usually from a low budget. E
 * OpenWrt, MIPS, 32MB RAM, 8MB flash
 * browser: gemiweb0 (scripted or for js0 CGI)
 
-### Nokia 110 4G (2021)
+### Nokia 110 4G 2021
 
 * https://www.gsmarena.com/nokia_110_4g-10965.php
 * Symbian S30+, 120x160, keypad, 128MB RAM
 * browser: Opera mini 4 only
 * https://techcabal.com/2025/04/16/opera-mini-mobile-browser/
 
-### Nokia 3210 (2024)
+### Nokia 3210 2024
 
 * https://en.wikipedia.org/wiki/Nokia_3210_%282024%29
 * Symbian S30+, 240x320, keypad, 64MB RAM
@@ -80,7 +80,7 @@ Hardware is assumed to be purchased a few years ago usually from a low budget. E
 * FreeDOS, keyboard, mouse, 720x480x8, 8MB RAM
 * browser: Arachne
 
-### Cheap SBC or TV box from a few years ago
+### Old SBC or TV box
 
 * Armbian, keyboard, mouse, quad core, 512MB-1GB RAM
 * browsers: NetSurf, Ladybird, edbrowse, Chawan, Ferus, ELinks, Dillo
