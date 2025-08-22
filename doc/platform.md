@@ -23,8 +23,13 @@ Hardware is assumed to be purchased a few years ago usually from a low budget. E
 ### Microcontroller
 
 * https://github.com/Allegra42/ZEReader
-* ESP32 or RP2040 (32-bit ARM Cortex-M0+), 256-512kB RAM, 2-4MB flash
+* custom RTOS, ESP32 or RP2040 (32-bit ARM Cortex-M0+), 256-512kB RAM, 2-4MB flash
 * browser: gemiweb0
+
+### Router
+
+* OpenWrt, MIPS, 32MB RAM, 8MB flash
+* browser: gemiweb0 (scripted or for js0 CGI)
 
 ### Nokia 110 4G (2021)
 
