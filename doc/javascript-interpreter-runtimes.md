@@ -459,6 +459,11 @@ Includes a web based example interpreter.
 * JavaScript 1.1
 * implemented in C
 * used by links2 up to 2.1.pre28
+* http://links.twibright.com/user_en.html#ap-javascript
+* http://links.twibright.com/project.html#subch-javascript
+* http://links.twibright.com/doc/links_doc_en.html#javascript
+* http://links.twibright.com/doc/links_doc_en.html#interpret_javascriptu
+* http://links.twibright.com/doc/implementacni.html#javascript
 
 ### lugrin.ch FESI
 
