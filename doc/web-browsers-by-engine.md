@@ -193,11 +193,13 @@ apt install firefox-esr
 
 ## Goanna engine
 
-A fork of older Firefox/Gecko for security and to keep older extensions working.
+A fork of older Firefox (Gecko v24) for security and to keep older (UXP) extensions working.
 
 ### Basilisk
 
 * https://en.wikipedia.org/wiki/Pale_Moon_(web_browser)#Basilisk_browser
+* https://www.basilisk-browser.org/features.html
+* backported features from Firefox 55
 
 ### Conkeror
 
@@ -207,6 +209,7 @@ A fork of older Firefox/Gecko for security and to keep older extensions working.
 ### Pale Moon
 
 * https://en.wikipedia.org/wiki/Pale_Moon_(web_browser)
+* https://www.palemoon.org/history.shtml
 
 ## May become full featured
 
@@ -803,6 +806,13 @@ https://en.wikipedia.org/wiki/Abaco_(web_browser)
 * no JS
 * implemented in: Emacs LISP
 
+### env-js
+
+* last update: 2008
+* https://github.com/jeresig/env-js
+
+> A pure-JavaScript browser environment.
+
 ### Erwise
 
 * last update: 1992
@@ -869,6 +879,7 @@ apt install midori
 ### NCSA-mosaic
 
 * https://github.com/alandipert/ncsa-mosaic
+* https://en.wikipedia.org/wiki/NCSA_Mosaic
 
 ### Nexus WorldWideWeb
 
@@ -952,3 +963,5 @@ FOSS JavaScript interpreters, runtimes
 * https://blogs.gnome.org/mcatanzaro/2022/11/04/stop-using-qtwebkit/
 * https://en.wikipedia.org/wiki/Libwww#Applications_using_libwww
 * https://eylenburg.github.io/browser_engines.htm
+* https://trac.webkit.org/wiki/Applications%20using%20WebKit
+* https://trac.webkit.org/wiki/ApplicationsGtk
