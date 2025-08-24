@@ -179,6 +179,12 @@ apt install firefox
 apt install firefox-esr
 ```
 
+### Fennec
+
+* fork of latest mobile "Firefox for Android" compatible with Android 5.0
+* https://f-droid.org/en/packages/org.mozilla.fennec_fdroid/
+* https://en.wikipedia.org/wiki/Firefox_for_Android
+
 ### GNU IceCat
 
 * https://en.wikipedia.org/wiki/GNU_IceCat
