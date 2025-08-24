@@ -45,6 +45,10 @@ done
 * Each software is assumed to be the latest version except where noted otherwise.
 * Each screen is assumed to support at least 15-bit/pixel RGB high or true color unless otherwise noted.
 
+See also FOSS web browsers by engine:
+
+[./web-browsers-by-engine.md](./web-browsers-by-engine.md)
+
 ### Microcontroller
 
 * https://github.com/Allegra42/ZEReader
@@ -91,7 +95,6 @@ done
 
 * Android 5, low power 4-core A53, 540x960 touchscreen, 1GB RAM
 * browser: only Mozilla Fennec not vulnerable
-* https://f-droid.org/en/packages/org.mozilla.fennec_fdroid/
 
 ### Supported Android
 
