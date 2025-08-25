@@ -101,6 +101,8 @@ https://bkil.gitlab.io/static-wonders.js/game/rgbname.htm
 
 https://bkil.gitlab.io/static-wonders.js/game/guard.htm
 
+https://bkil.gitlab.io/static-wonders.js/game/catmazes.htm
+
 https://bkil.gitlab.io/static-wonders.js/game/catmaze.htm
 
 https://bkil.gitlab.io/static-wonders.js/game/wallrace.htm
