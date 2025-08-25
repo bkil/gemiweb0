@@ -6,7 +6,7 @@ A platform configuration would be compromised of the OS, the web browser, interf
 
 Configurations can be tested inside a virtual machine or using online browser matrix services. We can assume a high network speed to investigate that question separately.
 
-### Common problems
+### Web developer mistakes
 
 If we don't want to go into all nuance details of responsive design, the main pain points I observe:
 * viewing on too small screen
@@ -39,7 +39,7 @@ while true; do
 done
 ```
 
-## Example platforms
+## Example platform configurations
 
 * Hardware is assumed to be purchased a few years ago usually from a low budget and most of these would still be expected to be on sale.
 * Each software is assumed to be the latest version except where noted otherwise.
@@ -93,8 +93,8 @@ See also FOSS web browsers by engine:
 
 ### Legacy Android
 
-* Android 5, low power 4-core A53, 540x960 touchscreen, 1GB RAM
-* browser: only Mozilla Fennec not vulnerable
+* Android 5.0, low power 4-core A53, 540x960 touchscreen, 1GB RAM
+* browser: only Fennec F-droid not vulnerable
 
 ### Supported Android
 
@@ -108,9 +108,9 @@ See also FOSS web browsers by engine:
 * Apple iOS, 6-core A13, 750x1334 touchscreen, 3GB RAM
 * browser: Mobile Safari, no use in testing others
 
-### Old SBC or TV box
+### Legacy SBC or TV box
 
-* representative chipset: x86 (VIA Eden X4, Intel Atom CE5300) or A53 (Raspberry Pi Zero 2 W or S805X Xiaomi Mi TV Stick)
+* representative chipset: x86 (VIA Eden X4, Intel Atom CE5300) or A53 (Raspberry Pi Zero 2 W, S805X Xiaomi Mi TV Stick)
 * antiX or Armbian, keyboard, mouse, 1366x768, 512MB-1GB RAM
 * browsers: NetSurf, Ladybird, edbrowse, Chawan, Ferus, ELinks, Dillo
 * just for fun: visurf, KolibriOS (on x86), Emacs Eww, links2, lynx, netrik, w3m
@@ -126,7 +126,7 @@ See also FOSS web browsers by engine:
 ### Desktop
 
 * Windows, 4-core AMD Ryzen 3 2200G, keyboard, mouse, 1920x1080, 8GB RAM
-* browsers: Microsoft Edge, Google Chrome
+* browsers: Microsoft Edge, Google Chrome, Opera
 
 ### Supported iPad
 
