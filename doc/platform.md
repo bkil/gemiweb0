@@ -20,6 +20,8 @@ If we don't want to go into all nuance details of responsive design, the main pa
 * if it is taking too long to load a huge page (or complex generated code) even over wifi
 * if there's input lag during interactions
 * the implementation relies on the behavior of a single rendering engine with regard to an obscure quirk or an optional experimental feature
+* assuming that all mouse and touchpad are equipped with more than one button and a usable scroll wheel or strip
+* assuming that a user has a pointing device at all or prefers to use it instead of the keyboard when interspersed with typing
 
 ### Emulation
 
