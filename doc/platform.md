@@ -22,6 +22,7 @@ If we don't want to go into all nuance details of responsive design, the main pa
 * the implementation relies on the behavior of a single rendering engine with regard to an obscure quirk or an optional experimental feature
 * assuming that all mouse and touchpad are equipped with more than one button and a usable scroll wheel or strip
 * assuming that a user has a pointing device at all or prefers to use it instead of the keyboard when interspersed with typing
+* not realizing pointer acceleration: that a mouse or touchpad may not be able to cross a big enough screen with a single stroke or that holding the cursor still on top of a small target or through a narrow tunnel can be difficult
 
 ### Emulation
 
@@ -121,13 +122,13 @@ See also FOSS web browsers by engine:
 
 ### Laptop
 
-* Xubuntu, 2(4)-core Intel i3-8145U, keyboard, touchpad, 1600x900, 4GB RAM
+* Xubuntu, 2(4)-core AMD Ryzen 3 2200U or Intel i3-8145U, keyboard, touchpad, 1600x900, 4GB RAM
 * browsers: Chromium, Firefox, Tor browser (Firefox ESR), Epiphany (Gnome Web), gngr, LoboEvolution, Flying Saucer, Servoshell, Pale Moon, Basilisk, Opera 12.18 (same as used by the server of Opera mini if you don't want to fiddle with an emulator online)
 * retro: Konqueror 5 (KHTML), Web-K
 
 ### Desktop
 
-* Windows, 4-core AMD Ryzen 3 2200G, keyboard, mouse, 1920x1080, 8GB RAM
+* Windows, 4-core AMD Ryzen 3 2200G or Intel i3-8100, keyboard, mouse, 1920x1080, 8GB RAM
 * browsers: Microsoft Edge, Google Chrome, Opera
 
 ### Supported iPad
