@@ -96,13 +96,20 @@ See also FOSS web browsers by engine:
 
 ### Legacy Android
 
-* Android 5.0, low power 4-core A53, 540x960 touchscreen, 1GB RAM
+* https://www.gsmarena.com/zte_maven-7355.php
+* Android 5.0, low power 4-core A53, 480x854 touchscreen, 1GB RAM
 * browser: only Fennec F-droid not vulnerable
 
-### Supported Android
+### Earliest supported Android
+
+* https://www.gsmarena.com/tcl_502-13943.php
+* Android 13 Go, fast 4-core A53, 480x960 touchscreen, 2GB RAM
+* browser: Mobile Chrome, no use in testing others
+
+### Recent supported Android
 
 * https://www.gsmarena.com/xiaomi_redmi_a5_4g-13737.php
-* Android, 8-core A75 & A55, 720x1640 touchscreen, 3GB RAM
+* Android 15 Go, 8-core A75 & A55, 720x1640 touchscreen, 3GB RAM
 * browser: Mobile Chrome, no use in testing others
 
 ### Supported iPhone
@@ -117,14 +124,14 @@ See also FOSS web browsers by engine:
 * antiX or Armbian, keyboard, mouse, 1366x768, 512MB-1GB RAM
 * browsers: NetSurf, Ladybird, edbrowse, Chawan, Ferus, ELinks, Dillo
 * just for fun: visurf, KolibriOS (on x86), Emacs Eww, links2, lynx, netrik, w3m
-* retro: Amaya, Arena, BrowseX, Emacs w3, HV3+SEE, Konqueror 1, Mozilla 1.0, Mycel, NCSA-Mosaic, Netscape 2.0, Netscape 3.0, Netscape 4.5, Opera 4.0, Opera 8.5
+* retro: Amaya, Arena, BrowseX, Emacs w3, HV3+SEE, Konqueror (KDE 2.0), Mozilla 1.0, Mycel, NCSA-Mosaic, Netscape 2.0, Netscape 3.0, Netscape 4.5, Opera 4.0, Opera 8.5
 * needs porting or a VM: Arachne/Linux (svgalib), AWeb, Charon, Voyager
 
 ### Laptop
 
 * Xubuntu, 2(4)-core AMD Ryzen 3 2200U or Intel i3-8145U, keyboard, touchpad, 1600x900, 4GB RAM
 * browsers: Chromium, Firefox, Tor browser (Firefox ESR), Epiphany (Gnome Web), gngr, LoboEvolution, Flying Saucer, Servoshell, Pale Moon, Basilisk, Opera 12.18 (same as used by the server of Opera mini if you don't want to fiddle with an emulator online)
-* retro: Konqueror 5 (KHTML), Web-K
+* retro: Konqueror v5 (KHTML), Web-K
 
 ### Desktop
 
