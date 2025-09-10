@@ -126,6 +126,7 @@ make_html() {
     printf '%s\n%s' "$IX" "$MD" | "$DEST/js0-min-static" "$ROOT/src/convert/gem2htm.js" |
     sed -r "s~\.md((#[^\"]*)?\")( target=_blank)?(>)~.htm\1\4~g" > "$OH" || return 1
     [ -s "$OH" ] || return 1
+    touch -r "$MD" "$OH"
   done
   mv "$DEST/README.htm" "$DEST/index.html" || return 1
   cp -a "$ROOT/doc/gemiweb-icon.ico" "$DEST/favicon.ico" || return 1
