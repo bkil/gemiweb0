@@ -462,6 +462,8 @@ function gemtext2htmFile(t, name) {
     '<html lang=en prefix="og: http://ogp.me/ns#">' + nl +
     '<head>' + nl +
     '<meta charset="utf-8">' + nl +
+    '<meta http-equiv=content-type content="text/html; charset=UTF-8">' + nl +
+    '<meta http-equiv=x-content-type-options content=nosniff>' + nl +
     '<title>' +
     title +
     '</title>' + nl +
@@ -470,6 +472,7 @@ function gemtext2htmFile(t, name) {
     '<meta property="og:type" content="article">' + nl +
     '<meta property="og:url" content="' + url + '">' + nl +
     '<meta property="og:image" content="' + pre + 'gemiweb0-avatar.png">' + nl +
+    '<meta name=author content=bkil.hu>' + nl +
     '<meta name=viewport content="width=device-width, initial-scale=1">' + nl +
     '<meta name=referrer content=unsafe-url>' + nl +
     '<meta http-equiv=x-dns-prefetch-control content=off>' + nl +
