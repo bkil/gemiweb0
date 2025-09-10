@@ -333,7 +333,7 @@ Not a web browser, only a rendering engine. Includes a demo browser.
 * supported HTML tags: a (href), p, img (src, title, alt), div, ol, ul, dt, dl, dd, li, hr (color), code, meta (charset, content, encoding, http-equiv refresh, name application), body (bgcolor, link, alink, text), iframe (src - just as a link), table (width), tr, th (width), td (width), caption, b (=big, strong), u (=ins), s (=strike, del), q, h1, h2, h3, h4, font (color, bg), pre, blockquote, button, img, nav, br (=header, article, footer, figure), title
 * supported attributes: name, id
 * features: HTML 4.0, character sets, up to 255 byte long anchor, control via mouse, CDATA comment, ignore content within script, style, binary and select
-* language: C--, assembly
+* language: C--, 586 assembly
 * no JavaScript
 * only supports HTTPS through a custom hosted HTTP downgrade proxy
 * platform: KolibriOS
@@ -907,6 +907,23 @@ apt install midori
 * features: mouse, incremental rendering, forms partially, tables partially, frames partially
 * no CSS, no JS
 * protocols: http, https, ftp, ftps, nntp, finger, file, local cgi
+
+### Singular browser
+
+* last update: 2007
+* https://csdb.dk/release/?id=48032&show=notes#notes
+* https://home.sch.bme.hu/~soci64/browser/
+* https://home.sch.bme.hu/~soci64/browser/compile.php
+* https://singularcrew.hu/browser/
+* HTML tags: br p b i u div s a em tr td th strong strike cite dfn code samp kbd q font center ul ol h1 h2 h3 h4 h5 h6 pre table img dir menu dl dt dd li var abbr acronym ins del tt small big span sub sup caption hr address blockquote blink form map fieldset label legend nobr plaintext xmp listing select option optgroup textarea button thead tbody tfoot body html head script style title
+* CSS: color background background-color margin-top margin-bottom margin-left margin-right text-align text-decoration font-style font-weight font-family white-space list-style list-style-type display
+* not supported: JavaScript, scrolling backwards, tables, forms, frames, images
+* interface: text-based
+* networking: (E)TFE and RR-net via http-load
+* protocols: http
+* platform: Commodore C64 and C128
+* license: GNU GPL v2 or later
+* implemented in: 6502 assembly
 
 ### tkWWW
 
