@@ -90,6 +90,14 @@ See also FOSS web browsers by engine:
 * Symbian S30+, 240x320, keypad, 64MB RAM
 * browser: Opera mini 4 only
 
+### JioPhone
+
+* sensibly purchased: 2017-2018
+* https://phonedb.net/index.php?m=device&id=14880&c=reliance_jiophone_td-lte_in_f101k__f30c__f10q__f61f
+* KaiOS 1.0, low power 2-core A7, 240x320, keypad, 512MB RAM, some of the TLS root CA may have expired
+* browser: Gecko 37 only
+* https://web.archive.org/web/20180507203733/http://www.bgr.in/news/jiophone-kaios-surpasses-ios-india-second-most-popular-mobile-operating-system-android-smartphones-feature-phones-jio-4g/
+
 ### Nokia 6300 4G
 
 * sensibly purchased: 2021-2022
