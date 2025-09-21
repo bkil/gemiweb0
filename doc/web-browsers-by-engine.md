@@ -103,10 +103,23 @@ apt install luakit
 
 ### Nyxt
 
-* https://github.com/atlas-engineer/nyxt/blob/master/documents/README.org
+* https://nyxt.atlas.engineer/documentation
+* https://github.com/atlas-engineer/nyxt/blob/master/source/manual.lisp
+* https://github.com/atlas-engineer/nyxt/blob/master/source/renderer/electron.lisp
+* https://github.com/atlas-engineer/nyxt/blob/master/source/renderer/gtk.lisp
 * Emacs, vi, CUA
 * libwebkit2gtk
 * beta: Blink engine
+
+### wyeb
+
+* https://github.com/jun7/wyeb
+* https://github.com/jun7/wyebadblock
+* features: keyboard-driven (vim-like), inspired by dwb and luakit
+* rendering engine: libwebkit2gtk
+* interface: GTK
+* implemented in: C
+* license: GPLv3
 
 ### Oku
 
