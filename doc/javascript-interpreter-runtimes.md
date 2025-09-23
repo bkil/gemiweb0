@@ -395,6 +395,15 @@ Includes a web based example interpreter.
 
 > ECMAScript Lexer / Parser / Interpreter / VM / method JIT written in C++
 
+### DMDScript
+
+* last update: mostly implemented until 2017, still accepting patches up to 2024
+* https://github.com/DigitalMars/DMDScript
+* https://digitalmars.com/dscript/
+* features: ES3, lacking __proto__
+* implemented in: D
+* license: BSL-1.0
+
 ### edbrowse 2
 
 * last update: 2006
