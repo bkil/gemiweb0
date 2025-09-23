@@ -38,6 +38,15 @@ Implementing the relevant standards of JavaScript fully would be prohibitively e
 
 Includes a web based example interpreter.
 
+### Escargot
+
+* https://github.com/Samsung/escargot
+* features: "a significant portion" of ES2025, memory efficiency
+* implemented in: C++
+* architecture: x86, x64, arm, aarch64
+* platforms: Linux, MacOS, Windows, Android
+* license: LGPL-2.1
+
 ### Espruino
 
 * https://github.com/espruino/Espruino
@@ -93,6 +102,24 @@ Includes a web based example interpreter.
 > Heavily optimized for low memory consumption
 > Snapshot support for precompiling JavaScript source code to byte code
 
+### Jint
+
+* https://github.com/sebastienros/jint
+* https://github.com/sebastienros/jint/blob/main/Jint.Benchmark/README.md
+* features: ES5 with many additions from later standards up to ES2025
+* used by: RavenDB, EventStore, OrchardCore, ELSA Workflows, docfx, JavaScript Engine Switcher
+* implemented in: C#
+* platforms: .NET Standard 2.0 and .NET 4.6.2 (and later)
+* license: 2-BSD
+
+### Jurassic
+
+* https://github.com/paulbartrum/jurassic
+* features: ES5, some ES6 features, compiles JS to .NET bytecode
+* implemented in: C#
+* platforms: .NET 3.5, .NET 4 and Silverlight
+* license: MIT
+
 ### Kinoma XS6
 
 * https://github.com/Kinoma/kinomajs
@@ -137,6 +164,14 @@ Includes a web based example interpreter.
 * https://packages.ubuntu.com/plucky/njs
 * https://packages.debian.org/trixie/njs
 * ES5.1 strict with some ES6 extensions
+
+### NiL.JS
+
+* https://github.com/nilproject/NiL.JS
+* features: ES6
+* platform: .NET Framework 4.6.1+, .NET Standard 1.3+, .NET Core 3.1, 5.0 and 6.0
+* implemented in: C#
+* license: 3-BSD
 
 ### otto
 
@@ -230,6 +265,14 @@ Includes a web based example interpreter.
 * implemented in: C++
 * license: BSD
 
+### YantraJS.Core
+
+* https://github.com/yantrajs/yantra
+* features: "many" ES5 and ES6 features
+* implemented in: C#
+* platform: .NET (Core and Standard 2)
+* license: Apache 2.0
+
 ## Maintained metacircular
 
 ### engine262
@@ -287,6 +330,17 @@ Includes a web based example interpreter.
 * license: Unlicense or MIT
 
 > Boa is an embeddable and experimental Javascript engine written in Rust. Currently, it has support for some of the language.
+
+### Esprima .NET
+
+Only a parser
+
+* last update: 2024
+* https://github.com/sebastienros/esprima-dotnet
+* features: ES2022 parser with some newer features, JSX
+* implemented in: C#
+* platform: .NET 6
+* license: 3-BSD
 
 ### Guile ECMAScript
 
@@ -651,6 +705,17 @@ Includes a web based example interpreter.
 
 > ES-lab: experiments with proposed extensions to JavaScript. A "reify eval, absorb apply" style meta-interpreter for ES5.
 
+### Esprima
+
+Only a parser
+
+* last update: 2021
+* https://github.com/jquery/esprima
+* https://esprima.org/
+* features: ES2019 parser, JSX
+* implemented in: TypeScript
+* license: 2-BSD
+
 ### MetaES
 
 * last update: 2022
@@ -677,7 +742,15 @@ Only a parser:
 
 ## Benchmarks
 
+* https://github.com/chromium/octane
+* https://github.com/mzp/sunspider-jsx
+* https://github.com/nbp/lifetime-benchmark
+* https://github.com/sebastienros/jint/blob/main/Jint.Benchmark/README.md
+* https://github.com/tc39/test262
+* https://github.com/v8/web-tooling-benchmark
+* https://github.com/WebKit/WebKit/tree/main/Websites/webkit.org/perf/
 * https://kangax.github.io/compat-table/es6/
+* http://www.webkit.org/perf/sunspider/sunspider.html
 
 ## References
 
