@@ -413,6 +413,18 @@ Includes a web based example interpreter.
 
 > Ejacs is basically a toy. It is regrettably insufficient in several important dimensions
 
+### Epimetheus
+
+* last update: 2002
+* https://www-archive.mozilla.org/js/language/epimetheus
+* https://github.com/jrmuizel/mozilla-cvs-history/tree/master/js2
+* https://github.com/ehsan/mozilla-cvs-history/tree/master/js2
+* https://github.com/rhencke/mozilla-cvs-history/tree/master/js2
+* https://github.com/roytam1/mozilla-cvs-history/tree/master/mozilla/js2
+* features: most of ES3, ES4 draft
+* implemented in: C++
+* license: MPL 1.1/GPL 2.0/LGPL 2.1
+
 ### HJS
 
 * last update: 2008
@@ -661,6 +673,7 @@ Only a parser:
 ## References
 
 * https://en.wikipedia.org/wiki/List_of_JavaScript_engines
+* https://joehni.github.io/JsUnit/products.html
 
 ## Related
 
