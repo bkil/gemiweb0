@@ -311,6 +311,13 @@ Includes a web based example interpreter.
 * A proof of concept JavaScript0 interpreter plugin for gemini and web browsers and for CLI/CGI web server integration will be provided later in multiple languages, both low level and high level.
 * Language: C, PHP, busybox ash & awk, JavaScript0
 
+### Yavashark
+
+* https://github.com/Sharktheone/yavashark
+* features: JavaScript, TypeScript
+* implemented in: Rust
+* license: MIT
+
 ## Experimental
 
 ### bali
