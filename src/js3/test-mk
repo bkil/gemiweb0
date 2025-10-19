@@ -17,7 +17,7 @@ test_coverage() {
   gcov \
     --all-blocks \
     --relative-only \
-    vm.c $SRC > /dev/null || return 1
+    *.gcda > /dev/null || return 1
 
   grep -H '' vm.c.gcov vm-free.c.inc.gcov 2>/dev/null |
   sed '
@@ -186,7 +186,7 @@ compile() {
   #
 
     ADD="$ADD \
-    -Os \
+    -Oz \
     -Wno-error=suggest-attribute=pure \
     -Wno-error=suggest-attribute=const \
     -Wno-error=unused-function \
