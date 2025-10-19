@@ -4,6 +4,13 @@ We've originally tried to enumerate lightweight web browsers for outdated comput
 
 ## Blink engine
 
+### Angelfish
+
+* https://apps.kde.org/angelfish/
+* https://packages.debian.org/trixie/angelfish
+* interface: Qt, Plasma Mobile
+* rendering engine: libqt6webenginecore6
+
 ### AgregoreWeb
 
 * https://github.com/AgregoreWeb/agregore-browser
@@ -33,6 +40,11 @@ apt install chromium-browser
 ```
 apt install falkon
 ```
+
+### Helium
+
+* https://github.com/imputnet/helium
+* based on ungoogled-chromium
 
 ### morph-browser
 
@@ -172,6 +184,7 @@ apt install surf
 ### vimb
 
 * https://github.com/fanglingsu/vimb
+* https://packages.debian.org/trixie/vimb
 * rendering engine: webkit2gtk
 * interface: GTK+ 3
 * implemented in: C
