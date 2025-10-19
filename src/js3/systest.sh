@@ -72,7 +72,7 @@ test_stdin() {
 }
 
 tn() {
-  local GIVEIN EXPNET EXPOUT C TNF GOTRET GOTOUT PID
+  local GIVEIN EXPNET EXPOUT C TNF GOTRET GOTOUT PID FAILED
   readonly GIVEIN="$1"
   readonly EXPNET="`printf "$2"`"
   readonly EXPOUT="`printf "$3"`"
@@ -99,14 +99,20 @@ tn() {
 
   GOTNET="`cat "$TNF" 2>/dev/null`"
 
+  FAILED=""
   if ! [ "$GOTRET" = 0 ]; then
     printf "failed status for network \"%s\", expected 0, error %s\n" "$C $GIVEIN" "$GOTRET" >&2
-    FAILS=$((FAILS+1))
-  elif ! [ "$GOTNET" = "$EXPNET" ]; then
+    FAILED=1
+  fi
+  if ! [ "$GOTNET" = "$EXPNET" ]; then
     printf "failed data over network \"%s\", expect: \"%s\", got: \"%s\"\n" "$C $GIVEIN" "$EXPNET" "$GOTNET" >&2
-    FAILS=$((FAILS+1))
-  elif ! [ "$GOTOUT" = "$EXPOUT" ]; then
+    FAILED=1
+  fi
+  if ! [ "$GOTOUT" = "$EXPOUT" ]; then
     printf "failed output for network \"%s\", expect: \"%s\", got: \"%s\"\n" "$C $GIVEIN" "$EXPOUT" "$GOTOUT" >&2
+    FAILED=1
+  fi
+  if [ -n "$FAILED" ]; then
     FAILS=$((FAILS+1))
   else
     SUCC=$((SUCC+1))
