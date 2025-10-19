@@ -1598,8 +1598,8 @@ parseOperatorTerm(Parser *p, Object *t1, char op) {
       case 'A':
       case 'O':
         return t2;
+      /* coverage:unreachable */
       default:
-        /* coverage:unreachable */
         Object_free(t2);
         return 0;
         /* /coverage:unreachable */

@@ -90,8 +90,8 @@ Object_free(Object *o) {
         Object_free(o->V.c.h);
       }
       break;
+    /* coverage:file */
     case MmapString:
-      /* coverage:file */
       if (munmap(o->V.mm.s, o->V.mm.len) < 0) {
         /* coverage:no */
         perror("munmap failed");
