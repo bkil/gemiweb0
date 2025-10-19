@@ -1770,7 +1770,11 @@ parseWhile(Parser *p) {
   int cond = 1;
   do {
     p->prog.s = begin;
-    if (!(o = parseExpr(p)) || !expectChar(p, ')')) {
+    if (!(o = parseExpr(p))) {
+      return 0;
+    }
+    if (!expectChar(p, ')')) {
+      Object_free(o);
       return 0;
     }
     if (!p->nest) {
@@ -1808,6 +1812,7 @@ parseFor(Parser *p) {
     return setRunError(p, "for can only iterate on Object", &itName);
   }
   if (!expectWs(p, ')')) {
+    Object_free(e);
     return 0;
   }
 

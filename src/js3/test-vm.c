@@ -199,6 +199,11 @@ main(void) {
   );
 
   t("var x = 8; var i; for (i in x) { 8 }", -2);
+  t("var o = new Object; var i; for (", -1);
+  t("var o = new Object; var i; for (i", -1);
+  t("var o = new Object; var i; for (i in", -1);
+  t("var o = new Object; var i; for (i in o", -1);
+  t("var o = new Object; var i; for (i in o) {", -1);
   t("var o = new Object; var i; for (i in o) { : }; s", -1);
   t("var o = new Object; var s = 9; var i; for (i in o) { s = s + 1; }; s", 9);
   t("var o = new Object; o.a = 4; o.b = 5; var s = 0; var i; for (i in o) { s = s + o[i]; }; s", 9);
@@ -627,6 +632,16 @@ main(void) {
   t("function f() { 8; }", 0);
   t("try { 8; } catch (e) { 7; }", 0);
   t("if (1) { 8 }; else { 7 }", -2);
+  t("while", -1);
+  t("while (", -1);
+  t("while (0", -1);
+  t("while (0;", -1);
+  t("while (0) {", -1);
+  t("if", -1);
+  t("if 8", -1);
+  t("if (", -1);
+  t("if () { 8; }", -1);
+  t("if (.) { 8; }", -1);
   t("try { 8 }; catch (e) { 7 }", -1);
 
   t("if (1) {}", 0);
