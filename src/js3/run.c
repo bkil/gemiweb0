@@ -9,6 +9,7 @@ Refer to the GNU GPL v2 in LICENSE for terms */
 #include <sys/stat.h> /* open fstat */
 #include <fcntl.h> /* open */
 #include <unistd.h> /* close fstat */
+#include <signal.h> /* signal */
 
 #define MAINERR (-3)
 
@@ -42,6 +43,7 @@ main(int argc, char **argv) {
     /* /coverage:no */
   }
 
+  signal(SIGPIPE, SIG_IGN);
   struct Parser *p = Parser_new();
   int ret = Parser_eval(p, prog, len, 1);
   if (ret >= 0) {
