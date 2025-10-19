@@ -80,7 +80,11 @@ tn() {
 
   if [ "$PORT" -ge 1024 ]; then
     {
-      printf "$GIVEIN" |
+      {
+        sleep 1
+        printf "$GIVEIN"
+        sleep 1
+      } |
       nc -l -q 1 "$PORT" > "$TNF"
     } &
     PID=$!
