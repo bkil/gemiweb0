@@ -236,6 +236,7 @@ Includes a web based example interpreter.
 * https://github.com/mozilla/rhino
 * https://packages.ubuntu.com/plucky/rhino
 * https://packages.ubuntu.com/plucky/librhino-java
+* https://mozilla.github.io/rhino/compat/engines.html
 * status: bundled with JRE
 * used by LibreOffice, gngr
 * features: ES5 with additions from ES6 and ES2016+
@@ -763,6 +764,7 @@ Only a parser:
 
 * https://en.wikipedia.org/wiki/List_of_JavaScript_engines
 * https://joehni.github.io/JsUnit/products.html
+* https://gist.github.com/guest271314/bd292fc33e1b30dede0643a283fadc6a
 
 ## Related
 
