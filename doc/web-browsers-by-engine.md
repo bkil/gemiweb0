@@ -89,6 +89,11 @@ apt install privacybrowser
 apt install epiphany-browser
 ```
 
+### Bad Wolf
+
+* https://hacktivis.me/projects/badwolf
+* https://www.hyperbola.info/packages/extra/x86_64/badwolf/
+
 ### Konqueror
 
 * https://en.wikipedia.org/wiki/Konqueror
