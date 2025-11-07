@@ -757,7 +757,7 @@ Only a parser:
 * https://github.com/tc39/test262
 * https://github.com/v8/web-tooling-benchmark
 * https://github.com/WebKit/WebKit/tree/main/Websites/webkit.org/perf/
-* https://kangax.github.io/compat-table/es6/
+* https://compat-table.github.io/compat-table/es6/
 * http://www.webkit.org/perf/sunspider/sunspider.html
 
 ## References
