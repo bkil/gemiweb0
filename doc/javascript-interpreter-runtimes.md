@@ -685,7 +685,9 @@ Only a parser
 ### Voyager
 
 * last update: 2002
+* https://en.wikipedia.org/wiki/Voyager_(web_browser)
 * https://zapek.com/software/voyager/
+* https://github.com/zapek/Voyager
 * features: JavaScript 1.3, DOM level 1 (IE)
 * implemented in C
 * platform: Amiga
@@ -703,6 +705,7 @@ Only a parser
 * last update: 2012
 * https://web.archive.org/web/20121203041426/http://benvie.github.com/continuum/
 * https://web.archive.org/web/20150619174908/github.com/benvie/continuum
+* https://github.com/srounce/continuum
 * supports ES6 draft
 * implemented in JavaScript ES3
 
@@ -764,6 +767,7 @@ Only a parser:
 
 * https://en.wikipedia.org/wiki/List_of_JavaScript_engines
 * https://joehni.github.io/JsUnit/products.html
+* https://github.com/ivankra/javascript-zoo#user-content-list-of-javascript-engines
 * https://gist.github.com/guest271314/bd292fc33e1b30dede0643a283fadc6a
 
 ## Related
