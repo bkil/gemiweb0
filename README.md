@@ -81,6 +81,8 @@ https://bkil.gitlab.io/static-wonders.js/edu/sortfun.htm
 
 https://bkil.gitlab.io/static-wonders.js/game/markov.htm
 
+https://bkil.gitlab.io/static-wonders.js/toy/daystill.htm
+
 https://bkil.gitlab.io/static-wonders.js/toy/randjs.htm
 
 https://bkil.gitlab.io/static-wonders.js/toy/namegen.htm
