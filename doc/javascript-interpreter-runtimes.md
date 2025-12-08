@@ -339,6 +339,15 @@ Includes a web based example interpreter.
 
 > Boa is an embeddable and experimental Javascript engine written in Rust. Currently, it has support for some of the language.
 
+### brimstone
+
+* https://github.com/Hans-Halverson/brimstone
+* features: most of ES2024
+* implemented in Rust
+* license: MIT
+
+> Heavy inspiration is taken from the design of V8 and SerenityOS's LibJS. Brimstone chooses to implement almost all components of the engine from scratch with minimal dependencies, with the notable exception of ICU4X. Bytecode VM, heavily inspired by the design of V8's Ignition, Compacting garbage collector, written in very unsafe Rust, Custom RegExp engine
+
 ### Esprima .NET
 
 Only a parser
