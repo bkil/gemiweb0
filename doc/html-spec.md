@@ -173,6 +173,7 @@ https://github.com/rendicott/uggly/tree/master/doc#user-content-uggly-proto
 
 * https://github.com/acidus99/stargate-proxy
 * https://github.com/matthewp/quack-proxy
+* https://github.com/webx-plus/WebX-Specification/blob/main/docs/htmlpp/index.md
 
 ### Compatible best practices
 
