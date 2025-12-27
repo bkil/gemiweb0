@@ -977,6 +977,7 @@ https://en.wikipedia.org/wiki/Uzbl
 * last update: 2002
 * https://en.wikipedia.org/wiki/Voyager_(web_browser)
 * https://zapek.com/software/voyager/
+* https://github.com/zapek/Voyager
 * features: HTML 3.2, frames, parts of HTML 4.01, table layout, basic auth, JavaScript 1.3, DOM level 1 (IE), CSS, pdf, animated gif, jpeg, alpha png, xbm
 * protocols: http, https (TLS v1), ftp, mailto (smtp)
 * implemented in C
