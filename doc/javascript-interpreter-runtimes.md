@@ -134,6 +134,16 @@ Includes a web based example interpreter.
 * https://github.com/LadybirdBrowser/ladybird/tree/master/Userland/Libraries/LibJS
 * used by Ladybird
 
+### Micro QuickJS
+
+* https://github.com/bellard/mquickjs
+* https://www.phoronix.com/news/Micro-QuickJS
+* features: a small, but robust subset of ES5, tracing and compacting garbage collector
+* implemented in: C
+* license: MIT
+
+> Compiles & Runs JavaScript With As Little As 10kB Of RAM. Requires just around 100 kB of ROM, including the C library
+
 ### microvium
 
 * https://github.com/coder-mike/microvium/blob/main/doc/supported-language.md#not-supported
