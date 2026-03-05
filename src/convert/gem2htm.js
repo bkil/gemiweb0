@@ -467,6 +467,7 @@ function gemtext2htmFile(t, name) {
     '<title>' +
     title +
     '</title>' + nl +
+    '<meta name=tdm-reservation content=1>' + nl +
     '<link rel="shortcut icon" href="/gemiweb0/favicon.ico">' + nl +
     '<meta property="og:title" content="' + title + '">' + nl +
     '<meta property="og:type" content="article">' + nl +
