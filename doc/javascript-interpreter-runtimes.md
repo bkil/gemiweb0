@@ -137,7 +137,6 @@ Includes a web based example interpreter.
 ### Micro QuickJS
 
 * https://github.com/bellard/mquickjs
-* https://www.phoronix.com/news/Micro-QuickJS
 * features: a small, but robust subset of ES5, tracing and compacting garbage collector
 * implemented in: C
 * license: MIT
@@ -322,6 +321,20 @@ Includes a web based example interpreter.
 * A proof of concept JavaScript0 interpreter plugin for gemini and web browsers and for CLI/CGI web server integration will be provided later in multiple languages, both low level and high level.
 * Language: C, PHP, busybox ash & awk, JavaScript0
 
+### ReevaJS
+
+* last update: 2024 (significant: 2023)
+* https://github.com/ReevaJS/reeva
+* platform: JVM
+* implemented in: Kotlin
+* license: 2-BSD
+* features and status unknown
+
+### tugawa ejs-new
+
+* https://github.com/tugawa/ejs-new
+* implemented in: C, Java
+
 ### Yavashark
 
 * https://github.com/Sharktheone/yavashark
@@ -374,9 +387,17 @@ Only a parser
 * implemented around 2009, but still maintained
 * https://git.savannah.gnu.org/cgit/guile.git/tree/module/language/ecmascript/
 * https://www.gnu.org/software/guile/manual/html_node/ECMAScript.html
+* https://wingolog.org/archives/2009/02/22/ecmascript-for-guile
 * approximately ES3 (not finished)
 
 > It's probably not as fast as compilers that produce native code, but because it hooks into Guile's compiler at a high level, as Guile's compiler improves and eventually gets native code compilation, it will be plenty fast.
+
+### Jessie
+
+* https://github.com/endojs/Jessie
+* features: tiny, well defined subset of ES2017
+* license: Apache-2.0
+* implemented in: JavaScript
 
 ### Kiesel
 
@@ -475,6 +496,16 @@ Only a parser
 * license: 2-BSD
 
 > ECMAScript Lexer / Parser / Interpreter / VM / method JIT written in C++
+
+## Defensive JavaScript
+
+* last update: 2013
+* features: small subset of ES5, only a type checker
+* license: 2-BSD
+* implemented in: OCaml
+* https://www.defensivejs.com/
+* https://www.defensivejs.com/jsdefp/
+* https://www.defensivejs.com/usenixsec13.pdf
 
 ### DMDScript
 
@@ -788,6 +819,7 @@ Only a parser:
 * https://joehni.github.io/JsUnit/products.html
 * https://github.com/ivankra/javascript-zoo#user-content-list-of-javascript-engines
 * https://gist.github.com/guest271314/bd292fc33e1b30dede0643a283fadc6a
+* https://notes.eatonphil.com/javascript-implementations.html
 
 ## Related
 
