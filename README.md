@@ -73,6 +73,8 @@ https://bkil.gitlab.io/static-wonders.js/edu/knowende.htm
 
 https://bkil.gitlab.io/static-wonders.js/edu/knownone.htm
 
+https://bkil.gitlab.io/static-wonders.js/compress/treedict.htm
+
 https://bkil.gitlab.io/static-wonders.js/edu/goodshuf.htm#
 
 https://bkil.gitlab.io/static-wonders.js/edu/knowcard.htm#
