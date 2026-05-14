@@ -104,6 +104,7 @@ General:
 * https://en.wikipedia.org/wiki/File_Transfer_Protocol#Simple_File_Transfer_Protocol
 * https://en.wikipedia.org/wiki/Trivial_File_Transfer_Protocol
 * http://www.and.org/texts/server-http
+* gemini://carcosa.net/journal/20240921-http-1.0-bis.gmi
 
 ## References
 
