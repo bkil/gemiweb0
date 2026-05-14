@@ -26,10 +26,10 @@ Implementing the relevant standards of JavaScript fully would be prohibitively e
 
 * https://duktape.org/dukweb.html
 * https://github.com/svaarala/duktape
-* https://packages.ubuntu.com/plucky/duktape
+* https://packages.ubuntu.com/questing/duktape
 * https://packages.debian.org/buster/libduktape203
 * https://packages.debian.org/bullseye/libduktape205
-* https://packages.ubuntu.com/plucky/libduktape207
+* https://packages.ubuntu.com/questing/libduktape207
 
 > Embeddable, portable, compact: can run on platforms with 160kB flash and 64kB RAM
 > ECMAScript E5/E5.1, with some semantics updated from ES2015+
@@ -81,13 +81,14 @@ Includes a web based example interpreter.
 
 * https://en.wikipedia.org/wiki/WebKit#JavaScriptCore
 * https://github.com/WebKit/WebKit/tree/main/Source/JavaScriptCore
-* https://packages.debian.org/buster/libqtwebkit4
-* https://packages.ubuntu.com/oracular/libqt5webkit5
+* https://web.archive.org/web/20241015045435/https://packages.debian.org/buster/libqtwebkit4
+* https://packages.ubuntu.com/noble/libqt5webkit5
 * https://web.archive.org/web/20210507015325/packages.ubuntu.com/bionic/libjavascriptcoregtk-1.0-0
 * https://web.archive.org/web/20210507015325/http://packages.ubuntu.com/libjavascriptcoregtk-3.0-0
 * https://packages.debian.org/bookworm-backports/libjavascriptcoregtk-4.0-18
-* https://packages.ubuntu.com/oracular/libjavascriptcoregtk-4.1-0
-* https://packages.ubuntu.com/oracular/libjavascriptcoregtk-6.0-1
+* https://packages.ubuntu.com/jammy/libjavascriptcoregtk-4.0-18
+* https://packages.ubuntu.com/questing/libjavascriptcoregtk-4.1-0
+* https://packages.ubuntu.com/questing/libjavascriptcoregtk-6.0-1
 * used by: Webkit (Safari)
 * implemented in: C++
 * platforms: Linux, Mac, iOS, Windows
@@ -157,9 +158,9 @@ Includes a web based example interpreter.
 
 * https://mujs.com/
 * https://github.com/ccxvii/mujs
-* https://packages.ubuntu.com/plucky/mujs
+* https://packages.ubuntu.com/questing/mujs
 * https://packages.ubuntu.com/jammy/libmujs1
-* https://packages.ubuntu.com/plucky/libmujs3
+* https://packages.ubuntu.com/questing/libmujs3
 * license: ISC
 
 > MuJS is a lightweight Javascript interpreter designed for embedding in other software to extend them with scripting capabilities.
@@ -170,8 +171,12 @@ Includes a web based example interpreter.
 
 * https://github.com/nginx/njs
 * https://nginx.org/en/docs/njs/
-* https://packages.ubuntu.com/plucky/njs
-* https://packages.debian.org/trixie/njs
+* https://packages.ubuntu.com/questing/njs
+* https://packages.ubuntu.com/questing/libnginx-mod-http-js
+* https://packages.ubuntu.com/questing/libnginx-mod-stream-js
+* https://packages.debian.org/forky/njs
+* https://packages.debian.org/forky/libnginx-mod-http-js
+* https://packages.debian.org/forky/libnginx-mod-stream-js
 * ES5.1 strict with some ES6 extensions
 
 ### NiL.JS
@@ -186,7 +191,7 @@ Includes a web based example interpreter.
 
 * https://github.com/robertkrimen/otto
 * https://github.com/robertkrimen/natto
-* https://packages.ubuntu.com/jammy/golang-github-robertkrimen-otto-dev
+* https://packages.ubuntu.com/questing/golang-github-robertkrimen-otto-dev
 
 > Package otto is a JavaScript parser and interpreter written natively in Go.
 > Otto targets ES5
@@ -200,8 +205,8 @@ Includes a web based example interpreter.
 * https://wiki.qt.io/V4
 * https://wiki.qt.io/Application_Scripting_with_QJSEngine
 * https://wiki.qt.io/Qt-contributors-summit-2013-QML-engine
-* https://packages.ubuntu.com/oracular/libqt5qml5
-* https://packages.ubuntu.com/oracular/libqt6qml6
+* https://packages.ubuntu.com/questing/libqt5qml5
+* https://packages.ubuntu.com/questing/libqt6qml6
 * implemented in: C++
 * features: ES7, JIT
 * Used for QML and QJSEngine
@@ -209,11 +214,11 @@ Includes a web based example interpreter.
 ### quickjs
 
 * https://github.com/bellard/quickjs
-* https://packages.ubuntu.com/plucky/libjavascript-quickjs-perl
-* https://packages.ubuntu.com/plucky/r-cran-quickjsr
-* https://packages.ubuntu.com/plucky/node-quickjs-emscripten
-* https://packages.ubuntu.com/plucky/libquickjs
-* https://packages.ubuntu.com/plucky/quickjs
+* https://packages.ubuntu.com/questing/libjavascript-quickjs-perl
+* https://packages.ubuntu.com/questing/r-cran-quickjsr
+* https://packages.ubuntu.com/questing/node-quickjs-emscripten
+* https://packages.ubuntu.com/questing/libquickjs
+* https://packages.ubuntu.com/questing/quickjs
 
 > QuickJS is a small and embeddable Javascript engine. It supports the ES2020 specification including modules, asynchronous generators, proxies and BigInt.
 > It supports mathematical extensions such as big decimal float float numbers (BigDecimal), big binary floating point numbers (BigFloat), and operator overloading.
@@ -226,14 +231,16 @@ Includes a web based example interpreter.
 
 * https://github.com/quickjs-ng/quickjs
 
-> Friendly QuickJS fork focused on reigniting the project.
+> Friendly QuickJS fork focused on reigniting the project
 
 ### SpiderMonkey
 
 * https://en.wikipedia.org/wiki/SpiderMonkey
 * https://github.com/mozilla-spidermonkey/spidermonkey.dev
 * https://github.com/mozilla-firefox/firefox/tree/main/js/src
-* https://packages.ubuntu.com/plucky/libmozjs-128-0
+* https://packages.ubuntu.com/jammy/libmozjs-78-0
+* https://packages.ubuntu.com/questing/libmozjs-128-0
+* https://packages.ubuntu.com/questing/libmozjs-140-0
 * used by: Gecko (Mozilla Firefox)
 * implemented in: C, C++, Rust
 * architectures: IA-32, x86-64, ARM, MIPS, SPARC, RISC-V
@@ -243,8 +250,8 @@ Includes a web based example interpreter.
 
 * https://en.wikipedia.org/wiki/Rhino_(JavaScript_engine)
 * https://github.com/mozilla/rhino
-* https://packages.ubuntu.com/plucky/rhino
-* https://packages.ubuntu.com/plucky/librhino-java
+* https://packages.ubuntu.com/questing/rhino
+* https://packages.ubuntu.com/questing/librhino-java
 * https://mozilla.github.io/rhino/compat/engines.html
 * status: bundled with JRE
 * used by LibreOffice, gngr
@@ -268,8 +275,11 @@ Includes a web based example interpreter.
 
 * https://en.wikipedia.org/wiki/V8_(JavaScript_engine)
 * https://chromium.googlesource.com/v8/v8
-* https://packages.ubuntu.com/oracular/libqt5webenginecore5
-* https://packages.ubuntu.com/oracular/libqt6webenginecore6
+* https://packages.ubuntu.com/questing/libqt5webenginecore5
+* https://packages.ubuntu.com/questing/libqt6webenginecore6
+* https://packages.ubuntu.com/noble/libnode109
+* https://packages.ubuntu.com/questing/libnode115
+* https://packages.ubuntu.com/resolute/libnode127
 * used by: Blink (Chromium, Google Chrome)
 * architectures: IA-32, x86-64, 32-bit ARM, AArch64, 32-bit MIPS, MIPS64, PowerPC, IBM ESA/390, z/Architecture
 * implemented in: C++
@@ -388,6 +398,7 @@ Only a parser
 * https://git.savannah.gnu.org/cgit/guile.git/tree/module/language/ecmascript/
 * https://www.gnu.org/software/guile/manual/html_node/ECMAScript.html
 * https://wingolog.org/archives/2009/02/22/ecmascript-for-guile
+* https://packages.ubuntu.com/questing/guile-3.0-libs
 * approximately ES3 (not finished)
 
 > It's probably not as fast as compilers that produce native code, but because it hooks into Guile's compiler at a high level, as Guile's compiler improves and eventually gets native code compilation, it will be plenty fast.
@@ -446,8 +457,8 @@ Only a parser
 * last update: 2020
 * https://github.com/BeRo1985/besen
 * licence: LGPL2
-
-> Complete ECMAScript Fifth Edition Implemention in Object Pascal
+* features: ES5
+* implemented in: Object Pascal
 
 ### cesanta mJS
 
@@ -495,7 +506,7 @@ Only a parser
 * implemented in C++
 * license: 2-BSD
 
-> ECMAScript Lexer / Parser / Interpreter / VM / method JIT written in C++
+> ECMAScript Lexer / Parser / Interpreter / VM / method JIT
 
 ## Defensive JavaScript
 
@@ -559,7 +570,7 @@ Only a parser
 
 * last update: 2014
 * https://metacpan.org/dist/JE
-* https://packages.ubuntu.com/plucky/libje-perl
+* https://packages.ubuntu.com/questing/libje-perl
 * features: ES3 with some ES5 behavior
 * implemented in: Perl 5.0.4
 * license: perl
@@ -580,7 +591,10 @@ Only a parser
 
 * https://github.com/KDE/khtml/tree/0c0f313659504be0fcd2feec92fd7a7a425379fb/src/ecma
 * https://en.wikipedia.org/wiki/KHTML
-* https://packages.debian.org/buster/libkjsapi4
+* `https://packages.debian.org/buster/libkjsapi4`
+* https://packages.ubuntu.com/jammy/libkf5js5
+* https://packages.debian.org/bookworm/libkf5js5
+* https://packages.ubuntu.com/plucky/libkf5js5t64
 * Used by Konqueror (KHTML) in the past
 * implemented in: C++
 * license: LGPLv2.1
@@ -666,8 +680,8 @@ Only a parser
 * https://wiki.qt.io/Category:Developing_Qt::Qt_Script#History
 * https://download.qt.io/archive/qt/4.5/
 * http://dezip.org/v1/9/https/download.qt.io/archive/qt/4.5/qt-all-opensource-src-4.5.3.zip/qt-all-opensource-src-4.5.3/src/script/
-* https://packages.debian.org/buster/libqt4-script
-* https://packages.ubuntu.com/plucky/libqt5script5
+* https://web.archive.org/web/20241229120232/https://packages.debian.org/buster/libqt4-script
+* https://packages.ubuntu.com/questing/libqt5script5
 * implemented in: C++
 * features: ES5
 * used in QtScript in Qt 4.3, 4.4 and 4.5 (2009)
