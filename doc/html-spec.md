@@ -1,6 +1,6 @@
 # HTML subset specification
 
-Cover as little as possible to correspond to gemini (gemtex) while remaining compatible with existing web browsers. Allow implementing all targeted user application.
+Cover as little as possible to correspond to gemini (gemtext) while remaining compatible with existing web browsers. Allow implementing all targeted user application.
 
 ## Motivation
 
