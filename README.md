@@ -119,6 +119,8 @@ https://bkil.gitlab.io/static-wonders.js/toy/busybvr.htm
 
 https://bkil.gitlab.io/static-wonders.js/toy/busybvr4.htm
 
+https://bkil.gitlab.io/static-wonders.js/toy/nqueens.htm
+
 https://bkil.gitlab.io/static-wonders.js/toy/ploteval.htm
 
 https://bkil.gitlab.io/static-wonders.js/toy/mandbrot.htm
