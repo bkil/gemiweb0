@@ -689,14 +689,16 @@ Projects listed here have not produced a browser a user could test yet or are on
 * license: GPLv3
 * implemented in: C++
 
-### litehtml
+### litehtml litebrowser
 
+* https://github.com/litehtml/litebrowser-linux
 * https://github.com/litehtml/litehtml
 * https://github.com/google/gumbo-parser
-
-> litehtml is the lightweight HTML rendering engine with CSS2/CSS3 support. Note that litehtml itself does not draw any text, pictures
-> litehtml just parses HTML/CSS and places the HTML elements into the correct positions (renders HTML). To draw the HTML elements you have to implement the simple callback interface document_container.
-> litehtml uses the gumbo-parser to parse HTML
+* interface: GTK (gtkmm4)
+* features: HTML5 (gumbo-parser), some CSS2/CSS3
+* platform: Windows, Linux, Haiku
+* license: 3-BSD
+* implemented in: C++
 
 ### LURE
 
