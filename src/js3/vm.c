@@ -11,7 +11,7 @@ Refer to the GNU GPL v2 in LICENSE for terms */
 #include <sys/stat.h> /* fstat open */
 #include <sys/types.h> /* fstat open opendir regcomp regexec regfree select */
 #include <fcntl.h> /* open */
-#include <unistd.h> /* close fstat read select write */
+#include <unistd.h> /* close fstat read select write environ */
 #include <sys/time.h> /* select */
 #include <limits.h> /* INT_MAX INT_MIN */
 #include <stddef.h> /* offsetof */
@@ -2521,6 +2521,28 @@ vm_createContext(Parser *p, List *l) {
   return &undefinedObject;
 }
 
+#ifndef NOPROCESSENV
+static Object *
+__attribute__((returns_nonnull, warn_unused_result))
+convert_process_env(void) {
+  Object *o = MapObject_new();
+  if (!environ) {
+    return o;
+  }
+  Object *v;
+  for (char **p = environ; *p; p++) {
+    const char *q;
+    for (q = *p; *q && (*q != '='); q++) {
+    }
+    Id id = (Id){.s = *p, .len = (size_t)(q - *p)};
+    v = StringObject_new(*q ? ++q : q);
+    Map_set_id(&o->V.m, &id, v);
+    Object_free(v);
+  }
+  return o;
+}
+#endif
+
 /* coverage:smokesystem */
 static Object *
 __attribute__((returns_nonnull, warn_unused_result, nonnull(1)))
@@ -2596,6 +2618,9 @@ Parser_new(void) {
   addFunction(ps, "pause", &process_stdin_pause);
   Object *pr = MapObject_new();
   addField(pr, "stdin", ps);
+#ifndef NOPROCESSENV
+  addField(pr, "env", convert_process_env());
+#endif
   addField(p->vars, "process", pr);
 
   addFunction(p->vars, "isNaN", &global_isNaN);

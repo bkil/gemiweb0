@@ -47,7 +47,7 @@ Refer to the GNU GPL v2 in LICENSE for terms */
 # endif
 
 # ifndef _GNU_SOURCE
-/* strnlen strdup strndup getline */
+/* strnlen strdup strndup getline environ */
 #  define _GNU_SOURCE
 # endif
 

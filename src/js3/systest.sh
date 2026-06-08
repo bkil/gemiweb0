@@ -48,6 +48,14 @@ tk() {
   rm "$TKF"
 }
 
+test_env() {
+  export SYSTEST42="HELLO="
+  export SYSTEST666="=WORLD"
+
+  tk "process.env.SYSTEST42 === 'HELLO='" 1 ''
+  tk "process.env.SYSTEST666 === '=WORLD'" 1 ''
+}
+
 test_stdin() {
   local C
   readonly C="$B test-stdin.js"
@@ -158,6 +166,7 @@ main() {
   }
   readonly B="$*"
 
+  test_env
   test_stdin
   test_network
 

@@ -9,6 +9,7 @@ O=`dirname $(readlink -f "$0")`
 BIN="$O/js0"
 ARGS=""
 [ -n "$NOREGEXP" ] && ARGS="$ARGS -DNOREGEXP"
+[ -n "$NOPROCESSENV" ] && ARGS="$ARGS -DNOPROCESSENV"
 ./gcc-warn.sh -O2 -g vm.c run.c -o $BIN $ARGS &&
 
 {
