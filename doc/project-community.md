@@ -4,7 +4,7 @@ We welcome participants and other collaborating projects whose interests interse
 
 ## In scope
 
-* anti-bloat: feature creep
+* anti-bloat: avoid feature creep
 * code golfing, minimalism, small is beautiful, less is more
 * security: possibility for auditing review, less opportunity for bugs
 * bottleneck-free: reduce single points of failure, web content can be developed in preferred form for modification
@@ -15,9 +15,10 @@ We welcome participants and other collaborating projects whose interests interse
 * anti vendor lock-in: reproducible environment
 * cross-platform: code generation, run anywhere
 * self-hosting: migrate between inexpensive alternatives
-* retro-computing, cyberpunk, anachronism: most web pages according to this standard should function on web browsers from the 1990s or simple present ones and they are built and look as if they were from the 1990s
+* retro-computing, cyberpunk, anachronism: most web pages according to this standard should function on (possibly patched) web browsers from the 1990s or simple present ones and they are built and look as if they were from the 1990s
 
 ## Out of scope
 
 * making it look pretty
 * create a browser according to this specification and expect to be able to view arbitrary old websites from the 1990s
+* expect unmodified and unmaintained software full of vulnerabilities to be able to render all pages created according to this specification
