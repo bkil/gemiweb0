@@ -51,7 +51,7 @@ missing:
 * var
 * undefined
 * null
-* decimal integers
+* 32 bit decimal integers
 * NaN
 * string literals (without escaping)
 * Object square bracket ([]) with string index
@@ -201,7 +201,7 @@ https://bkil.gitlab.io/static-wonders.js/browser-vm/parse-dispatch-js.html
 
 A simple, text-entry & pre based browser written in the JavaScript subset interpreted by the interpreter in the browser:
 
-* https://bkil.gitlab.io/static-wonders.js/browser-vm/lambda-dispatch-js.html
+https://bkil.gitlab.io/static-wonders.js/browser-vm/lambda-dispatch-js.html
 
 Work in progress C interpreter aiming for short source that is easy to review, small size of compressed binary code and low memory footprint:
 
