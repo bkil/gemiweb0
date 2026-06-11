@@ -534,6 +534,20 @@ apt install w3m
 
 > mBrowser is a toy browser developed from scratch for learning purpose.
 
+### MicroWeb
+
+* https://github.com/jhhoward/MicroWeb/blob/master/src/Tags.h
+* https://github.com/jhhoward/MicroWeb/blob/master/src/Tags.cpp
+* interface: graphical (CGA, EGA, VGA, Hercules)
+* features: GIF images, mouse
+* HTML: head, body, title, pre, center, font, b, strong, i, em, cite, var, u, code, br, hr, h1, h2, h3, h4, h5, h6, blockquote, section, p, div, dt, dd, ul, ol, menu, small, a, form, input, textarea, select, button, img, meta, table, align (left, right, center), name
+* character encoding: UTF8, ISO-8859-1, ISO-8859-2
+* no CSS, no JS
+* protocols: HTTP
+* platform: FreeDOS, Intel 8088 with 640kB RAM or less
+* implemented in: C++
+* license: GPLv2
+
 ### moon
 
 * https://github.com/ZeroX-DG/moon
