@@ -147,6 +147,14 @@ Bookmarklets:
 * https://bkil.gitlab.io/static-wonders.js/userjs/localStorage-stub.html
 * https://bkil.gitlab.io/static-wonders.js/userjs/maltai-map.js0.html
 
+This is the tool I made to convert gemini-flavored markdown to this very HTML site:
+
+* https://bkil.gitlab.io/gemiweb0/src/convert/gem2htm.js
+
+The bare picobrowser bundled with the proof of concept interpreter that I use to test all the other examples with is itself also implemented in an earlier dialect of js0:
+
+* https://bkil.gitlab.io/gemiweb0/src/br/br-lib.js
+
 ## Contact
 
 Join our free chat room on Matrix, also relayed over an XMPP MUC and the IRC channel #gemiweb0. You can participate in brainstorming and give a hand by implementing the standard from scratch in your favorite language:
