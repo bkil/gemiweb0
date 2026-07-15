@@ -354,6 +354,14 @@ Includes a web based example interpreter.
 
 ## Experimental
 
+### Ant Silver
+
+* https://github.com/themackabu/ant/
+* features: ES2016+, npm, WinterTC
+* implemented in: C
+* chat bots used: extensively
+* license: MIT
+
 ### bali
 
 * https://github.com/ferus-web/bali
