@@ -143,7 +143,7 @@ See also FOSS web browsers by engine:
 ### Legacy SBC or TV box
 
 * sensibly purchased: 2021-2025
-* representative chipset: x86 (VIA Eden X4, Intel Yonah, Atom CE5300) or A53 (Raspberry Pi Zero 2 W, S805X Xiaomi Mi TV Stick)
+* representative chipset: 32-bit x86 (VIA Eden X4, Intel Yonah, Atom CE5300) or A53 (Raspberry Pi Zero 2 W, S805X Xiaomi Mi TV Stick)
 * antiX or Armbian, keyboard, mouse, 1366x768, 512MB-1GB RAM
 * browsers: NetSurf, Ladybird, edbrowse, Chawan, Ferus, ELinks, Dillo
 * just for fun: visurf, KolibriOS (on x86), Emacs Eww, links2, lynx, netrik, w3m
