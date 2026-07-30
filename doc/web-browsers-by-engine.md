@@ -481,6 +481,7 @@ apt install w3m
 * platform: FreeRTOS
 * implemented in: C++
 * license: MIT
+* chat bots used: extensively
 
 ### Chawan
 
