@@ -511,6 +511,31 @@ apt install w3m
 
 > It provides no user interface and is suitable to be used as a web application container for embedded devices in kiosk mode.
 
+### diy-esp32-epub-reader
+
+* https://github.com/atomic14/diy-esp32-epub-reader
+* https://github.com/atomic14/diy-esp32-epub-reader/blob/main/lib/Epub/RubbishHtmlParser/RubbishHtmlParser.cpp
+* features: no layout, no JavaScript
+* HTML tags: h1-h6, p, li, div, br, b, i, img (src)
+* implemented in: C++
+* architecture: ESP32
+* license: MIT
+
+### EPub-InkPlate
+
+* https://github.com/turgu1/EPub-InkPlate
+* https://github.com/turgu1/EPub-InkPlate/blob/master/src/viewers/html_interpreter.cpp
+* https://github.com/turgu1/EPub-InkPlate/blob/master/src/models/dom.cpp
+* https://github.com/turgu1/EPub-InkPlate/blob/master/src/models/css.cpp
+* features: no layout, no JavaScript
+* HTML tags: p, div, span, br, h1-h6, b, i, em, body, a, img (src, alt), image (xlink:href), li, pre, sub, strong, blockquote, sup
+* HTML attributes: id, class, style
+* CSS properties: font-family, font-size (xx-small, x-small, smaller, small, medium, large, larger, x-large, xx-large), font-style, font-weight, text-align, text-indent, text-transform, line-height, src, margin, margin-top, margin-bottom, margin-left, margin-right, width, height, display, border, vercital-align
+* CSS combinators: compound selector, next-sibling, child, descendant
+* implemented in: C++
+* architecture: 240MHz ESP32
+* license: MIT mostly
+
 ### HighWire
 
 * last update: mostly implemented in 2010, but many recent commits
@@ -672,6 +697,15 @@ apt install w3m
 * glfw
 
 > An (un)impressive browser being written from scratch in Rust
+
+### ZEReader
+
+* https://github.com/Allegra42/ZEReader/blob/main/lib/epub/epub.c
+* no layout, no JavaScript
+* HTML tags: p, div, li, h1, h2, h3, br
+* architecture: Raspberry Pi Pico 1
+* implemented in: C
+* license: MPL-2.0
 
 ## Planned
 
