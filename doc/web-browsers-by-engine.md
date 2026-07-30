@@ -469,6 +469,19 @@ apt install w3m
 
 ## Experimental
 
+### Babe32
+
+* https://github.com/alunmorris/babe32-ESP32-web-browser-for-cheap-black-display/blob/master/src/html_parser.cpp
+* interface: 480x320 touchscreen graphics
+* features: numbered nested lists, serialized tables, no rendering layout, no JavaScript
+* HTML tags: img (src, alt), h1-h6, p, a link (href, #), b, strong, em, i, code, kbd, samp, var, pre, q, span, font (size, color), form (action; method=get,post), input (type=hidden,submit,text; name; value; placeholder), textarea (name), select (name), option, button, ul, ol, li, table, th, tr, td, hr, div, p, blockquote, dl, dt, dd, dfn
+* HTML attributes: id, style (color, background-image)
+* protocol: HTTP, HTTPS
+* architecture: 240MHz ESP32-S3, 16MB flash, 8MB RAM, wifi
+* platform: FreeRTOS
+* implemented in: C++
+* license: MIT
+
 ### Chawan
 
 * https://sr.ht/~bptato/chawan/
