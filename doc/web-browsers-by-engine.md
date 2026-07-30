@@ -539,6 +539,23 @@ apt install w3m
 > text/gemini, text/html (reduced feature set), text/markdown
 > Qt5
 
+### libwebsockets lhp
+
+* https://github.com/warmcat/libwebsockets/blob/main/READMEs/README.html-parser.md
+* https://github.com/warmcat/libwebsockets/blob/main/lib/misc/lhp.c
+* https://github.com/warmcat/libwebsockets/blob/main/lib/misc/dlo/dlo-lhp.c
+* interface: graphical touch screen
+* features: HTML5, inline CSS 2.1 (with some CSS3 features), limited streaming layout, PNG, JPEG, no JavaScript
+* HTML tags: body, link (rel=stylesheet, href), img (src, width, height), br, div, main, header, footer, article, section, nav, aside, address, h1-6, p, ul, ol, li, dl, dt, dd, blockquote, form, filedset, pre, a, span, table, tr, td
+* HTML attributes: class, id
+* protocol: file, HTTP, HTTPS, HTTP 2.0, QUIC
+* architecture: 240MHz ESP32, 200kB RAM, FPU-free math
+* platform: FreeRTOS
+* implemented in: C
+* license: MIT
+
+> There is a DOM representation, but for optimal memory usage it is stream-parsed and destroyed element by element after using it to produce the DLO layout, so only DOM parent elements that are still open exist at any one time.
+
 ### mbrowser
 
 * https://github.com/MQuy/mbrowser
