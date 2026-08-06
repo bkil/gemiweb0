@@ -304,6 +304,17 @@ It received $1M funding on 2024-07-01 to help release a public beta by 2026.
 * platform: RISC OS, Linux, Haiku (BeOS), AmigaOS, Windows, Atari
 * implemented in: C
 
+### nordstjernen northstar
+
+* https://github.com/nordstjernen-web/northstar-browser
+* interface: GTK4
+* engine: lexbor parser, quickjs-ng JavaScript, WAMR wasm
+* features: HTML5 (140 spec rows fully implemented, 31 partial), CSS with Media Queries Level 4, container queries and units, flex, grid, transforms, gradients, animations and vertical writing modes
+* protocol: libcurl (HTTP/2, HTTP/3)
+* implemented in: C
+* license: GPLv3+
+* chat bots used: extensively
+
 ### visurf
 
 * https://git.sr.ht/~sircmpwn/visurf
@@ -568,6 +579,8 @@ apt install w3m
 
 * https://github.com/warmcat/libwebsockets/blob/main/READMEs/README.html-parser.md
 * https://github.com/warmcat/libwebsockets/blob/main/lib/misc/lhp.c
+* https://github.com/warmcat/libwebsockets/blob/main/lib/misc/css-lextable-strings.txt
+* https://github.com/warmcat/libwebsockets/blob/main/lib/misc/css-prop-constants.txt
 * https://github.com/warmcat/libwebsockets/blob/main/lib/misc/dlo/dlo-lhp.c
 * interface: graphical touch screen
 * features: HTML5, inline CSS 2.1 (with some CSS3 features), limited streaming layout, PNG, JPEG, no JavaScript
@@ -596,8 +609,8 @@ apt install w3m
 * https://github.com/jhhoward/MicroWeb/blob/master/src/Tags.cpp
 * interface: graphical (CGA, EGA, VGA, Hercules)
 * features: GIF images, mouse
-* HTML: head, body, title, pre, center, font, b, strong, i, em, cite, var, u, code, br, hr, h1, h2, h3, h4, h5, h6, blockquote, section, p, div, dt, dd, ul, ol, menu, small, a, form, input, textarea, select, button, img, meta, table, align (left, right, center), name
-* character encoding: UTF8, ISO-8859-1, ISO-8859-2
+* HTML: head, meta (charset, content), title, html & body (link, text, bgcolor), pre, center, font (size, color), b, strong, i, em, cite, var, u, code, br, hr, h1, h2, h3, h4, h5, h6, blockquote, section, p, div, dt, dd, ul, ol, li, menu, small, a (href), form (action; method=post,get), input (value; name; width; checked; type=submit,text,password,checkbox,radio), textarea, select (name), option (selected), button, img (alt, src, width, height, ismap), table (border, cellpadding, cellspacing, bgcolor, width), th & td (bgcolor, colspan, width), tr, align (left, right, center), name
+* character encoding: UTF8, ISO-8859-1 (Windows-1252), ISO-8859-2 (Windows-1250)
 * no CSS, no JS
 * protocols: HTTP
 * platform: FreeDOS, Intel 8088 with 640kB RAM or less
