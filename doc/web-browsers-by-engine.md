@@ -761,6 +761,20 @@ Projects listed here have not produced a browser a user could test yet or are on
 * https://argonaut-constellation.org/
 * implemented in: Haskell
 
+### Kristall
+
+* https://github.com/ikskuh/kristall
+* https://github.com/ikskuh/kristall/blob/master/src/renderers/htmlrenderer.cpp
+* https://github.com/google/gumbo-parser
+* https://codeberg.org/gumbo-parser/gumbo-parser
+* interface: Qt5
+* features: HTML5 (gumbo-parser), CommonMark, plain text, no JavaScript, no CSS
+* tags: head, title, body, br, hr, nav, a (href), h1-h6
+* protocol: gemini, gopher, finger, HTTP, HTTPS
+* platform: Linux, Windows, FreeBSD, NetBSD, OpenBSD, macOS, Haiku
+* license: GPLv3+
+* implemented in: C++
+
 ### Lexbor
 
 * https://github.com/lexbor/lexbor
@@ -786,6 +800,7 @@ Projects listed here have not produced a browser a user could test yet or are on
 * https://github.com/litehtml/litebrowser-linux
 * https://github.com/litehtml/litehtml
 * https://github.com/google/gumbo-parser
+* https://codeberg.org/gumbo-parser/gumbo-parser
 * interface: GTK (gtkmm4)
 * features: HTML5 (gumbo-parser), some CSS2/CSS3
 * platform: Windows, Linux, Haiku
