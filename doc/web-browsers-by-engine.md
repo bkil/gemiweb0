@@ -565,15 +565,19 @@ apt install w3m
 > Kosmonaut is built with Rust using OpenGL bindings via gl-rs, Glutin for window management and OpenGL context creation, Servo's html5ever and cssparser for HTML and CSS parsing, and various other auxiliary libraries.
 > Only a very limited subset of CSS is currently supported, so most web pages will not work.
 
-### kristall
+### Kristall
 
-* https://github.com/MasterQ32/kristall
-* https://github.com/MasterQ32/kristall/blob/master/src/renderers/htmlrenderer.cpp
+* https://github.com/ikskuh/kristall
+* https://github.com/ikskuh/kristall/blob/master/src/renderers/htmlrenderer.cpp
+* https://github.com/google/gumbo-parser
+* https://codeberg.org/gumbo-parser/gumbo-parser
+* interface: Qt5
+* features: HTML5 (gumbo-parser), CommonMark, plain text, no JavaScript, no CSS
+* tags: head, title, body, br, hr, nav, a (href), h1-h6
+* protocol: gemini, gopher, finger, HTTP, HTTPS
+* platform: Linux, Windows, FreeBSD, NetBSD, OpenBSD, macOS, Haiku
+* license: GPLv3+
 * implemented in: C++
-
-> Graphical small-internet client for windows, linux, MacOS X and BSDs. Supports gemini, http, https, gopher, finger.
-> text/gemini, text/html (reduced feature set), text/markdown
-> Qt5
 
 ### libwebsockets lhp
 
@@ -760,20 +764,6 @@ Projects listed here have not produced a browser a user could test yet or are on
 * https://haphaestus.org/
 * https://argonaut-constellation.org/
 * implemented in: Haskell
-
-### Kristall
-
-* https://github.com/ikskuh/kristall
-* https://github.com/ikskuh/kristall/blob/master/src/renderers/htmlrenderer.cpp
-* https://github.com/google/gumbo-parser
-* https://codeberg.org/gumbo-parser/gumbo-parser
-* interface: Qt5
-* features: HTML5 (gumbo-parser), CommonMark, plain text, no JavaScript, no CSS
-* tags: head, title, body, br, hr, nav, a (href), h1-h6
-* protocol: gemini, gopher, finger, HTTP, HTTPS
-* platform: Linux, Windows, FreeBSD, NetBSD, OpenBSD, macOS, Haiku
-* license: GPLv3+
-* implemented in: C++
 
 ### Lexbor
 
