@@ -571,6 +571,7 @@ apt install w3m
 * https://github.com/ikskuh/kristall/blob/master/src/renderers/htmlrenderer.cpp
 * https://github.com/google/gumbo-parser
 * https://codeberg.org/gumbo-parser/gumbo-parser
+* https://packages.ubuntu.com/stonking/kristall
 * interface: Qt5
 * features: HTML5 (gumbo-parser), CommonMark, plain text, no JavaScript, no CSS
 * tags: head, title, body, br, hr, nav, a (href), h1-h6
@@ -645,6 +646,22 @@ apt install w3m
 * implemented in C++
 * platform: Amiga, GTK, Qt, SDL
 * license: BSD3
+
+### offpunk
+
+* https://sr.ht/~lioploum/offpunk/
+* https://git.sr.ht/~lioploum/offpunk/tree/master/item/ansicat.py
+* https://github.com/wention/BeautifulSoup4
+* https://github.com/fedora-python/lxml_html_clean
+* https://github.com/hpjansson/chafa
+* https://packages.ubuntu.com/stonking/offpunk
+* interface: text-only (less)
+* features: HTML (BeautifulSoup4, Readability, lxml-html-clean), images (Chafa), bookmarks, table layout, no other layout
+* HTML tags: title, base href, blockquote, dd, div, p, dt, span, h1-h6, code, tt, abbr, pre, li, table, th & td (colspan, rowspan), tr, colgroup, thead, tbody, tfoot, em, i, b, strong, a (href), img (src, alt, data-src), video (thumbnail-only: poster, src, alt, source src), br, link (rel=alternate, type, href, title)
+* limitations: no CSS, no JS
+* protocol: gemini, gopher (charset-normalizer), finger, spartan, HTTP, HTTPS (curl)
+* implemented in: Python
+* license: AGPL-3.0
 
 ### QEmacs html-mode
 
